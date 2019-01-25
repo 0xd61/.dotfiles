@@ -5,7 +5,7 @@ fi
 HISTFILE=~/.zhistfile
 HISTSIZE=4096
 SAVEHIST=4096
-setopt appendhistory notify HIST_IGNORE_SPACE 
+setopt APPENDHISTORY NOTIFY HIST_IGNORE_SPACE HIST_IGNORE_ALL_DUPS
 unsetopt beep
 bindkey -v
 zstyle ':completion:*' menu select
@@ -43,7 +43,7 @@ zstyle ':vcs_info:git:*' formats '%F{black}@%f%F{white}%b%f'
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
 
-PROMPT=$'%B%F{green}[%40<…<%~%<<%f${vcs_info_msg_0_}%F{green}]%f\n%f%F{red}%(?..%? )%f%F{white}%(!.#.$)%f%b '
+PS1=$'%B%F{green}[%40<…<%~%<<%f${vcs_info_msg_0_}%F{green}]%f\n%f%F{red}%(?..%? )%f%F{white}%(!.#.$)%f%b '
 
 # create persistand dirstack
 DIRSTACKFILE="$HOME/.zdirfile"
@@ -65,6 +65,18 @@ for EDITOR in "${EDITOR:-}" emacs vim jupp jstar mcedit ed vi; do
 	[[ -n $EDITOR && -x $EDITOR ]] && break
 	EDITOR=
 done
+
+# Vi input mode
+# Show Vi mode in prompt
+precmd() { RPROMPT="" }
+function zle-line-init zle-keymap-select {
+   RPS1='${${KEYMAP/vicmd/"%B%F{black}[% NORMAL]% %f%b"}/(main|viins)/"%B%F{black}[% INSERT]% %f%b"}'
+   zle reset-prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select
+export KEYTIMEOUT=1
+
 
 # colorful man pages
 builtin export LESS_TERMCAP_mb=$'\e[1;31m'     # begin bold
