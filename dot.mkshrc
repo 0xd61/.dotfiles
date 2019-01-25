@@ -56,6 +56,7 @@ done
 \\builtin alias grep='grep --colour=auto'
 \\builtin alias egrep='egrep --colour=auto'
 \\builtin alias fgrep='fgrep --colour=auto'
+\\builtin alias dirs='dirs -v'
 \: "${HOSTNAME:=$(\\builtin ulimit -c 0; \\builtin print -r -- $(hostname \
     2>/dev/null))}${EDITOR:=/bin/ed}${TERM:=vt100}${USER:=$(\\builtin ulimit \
     -c 0; id -un 2>/dev/null)}${USER:=?}"
