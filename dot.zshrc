@@ -84,6 +84,7 @@ builtin alias cd=' cd'
 
 
 # add local bin folders to path
+PATHSEP=:
 for p in ~/.local/bin ~/bin; do
 	[[ -d $p/. ]] || builtin continue
 	[[ $PATHSEP$PATH$PATHSEP = *"$PATHSEP$p$PATHSEP"* ]] || \
