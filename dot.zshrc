@@ -35,15 +35,14 @@ zcompare ${ZDOTDIR:-${HOME}}/.zshrc
 
 # Load version control information
 autoload -Uz vcs_info
-precmd() { vcs_info }
-
+precmd() { RPROMPT=""; vcs_info }
 # Format the vcs_info_msg_0_ variable
 zstyle ':vcs_info:git:*' formats '%F{black}@%f%F{white}%b%f'
  
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
 
-PS1=$'%B%F{green}[%40<…<%~%<<%f${vcs_info_msg_0_}%F{green}]%f\n%f%F{red}%(?..%? )%f%F{white}%(!.#.$)%f%b '
+PROMPT=$'%B%F{green}[%40<…<%~%<<%f${vcs_info_msg_0_}%F{green}]%f\n%f%F{red}%(?..%? )%f%F{white}%(!.#.$)%f%b '
 
 # create persistand dirstack
 DIRSTACKFILE="$HOME/.zdirfile"
@@ -68,7 +67,6 @@ done
 
 # Vi input mode
 # Show Vi mode in prompt
-precmd() { RPROMPT="" }
 function zle-line-init zle-keymap-select {
    RPS1='${${KEYMAP/vicmd/"%B%F{black}[% NORMAL]% %f%b"}/(main|viins)/"%B%F{black}[% INSERT]% %f%b"}'
    zle reset-prompt
