@@ -8,7 +8,7 @@ amixer set Master mute
 
 while true; do
 	~/.dwm-status/status.mksh
-	sleep 2
+	sleep 5
 done
 
 exec dwm

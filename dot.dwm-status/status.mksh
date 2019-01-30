@@ -46,7 +46,6 @@ VOLUME=$(amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_IC
 STATUS="$VOLUME $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $DATE,$TIME"
 #STATUS="$DATE,$TIME"
 
-\\builtin print $STATUS
 # Piping it to the root X window, which dwm uses as status bar
 #xsetroot -name \x02"$STATUS"
 xsetroot -name "$(\\builtin print $STATUS)"
