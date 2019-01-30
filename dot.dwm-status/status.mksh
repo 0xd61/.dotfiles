@@ -1,0 +1,52 @@
+#!/bin/mksh
+
+#--- Icons ---#
+
+# \uxxxx is just unicode character, taken from http://nerdfonts.com/#cheat-sheet
+
+local SEPARATOR="\ue621"
+local WIFI_ICON="\ue1af"
+local WIFI_OFF_ICON="\ufaa9"
+local ETHERNET_ICON="\uf700"
+local ETHERNET_OFF_ICON="\uf701"
+local PROCESSOR_ICON="\ue266"
+local MEMORY_ICON="\uf85a"
+local CALENDAR_ICON="\uf073"
+local TIME_ICON="\uf43a"
+local VOLUME_ICON="\ufa7d"
+local VOLUME_OFF_ICON="\ufa80"
+local THERMAL_ICON="\uf2c7"
+
+
+# CPU Usage
+CPU_USAGE="$PROCESSOR_ICON$(top -b -n1 | grep "Cpu(s)" | awk '{printf "%2d%%", $2 + $4}')"
+
+# Memory Usage
+MEMORY_USAGE="$MEMORY_ICON$(free -h --giga | awk '(NR==2){ print $3 }')"
+
+# Date and time
+DATE=$(date +"%a %d %b")
+
+# Time
+TIME="$(date +"%R") " # Adds a gap at the end of the bar
+
+# Volume
+VOLUME=$(amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_ICON" -F'[][]' 'END{print ($4=="off") ?OFF:ON $2 }')
+
+# CPU Temp
+# THERMAL="$THERMAL_ICON $(cat /sys/class/thermal/thermal_zone0/temp | awk '{printf "%s°C", $1/1000}')"
+
+# Status to be displayed
+
+# \x02 means the icons, and the following ones, will use the colors in
+# [SchemeSel] con dwm's config.h, making them lighter. This is done in case
+# one parameter reaches dangerous values so we can change it with \x03
+# without affecting the rest - yeah it's programmed in a weird way, don't ask.
+
+STATUS="$VOLUME $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $DATE,$TIME"
+#STATUS="$DATE,$TIME"
+
+\\builtin print $STATUS
+# Piping it to the root X window, which dwm uses as status bar
+#xsetroot -name \x02"$STATUS"
+xsetroot -name "$(\\builtin print $STATUS)"
