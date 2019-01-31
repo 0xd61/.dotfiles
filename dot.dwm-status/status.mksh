@@ -15,14 +15,17 @@ local CALENDAR_ICON="\uf073"
 local TIME_ICON="\uf43a"
 local VOLUME_ICON="\ufa7d"
 local VOLUME_OFF_ICON="\ufa80"
+local BATTERY_FULL_ICON="\uf240"
+local BATTERY_EMPTY_ICON="\uf244"
+local BATTERY_CHARGE_ICON="\ufba3"
 local THERMAL_ICON="\uf2c7"
 
 
 # CPU Usage
-CPU_USAGE="$PROCESSOR_ICON$(top -b -n1 | grep "Cpu(s)" | awk '{printf "%2d%%", $2 + $4}')"
+CPU_USAGE="$PROCESSOR_ICON $(top -b -n1 | grep "Cpu(s)" | awk '{printf "%2d%%", $2 + $4}')"
 
 # Memory Usage
-MEMORY_USAGE="$MEMORY_ICON$(free -h --giga | awk '(NR==2){ print $3 }')"
+MEMORY_USAGE="$MEMORY_ICON $(free -h --giga | awk '(NR==2){ print $3 }')"
 
 # Date and time
 DATE=$(date +"%a %d %b")
@@ -31,7 +34,23 @@ DATE=$(date +"%a %d %b")
 TIME="$(date +"%R") " # Adds a gap at the end of the bar
 
 # Volume
-VOLUME=$(amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_ICON" -F'[][]' 'END{print ($4=="off") ?OFF:ON $2 }')
+volume() {
+    amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_ICON" -F'[][]' 'END{print ($4=="off") ?OFF:ON " " $2 }'
+}
+
+# Battery
+battery() {
+    local status="$(cat /sys/class/power_supply/AC/online)"
+    local battery="$(cat /sys/class/power_supply/BAT0/capacity)"
+    local timer="$(acpi -b | grep "Battery" | awk '{print $5}' | cut -c 1-5)"
+    if [[ ( $status -eq "0" && $battery -gt 20 ) ]]; then 
+        \\builtin print "$BATTERY_FULL_ICON $battery% $timer"
+    elif [[ ( $status -eq "0" && $battery -le 20 ) ]]; then
+        \\builtin print "$BATTERY_EMPTY_ICON $battery% $timer\x01"
+    else
+        \\builtin print "$BATTERY_CHARGE_ICON $battery%"
+    fi
+}
 
 # CPU Temp
 # THERMAL="$THERMAL_ICON $(cat /sys/class/thermal/thermal_zone0/temp | awk '{printf "%s°C", $1/1000}')"
@@ -43,7 +62,7 @@ VOLUME=$(amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_IC
 # one parameter reaches dangerous values so we can change it with \x03
 # without affecting the rest - yeah it's programmed in a weird way, don't ask.
 
-STATUS="$VOLUME $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $DATE,$TIME"
+STATUS="$(volume) $SEPARATOR $(battery) $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $DATE,$TIME"
 #STATUS="$DATE,$TIME"
 
 # Piping it to the root X window, which dwm uses as status bar
