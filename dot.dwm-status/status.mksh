@@ -35,7 +35,7 @@ TIME="$(date +"%R") " # Adds a gap at the end of the bar
 
 # Volume
 volume() {
-    amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_ICON" -F'[][]' 'END{print ($4=="off") ?OFF:ON " " $2 }'
+    amixer get Master | awk -v OFF="\\$VOLUME_OFF_ICON" -v ON="\\$VOLUME_ICON" -F'[][]' 'END{print ($6=="off") ?OFF:ON " " $2 }'
 }
 
 # Battery
@@ -46,7 +46,7 @@ battery() {
     if [[ ( $status -eq "0" && $battery -gt 20 ) ]]; then 
         \\builtin print "$BATTERY_FULL_ICON $battery% $timer"
     elif [[ ( $status -eq "0" && $battery -le 20 ) ]]; then
-        \\builtin print "$BATTERY_EMPTY_ICON $battery% $timer\x01"
+        \\builtin print "$BATTERY_EMPTY_ICON $battery% $timer"
     else
         \\builtin print "$BATTERY_CHARGE_ICON $battery%"
     fi
