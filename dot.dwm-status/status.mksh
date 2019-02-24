@@ -19,7 +19,8 @@ local BATTERY_FULL_ICON="\uf240"
 local BATTERY_EMPTY_ICON="\uf244"
 local BATTERY_CHARGE_ICON="\ufba3"
 local THERMAL_ICON="\uf2c7"
-
+local WIFI_ICON="\ufaa8"
+local WIFI_OFF_ICON="\ufaa9"
 
 # CPU Usage
 CPU_USAGE="$PROCESSOR_ICON $(top -b -n1 | grep "Cpu(s)" | awk '{printf "%2d%%", $2 + $4}')"
@@ -53,8 +54,14 @@ battery() {
 }
 
 # CPU Temp
-# THERMAL="$THERMAL_ICON $(cat /sys/class/thermal/thermal_zone0/temp | awk '{printf "%s°C", $1/1000}')"
+temp() {
+ \\builtin print "$THERMAL_ICON $(cat /sys/class/thermal/thermal_zone8/temp | awk '{printf "%s°C", $1/1000}')"
+}
 
+# Wifi
+wifi() {
+ if [ $(cat /sys/class/net/wlp2s0/operstate) == "up" ]; then \\builtin print "$WIFI_ICON"; else \\builtin print "$WIFI_OFF_ICON"; fi
+}
 # Status to be displayed
 
 # \x02 means the icons, and the following ones, will use the colors in
@@ -62,7 +69,7 @@ battery() {
 # one parameter reaches dangerous values so we can change it with \x03
 # without affecting the rest - yeah it's programmed in a weird way, don't ask.
 
-STATUS="$(volume) $SEPARATOR $(battery) $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $DATE,$TIME"
+STATUS="$(wifi) $SEPARATOR $(volume) $SEPARATOR $(battery) $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $(temp) $SEPARATOR $DATE,$TIME"
 #STATUS="$DATE,$TIME"
 
 # Piping it to the root X window, which dwm uses as status bar
