@@ -639,13 +639,11 @@ done
 
 \\builtin unset p
 
-export ANDROID_HOME=~/Android/Sdk
-export PATH=$PATH:$JAVA_HOME/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools
 export GOROOT=/usr/lib/go
-export GOPATH=$HOME/Code/Go
-
-export PKG_CONFIG_PATH=/opt/oracle/instantclient_18_3
+export GOPATH=$HOME/Code
 
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:$HOME/.yarn/bin
 
 \: place customisations above this line
