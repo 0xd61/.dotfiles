@@ -606,7 +606,6 @@ if (( USER_ID )); then PS1=$'\e[1;37m\$'; else PS1=$'\e[1;31m\#'; fi
 PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 25 )); then print \…${WD: -25: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;30m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'"$PS1"$'\e[0m '
 
 \\builtin alias signal="flatpak run org.signal.Signal"
-\\builtin alias e="emacsclient --no-wait"
 
 # load alias file
 if [[ -f $HOME/.mksh_alias ]]; then
