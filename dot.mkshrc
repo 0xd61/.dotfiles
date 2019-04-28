@@ -639,11 +639,12 @@ done
 
 \\builtin unset p
 
-export GOROOT=/usr/lib/go
-export GOPATH=$HOME/Code
-
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export PATH=$PATH:$HOME/.emacs.d/bin
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.yarn/bin
+
+export GOROOT=/usr/lib/go
+export GOPATH=$HOME/Code
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 \: place customisations above this line
