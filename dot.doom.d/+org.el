@@ -1,7 +1,6 @@
 ;;;  -*- lexical-binding: t; -*-
 
 (setq +todo-file "~/org/inbox.org")
-(setq +notes-file "~/org/notes.org")
 
 (after! org
   (setq org-agenda-files '("~/org/inbox.org"
@@ -21,7 +20,7 @@
 
   (setq org-refile-targets '(("~/org/gtd.org" :maxlevel . 3)
                             ("~/org/someday.org" :level . 1)
-                            ("~/org/notes.org" :level . 1)
+                            ("~/org/notes.org" :maxlevel . 2)
                             ("~/org/tickler.org" :maxlevel . 2)))
 
   ;; show refile targets simultaneously
@@ -57,15 +56,5 @@
   "Opens the todo file"
   (find-file +todo-file))
 
-(defun +open-notes-file ()
-  (interactive)
-  "Opens the Notes file"
-  (find-file +notes-file))
-
 (map! :leader
-      (:prefix "o"
-        (:prefix "a"
-        :desc "Open todo file" "T" #'+open-todo-file
-        :desc "Open notes file" "N" #'+open-notes-file))
-      (:when (featurep! :completion helm)
-        "X" #'helm-org-capture-templates))
+        :desc "Open todo file" "O" #'+open-todo-file)
