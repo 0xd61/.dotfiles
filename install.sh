@@ -8,6 +8,7 @@ fc-cache
 
 # make dotfiles available
 ln -s $BASEDIR/dot.mkshrc $HOME/.mkshrc
+ln -s $BASEDIR/dot.mksh_alias $HOME/.mksh_alias
 ln -s $BASEDIR/dot.zshrc $HOME/.zshrc
 [ -d "$HOME/.dwm-status" ] && unlink $HOME/.dwm-status; ln -s $BASEDIR/dot.dwm-status $HOME/.dwm-status
 [ -d "$HOME/.local/bin" ] && unlink $HOME/.local/bin; ln -s $BASEDIR/bin $HOME/.local/bin

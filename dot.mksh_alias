@@ -1,0 +1,2 @@
+\\builtin alias signal="flatpak run org.signal.Signal"
+\\builtin alias r="ranger"
