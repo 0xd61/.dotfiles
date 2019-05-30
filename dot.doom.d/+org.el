@@ -23,6 +23,9 @@
                             ("~/org/notes.org" :maxlevel . 2)
                             ("~/org/tickler.org" :maxlevel . 2)))
 
+  ;; timer
+  (setq org-clock-idle-time 5)
+
   ;; show refile targets simultaneously
   (setq org-outline-path-complete-in-steps nil)
 ;; use full outline paths for refile targets
@@ -34,12 +37,19 @@
 
   (map! :map evil-org-mode-map
         :localleader
+        :desc "Toggle Archive Tag" "a" #'org-toggle-archive-tag
+        :desc "Archive Subtree" "A" #'org-archive-subtree-default-with-confirmation
         :desc "Create/Edit Todo" "o" #'org-todo
         :desc "Schedule" "s" #'org-schedule
         :desc "Deadline" "d" #'org-deadline
         :desc "Refile" "r" #'org-refile
         :desc "Filter" "f" #'org-match-sparse-tree
-        :desc "Tag heading" "t" #'org-set-tags-command)
+        :desc "Tag heading" "t" #'org-set-tags-command
+        (:prefix "c"
+          :desc "Create Report about clocked time" "r" #'org-clock-report
+          ))
+
+
 
   ;; Normally its only like 3 lines tall, too hard to see anything.
   (set-popup-rule! "^\\*Org Agenda"
