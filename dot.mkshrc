@@ -645,4 +645,6 @@ export GOROOT=/usr/lib/go
 export GOPATH=$HOME/Code
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
+source $HOME/.asdf/asdf.sh
+
 \: place customisations above this line
