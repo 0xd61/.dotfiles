@@ -17,5 +17,11 @@
         web-mode-enable-auto-quoting nil ;; disbale adding "" after an =
         web-mode-auto-close-style 2))
 
+(map! :leader
+     :prefix "c"
+     "j" (λ!! #'avy-goto-char-timer t)
+     )
+
+
 (load! "+ui")
 (load! "+org")
