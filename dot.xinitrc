@@ -1,8 +1,6 @@
 #
 monitor.sh dark
 
-# turn off sound
-amixer set Master mute
 
 while true; do
 	~/.dwm-status/status.mksh
@@ -11,5 +9,13 @@ done &
 
 xrandr --setprovideroutputsource modesetting NVIDIA-0
 xrandr --auto
+
+start-pulseaudio-x11 &
+
+# Mute Audio
+pactl set-sink-mute 0 1
+
+# Mute Microphone
+pactl set-source-mute 1 1
 
 exec dwm
