@@ -3,7 +3,12 @@
 (setq-default evil-shift-width 2 ;; set tabs to 2
       tab-width 2)
 
+(setq user-mail-address "kaitsh@d-git.de"
+      user-full-name "Daniel Glinka")
+
 (add-hook 'prog-mode-hook #'goto-address-mode) ;; Linkify links!
+
+(setq company-idle-delay 0.1)
 
 (after! web-mode
   (add-hook 'web-mode-hook #'flycheck-mode)
@@ -21,3 +26,4 @@
 
 (load! "+ui")
 (load! "+org")
+(load! "+keycast") ;; Keycast module written by our favourite flying meatball
