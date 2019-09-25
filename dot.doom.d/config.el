@@ -12,7 +12,8 @@
 (after! yasnippet
   (push (expand-file-name "snippets/" doom-private-dir) yas-snippet-dirs))
 
-(setq company-idle-delay 0.1)
+;; On-demand code completion. I don't often need it.
+(setq company-idle-delay nil)
 
 (after! web-mode
   (add-hook 'web-mode-hook #'flycheck-mode)
