@@ -46,6 +46,7 @@
        :editor
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
+       ;;god               ; run Emacs commands without modifier keys
        fold              ; (nigh) universal code folding
        (format +onsave)  ; automated prettiness
        ;;lispy             ; vim for lisp, for people who dont like vim
@@ -108,6 +109,7 @@
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;ess               ; emacs speaks statistics
+       ;;faust             ; dsp, but you get to keep your soul
        ;;fsharp           ; ML stands for Microsoft's Language
        go                ; the hipster dialect
        ;;(haskell +intero) ; a language that's lazier than I am
@@ -127,6 +129,7 @@
        ;;ocaml             ; an objective camel
        (org              ; organize your plain life in plain text
         +pandoc          ; export-with-pandoc support
+        +pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
        ;;perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
@@ -145,7 +148,6 @@
        ;;swift             ; who asked for emoji variables?
        ;;terra             ; Earth and Moon in alignment for performance.
        web               ; the tubes
-       ;;vala              ; GObjective-C
 
        :email
        ;;(mu4e +gmail)       ; WIP
