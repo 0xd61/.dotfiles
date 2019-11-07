@@ -637,16 +637,12 @@ done
 
 \\builtin unset p
 
-export PATH=$PATH:$HOME/.emacs.d/bin
-export PATH=$PATH:$HOME/.cargo/bin
 # Set rust default linker to lld (needs to be installed separately)
-export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
-export PATH=$PATH:$HOME/.yarn/bin
+\\builtin export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
 
-export GOROOT=/usr/lib/go
-export GOPATH=$HOME/Code
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+\\builtin export PATH=$PATH:$HOME/.emacs.d/bin
+\\builtin export PATH=$PATH:$HOME/.yarn/bin
 
-source $HOME/.asdf/asdf.sh
+\\builtin source $HOME/.asdf/asdf.sh
 
 \: place customisations above this line
