@@ -1,5 +1,10 @@
 ;;; ~/.doom.d/config.el -*- lexical-binding: t; -*-
 
+; Stop Emacs from losing undo information by
+; setting very high limits for undo buffers
+(setq undo-limit 20000000)
+(setq undo-strong-limit 40000000)
+
 (setq-default evil-shift-width 2 ;; set tabs to 2
       tab-width 2)
 
