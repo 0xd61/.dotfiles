@@ -638,7 +638,8 @@ done
 \\builtin unset p
 
 # Set rust default linker to lld (needs to be installed separately)
-\\builtin export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
+# not useful for build webassembly
+#\\builtin export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
 
 \\builtin export PATH=$PATH:$HOME/.emacs.d/bin
 \\builtin export PATH=$PATH:$HOME/.yarn/bin
