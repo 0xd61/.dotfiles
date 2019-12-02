@@ -35,22 +35,6 @@
 
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "NEXT(n)" "|" "DONE(d)" "CANCELLED(c)")))
 
-  (map! :map evil-org-mode-map
-        :localleader
-        :desc "Toggle Archive Tag" "a" #'org-toggle-archive-tag
-        :desc "Archive Subtree" "A" #'org-archive-subtree-default-with-confirmation
-        :desc "Create/Edit Todo" "o" #'org-todo
-        :desc "Schedule" "s" #'org-schedule
-        :desc "Deadline" "d" #'org-deadline
-        :desc "Refile" "r" #'org-refile
-        :desc "Filter" "f" #'org-match-sparse-tree
-        :desc "Tag heading" "t" #'org-set-tags-command
-        (:prefix "c"
-          :desc "Create Report about clocked time" "r" #'org-clock-report
-          ))
-
-
-
   ;; Normally its only like 3 lines tall, too hard to see anything.
   (set-popup-rule! "^\\*Org Agenda"
     :size 15
