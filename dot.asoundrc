@@ -1,28 +1,120 @@
+# Seems reasonable quality, low CPU usage
+defaults.pcm.rate_converter "speexrate_medium"
+pcm.dmixed  {
+	type asym
+	playback.pcm {
+		# See plugin:dmix at http://www.alsa-project.org/alsa-doc/alsa-lib/pcm_plugins.html
+		type dmix
+
+		# Don't block other users, e.g. the Timidity midi-player daemon
+		# http://www.alsa-project.org/alsa-doc/alsa-lib/pcm_plugins.html
+		ipc_key_add_uid true
+
+		ipc_key 5678293
+		ipc_perm 0660
+		ipc_gid audio
+		# Don't put the rate here! Otherwise it resets the rate & channels set below, as shown by:  cat /proc/asound/card0/pcm0p/sub0/hw_params
+		slave {
+			# 2 for stereo, 6 for surround51, 8 for surround71
+			channels 2
+			pcm {
+				# mplayer chooses S32_LE, but others usually S16_LE
+				#format S32_LE
+				format S16_LE
+
+				# 44100 or 48000
+				# 44100 for music, 48000 is compatible with most h/w
+				#rate 44100
+				rate 48000
+
+				# http://www.alsa-project.org/alsa-doc/alsa-lib/pcm_plugins.html
+				# Maybe helps
+				nonblock true
+
+				type hw
+				card 0
+				device 0
+				subdevice 0
+			}
+			# mplayer2 chooses 1024
+			# period_size 512 with buffer_size 16384 stops crackling in xmame
+			# 320 breaks flash - https://bbs.archlinux.org/viewtopic.php?id=129458
+			#period_size 512
+			period_size 1024
+			#period_size 512
+
+			# 4096 might make sound crackle
+			# mplayer2 chooses 8192. Half-Life 2 chooses 16384.
+			# If too large, use CONFIG_SND_HDA_PREALLOC_SIZE=2048
+			buffer_size 8192
+		}
+	}
+	# apulse (a cut-down replacement for pulseaudio) needs dsnoop
+	# https://bbs.archlinux.org/viewtopic.php?id=187258
+	capture.pcm "dsnoop"
+}
+# Check that e.g. ut2004 still works, if default is redefined.
+# Flash, etc. use this "default" entry.
 pcm.!default {
-      type plug
-      slave.pcm "dmixer"
+	type plug
+	# Would need to always output to all 6 channels, so the dmixer actually works if e.g. 6-channel is attempted to be started, while 2-channel is playing.
+	slave.pcm "dmixed"
 }
-pcm.dmixer  {
-        type dmix
-        ipc_key 1024
-        slave {
-          pcm "hw:1,0"
-          period_time 0
-              period_size 1024
-          buffer_size 4096
-          rate 44100
-        }
-        bindings {
-          0 0
-          1 1
-        }
+pcm.!surround20 {
+	type plug
+	slave.pcm "dmixed"
 }
-ctl.dmixer {
-       type hw
-       card 0
-}
-ctl.!default {
-    type hw
-    card 0
+pcm.wine {
+	type plug
+	# Output directly, for performance
+	#slave.pcm "hw:0"
+	slave.pcm "surround20"
 }
 
+# If get error "Slave PCM not usable", then need to use plug:
+# If get error "Cannot find rate converter", then install libsamplerate and alsa-plugins
+
+# Lunar Linux:  lin ladspa-bs2b
+# listplugins
+# analyseplugin bs2b
+pcm.bs2b {
+	type ladspa
+	path "/usr/lib/ladspa"
+	plugins {
+		0 {
+			id 4221  # Bauer stereophonic-to-binaural (4221/bs2b)
+			input {
+				controls [ 700 6 ]
+			}
+		}
+	}
+	# http://bbs.archlinux.org/viewtopic.php?id=95582
+	slave.pcm "surround20"
+}
+
+# speaker-test -D headphones -c 2 -t wav
+# audacious uses less CPU when running bs2b as a listed plugin, probably because of samplerate_best
+# Posted at http://bbs.archlinux.org/viewtopic.php?pid=626573#p626573
+pcm.headphones {
+	type rate
+	slave {
+		pcm "plug:bs2b"
+		#pcm "plug:narrower"
+		#rate 44100
+		rate 48000
+	}
+	#converter "speexrate_medium"
+
+    hint {
+        show on
+        description "Headphones"
+    }
+}
+# http://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/PerfectSetup/
+pcm.pulse {
+	type pulse
+}
+
+ctl.pulse {
+	type pulse
+}
