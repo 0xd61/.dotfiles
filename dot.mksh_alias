@@ -1,3 +1,3 @@
 \\builtin alias signal="flatpak run org.signal.Signal"
 \\builtin alias r="ranger"
-\\builtin alias steam="LD_PRELOAD='/usr/$LIB/libstdc++.so.6 /usr/$LIB/libgcc_s.so.1 /usr/$LIB/libxcb.so.1' steam"
+\\builtin alias steam="LIBGL_DEBUG=verbose steam"

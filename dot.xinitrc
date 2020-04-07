@@ -10,12 +10,10 @@ done &
 xrandr --setprovideroutputsource modesetting NVIDIA-0
 xrandr --auto
 
-start-pulseaudio-x11 &
-
 # Mute Audio
-pactl set-sink-mute 0 1
+amixer sset Master mute
 
 # Mute Microphone
-pactl set-source-mute 1 1
+amixer sset Capture mute
 
 exec dwm
