@@ -7,8 +7,8 @@ while true; do
 	sleep 10
 done &
 
-xrandr --setprovideroutputsource modesetting NVIDIA-0
-xrandr --auto
+# xrandr --setprovideroutputsource modesetting NVIDIA-0
+# xrandr --auto
 
 # Mute Audio
 amixer sset Master mute
