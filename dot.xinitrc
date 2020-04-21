@@ -1,7 +1,4 @@
 #
-monitor.sh dark
-
-
 while true; do
 	~/.dwm-status/status.mksh
 	sleep 10
