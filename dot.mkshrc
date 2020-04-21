@@ -647,4 +647,8 @@ done
 
 \\builtin source $HOME/.asdf/asdf.sh
 
+# st-265color error fix
+\\builtin export TERM=xterm
+\\builtin export EDITOR=vim
+
 \: place customisations above this line
