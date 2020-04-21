@@ -4,6 +4,9 @@
 " BASIC SETUP:
 " enter the current millenium
 set nocompatible
+set background=dark
+set mouse=a
+set history=1000
 
 " enable syntax and plugins (for netrw)
 syntax enable
