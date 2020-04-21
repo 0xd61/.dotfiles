@@ -35,23 +35,27 @@ usage() {
 	EOF
 }
 
+CALL="/sys/class/backlight/intel_backlight/brightness"
+MAX=$(cat /sys/class/backlight/intel_backlight/max_brightness)
+CURRENT=$(cat ${CALL})
+
 case "$1" in
 	mirror|dual) xrandr --output eDP1 --auto --output HDMI1 --set 'Broadcast RGB' 'Limited 16:235' --auto;;
 	hdmi|external) xrandr --output eDP1 --off --output HDMI1 --set 'Broadcast RGB' 'Limited 16:235' --auto;;
 	laptop|builtin) xrandr --output HDMI1 --off --output eDP1 --auto;;
 
-	brighter) xbacklight + 5;;
-	darker) xbacklight - 5;;
+	brighter) sudo tee $CALL <<< $(($CURRENT + 50));;
+	darker) sudo tee $CALL <<< $(($CURRENT - 50));;
 
-	bright|brightest) xbacklight = 100;;
-	dark) xbacklight = 1;;
-	darkest) xbacklight = .1;;
+	bright|brightest) sudo tee $CALL <<< $(($MAX - 500));;
+	dark) sudo tee $CALL <<< 200;;
+	darkest) sudo tee $CALL <<< 1;;
 
 	day) redshift -m randr -x;;
 	night) redshift -m randr -PO 4500;;
 
-	(+([0-9])) xbacklight = "$1";;
-	''|get) xbacklight -get;;
+	(+([0-9])) sudo tee $CALL <<< "$1";;
+	''|get) echo $CURRENT;;
 
 	-h|help) usage;;
 	*) usage >&2; exit 1;;
