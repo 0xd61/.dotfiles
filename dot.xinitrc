@@ -4,6 +4,7 @@ while true; do
 	sleep 10
 done &
 
+primusrun glxinfo
 # xrandr --setprovideroutputsource modesetting NVIDIA-0
 # xrandr --auto
 
