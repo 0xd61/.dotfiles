@@ -44,17 +44,17 @@ case "$1" in
 	hdmi|external) xrandr --output eDP1 --off --output HDMI1 --set 'Broadcast RGB' 'Limited 16:235' --auto;;
 	laptop|builtin) xrandr --output HDMI1 --off --output eDP1 --auto;;
 
-	brighter) sudo tee $CALL <<< $(($CURRENT + 50));;
-	darker) sudo tee $CALL <<< $(($CURRENT - 50));;
+	brighter) tee $CALL <<< $(($CURRENT + 50));;
+	darker) tee $CALL <<< $(($CURRENT - 50));;
 
-	bright|brightest) sudo tee $CALL <<< $(($MAX - 500));;
-	dark) sudo tee $CALL <<< 200;;
-	darkest) sudo tee $CALL <<< 1;;
+	bright|brightest) tee $CALL <<< $(($MAX - 500));;
+	dark) tee $CALL <<< 200;;
+	darkest) tee $CALL <<< 1;;
 
 	day) redshift -m randr -x;;
 	night) redshift -m randr -PO 4500;;
 
-	(+([0-9])) sudo tee $CALL <<< "$1";;
+	(+([0-9])) tee $CALL <<< "$1";;
 	''|get) echo $CURRENT;;
 
 	-h|help) usage;;

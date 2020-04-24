@@ -18,8 +18,8 @@ usage() {
 CALL="/proc/acpi/bbswitch"
 
 case "$1" in
-	off) sudo tee $CALL <<< OFF;;
-	on) sudo tee $CALL <<< ON;;
+	off) tee $CALL <<< OFF;;
+	on) tee $CALL <<< ON;;
 
 	''|get) cat $CALL;;
 
