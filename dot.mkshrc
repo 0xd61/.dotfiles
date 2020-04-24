@@ -598,6 +598,23 @@ function enable {
 
 \: place customisations below this line
 
+function clip {
+# Copy into clipboard or from clipboard
+if command -v xclip 1>/dev/null; then
+    if [[ -p /dev/stdin ]] ; then
+        # stdin is a pipe
+        # stdin -> clipboard
+        xclip -i -selection clipboard
+    else
+        # stdin is not a pipe
+        # clipboard -> stdout
+        xclip -o -selection clipboard
+    fi
+else
+    echo "Please install xclip"
+fi
+}
+
 # history
 \\builtin export HISTSIZE=4096
 \\builtin export HISTFILE=~/.mksh_hist
