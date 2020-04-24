@@ -7,10 +7,50 @@ set nocompatible
 set background=dark
 set mouse=a
 set history=1000
+set encoding=utf8
+set autoread
+set showcmd
+
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+
+" :W sudo saves the file
+" (useful for handling the permission-denied error)
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 
 " enable syntax and plugins (for netrw)
 syntax enable
 filetype plugin on
+filetype indent on
+
+" Set 7 lines to the cursor - when moving vertically using j/k
+set so=7
+
+" A buffer becomes hidden when it is abandoned
+set hid
+
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+
+" When searching try to be smart about cases
+set smartcase
+
+" Highlight search results
+set hlsearch
+
+" Makes search act like search in modern browsers
+set incsearch
+
+" For regular expressions turn magic on
+set magic
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
 
 " FINDING FILES:
 
