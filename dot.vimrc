@@ -23,6 +23,11 @@ syntax enable
 filetype plugin on
 filetype indent on
 
+" Extra folders for swap, backup and undo files
+set backupdir=$HOME/.vim/backup//
+set directory=$HOME/.vim/swap//
+set undodir=$HOME/.vim/undo//
+
 " Set 7 lines to the cursor - when moving vertically using j/k
 set so=7
 
