@@ -61,6 +61,10 @@ flycheck_*.el
 [._]ss[a-gi-z]
 [._]sw[a-p]
 
+/dot.vim/swap/
+/dot.vim/undo/
+/dot.vim/backup/
+
 # Session
 Session.vim
 
