@@ -1,1 +1,1 @@
-tcpdump -i lo -nnvvvSeXX port $1
+sudo tcpdump -i lo -nnvvvSeXX port $1
