@@ -11,6 +11,12 @@ set encoding=utf8
 set autoread
 set showcmd
 
+" KEYMAPPINGS
+nnoremap <Space>t :tabnew<CR>
+inoremap jk <Esc>
+nnoremap <Space>f :find 
+
+
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
