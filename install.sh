@@ -12,6 +12,7 @@ ln -s $BASEDIR/dot.mksh_alias $HOME/.mksh_alias
 #ln -s $BASEDIR/dot.zshrc $HOME/.zshrc
 ln -s $BASEDIR/dot.asoundrc $HOME/.asoundrc
 ln -s $BASEDIR/dot.vimrc $HOME/.vimrc
+ln -s $BASEDIR/dot.ctags $HOME/.ctags
 [ -d "$HOME/.vim" ] && unlink $HOME/.vim; ln -s $BASEDIR/dot.vim $HOME/.vim
 [ -d "$HOME/.dwm-status" ] && unlink $HOME/.dwm-status; ln -s $BASEDIR/dot.dwm-status $HOME/.dwm-status
 [ -d "$HOME/.local/bin" ] && unlink $HOME/.local/bin; ln -s $BASEDIR/bin $HOME/.local/bin

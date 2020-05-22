@@ -1,109 +1,190 @@
-" Credits to Max Cantor to his no-plugin config
-" https://github.com/changemewtf/no_plugins/blob/master/no_plugins.vim
+" Credits:
+" - to Max Cantor for his no-plugin config https://github.com/changemewtf/no_plugins/blob/master/no_plugins.vim
+" - to Micha Mettke for his config https://github.com/vurtun/dotfiles/blob/master/.vimrc
 "
-" BASIC SETUP:
-" enter the current millenium
-set nocompatible
-set background=dark
-set mouse=a
-set history=1000
-set encoding=utf8
+"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Map leader
+let mapleader=" "
+" Automatic reloading
+autocmd! bufwritepost .vimrc source %
 set autoread
-set showcmd
-
-" KEYMAPPINGS
-nnoremap <Space>t :tabnew<CR>
-inoremap jk <Esc>
-nnoremap <Space>f :find 
-
-
-" Use Unix as the standard file type
-set ffs=unix,dos,mac
-
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 
-" enable syntax and plugins (for netrw)
-syntax enable
-filetype plugin on
-filetype indent on
+" Copy & Paste
+set pastetoggle=<F2>
+set clipboard=unnamedplus
+set mouse=a "(alt + click)
 
+set nocompatible
+set background=dark
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set so=7 " Set 7 lines to the cursor - when moving vertically using j/k
+set cmdheight=2
+set hid " Buffer becomes hidden, when abandoned
+set backspace=eol,start,indent " Configure backspace so it acts as it should act
+set whichwrap+=<,>,h,l
+set ignorecase
+set hlsearch " Highlight search results
+set incsearch " Makes search act like search in modern browsers
+set lazyredraw " Don't redraw while executing macros (good performance config)
+set magic " For regular expressions turn magic on
+set showmatch " Show matching brackets when text indicator is over them
+set mat=2 " How many tenths of a second to blink when matching brackets
+set splitbelow " new splits are down
+set splitright " new vsplits are to the right
+set history=1000
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set list
+set listchars=tab:>-,trail:- " show tabs and trailing
+set smartcase " When searching try to be smart about cases
+set smartindent
+set smarttab
+set expandtab
+set showcmd
+"set number
+set linebreak
+set textwidth=80
+set cindent
+set shiftwidth=4
+set softtabstop=4
+set autoread
+set tabstop=4
+set columns=80
+set ai "Auto indent
+set si "Smart indent
+set wrap "Wrap lines
+"set colorcolumn=80
+
+inoremap {      {}<Left>
+inoremap {<CR>  {<CR>}<Esc>O
+inoremap {{     {
+inoremap {}     {}
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Colors and Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+filetype indent on
+filetype plugin indent on
+filetype on
+filetype plugin on
+syntax on
+set grepprg=grep\ -nH\ $*
+
+syntax on
+set t_Co=256
+set encoding=utf8
+" Use Unix as the standard file type
+set ffs=unix,dos,mac
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Folding
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set foldenable " Turn on folding
+set foldmethod=marker
+autocmd FileType c setlocal foldmethod=syntax
+set foldlevel=1
+set foldlevel=100 " Don't autofold anything (but I can still fold manually)
+set foldnestmax=1 " I only like to fold outer functions
+set foldopen=block,hor,mark,percent,quickfix,tag " what movements open folds
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Menu
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set wildmenu " Display all matching files when we tab complete
+set wildmode=list:longest,full
+set wildignore=*.o,*~,*.pyc,
+set wildignore+=*.pdf,*.pyo,*.pyc,*.zip,*.so,*.swp,*.dll,*.o,*.DS_Store,*.obj,*.bak,*.exe,*.pyc,*.jpg,*.gif,*.png,*.a
+set wildignore+=.git\*,.hg\*,.svn\*.o,*~,*pyc
+" Search down into subfolders
+" Provides tab-completion for all file-related tasks
+set path+=**
+" set autochdir " tells vim to search in the parent dir
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Backup
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Extra folders for swap, backup and undo files
 set backupdir=$HOME/.vim/backup//
 set directory=$HOME/.vim/swap//
 set undodir=$HOME/.vim/undo//
 
-" Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
 
-" A buffer becomes hidden when it is abandoned
-set hid
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Mapping
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
+" move by visual line
+nnoremap j gj
+nnoremap k gk
+xnoremap j gj
+xnoremap k gk
 
-" When searching try to be smart about cases
-set smartcase
+nnoremap J 5j
+nnoremap K 5k
+xnoremap J 5j
+xnoremap K 5k
 
-" Highlight search results
-set hlsearch
+" copy/paste replaced
+map <Leader>f c<C-r>0<ESC>
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+vmap <Leader>P "+p
 
-" Makes search act like search in modern browsers
-set incsearch
+" Remove highlight after search
+noremap <Leader>D :nohl<CR>
 
-" For regular expressions turn magic on
-set magic
+" Tabs
+map <Leader>n <esc>:tabprevious<CR>
+map <Leader>m <esc>:tabnext<CR>
+map <Leader>b <esc>:tabnew<CR>
 
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
+" Shifting
+nnoremap < <S-V><<Esc>
+nnoremap > <S-V>><Esc>
+vnoremap < <gv
+vnoremap > >gv
 
-" Show matching brackets when text indicator is over them
-set showmatch
-" How many tenths of a second to blink when matching brackets
-set mat=2
+" Remapping Esc
+inoremap jk <Esc>
 
-" FINDING FILES:
+" Remapping Tag jumping
+noremap <Leader>t <C-]>
+noremap <Leader>T <C-T>
+noremap <Leader>bt <esc>:tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+noremap <Leader>st <esc>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" Search down into subfolders
-" Provides tab-completion for all file-related tasks
-set path+=**
+" Quick file open
+nnoremap <Leader>f :find ./
 
-" Display all matching files when we tab complete
-set wildmenu
-
-" NOW WE CAN:
-" - Hit tab to :find by partial match
-" - Use * to make it fuzzy
-
-" THINGS TO CONSIDER:
-" - :b lets you autocomplete any open buffer
+""""""""""""""""""""""""""""""
+" => Plugin
+""""""""""""""""""""""""""""""
 
 " TAG JUMPING:
 
 " Create the `tags` file (may need to install ctags first)
 command! MakeTags !ctags -R .
+set tags=tags; "tells vim that the name of your tags file will always be the same as the default tags file generated by ctags
 
 " NOW WE CAN:
 " - Use ^] to jump to tag under cursor
 " - Use g^] for ambiguous tags
-" - Use ^t to jump back up the tag stack
+" - Use ^T to jump back up the tag stack
 
 " THINGS TO CONSIDER:
 " - This doesn't help if you want a visual list of tags
-
-" AUTOCOMPLETE:
-
-" The good stuff is documented in |ins-completion|
-
-" HIGHLIGHTS:
-" - ^x^n for JUST this file
-" - ^x^f for filenames (works with our path trick!)
-" - ^x^] for tags only
-" - ^n for anything specified by the 'complete' option
-
-" NOW WE CAN:
-" - Use ^n and ^p to go back and forth in the suggestion list
 
 " FILE BROWSING:
 
@@ -119,11 +200,6 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " - :edit a folder to open a file browser
 " - <CR>/v/t to open in an h-split/v-split/tab
 " - check |netrw-browse-maps| for more mappings
-
-" SNIPPETS:
-
-" Read an empty HTML template and move cursor to title
-" nnoremap ,html :-1read $HOME/.vim/.skeleton.html<CR>3jwf>a
 
 " BUILD INTEGRATION:
 
