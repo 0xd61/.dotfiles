@@ -166,7 +166,7 @@ noremap <Leader>bt <esc>:tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 noremap <Leader>st <esc>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Quick file open
-nnoremap <Leader>f :find ./
+nnoremap <Leader>f :find 
 
 """"""""""""""""""""""""""""""
 " => Plugin
