@@ -1,5 +1,17 @@
 # Seems reasonable quality, low CPU usage
 defaults.pcm.rate_converter "speexrate_medium"
+
+# Check that e.g. ut2004 still works, if default is redefined.
+# Flash, etc. use this "default" entry.
+pcm.!default {
+	type plug
+	# Would need to always output to all 6 channels, so the dmixer actually works if e.g. 6-channel is attempted to be started, while 2-channel is playing.
+    slave.pcm "dmixed"
+    hint.description "Dmix Audio"
+#    slave.pcm "jack"
+#    hint.description "Jack Audio"
+}
+
 pcm.dmixed  {
 	type asym
 	playback.pcm {
@@ -52,23 +64,6 @@ pcm.dmixed  {
 	# apulse (a cut-down replacement for pulseaudio) needs dsnoop
 	# https://bbs.archlinux.org/viewtopic.php?id=187258
 	capture.pcm "dsnoop"
-}
-# Check that e.g. ut2004 still works, if default is redefined.
-# Flash, etc. use this "default" entry.
-pcm.!default {
-	type plug
-	# Would need to always output to all 6 channels, so the dmixer actually works if e.g. 6-channel is attempted to be started, while 2-channel is playing.
-	slave.pcm "dmixed"
-}
-pcm.!surround20 {
-	type plug
-	slave.pcm "dmixed"
-}
-pcm.wine {
-	type plug
-	# Output directly, for performance
-	#slave.pcm "hw:0"
-	slave.pcm "surround20"
 }
 
 # If get error "Slave PCM not usable", then need to use plug:
