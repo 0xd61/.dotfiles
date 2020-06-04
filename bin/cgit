@@ -54,7 +54,7 @@ if [ ! -z "$1" ]; then
 else
     echo "usage: cgit <command> [<args>]"
     echo "commands:"
-    echo -e "\tpushall <commit message>\t\tAdd and commit all changes and push them to origin"
+    echo -e "\tpushall <commit message>\t\tAdd, commit and push changes to origin"
     echo -e "\tremotediff [<remote branch>]\t\tShow differences between the local and remote branch"
     echo -e "\tremotelog [<remote branch>]\t\tShow logs between the local and remote branch"
     echo -e "\tswitchto <branch>\t\t\tStash changes, switch to new branch and try to apply stash"
