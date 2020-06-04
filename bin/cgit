@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# contains custom git commands. Run with cgit <command> [<args>]
+
+if [ ! -z "$1" ]; then
+    case "$1" in
+        pushall)
+            if [ ! -z "$2" ]; then
+                currentBranch=$(git symbolic-ref --short -q HEAD) # Getting the current branch
+                git add .
+                git commit -m "$2"
+                git push origin $currentBranch
+            else
+                >&2 echo "Commit message is not provided"
+            fi
+            ;;
+        remotediff)
+            git fetch
+            remoteBranch=$(git symbolic-ref --short -q HEAD)
+
+            if [ ! -z "$2" ]
+            then
+                remoteBranch=$2
+            fi
+            echo "Showing diff between $remoteBranch origin/$remoteBranch"
+            git diff $remoteBranch origin/$remoteBranch
+            ;;
+
+        remotelog)
+            git fetch
+            remoteBranch=$(git symbolic-ref --short -q HEAD)
+
+            if [ ! -z "$2" ]
+            then
+              remoteBranch=$2
+            fi
+            echo "Showing logs between $remoteBranch origin/$remoteBranch"
+            git log $remoteBranch..origin/$remoteBranch --oneline
+            ;;
+
+        switchto)
+            newBranch=$2
+
+            if [ ! -z "$2" ]
+            then
+                git stash
+                git checkout -b $newBranch
+                git stash apply
+            else
+                echo "Branch name is not specified"
+            fi
+            ;;
+    esac
+else
+    echo "usage: cgit <command> [<args>]"
+    echo "commands:"
+    echo -e "\tpushall <commit message>\t\tAdd and commit all changes and push them to origin"
+    echo -e "\tremotediff [<remote branch>]\t\tShow differences between the local and remote branch"
+    echo -e "\tremotelog [<remote branch>]\t\tShow logs between the local and remote branch"
+    echo -e "\tswitchto <branch>\t\t\tStash changes, switch to new branch and try to apply stash"
+fi
