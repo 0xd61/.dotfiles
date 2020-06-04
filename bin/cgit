@@ -54,6 +54,9 @@ if [ ! -z "$1" ]; then
             if [ ! -z "$2" ]; then
                 if [ "$2" == "-c" ] || [ "$2" == "--changes" ]; then
                     git log --oneline -p
+
+                elif [ "$2" == "-t" ] || [ "$2" == "--tree" ]; then
+                    git log --graph --decorate --pretty=oneline --abbrev-commit
                 else
                     echo "Invalid argument: $2"
                 fi
@@ -61,11 +64,12 @@ if [ ! -z "$1" ]; then
                 git log --oneline
             fi
             ;;
+
     esac
 else
     echo "usage: cgit <command> [<args>]"
     echo "commands:"
-    echo -e "\tl [-c | --changes] \t\t\t\tCustom git log command"
+    echo -e "\tl [-c | --changes] [-t | --tree] \tCustom git log command"
     echo -e "\tpushall <commit message>\t\tAdd, commit and push changes to origin"
     echo -e "\tremotediff [<remote branch>]\t\tShow differences between the local and remote branch"
     echo -e "\tremotelog [<remote branch>]\t\tShow logs between the local and remote branch"
