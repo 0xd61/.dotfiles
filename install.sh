@@ -19,3 +19,11 @@ ln -s $BASEDIR/dot.ctags $HOME/.ctags
 #[ -d "$HOME/.config/ranger" ] && unlink $HOME/.config/ranger; ln -s $BASEDIR/ranger $HOME/.config/ranger
 [ -d "$HOME/.doom.d" ] && unlink $HOME/.doom.d; ln -s $BASEDIR/dot.doom.d $HOME/.doom.d
 ln -s $BASEDIR/dot.xinitrc $HOME/.xinitrc
+
+# install/update lite editor
+cd lite > /dev/null
+echo
+echo "#### Installing Lite editor ####"
+/bin/sh ./updater.sh
+
+cd - > /dev/null
