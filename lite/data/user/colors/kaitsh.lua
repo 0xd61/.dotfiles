@@ -17,9 +17,9 @@ style.scrollbar = { common.color "#012D30" }
 style.scrollbar2 = { common.color "#012D30" }
 
 style.syntax["normal"] = { common.color "#D6B58D" }
-style.syntax["symbol"] = { common.color "#E8E6E1" }
+style.syntax["symbol"] = { common.color "#D6B58D" }
 style.syntax["comment"] = { common.color "#31B72C" }
-style.syntax["keyword"] = { common.color "#D6B58D" }
+style.syntax["keyword"] = { common.color "#E8E6E1" }
 style.syntax["keyword2"] = { common.color "#625D52" }
 style.syntax["number"] = { common.color "#65D6AD" }
 style.syntax["literal"] = { common.color "#D6B58D" }
