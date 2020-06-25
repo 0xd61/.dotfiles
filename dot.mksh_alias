@@ -1,3 +1,4 @@
 \\builtin alias signal="flatpak run org.signal.Signal"
 \\builtin alias r="ranger"
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
+\\builtin alias lite="lite &"
