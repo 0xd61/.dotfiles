@@ -9,7 +9,16 @@ local style = require "core.style"
 require "user.colors.kaitsh"
 
 -- key binding:
--- keymap.add { ["ctrl+escape"] = "core:quit" }
+keymap.add {
+  ["alt+x"] = "core:find-command",
+  ["ctrl+i"] = "core:find-file",
+  ["ctrl+shift+left"] = "doc:select-to-start-of-line",
+  ["ctrl+shift+right"] = "doc:select-to-end-of-line",
+  ["ctrl+space"] = "markers:toggle-marker",
+  ["ctrl+shift+space"] = "markers:go-to-next-marker",
+  ["modal+space"] = "markers:toggle-marker",
+  ["modal+m"] = "markers:go-to-next-marker",
+}
 
 config.ignore_files = {"node_modules", "^_?build", "^deps"}
 

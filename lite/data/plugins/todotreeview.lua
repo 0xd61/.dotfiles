@@ -25,7 +25,7 @@ function TodoTreeView:new()
   TodoTreeView.super.new(self)
   self.scrollable = true
   self.focusable = false
-  self.visible = true
+  self.visible = false
   self.times_cache = {}
   self.cache = {}
   self.cache_updated = false
