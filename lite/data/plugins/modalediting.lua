@@ -8,6 +8,7 @@ by vim, this is not a vim emulator, it only has the most basic movement function
 
 local core = require "core"
 local command = require "core.command"
+local CommandView = require "core.commandview"
 local keymap = require "core.keymap"
 local DocView = require "core.docview"
 local style = require "core.style"
@@ -23,6 +24,10 @@ end
 
 local function doc()
   return core.active_view.doc
+end
+
+local function has_commandview()
+  return core.active_view:is(CommandView)
 end
 
 local modkey_map = {
@@ -57,12 +62,14 @@ function keymap.on_key_pressed(k)
   else
     local stroke = key_to_stroke(k)
     local commands
-    if mode == "insert" then
+
+    if has_commandview() or mode == "insert" then
       commands = keymap.map[stroke]
     elseif mode == "command" then
       commands = keymap.map["modal+" .. stroke]
       -- when no command found, we fall back to insert mode (default) commands
       if not commands then
+      -- we change to insert mode. Otherweise
         commands = keymap.map[stroke]
       end
     end
@@ -76,7 +83,7 @@ function keymap.on_key_pressed(k)
     end
 
     -- we don't want to perform any action (key insert) when a command isn't found in movement mode
-    if mode == "command" then
+    if not has_commandview() and mode == "command" then
       return true
     end
   end
@@ -89,7 +96,7 @@ function DocView:draw_line_body(idx, x, y)
   local line, col = self.doc:get_selection()
   draw_line_body(self, idx, x, y)
 
-  if mode == "command" then
+  if not has_commandview() and mode == "command" then
     if line == idx and core.active_view == self
     and system.window_has_focus() then
       local lh = self:get_line_height()
@@ -138,11 +145,7 @@ command.add(nil, {
 
   ["modalediting:insert-on-newline-below"] = function()
     mode = "insert"
-    if has_autoindent then
-      command.perform("autoindent:newline-below")
-    else
-      command.perform("doc:newline-below")
-    end
+    command.perform("doc:newline-below")
   end,
 
   ["modalediting:insert-on-newline-above"] = function()
