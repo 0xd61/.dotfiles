@@ -330,7 +330,7 @@ keymap.add {
   ["modal+shift+j"] = "doc:move-to-next-block-end",
   ["modal+shift+h"] = "doc:move-to-previous-word-start",
   ["modal+shift+l"] = "doc:move-to-next-word-end",
-  ["modal+x"] = "doc:backspace",
+  ["modal+x"] = "doc:delete",
   ["modal+0"] = "doc:move-to-start-of-line",
   ["modal+shift+4"] = "doc:move-to-end-of-line",
 
