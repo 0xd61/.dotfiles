@@ -21,6 +21,15 @@ keymap.add {
 
   ["alt+t"] = "highlightcomments:add-todo",
   ["alt+y"] = "highlightcomments:add-note",
+
+  ["alt+shift+left"] = "root:split-left",
+  ["alt+shift+right"] = "root:split-right",
+  ["alt+shift+up"] = "root:split-up",
+  ["alt+shift+down"] = "root:split-down",
+  ["alt+left"] = "root:switch-to-left",
+  ["alt+right"] = "root:switch-to-right",
+  ["alt+up"] = "root:switch-to-up",
+  ["alt+down"] = "root:switch-to-down",
 }
 
 config.ignore_files = {"node_modules", "^_?build", "^deps"}
