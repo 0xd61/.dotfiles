@@ -18,9 +18,15 @@ keymap.add {
   ["ctrl+shift+space"] = "markers:go-to-next-marker",
   ["modal+space"] = "markers:toggle-marker",
   ["modal+m"] = "markers:go-to-next-marker",
+
+  ["alt+t"] = "highlightcomments:add-todo",
+  ["alt+y"] = "highlightcomments:add-note",
 }
 
 config.ignore_files = {"node_modules", "^_?build", "^deps"}
+
+-- highlightcomments settings:
+config.user_initials = "dgl"
 
 -- todotreeview settings:
 -- Add extra tags
