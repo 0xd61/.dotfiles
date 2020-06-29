@@ -15,14 +15,14 @@ local highlights = {
 }
 
 function DocView:draw_line_text(idx, x, y)
-  for key, val in pairs(highlights) do
+  for key, color in pairs(highlights) do
     local text = self.doc.lines[idx]
     local s, e = text:find(key)
     if s then
-      local x1 = x + self:get_col_x_offset(idx, s)
-      local x2 = x + self:get_col_x_offset(idx, e)
-      local h = math.ceil(2 * SCALE)
-      renderer.draw_rect(x1, y + self:get_line_height() - h, x2 - x1, h, val)
+       local x1 = x + self:get_col_x_offset(idx, s)
+       local x2 = x + self:get_col_x_offset(idx, e)
+       local h = math.ceil(2 * SCALE)
+       renderer.draw_rect(x1, y + self:get_line_height() - h, x2 - x1, h, color)
     end
   end
 
@@ -37,24 +37,21 @@ local function build_comment(type)
   return table.concat(t)
 end
 
--- TODO: create todo and note comments
 command.add(nil, {
   ["highlightcomments:add-todo"] = function()
-    local doc = core.active_view.doc
-    local line, col = doc:get_selection()
+    local line, col = doc():get_selection()
     local text = build_comment("TODO")
     if text then
-      doc:insert(line, col, text)
-      doc:set_selection(line, col + #text)
+      doc():insert(line, col, text)
+      doc():set_selection(line, col + #text)
     end
   end,
   ["highlightcomments:add-note"] = function()
-    local doc = core.active_view.doc
-    local line, col = doc:get_selection()
+    local line, col = doc():get_selection()
     local text = build_comment("NOTE")
     if text then
-      doc:insert(line, col, text)
-      doc:set_selection(line, col + #text)
+      doc():insert(line, col, text)
+      doc():set_selection(line, col + #text)
     end
   end,
 })

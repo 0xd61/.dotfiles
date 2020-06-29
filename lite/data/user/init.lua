@@ -33,6 +33,7 @@ keymap.add {
 }
 
 config.ignore_files = {"node_modules", "^_?build", "^deps"}
+config.mouse_wheel_scroll = 80 * SCALE
 
 -- highlightcomments settings:
 config.user_initials = "dgl"

@@ -12,7 +12,7 @@ syntax.add {
     { pattern = "-?%d+[%d%.eE]*f?",     type = "number"   },
     { pattern = "-?%.?%d+f?",           type = "number"   },
     { pattern = ':"?[%a_][%w_]*"?',     type = "number"   },
-    { pattern = "%u%w+",                type = "keyword"  },
+    { pattern = "%u%w+",                type = "normal"  },
     { pattern = "@[%a_][%w_]*",         type = "keyword2" },
     { pattern = "_%a[%w_]*",            type = "keyword2" },
     { pattern = "[%+%-=/%*%^%%<>!~|&]", type = "operator" },
