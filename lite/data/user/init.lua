@@ -10,14 +10,19 @@ require "user.colors.kaitsh"
 
 -- key binding:
 keymap.add {
+  ["ctrl+z"] = "doc:undo",
+  ["ctrl+shift+z"] = "doc:redo",
   ["alt+x"] = "core:find-command",
   ["ctrl+i"] = "core:find-file",
-  ["ctrl+shift+left"] = "doc:select-to-start-of-line",
-  ["ctrl+shift+right"] = "doc:select-to-end-of-line",
   ["ctrl+space"] = "markers:toggle-marker",
   ["ctrl+shift+space"] = "markers:go-to-next-marker",
   ["modal+space"] = "markers:toggle-marker",
   ["modal+m"] = "markers:go-to-next-marker",
+  ["ctrl+m"] = "markers:go-to-next-marker",
+  ["ctrl+shift+l"] = "doc:duplicate-lines",
+  ["ctrl+shift+d"] = "doc:delete-lines",
+  ["modal+c"] = "doc:toggle-line-comments",
+  ["modal+d"] = "doc:delete-lines",
 
   ["alt+t"] = "highlightcomments:add-todo",
   ["alt+y"] = "highlightcomments:add-note",
@@ -30,6 +35,9 @@ keymap.add {
   ["alt+right"] = "root:switch-to-right",
   ["alt+up"] = "root:switch-to-up",
   ["alt+down"] = "root:switch-to-down",
+
+  ["ctrl+."] = "macro:play",
+  ["ctrl+shift+."] = "macro:toggle-record",
 }
 
 config.ignore_files = {"node_modules", "^_?build", "^deps"}
