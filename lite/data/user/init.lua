@@ -24,8 +24,8 @@ keymap.add {
   ["modal+c"] = "doc:toggle-line-comments",
   ["modal+d"] = "doc:delete-lines",
 
-  ["control+t"] = "treeview:toggle",
-  ["control+shift+t"] = "todotreeview:toggle",
+  ["ctrl+t"] = "treeview:toggle",
+  ["ctrl+shift+t"] = "todotreeview:toggle",
 
   ["alt+t"] = "highlightcomments:add-todo",
   ["alt+y"] = "highlightcomments:add-note",
