@@ -43,7 +43,7 @@ keymap.add {
   ["ctrl+shift+."] = "macro:toggle-record",
 }
 
-config.ignore_files = {"node_modules", "^_?build$", "^deps"}
+config.ignore_files = {"^node_modules$", "^_?build$", "^deps$", "^.git$"}
 config.mouse_wheel_scroll = 80 * SCALE
 
 -- highlightcomments settings:
