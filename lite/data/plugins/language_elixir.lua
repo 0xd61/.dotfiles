@@ -1,22 +1,24 @@
 local syntax = require "core.syntax"
 
 syntax.add {
-  files = { "%.ex$", "%.exs$" },
+  files = { "%.ex$", "%.exs$"},
   comment = "#",
   patterns = {
     { pattern = "#.*\n",                type = "comment"  },
+    { pattern = { ':"', '"', '\\' },    type = "number"   },
+    { pattern = { '"""', '"""', '\\' }, type = "string"   },
     { pattern = { '"', '"', '\\' },     type = "string"   },
     { pattern = { "'", "'", '\\' },     type = "string"   },
-    { pattern = { '"""', '"""' },       type = "string"   },
+    { pattern = { '~%a[/"|\'%(%[%{<]', '[/"|\'%)%]%}>]', '\\' }, type = "string"},
     { pattern = "-?0x%x+",              type = "number"   },
     { pattern = "-?%d+[%d%.eE]*f?",     type = "number"   },
     { pattern = "-?%.?%d+f?",           type = "number"   },
     { pattern = ':"?[%a_][%w_]*"?',     type = "number"   },
+    { pattern = "[%a][%w_!?]*%f[(]",    type = "function" },
     { pattern = "%u%w+",                type = "normal"  },
     { pattern = "@[%a_][%w_]*",         type = "keyword2" },
     { pattern = "_%a[%w_]*",            type = "keyword2" },
-    { pattern = "[%+%-=/%*%^%%<>!~|&]", type = "operator" },
-    { pattern = "[%a][%w_]*%f[(]",      type = "function" },
+    { pattern = "[%+%-=/%*<>!|&]",      type = "operator" },
 	  { pattern = "[%a_][%w_]*",          type = "symbol"   },
 
   },
@@ -68,4 +70,24 @@ syntax.add {
     ["false"]            = "literal",
     ["nil"]              = "literal",
   },
+}
+
+syntax.add {
+  files = { "%.l?eex$" },
+  patterns = {
+    { pattern = { "<!%-%-", "%-%->" },     type = "comment"  },
+    { pattern = { '%f[^>][^<]', '%f[<]' }, type = "normal"   },
+    { pattern = { '<%%=?', '%%>' },        type = "normal"   },
+    { pattern = { '"', '"', '\\' },        type = "string"   },
+    { pattern = { "'", "'", '\\' },        type = "string"   },
+    { pattern = "0x[%da-fA-F]+",           type = "number"   },
+    { pattern = "-?%d+[%d%.]*f?",          type = "number"   },
+    { pattern = "-?%.?%d+f?",              type = "number"   },
+    { pattern = "%f[^<]![%a_][%w_]*",      type = "keyword2" },
+    { pattern = "%f[^<][%a_][%w_]*",       type = "function" },
+    { pattern = "%f[^<]/[%a_][%w_]*",      type = "function" },
+    { pattern = "[%a_][%w_]*",             type = "keyword"  },
+    { pattern = "[/<>=]",                  type = "operator" },
+  },
+  symbols = {},
 }
