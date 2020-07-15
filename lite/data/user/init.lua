@@ -41,6 +41,9 @@ keymap.add {
 
   ["ctrl+."] = "macro:play",
   ["ctrl+shift+."] = "macro:toggle-record",
+
+  ["ctrl+-"] = "scale:decrease",
+  ["ctrl++"] = "scale:increase",
 }
 
 config.ignore_files = {"^node_modules$", "^_?build$", "^deps$", "^.git$"}
