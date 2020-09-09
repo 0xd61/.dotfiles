@@ -55,6 +55,7 @@ flycheck_*.el
 ### WeeChat ###
 /dot.weechat/logs/
 /dot.weechat/weechat.log
+/dot.weechat/sec.conf
 /dot.weechat/weechat_fifo
 
 ### Vim ###
