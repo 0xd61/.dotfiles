@@ -52,6 +52,10 @@ flycheck_*.el
 # network security
 /network-security.data
 
+### WeeChat ###
+/dot.weechat/logs/
+/dot.weechat/weechat.log
+/dot.weechat/weechat_fifo
 
 ### Vim ###
 # Swap

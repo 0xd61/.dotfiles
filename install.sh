@@ -18,6 +18,7 @@ ln -s $BASEDIR/dot.ctags $HOME/.ctags
 [ -d "$HOME/.local/bin" ] && unlink $HOME/.local/bin; ln -s $BASEDIR/bin $HOME/.local/bin
 #[ -d "$HOME/.config/ranger" ] && unlink $HOME/.config/ranger; ln -s $BASEDIR/ranger $HOME/.config/ranger
 [ -d "$HOME/.doom.d" ] && unlink $HOME/.doom.d; ln -s $BASEDIR/dot.doom.d $HOME/.doom.d
+[ -d "$HOME/.weechat" ] && unlink $HOME/.weechat; ln -s $BASEDIR/dot.weechat $HOME/.weechat
 ln -s $BASEDIR/dot.xinitrc $HOME/.xinitrc
 
 # install/update lite editor
