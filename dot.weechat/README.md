@@ -21,6 +21,6 @@ salt = on
 __passphrase__ = off
 nick = "<nick>"
 handmade_password = "<password>"
-debian_password = "<password>"
+oftc_password = "<password>"
 freenode_password = "<password>"
 
