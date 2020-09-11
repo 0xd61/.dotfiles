@@ -35,8 +35,21 @@ end
 local current_scale = SCALE
 local default = current_scale
 
+
+local function get_scale() return current_scale end
+
+
 local function set_scale(scale)
   scale = common.clamp(scale, 0.2, 6)
+
+  -- save scroll positions
+  local scrolls = {}
+  for _, view in ipairs(core.root_view.root_node:get_children()) do
+    local n = view:get_scrollable_size()
+    if n ~= math.huge then
+      scrolls[view] = view.scroll.y / (n - view.size.y)
+    end
+  end
 
   local s = scale / current_scale
   current_scale = scale
@@ -57,6 +70,12 @@ local function set_scale(scale)
   end
 
   style.code_font = scale_font(style.code_font, s)
+
+  -- restore scroll positions
+  for view, n in pairs(scrolls) do
+    view.scroll.y = n * (view:get_scrollable_size() - view.size.y)
+    view.scroll.to.y = view.scroll.y
+  end
 
   core.redraw = true
 end
@@ -86,5 +105,6 @@ keymap.add {
   ["ctrl+="] = "scale:increase",
 }
 
-return { set_scale = set_scale }
+return { get_scale = get_scale, set_scale = set_scale }
+
 
