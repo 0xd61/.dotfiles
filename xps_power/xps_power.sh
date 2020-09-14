@@ -183,10 +183,10 @@ if [ -t 0 ]; then #not interactive (does not work?)
   echo " Output is redirected to /var/log/xps_power"
 fi
 
-exec >> /var/log/xps_power
+exec >> /var/log/xps-power
 exec 2>&1
 
-echo `date +%d/%m/%Y_%H:%M:%S` "  Running xps_power script"
+echo `date +%d/%m/%Y_%H:%M:%S` "  Running xps-power script"
 
 if [ -z "$1" ]; then
   echo `date +%d/%m/%Y_%H:%M:%S` "  ERROR: No arguments supplied."
@@ -215,6 +215,7 @@ case "$input" in
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
 #     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
+    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
     for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo on > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo on > ${i} ; done
@@ -261,6 +262,7 @@ case "$input" in
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
 #     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
+    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
     for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo on > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo on > ${i} ; done
@@ -306,7 +308,8 @@ case "$input" in
 
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
-  #  for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
+#     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
+    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
     for i in /sys/bus/!(pci*)/devices/*/power/control; do echo auto > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo auto > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo auto > ${i} ; done
@@ -348,7 +351,7 @@ case "$input" in
 
 esac
 
-echo `date +%d/%m/%Y_%H:%M:%S` "  Exiting xps_power script"
+echo `date +%d/%m/%Y_%H:%M:%S` "  Exiting xps-power script"
 
 exit 0
 }
