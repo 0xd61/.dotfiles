@@ -1,0 +1,9 @@
+#Rule for activating / deactivating power saving on battery
+#
+#Other tunables are in kernel line, module load etc.
+#SUBSYSTEM=="power_supply", ATTR{status}=="Discharging", RUN+="/bin/XPSpower auto"
+#SUBSYSTEM=="power_supply", ATTR{status}=="Charging", RUN+="/bin/XPSpower auto"
+#SUBSYSTEM=="power_supply", ATTR{online}=="0", RUN+="/bin/XPSpower auto"
+#SUBSYSTEM=="power_supply", ATTR{online}=="1", RUN+="/bin/XPSpower auto"
+#New, different test, may work better?
+ACTION=="change", SUBSYSTEM=="power_supply", RUN+="/usr/local/bin/xps_power.sh auto"
