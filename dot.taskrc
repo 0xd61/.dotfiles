@@ -31,8 +31,3 @@ data.location=~/.task
 
 report.next.filter=status:pending limit:page -someday
 report.ready.filter=+READY -someday
-taskd.server=freecinc.com:53589
-taskd.key=\/home\/dgl\/.task\/freecinc_2b44de2d.key.pem
-taskd.certificate=\/home\/dgl\/.task\/freecinc_2b44de2d.cert.pem
-taskd.ca=\/home\/dgl\/.task\/freecinc_2b44de2d.ca.pem
-taskd.credentials=FreeCinc\/freecinc_2b44de2d\/3d873d0d-e140-48b4-aec0-9233d9acc9ba
