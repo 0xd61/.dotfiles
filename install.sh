@@ -9,6 +9,7 @@ fc-cache
 # make dotfiles available
 ln -s $BASEDIR/dot.mkshrc $HOME/.mkshrc
 ln -s $BASEDIR/dot.mksh_alias $HOME/.mksh_alias
+ln -s $BASEDIR/dot.taskrc $HOME/.taskrc
 #ln -s $BASEDIR/dot.zshrc $HOME/.zshrc
 ln -s $BASEDIR/dot.asoundrc $HOME/.asoundrc
 ln -s $BASEDIR/dot.vimrc $HOME/.vimrc
