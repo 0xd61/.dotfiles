@@ -2,3 +2,4 @@
 \\builtin alias r="ranger"
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
 \\builtin alias lite="lite ./ &"
+\\builtin alias cls="\\builtin print -n \\ec"
