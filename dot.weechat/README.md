@@ -23,4 +23,5 @@ nick = "<nick>"
 handmade_password = "<password>"
 oftc_password = "<password>"
 freenode_password = "<password>"
+hackint_password = "<password>"
 
