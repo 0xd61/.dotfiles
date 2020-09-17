@@ -679,7 +679,7 @@ function tw_read_and_review {
     link="$1"
     title=$(tw_html_title $link)
     echo $title
-    descr="\"Read and review: $title\""
+    descr="\"Read and review: $title ($link)\""
     id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
     task "$id" annotate "$link"
 }
