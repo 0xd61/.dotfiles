@@ -3,8 +3,6 @@
 #https://www.reddit.com/r/Dell/comments/6s2e3w/optimizing_dell_xps_for_linux/dla56m5/
 #https://wiki.ubuntu.com/Kernel/PowerManagement/PowerSavingTweaks
 #https://www.kernel.org/doc/html/latest/admin-guide/laptops/laptop-mode.html
-set -e # Stop on errors
-
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if [ "$EUID" -ne 0 ]; then

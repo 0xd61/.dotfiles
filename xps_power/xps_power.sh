@@ -214,9 +214,9 @@ case "$input" in
 
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
-#     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
+    for i in /sys/bus/*/devices/*/power/control; do echo on > ${i} ; done
+#    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo on > ${i} ; done
+#    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo on > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo on > ${i} ; done
 
@@ -261,9 +261,9 @@ case "$input" in
 
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
-#     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
+    for i in /sys/bus/*/devices/*/power/control; do echo on > ${i} ; done
+#    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo on > ${i} ; done
+#    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo on > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo on > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo on > ${i} ; done
 
@@ -308,9 +308,9 @@ case "$input" in
 
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
     #The first one might conflict with nvidia devices starting, so we exclude the PCI devices
-#     for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
-    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo auto > ${i} ; done
+    for i in /sys/bus/*/devices/*/power/control; do echo auto > ${i} ; done
+#    for i in /sys/bus/pci/devices/!(0000:01:00.0)/power/control; do echo auto > ${i} ; done
+#    for i in /sys/bus/!(pci*)/devices/*/power/control; do echo auto > ${i} ; done
     for i in /sys/bus/*/devices/*/ata*/power/control; do echo auto > ${i} ; done
     for i in /sys/block/*/device/power/control; do echo auto > ${i} ; done
 
