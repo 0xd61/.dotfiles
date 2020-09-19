@@ -1,6 +1,10 @@
 #!/bin/bash
 #http://www.linux-kvm.org/page/Simple_shell_script_to_manage_your_virtual_machine_with_bridged_networking
 
+# TODO(dgl):
+# - auto create run dir
+# - merge kvm-network.sh
+
 ######################
 ## Default settings ##
 ######################
@@ -12,7 +16,6 @@ then
 else
 	DIR_BASE=$2
 fi
-FILE_HDA=${DIR_BASE}/hda
 FILE_CONF=${DIR_BASE}/conf
 
 ### run directory will be auto-created with following files
@@ -25,7 +28,7 @@ GUEST_ID=0
 GUEST_MEMORY=1024
 GUEST_IP=192.168.1.97
 HOST_IP=192.168.1.90/24
-HOST_INTERFACE=wlan0
+HOST_INTERFACE=vmbr0
 
 ### generated variables
 TAP_NAME=tap${GUEST_ID}
@@ -65,7 +68,7 @@ OPT_HDB=""
 OPT_VNC=""
 
 #OPT_HDA="-hda <hda>"
-OPT_HDA="-hda ${FILE_HDA}"
+OPT_HDA=""
 
 #OPT_SMP="-smp 4"
 OPT_SMP=""
@@ -122,10 +125,9 @@ start_vm_sliently() {
                 -m ${GUEST_MEMORY} \
                 ${OPT_BOOT} \
                 ${OPT_USBDEVICE} \
-                ${OPT_NIC} \
                 ${OPT_SERIAL} \
-                -net tap,ifname=${TAP_NAME},script=no \
-                -k fr \
+                -nic tap,ifname=${TAP_NAME},script=no,downscript=no \
+                -k de \
                 ${OPT_STD_VGA} \
                 -monitor unix:${FILE_MONITOR},server,nowait \
                 -pidfile ${FILE_PID} \
@@ -312,7 +314,7 @@ init)
 	echo 'OPT_DRIVE=""' >> ${DIR_BASE}/conf
 	echo 'OPT_HDB=""' >> ${DIR_BASE}/conf
 	echo 'OPT_VNC=""' >> ${DIR_BASE}/conf
-	echo 'OPT_HDA="-hda ${FILE_HDA}"' >> ${DIR_BASE}/conf
+	echo 'OPT_HDA=""' >> ${DIR_BASE}/conf
 	echo 'OPT_SMP="-smp 4"' >> ${DIR_BASE}/conf
 	echo 'OPT_SERIAL=""' >> ${DIR_BASE}/conf
 	echo 'OPT_OTHER=""' >> ${DIR_BASE}/conf
