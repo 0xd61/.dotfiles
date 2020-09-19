@@ -31,3 +31,14 @@ data.location=~/.task
 
 report.next.filter=status:pending limit:page -someday
 report.ready.filter=+READY -someday
+
+context.work=+@computer +@online
+context.home=+@home
+
+report.in.columns=id,description
+report.in.description=Inbox
+report.in.filter=status:pending limit:page (+in)
+report.in.labels=ID,Description
+report.next.filter=status:pending limit:page -in -someday
+report.ready.filter=+READY -someday
+
