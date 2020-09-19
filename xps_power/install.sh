@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 cp $DIR/xps_power.sh /usr/local/bin/xps-power.sh
-cp $DIR/xps_power.service /etc/systemd/system/xps-power.service
+#cp $DIR/xps_power.service /etc/systemd/system/xps-power.service
 ln -s $DIR/xps_power.rules /etc/udev/rules.d/99-xps-power.rules
 ln -s $DIR/xps_power.conf /etc/sysctl.d/99-xps-power.conf
 
