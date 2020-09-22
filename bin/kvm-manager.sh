@@ -27,11 +27,12 @@ FILE_OUT=${DIR_RUN}/out
 GUEST_ID=0
 GUEST_MEMORY=1024
 GUEST_IP=192.168.1.97
-HOST_IP=192.168.1.90/24
-HOST_INTERFACE=vmbr0
+HOST_INTERFACE=wlp2s0
+BRIDGE=vmbr0
+BRIDGE_IP=10.0.1.1/24
 
 ### generated variables
-TAP_NAME=tap${GUEST_ID}
+TAP=tap0${GUEST_ID}
 #MAC_ADDR=00:16:3e:${GUEST_ID}:00:01
 #VNC_DISPLAY=3${GUEST_ID}00
 #VNC_PORT=`expr ${VNC_DISPLAY} + 5900`
@@ -47,7 +48,7 @@ OPT_CDROM=""
 OPT_STD_VGA=""
 
 #OPT_USBDEVICE="-usbdevice tablet"
-OPT_USBDEVICE=""
+OPT_USBDEVICE="-usbdevice tablet"
 
 #OPT_NO_ACPI="-no-acpi"
 OPT_NO_ACPI=""
@@ -55,8 +56,7 @@ OPT_NO_ACPI=""
 #OPT_CPU="-cpu qemu64"
 OPT_CPU=""
 
-#OPT_NIC="-net nic,macaddr=${MAC_ADDR},model=rtl8139"
-OPT_NIC="-net nic"
+OPT_NIC="-nic tap,ifname=${TAP},script=no,downscript=no"
 
 #OPT_DRIVE="-drive <drive>"
 OPT_DRIVE=""
@@ -73,6 +73,8 @@ OPT_HDA=""
 #OPT_SMP="-smp 4"
 OPT_SMP=""
 
+OPT_KBD_LAYOUT="de"
+
 OPT_SERIAL=""
 
 OPT_OTHER=""
@@ -82,27 +84,58 @@ then
         . ${FILE_CONF}
 fi
 
+__check_root() {
+	if [ "$EUID" -ne 0 ]
+  	then echo "Please run as root"
+  	exit
+	fi
+}
+
 ### wireless network
 start_net() {
-        echo "start network adapter ${TAP_NAME}"
-        sysctl net.ipv4.ip_forward=1
-        tunctl -b -t ${TAP_NAME} -u `whoami`
-        ip link set ${TAP_NAME} up
-        ip addr add ${HOST_IP} dev ${TAP_NAME}
-        parprouted ${HOST_INTERFACE}  ${TAP_NAME}
-        echo "network adapter ${TAP_NAME} is started with as ip ${GUEST_IP}"
+		__check_root()
+    echo "start network adapter ${TAP_NAME}"
+		ip tuntap add dev ${TAP} mode tap group kvm
+    ip link set dev ${TAP} up promisc on
+    ip addr add 0.0.0.0 dev ${TAP}
+    ip link set ${TAP} master ${BRIDGE}
+
+    sysctl net.ipv4.conf.${TAP}.proxy_arp=1
+    echo "network adapter ${TAP} is started with as ip ${GUEST_IP}"
 }
 stop_net() {
-        echo "stop network adapter ${TAP_NAME}"
-        tunctl -d ${TAP_NAME}
+		__check_root()
+    echo "stop network adapter ${TAP}"
+		ip link del ${TAP}
 }
+start_bridge() {
+		__check_root()
+		ip link add ${BRIDGE} type bridge
+    ip link set ${BRIDGE} up
+    echo 0 > tee /sys/class/net/${BRIDGE}/bridge/stp_state
+    ip addr add ${BRIDGE_IP} dev ${BRIDGE}
+
+    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
+    sysctl net.ipv4.ip_forward=1
+    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
+    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
+
+    echo "bridge ${BRIDGE} started"
+}
+stop_bridge() {
+		__check_root()
+		echo "stop network bridge ${BRIDGE}"
+		ip link del ${BRIDGE}
+}
+
 check_net_status() {
-        NET_STATUS=`ifconfig | grep ${TAP_NAME}`
+        NET_STATUS=`ifconfig | grep ${TAP}`
         if test "${NET_STATUS}" = ""
         then
-                echo "network adapter ${TAP_NAME} has not been started"
+                echo "network adapter ${TAP} has not been started"
         else
-                echo "network adapter ${TAP_NAME} has been started"
+                echo "network adapter ${TAP} has been started"
         fi
 }
 
@@ -126,8 +159,8 @@ start_vm_sliently() {
                 ${OPT_BOOT} \
                 ${OPT_USBDEVICE} \
                 ${OPT_SERIAL} \
-                -nic tap,ifname=${TAP_NAME},script=no,downscript=no \
-                -k de \
+                ${OPT_NIC} \
+                -k ${OPT_KBD_LAYOUT} \
                 ${OPT_STD_VGA} \
                 -monitor unix:${FILE_MONITOR},server,nowait \
                 -pidfile ${FILE_PID} \
@@ -295,33 +328,38 @@ init)
 	DIR_BASE=${input:-$DIR_BASE}
 	mkdir -p $DIR_BASE
 	touch ${DIR_BASE}/conf
-	echo "DIR_RUN=${DIR_BASE}/run" >> ${DIR_BASE}/conf
-	echo "FILE_MONITOR=\${DIR_RUN}/monitor" >> ${DIR_BASE}/conf
-	echo "FILE_PID=\${DIR_RUN}/pid" >> ${DIR_BASE}/conf
-	echo "FILE_OUT=\${DIR_RUN}/out" >> ${DIR_BASE}/conf
-	echo "GUEST_ID=0" >> ${DIR_BASE}/conf
-	echo "GUEST_MEMORY=1024" >> ${DIR_BASE}/conf
-	echo "GUEST_IP=10.18.18.1\${GUEST_ID}" >> ${DIR_BASE}/conf
-	echo "HOST_IP=10.18.18.1/24" >> ${DIR_BASE}/conf
-	echo "HOST_INTERFACE=wlp2s0" >> ${DIR_BASE}/conf
-	echo 'OPT_BOOT="-boot c"' >> ${DIR_BASE}/conf
-	echo 'OPT_CDROM=""' >> ${DIR_BASE}/conf
-	echo 'OPT_STD_VGA="-std-vga"' >> ${DIR_BASE}/conf
-	echo 'OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
-	echo 'OPT_NO_ACPI=""' >> ${DIR_BASE}/conf
-	echo 'OPT_CPU="-cpu qemu64"' >> ${DIR_BASE}/conf
-	echo 'OPT_NIC="-net nic"' >> ${DIR_BASE}/conf
-	echo 'OPT_DRIVE=""' >> ${DIR_BASE}/conf
-	echo 'OPT_HDB=""' >> ${DIR_BASE}/conf
-	echo 'OPT_VNC=""' >> ${DIR_BASE}/conf
-	echo 'OPT_HDA=""' >> ${DIR_BASE}/conf
-	echo 'OPT_SMP="-smp 4"' >> ${DIR_BASE}/conf
-	echo 'OPT_SERIAL=""' >> ${DIR_BASE}/conf
-	echo 'OPT_OTHER=""' >> ${DIR_BASE}/conf
+	echo "#DIR_RUN=${DIR_BASE}/_run" >> ${DIR_BASE}/conf
+	echo "#FILE_MONITOR=\${DIR_RUN}/monitor" >> ${DIR_BASE}/conf
+	echo "#FILE_PID=\${DIR_RUN}/pid" >> ${DIR_BASE}/conf
+	echo "#FILE_OUT=\${DIR_RUN}/out" >> ${DIR_BASE}/conf
+	echo "#GUEST_ID=0" >> ${DIR_BASE}/conf
+	echo "#GUEST_MEMORY=1024" >> ${DIR_BASE}/conf
+	echo "#GUEST_IP=10.18.18.1\${GUEST_ID}" >> ${DIR_BASE}/conf
+	echo "#HOST_IP=10.18.18.1/24" >> ${DIR_BASE}/conf
+	echo "#HOST_INTERFACE=wlp2s0" >> ${DIR_BASE}/conf
+	echo "#TAP=tap0\${GUEST_ID}" >> ${DIR_BASE}/conf
+	echo "#BRIDGE=vmbr0" >> ${DIR_BASE}/conf
+	echo '#OPT_BOOT="-boot c"' >> ${DIR_BASE}/conf
+	echo '#OPT_CDROM=""' >> ${DIR_BASE}/conf
+	echo '#OPT_STD_VGA="-std-vga"' >> ${DIR_BASE}/conf
+	echo '#OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
+	echo '#OPT_NO_ACPI=""' >> ${DIR_BASE}/conf
+	echo '#OPT_CPU="-cpu qemu64"' >> ${DIR_BASE}/conf
+	echo '#OPT_NIC=""' >> ${DIR_BASE}/conf
+	echo '#OPT_DRIVE=""' >> ${DIR_BASE}/conf
+	echo '#OPT_HDB=""' >> ${DIR_BASE}/conf
+	echo '#OPT_VNC=""' >> ${DIR_BASE}/conf
+	echo '#OPT_HDA=""' >> ${DIR_BASE}/conf
+	echo '#OPT_SMP="-smp 4"' >> ${DIR_BASE}/conf
+	echo '#OPT_SERIAL=""' >> ${DIR_BASE}/conf
+	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
 	;;
 start-kvm)
 	start_kvm
 	;;
+start-bridge)
+  start_bridge
+  ;;
 start-net)
         start_net
         ;;
@@ -331,7 +369,7 @@ start-vm)
         ;;
 
 start)
-        start_net
+        sudo start_net
         start_vm
         ;;
 
@@ -375,10 +413,12 @@ stop-vm)
 stop-net)
         stop_net
         ;;
-
+stop-bridge)
+  			stop_bridge
+  			;;
 stop)
         stop_vm
-        stop_net
+        sudo stop_net
         ;;
 stop-kvm)
 	stop_kvm
@@ -396,9 +436,7 @@ kill)
 	echo "Standard options:"
 	echo "You need to specify a action, available actions are:"
 	echo "[init] creates default config file"
-	echo "[start-kvm] start kvm module"
-  echo "[start-net] start network of the virtual machine"
-  echo "[start-vm] start virtual machine itself"
+  echo "[start-bridge] start NAT bridge"
   echo "[start] start both"
   echo "[status] check the status of network and virtual machine"
   echo "[cad] ctrl-alt-delete"
@@ -408,9 +446,7 @@ kill)
   echo "[ping] ping guest"
   echo "[halt] ssh to the guest and halt the guest"
   echo "[reset] reset the virtual machine"
-  echo "[stop-vm] power off vritual machine"
-  echo "[stop-net] stop network of the virtual machine"
-	echo "[stop-kvm] stop kvm module"
+  echo "[stop-bridge] stop NAT bridge"
   echo "[stop] stop both"
   echo "[kill] kill the viritual machine and network"
 	echo ""
