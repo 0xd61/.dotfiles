@@ -39,6 +39,9 @@ report.in.columns=id,description
 report.in.description=Inbox
 report.in.filter=status:pending limit:page (+in)
 report.in.labels=ID,Description
+report.someday.columns=id,description
+report.someday.description=Someday
+report.someday.filter=status:pending limit:page (+someday)
+report.someday.labels=ID,Description
 report.next.filter=status:pending limit:page -in -someday
 report.ready.filter=+READY -someday
-
