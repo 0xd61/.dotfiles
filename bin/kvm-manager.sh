@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #http://www.linux-kvm.org/page/Simple_shell_script_to_manage_your_virtual_machine_with_bridged_networking
 
 # TODO(dgl):
@@ -10,9 +10,8 @@
 ######################
 
 ## Directory and files
-if ! [ -d $2 ]
-then
-	DIR_BASE=`pwd $`
+if [ "$2" = "" ]; then
+	DIR_BASE=`pwd`
 else
 	DIR_BASE=$2
 fi
@@ -48,7 +47,7 @@ OPT_CDROM=""
 OPT_STD_VGA=""
 
 #OPT_USBDEVICE="-usbdevice tablet"
-OPT_USBDEVICE="-usbdevice tablet"
+OPT_DEVICE="-usb -device usb-tablet"
 
 #OPT_NO_ACPI="-no-acpi"
 OPT_NO_ACPI=""
@@ -79,22 +78,21 @@ OPT_SERIAL=""
 
 OPT_OTHER=""
 
-if [ -f ${FILE_CONF} ]
-then
-        . ${FILE_CONF}
+if [ -f "${FILE_CONF}" ]; then
+    source ${FILE_CONF}
 fi
 
 __check_root() {
-	if [ "$EUID" -ne 0 ]
-  	then echo "Please run as root"
-  	exit
-	fi
+	  if [ "$EUID" -ne 0 ]; then
+	      echo "Please run as root"
+  	  	exit
+	  fi
 }
 
 ### wireless network
 start_net() {
-		__check_root()
-    echo "start network adapter ${TAP_NAME}"
+		__check_root
+    echo "start network adapter ${TAP}"
 		ip tuntap add dev ${TAP} mode tap group kvm
     ip link set dev ${TAP} up promisc on
     ip addr add 0.0.0.0 dev ${TAP}
@@ -104,38 +102,42 @@ start_net() {
     echo "network adapter ${TAP} is started with as ip ${GUEST_IP}"
 }
 stop_net() {
-		__check_root()
+		__check_root
     echo "stop network adapter ${TAP}"
 		ip link del ${TAP}
 }
 start_bridge() {
-		__check_root()
-		ip link add ${BRIDGE} type bridge
-    ip link set ${BRIDGE} up
-    echo 0 > tee /sys/class/net/${BRIDGE}/bridge/stp_state
-    ip addr add ${BRIDGE_IP} dev ${BRIDGE}
+		ip addr show ${BRIDGE} > /dev/null 2>&1
+    if [ "$?" -eq 0 ]; then
+		    __check_root
+				ip link add ${BRIDGE} type bridge
+		    ip link set ${BRIDGE} up
+		    tee /sys/class/net/${BRIDGE}/bridge/stp_state <<<0
+		    ip addr add ${BRIDGE_IP} dev ${BRIDGE}
 
-    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
-    sysctl net.ipv4.ip_forward=1
-    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
-    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
-    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
+		    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
+		    sysctl net.ipv4.ip_forward=1
+		    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
+		    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+		    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
 
-    echo "bridge ${BRIDGE} started"
+		    echo "bridge ${BRIDGE} started"
+		 else
+		 		echo "bridge ${BRIDGE} has been started"
+		 fi
 }
 stop_bridge() {
-		__check_root()
+		__check_root
 		echo "stop network bridge ${BRIDGE}"
 		ip link del ${BRIDGE}
 }
 
 check_net_status() {
-        NET_STATUS=`ifconfig | grep ${TAP}`
-        if test "${NET_STATUS}" = ""
-        then
-                echo "network adapter ${TAP} has not been started"
+				ip addr show ${TAP} > /dev/null 2>&1
+    		if [ "$?" -eq 0 ]; then
+        		echo "network adapter ${TAP} has been started"
         else
-                echo "network adapter ${TAP} has been started"
+            echo "network adapter ${TAP} has not been started"
         fi
 }
 
@@ -157,7 +159,7 @@ start_vm_sliently() {
                 ${OPT_CDROM} \
                 -m ${GUEST_MEMORY} \
                 ${OPT_BOOT} \
-                ${OPT_USBDEVICE} \
+                ${OPT_DEVICE} \
                 ${OPT_SERIAL} \
                 ${OPT_NIC} \
                 -k ${OPT_KBD_LAYOUT} \
@@ -357,10 +359,8 @@ init)
 start-kvm)
 	start_kvm
 	;;
-start-bridge)
-  start_bridge
-  ;;
 start-net)
+				start_bridge
         start_net
         ;;
 
@@ -369,7 +369,7 @@ start-vm)
         ;;
 
 start)
-        sudo start_net
+        start_net
         start_vm
         ;;
 
@@ -411,14 +411,12 @@ stop-vm)
         ;;
 
 stop-net)
+				stop_bridge
         stop_net
         ;;
-stop-bridge)
-  			stop_bridge
-  			;;
 stop)
         stop_vm
-        sudo stop_net
+        stop_net
         ;;
 stop-kvm)
 	stop_kvm
@@ -436,7 +434,8 @@ kill)
 	echo "Standard options:"
 	echo "You need to specify a action, available actions are:"
 	echo "[init] creates default config file"
-  echo "[start-bridge] start NAT bridge"
+  echo "[start-net] start network interfaces"
+  echo "[start-vm] start vm"
   echo "[start] start both"
   echo "[status] check the status of network and virtual machine"
   echo "[cad] ctrl-alt-delete"
@@ -446,7 +445,8 @@ kill)
   echo "[ping] ping guest"
   echo "[halt] ssh to the guest and halt the guest"
   echo "[reset] reset the virtual machine"
-  echo "[stop-bridge] stop NAT bridge"
+  echo "[stop-net] stop network interfaces"
+  echo "[stop-vm] stop vm"
   echo "[stop] stop both"
   echo "[kill] kill the viritual machine and network"
 	echo ""
