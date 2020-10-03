@@ -3,3 +3,4 @@
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
 \\builtin alias lite="lite ./ &"
 \\builtin alias cls="\\builtin print -n \\ec"
+\\builtin alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""

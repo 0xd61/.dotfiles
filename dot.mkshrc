@@ -692,8 +692,6 @@ function tw_read_and_review {
 #\\builtin export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
 
 \\builtin export DOCKER_HOST_IP=`ip -4 addr show scope global dev docker0 2> /dev/null | grep inet | awk '{print \$2}' | cut -d / -f 1`
-\\builtin export PATH=$PATH:$HOME/.local/bin
-
 \\builtin source $HOME/.asdf/asdf.sh
 
 # st-265color error fix
