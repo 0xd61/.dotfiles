@@ -9,6 +9,33 @@
 ## Default settings ##
 ######################
 
+#SPICE_PORT=5924
+#DIR_RUN=/home/dgl/VMs/windows/run
+#FILE_MONITOR=${DIR_RUN}/monitor
+#FILE_PID=${DIR_RUN}/pid
+#FILE_OUT=${DIR_RUN}/out
+#GUEST_ID=1
+#GUEST_MEMORY=4096
+#GUEST_IP=10.18.18.1${GUEST_ID}
+#BRIDGE_IP=10.18.18.1/24
+#HOST_INTERFACE=wlp2s0
+#TAP=tap0${GUEST_ID}
+#BRIDGE=vmbr0
+#OPT_BOOT="-boot c"
+#OPT_CDROM="-cdrom Windows10_InsiderPreview_Client_x64_en-us_19041.iso"
+#OPT_STD_VGA="-vga qxl"
+#OPT_USBDEVICE="-usbdevice tablet"
+#OPT_NO_ACPI=""
+#OPT_CPU="-cpu qemu64"
+#OPT_NIC="-nic tap,ifname=tap0${GUEST_ID},script=no,downscript=no,model=rtl8139"
+#OPT_DRIVE="-device virtio-serial -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0"
+#OPT_HDB=""
+#OPT_VNC=""
+#OPT_HDA="-hda data.qcow2"
+#OPT_SMP="-smp 4"
+#OPT_SERIAL=""
+#OPT_OTHER="-spice port=${SPICE_PORT},disable-ticketing"
+
 ## Directory and files
 if [ "$2" = "" ]; then
 	DIR_BASE=`pwd`
@@ -108,7 +135,7 @@ stop_net() {
 }
 start_bridge() {
 		ip addr show ${BRIDGE} > /dev/null 2>&1
-    if [ "$?" -eq 0 ]; then
+    if [ "$?" -ne 0 ]; then
 		    __check_root
 				ip link add ${BRIDGE} type bridge
 		    ip link set ${BRIDGE} up
@@ -337,7 +364,7 @@ init)
 	echo "#GUEST_ID=0" >> ${DIR_BASE}/conf
 	echo "#GUEST_MEMORY=1024" >> ${DIR_BASE}/conf
 	echo "#GUEST_IP=10.18.18.1\${GUEST_ID}" >> ${DIR_BASE}/conf
-	echo "#HOST_IP=10.18.18.1/24" >> ${DIR_BASE}/conf
+	echo "#BRIDGE_IP=10.18.18.1/24" >> ${DIR_BASE}/conf
 	echo "#HOST_INTERFACE=wlp2s0" >> ${DIR_BASE}/conf
 	echo "#TAP=tap0\${GUEST_ID}" >> ${DIR_BASE}/conf
 	echo "#BRIDGE=vmbr0" >> ${DIR_BASE}/conf
@@ -460,7 +487,7 @@ kill)
 	echo "GUEST_ID"
 	echo "GUEST_MEMORY"
 	echo "GUEST_IP"
-	echo "HOST_IP"
+	echo "BRIDGE_IP"
 	echo "HOST_INTERFACE"
 	echo "OPT_BOOT"
 	echo "OPT_CDROM"
