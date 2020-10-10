@@ -9,33 +9,6 @@
 ## Default settings ##
 ######################
 
-#SPICE_PORT=5924
-#DIR_RUN=/home/dgl/VMs/windows/run
-#FILE_MONITOR=${DIR_RUN}/monitor
-#FILE_PID=${DIR_RUN}/pid
-#FILE_OUT=${DIR_RUN}/out
-#GUEST_ID=1
-#GUEST_MEMORY=4096
-#GUEST_IP=10.18.18.1${GUEST_ID}
-#BRIDGE_IP=10.18.18.1/24
-#HOST_INTERFACE=wlp2s0
-#TAP=tap0${GUEST_ID}
-#BRIDGE=vmbr0
-#OPT_BOOT="-boot c"
-#OPT_CDROM="-cdrom Windows10_InsiderPreview_Client_x64_en-us_19041.iso"
-#OPT_STD_VGA="-vga qxl"
-#OPT_USBDEVICE="-usbdevice tablet"
-#OPT_NO_ACPI=""
-#OPT_CPU="-cpu qemu64"
-#OPT_NIC="-nic tap,ifname=tap0${GUEST_ID},script=no,downscript=no,model=rtl8139"
-#OPT_DRIVE="-device virtio-serial -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0"
-#OPT_HDB=""
-#OPT_VNC=""
-#OPT_HDA="-hda data.qcow2"
-#OPT_SMP="-smp 4"
-#OPT_SERIAL=""
-#OPT_OTHER="-spice port=${SPICE_PORT},disable-ticketing"
-
 ## Directory and files
 if [ "$2" = "" ]; then
 	DIR_BASE=`pwd`
@@ -52,62 +25,54 @@ FILE_OUT=${DIR_RUN}/out
 
 GUEST_ID=0
 GUEST_MEMORY=1024
-GUEST_IP=192.168.1.97
+GUEST_IP=10.18.18.1${GUEST_ID}
 HOST_INTERFACE=wlp2s0
 BRIDGE=vmbr0
-BRIDGE_IP=10.0.1.1/24
-
-### generated variables
-TAP=tap0${GUEST_ID}
-#MAC_ADDR=00:16:3e:${GUEST_ID}:00:01
-#VNC_DISPLAY=3${GUEST_ID}00
-#VNC_PORT=`expr ${VNC_DISPLAY} + 5900`
+BRIDGE_IP=10.18.18.1/24
 
 ### options for kvm
-#OPT_BOOT="-boot c"
+QEMU_SYSTEM=`which qemu-system-x86_64`
+OPT_KVM="-enable-kvm"
+OPT_CPU="-cpu host"
+OPT_SMP="-smp 4"
 OPT_BOOT=""
-
-#OPT_CDROM="-cdrom /media/cdrom"
-OPT_CDROM=""
-
-#OPT_STD_VGA="-std-vga"
-OPT_STD_VGA=""
-
-#OPT_USBDEVICE="-usbdevice tablet"
-OPT_DEVICE="-usb -device usb-tablet"
-
-#OPT_NO_ACPI="-no-acpi"
 OPT_NO_ACPI=""
-
-#OPT_CPU="-cpu qemu64"
-OPT_CPU=""
-
-OPT_NIC="-nic tap,ifname=${TAP},script=no,downscript=no"
-
-#OPT_DRIVE="-drive <drive>"
+OPT_CDROM=""
 OPT_DRIVE=""
-
-#OPT_HDB="-hdb <hdb>"
-OPT_HDB=""
-
-#OPT_VNC="-vnc :${VNC_DISPLAY}"
-OPT_VNC=""
-
-#OPT_HDA="-hda <hda>"
 OPT_HDA=""
-
-#OPT_SMP="-smp 4"
-OPT_SMP=""
-
-OPT_KBD_LAYOUT="de"
-
+OPT_HDB=""
+OPT_VGA=""
 OPT_SERIAL=""
-
+OPT_NIC="-nic tap,ifname=${TAP},script=no,downscript=no"
+OPT_USBDEVICE="-usbdevice tablet"
+OPT_KBD_LAYOUT="de"
 OPT_OTHER=""
 
 if [ -f "${FILE_CONF}" ]; then
     source ${FILE_CONF}
 fi
+
+if [ ! -z ${VNC_DISPLAY} ]; then
+	VNC="-vnc :${VNC_DISPLAY}"
+	VNC_PORT=`expr ${VNC_DISPLAY} + 5900`
+fi
+
+if [ ! -z ${SPICE_PORT} ]; then
+	SPICE="-spice port=${SPICE_PORT},disable-ticketing \
+-device virtio-serial -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
+-device ich9-usb-ehci1,id=usb \
+-device ich9-usb-uhci1,masterbus=usb.0,firstport=0,multifunction=on \
+-device ich9-usb-uhci2,masterbus=usb.0,firstport=2 \
+-device ich9-usb-uhci3,masterbus=usb.0,firstport=4 \
+-chardev spicevmc,name=usbredir,id=usbredirchardev1 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1 \
+-chardev spicevmc,name=usbredir,id=usbredirchardev2 -device usb-redir,chardev=usbredirchardev2,id=usbredirdev2 \
+-chardev spicevmc,name=usbredir,id=usbredirchardev3 -device usb-redir,chardev=usbredirchardev3,id=usbredirdev3"
+fi
+
+### generated variables
+
+if [ -z ${TAP} ]; then TAP=tap0${GUEST_ID}; fi
+if [ -z ${MAC_ADDR} ]; then MAC_ADDR=00:16:3e:${GUEST_ID}:00:01; fi
 
 __check_root() {
 	  if [ "$EUID" -ne 0 ]; then
@@ -177,7 +142,8 @@ start_vm_sliently() {
                 mkdir ${DIR_RUN}
         fi
 
-        kvm \
+        ${QEMU_SYSTEM} \
+        				${OPT_KVM} \
                 ${OPT_HDA} \
                 ${OPT_HDB} \
                 ${OPT_DRIVE} \
@@ -190,12 +156,13 @@ start_vm_sliently() {
                 ${OPT_SERIAL} \
                 ${OPT_NIC} \
                 -k ${OPT_KBD_LAYOUT} \
-                ${OPT_STD_VGA} \
+                ${OPT_VGA} \
                 -monitor unix:${FILE_MONITOR},server,nowait \
                 -pidfile ${FILE_PID} \
                 ${OPT_NO_ACPI} \
-                ${OPT_VNC} \
-                ${OPT_OTHER} &
+                ${OPT_OTHER} \
+                ${VNC} \
+                ${SPICE} &
 
         # check if the pid file created successfully
         if [ ! -f ${FILE_PID} ]
@@ -357,31 +324,37 @@ init)
 	DIR_BASE=${input:-$DIR_BASE}
 	mkdir -p $DIR_BASE
 	touch ${DIR_BASE}/conf
-	echo "#DIR_RUN=${DIR_BASE}/_run" >> ${DIR_BASE}/conf
-	echo "#FILE_MONITOR=\${DIR_RUN}/monitor" >> ${DIR_BASE}/conf
-	echo "#FILE_PID=\${DIR_RUN}/pid" >> ${DIR_BASE}/conf
-	echo "#FILE_OUT=\${DIR_RUN}/out" >> ${DIR_BASE}/conf
-	echo "#GUEST_ID=0" >> ${DIR_BASE}/conf
-	echo "#GUEST_MEMORY=1024" >> ${DIR_BASE}/conf
-	echo "#GUEST_IP=10.18.18.1\${GUEST_ID}" >> ${DIR_BASE}/conf
-	echo "#BRIDGE_IP=10.18.18.1/24" >> ${DIR_BASE}/conf
-	echo "#HOST_INTERFACE=wlp2s0" >> ${DIR_BASE}/conf
-	echo "#TAP=tap0\${GUEST_ID}" >> ${DIR_BASE}/conf
-	echo "#BRIDGE=vmbr0" >> ${DIR_BASE}/conf
-	echo '#OPT_BOOT="-boot c"' >> ${DIR_BASE}/conf
-	echo '#OPT_CDROM=""' >> ${DIR_BASE}/conf
-	echo '#OPT_STD_VGA="-std-vga"' >> ${DIR_BASE}/conf
-	echo '#OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
-	echo '#OPT_NO_ACPI=""' >> ${DIR_BASE}/conf
-	echo '#OPT_CPU="-cpu qemu64"' >> ${DIR_BASE}/conf
-	echo '#OPT_NIC=""' >> ${DIR_BASE}/conf
-	echo '#OPT_DRIVE=""' >> ${DIR_BASE}/conf
-	echo '#OPT_HDB=""' >> ${DIR_BASE}/conf
-	echo '#OPT_VNC=""' >> ${DIR_BASE}/conf
-	echo '#OPT_HDA=""' >> ${DIR_BASE}/conf
+	echo "#DIR_RUN=${DIR_BASE}/run" >> ${DIR_BASE}/conf
+	echo '#FILE_MONITOR=${DIR_RUN}/monitor' >> ${DIR_BASE}/conf
+	echo '#FILE_PID=${DIR_RUN}/pid' >> ${DIR_BASE}/conf
+	echo '#FILE_OUT=${DIR_RUN}/out' >> ${DIR_BASE}/conf
+	echo '#GUEST_ID=0' >> ${DIR_BASE}/conf
+	echo '#GUEST_MEMORY=1024' >> ${DIR_BASE}/conf
+	echo '#GUEST_IP=10.18.18.1${GUEST_ID}' >> ${DIR_BASE}/conf
+	echo '#HOST_INTERFACE=wlp2s0' >> ${DIR_BASE}/conf
+	echo '#BRIDGE_IP=10.18.18.1/24' >> ${DIR_BASE}/conf
+	echo '#BRIDGE=vmbr0' >> ${DIR_BASE}/conf
+	echo '#TAP=tap0${GUEST_ID}' >> ${DIR_BASE}/conf
+  echo '' >> ${DIR_BASE}/conf
+  echo '#QEMU_SYSTEM=`which qemu-system-x86_64`' >> ${DIR_BASE}/conf
+  echo '#OPT_KVM="-enable kvm"' >> ${DIR_BASE}/conf
+	echo '#OPT_CPU="-cpu host"' >> ${DIR_BASE}/conf
 	echo '#OPT_SMP="-smp 4"' >> ${DIR_BASE}/conf
-	echo '#OPT_SERIAL=""' >> ${DIR_BASE}/conf
+	echo '#OPT_BOOT=""    # -boot c' >> ${DIR_BASE}/conf
+	echo '#OPT_NO_ACPI="" # -no-acpi' >> ${DIR_BASE}/conf
+	echo '#OPT_CDROM=""    # -cdrom MyIsoImage.img' >> ${DIR_BASE}/conf
+	echo '#OPT_DRIVE=""    # -drive file=data.qcow2,media=disk,if=virtio' >> ${DIR_BASE}/conf
+	echo '#OPT_HDA=""    # -hda data.qcow2' >> ${DIR_BASE}/conf
+	echo '#OPT_HDB=""' >> ${DIR_BASE}/conf
+	echo '#OPT_VGA=""    # -vga qxl' >> ${DIR_BASE}/conf
+	echo '#OPT_SERIAL=""    # -serial stdio' >> ${DIR_BASE}/conf
+	echo '#OPT_NIC="-nic tap,ifname=tap0${GUEST_ID},script=no,downscript=no"' >> ${DIR_BASE}/conf
+	echo '#OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
+	echo '#OPT_KBD_LAYOUT="de"' >> ${DIR_BASE}/conf
 	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
+  echo '' >> ${DIR_BASE}/conf
+	echo '#VNC_DISPLAY=3${GUEST_ID}00'  >> ${DIR_BASE}/conf
+	echo '#SPICE_PORT=592${GUEST_ID}' >> ${DIR_BASE}/conf
 	;;
 start-kvm)
 	start_kvm
@@ -438,73 +411,46 @@ stop-vm)
         ;;
 
 stop-net)
-				stop_bridge
-        stop_net
-        ;;
+		stop_bridge
+		stop_net
+		;;
 stop)
-        stop_vm
-        stop_net
-        ;;
+    stop_vm
+    stop_net
+    ;;
 stop-kvm)
-	stop_kvm
-	;;
+		stop_kvm
+		;;
 kill)
-        kill_vm
-        sleep 1
-        stop_net
-        ;;
+    kill_vm
+    sleep 1
+    stop_net
+    ;;
 
 *)
-	echo "KVM manager version 0.1, Samuel Bally"
-	echo "usage: kvm-manager [options] [path]"
-	echo ""
-	echo "Standard options:"
-	echo "You need to specify a action, available actions are:"
-	echo "[init] creates default config file"
-  echo "[start-net] start network interfaces"
-  echo "[start-vm] start vm"
-  echo "[start] start both"
-  echo "[status] check the status of network and virtual machine"
-  echo "[cad] ctrl-alt-delete"
-  echo "[vnc] use vinagre to view the vnc of the guest"
-  echo "[rdesktop] remote desktop to the guest"
-  echo "[ssh] ssh to the guest"
-  echo "[ping] ping guest"
-  echo "[halt] ssh to the guest and halt the guest"
-  echo "[reset] reset the virtual machine"
-  echo "[stop-net] stop network interfaces"
-  echo "[stop-vm] stop vm"
-  echo "[stop] stop both"
-  echo "[kill] kill the viritual machine and network"
-	echo ""
-	echo "Config file:"
-	echo "create a conf file in your vm directory for change default settings"
-	echo "conf varialbles:"
-	echo "DIR_RUN"
-	echo "FILE_MONITOR"
-	echo "FILE_PID"
-	echo "FILE_OUT"
-	echo "GUEST_ID"
-	echo "GUEST_MEMORY"
-	echo "GUEST_IP"
-	echo "BRIDGE_IP"
-	echo "HOST_INTERFACE"
-	echo "OPT_BOOT"
-	echo "OPT_CDROM"
-	echo "OPT_STD_VGA"
-	echo "OPT_USBDEVICE"
-	echo "OPT_NO_ACPI"
-	echo "OPT_CPU"
-	echo "OPT_NIC"
-	echo "OPT_DRIVE"
-	echo "OPT_HDB"
-	echo "OPT_VNC"
-	echo "OPT_HDA"
-	echo "OPT_SMP"
-	echo "OPT_SERIAL"
-	echo "OPT_OTHER"
-        exit 1
-        ;;
+		echo "KVM manager version 0.1, Samuel Bally"
+		echo "usage: kvm-manager [options] [path]"
+		echo ""
+		echo "Standard options:"
+		echo "You need to specify a action, available actions are:"
+		echo "[init] creates default config file"
+	  echo "[start-net] start network interfaces"
+	  echo "[start-vm] start vm"
+	  echo "[start] start both"
+	  echo "[status] check the status of network and virtual machine"
+	  echo "[cad] ctrl-alt-delete"
+	  echo "[vnc] use vinagre to view the vnc of the guest"
+	  echo "[rdesktop] remote desktop to the guest"
+	  echo "[ssh] ssh to the guest"
+	  echo "[ping] ping guest"
+	  echo "[halt] ssh to the guest and halt the guest"
+	  echo "[reset] reset the virtual machine"
+	  echo "[stop-net] stop network interfaces"
+  	echo "[stop-vm] stop vm"
+  	echo "[stop] stop both"
+		echo "[kill] kill the viritual machine and network"
+    exit 1
+    ;;
 
 esac
 exit
