@@ -68,7 +68,7 @@ IFS=$'\n\t'
 # $_VERSION
 #
 # The most recent program version.
-_VERSION="5.5.1"
+_VERSION="5.6.1"
 
 # $_ME
 #
@@ -126,6 +126,11 @@ _LANG="${LANG:-}" _LC_ALL="${LC_ALL:-}"
 # Information on why `hash` is used here:
 # http://stackoverflow.com/a/677212
 _command_exists() {
+  if [[ "${1:-}" == "w3m" ]]
+  then # Detect WSL 1 (https://stackoverflow.com/a/38859331), where w3m errors.
+    [[ -f /proc/version ]] && grep -q Micro /proc/version && return 1
+  fi
+
   hash "${1}" 2>/dev/null
 }
 
@@ -635,6 +640,22 @@ __set_nb_color_primary() {
 # Supported Values: [0..255+]
 export NB_COLOR_SECONDARY="${NB_COLOR_SECONDARY:-8}"
 
+# Color Variables
+#
+# Avoid multiple tput calls by assigning output to variables.
+export _TPUT_SGR0=
+if [[ -n "${TMUX:-}" ]]
+then
+  # Avoid `tmux` and `less` quirks: https://unix.stackexchange.com/a/446541
+  _TPUT_SGR0="$(printf '\033[m')"
+else
+  _TPUT_SGR0="$(tput sgr0)"
+fi
+export _TPUT_SMUL=          ; _TPUT_SMUL="$(tput smul)"
+export _TPUT_SETAF_8=       ; _TPUT_SETAF_8="$(tput setaf 8)"
+export _TPUT_COLOR_PRIMARY=
+       _TPUT_COLOR_PRIMARY="$(tput setaf "${NB_COLOR_PRIMARY}")"
+
 # _color_dim()
 #
 # Usage:
@@ -685,11 +706,6 @@ _color_id_brackets() {
 #
 # Description:
 #   Use `tput` to highlight the given string.
-export _TPUT_SGR0=          ; _TPUT_SGR0="$(tput sgr0)"
-export _TPUT_SMUL=          ; _TPUT_SMUL="$(tput smul)"
-export _TPUT_SETAF_8=       ; _TPUT_SETAF_8="$(tput setaf 8)"
-export _TPUT_COLOR_PRIMARY=
-       _TPUT_COLOR_PRIMARY="$(tput setaf "${NB_COLOR_PRIMARY}")"
 _color_primary() {
   if ! ((_COLOR_ENABLED))
   then
@@ -810,6 +826,14 @@ then
   mkdir -p "${_NB_CACHE_PATH}"
 fi
 
+# $TMPDIR
+#
+# Reset $TMPDIR if it's set to the current working directory by npm.
+if [[ "${TMPDIR:-}" == "${PWD}" ]]
+then
+  export TMPDIR="/tmp"
+fi
+
 # $_NB_TEMP_DIRECTORY
 #
 # The full path to the temp directory.
@@ -918,94 +942,105 @@ _git_checkpoint() {
    [[ -z "${_target_directory:-}" ]] &&
       _exit_1 printf "Usage: _get_checkpoint_sync <target-directory>"
 
+    if ! git -C "${_target_directory}" remote get-url origin &>/dev/null
+    then
+      return 0
+    fi
+
     local _git_branch=
     _git_branch="$(git -C "${_target_directory}" rev-parse --abbrev-ref HEAD)"
 
-    if git -C "${_target_directory}" show-branch "remotes/origin/${_git_branch}" > /dev/null 2>&1
+    if ! git -C "${_target_directory}" fetch &>/dev/null
     then
-      git -C "${_target_directory}" fetch &>/dev/null || {
-        _warn printf "Unable to fetch from remote.\\n"
-        return 1
-      }
+      _warn printf "Unable to fetch from remote.\\n"
+      return 1
+    fi
 
-      if ! git -C "${_target_directory}" rebase "origin/${_git_branch}" &>/dev/null
+    if ! git -C "${_target_directory}" show-branch "remotes/origin/${_git_branch}" > /dev/null 2>&1
+    then
+      _warn printf \
+        "Remote branch not found: %s\\n" "$(_color_primary "${_git_branch}")"
+      return 1
+    fi
+
+    if ! git -C "${_target_directory}" rebase "origin/${_git_branch}" &>/dev/null
+    then
+      local _merge_error=1
+
+      local _conflicted_files
+      _conflicted_files=($(
+        GIT_PAGER='' git -C "${_target_directory}" diff --name-only --diff-filter=U
+      ))
+
+      local _conflicted_text_files=()
+      local _conflicted_binary_files=()
+
+      if [[ -n "${_conflicted_files[*]:-}" ]]
       then
-        local _merge_error=1
-
-        local _conflicted_files
-        _conflicted_files=($(
-          GIT_PAGER='' git -C "${_target_directory}" diff --name-only --diff-filter=U
-        ))
-
-        local _conflicted_text_files=()
-        local _conflicted_binary_files=()
-
-        if [[ -n "${_conflicted_files[*]:-}" ]]
+        if _contains ".index" "${_conflicted_files[@]}"
         then
-          if _contains ".index" "${_conflicted_files[@]}"
-          then
-            # Remove git conflict markers to keep both.
-            # More info: https://stackoverflow.com/a/55187779
-            _sed_i              \
-              -e '/^<<<<<<</d'  \
-              -e '/^>>>>>>>/d'  \
-              -e '/=======/d'   \
-              "${_target_directory}/.index"
+          # Remove git conflict markers to keep both.
+          # More info: https://stackoverflow.com/a/55187779
+          _sed_i              \
+            -e '/^<<<<<<</d'  \
+            -e '/^>>>>>>>/d'  \
+            -e '/=======/d'   \
+            "${_target_directory}/.index"
 
-            git -C "${_target_directory}" add ".index"
-          fi
-
-          for __file in "${_conflicted_files[@]}"
-          do
-            [[ "${__file}" == ".index" ]] && continue
-
-            if _file_is_text "${__file}"
-            then
-              _conflicted_text_files+=("${__file}")
-
-              git -C "${_target_directory}" add         \
-                "${__file}"
-            else
-              git -C "${_target_directory}" checkout    \
-                "origin/${_git_branch}" -- "${__file}"
-
-              local _conflicted_file=
-              _conflicted_file="$(
-                _notebooks show "${_target_directory}"  \
-                  --filename  "${__file%%.*}--conflicted-copy.${__file#*.}"
-              )"
-
-              _conflicted_binary_files+=("${_conflicted_file}")
-
-              git -C "${_target_directory}" mv          \
-                "${__file}" "${_conflicted_file}"
-
-              git -C "${_target_directory}" checkout    \
-                "${_git_branch}" -- "${__file}"
-
-              git -C "${_target_directory}" add "${_conflicted_file}"
-              git -C "${_target_directory}" add "${__file}"
-            fi
-          done
-
-          GIT_EDITOR=true git -C "${_target_directory}" rebase \
-            --continue &>/dev/null &&
-              _merge_error=0
+          git -C "${_target_directory}" add ".index"
         fi
 
-        if ((_merge_error))
-        then
-          git -C "${_target_directory}" rebase --abort
+        for __file in "${_conflicted_files[@]}"
+        do
+          [[ "${__file}" == ".index" ]] && continue
 
-          _warn printf \
-            "Merge conflict. Use \`%s git\` to merge manually.\\n" \
-            "${_ME}"
-          return 1
-        else
-          if ((${#_conflicted_text_files[@]}))
+          if _file_is_text "${__file}"
           then
-            printf "\\n"
-            _warn cat <<HEREDOC
+            _conflicted_text_files+=("${__file}")
+
+            git -C "${_target_directory}" add         \
+              "${__file}"
+          else
+            git -C "${_target_directory}" checkout    \
+              "origin/${_git_branch}" -- "${__file}"
+
+            local _conflicted_file=
+            _conflicted_file="$(
+              _notebooks show "${_target_directory}"  \
+                --filename  "${__file%%.*}--conflicted-copy.${__file#*.}"
+            )"
+
+            _conflicted_binary_files+=("${_conflicted_file}")
+
+            git -C "${_target_directory}" mv          \
+              "${__file}" "${_conflicted_file}"
+
+            git -C "${_target_directory}" checkout    \
+              "${_git_branch}" -- "${__file}"
+
+            git -C "${_target_directory}" add "${_conflicted_file}"
+            git -C "${_target_directory}" add "${__file}"
+          fi
+        done
+
+        GIT_EDITOR=true git -C "${_target_directory}" rebase \
+          --continue &>/dev/null &&
+            _merge_error=0
+      fi
+
+      if ((_merge_error))
+      then
+        git -C "${_target_directory}" rebase --abort
+
+        _warn printf \
+          "Merge conflict. Use \`%s git\` to merge manually.\\n" \
+          "${_ME}"
+        return 1
+      else
+        if ((${#_conflicted_text_files[@]}))
+        then
+          printf "\\n"
+          _warn cat <<HEREDOC
 Files containing conflicts:
 
 $(for __file in "${_conflicted_text_files[@]}"
@@ -1015,12 +1050,12 @@ done)
 
 Resolve conflicts with \`${_ME} edit\`. More info: \`${_ME} help sync\`
 HEREDOC
-          fi
+        fi
 
-          if ((${#_conflicted_binary_files[@]}))
-          then
-            printf "\\n"
-            _warn cat <<HEREDOC
+        if ((${#_conflicted_binary_files[@]}))
+        then
+          printf "\\n"
+          _warn cat <<HEREDOC
 Conflicted copies of binary files:
 
 $(for __file in "${_conflicted_binary_files[@]}"
@@ -1028,17 +1063,16 @@ do
   printf "  %s:%s\\n" "${_target_directory}" "${__file}"
 done)
 HEREDOC
-          fi
         fi
       fi
+    fi
 
-      git -C "${_target_directory}" push origin "${_git_branch}" &>/dev/null || {
+    git -C "${_target_directory}" push  \
+      --set-upstream                    \
+      origin "${_git_branch}" &>/dev/null || {
         _warn printf "Unable to push to remote.\\n"
         return 1
       }
-    else
-      git push &>/dev/null
-    fi
   }
 
   local _message=
@@ -1292,6 +1326,88 @@ _alias_subcommand() {
   eval "_${_alias}() { _${_subcommand} \"\${@}\"; }"
 }
 
+# _browser()
+#
+# Usage:
+#   _browser [<url>] [--dump]
+#
+# Options:
+#   --dump    Print the page to standard output.
+#
+# Description:
+#   Interact with the preferred or available terminal web browser. When called
+#   with no input or arguments, test if a terminal web browser is available.
+#   With <url> or standard input, view in the preferred or available browser.
+#
+# Exit / Error Status:
+#   0 (success, true)  If a terminal browser is available.
+#   1 (error,  false)  if not.
+_browser() {
+  local _browser_command=()
+  local _dump=0
+  local _url=
+
+  for __arg in "${@:-}"
+  do
+    case "${__arg}" in
+      --dump)
+        _dump=1
+        ;;
+      *)
+        [[ -z "${_url:-}" ]] && _url="${__arg}"
+        ;;
+    esac
+  done
+
+  if [[ -n "${BROWSER:-}" ]]
+  then
+    IFS=' ' read -ra _browser_command <<< "${BROWSER}"
+  else
+    if _command_exists "w3m"
+    then
+      _browser_command+=("w3m")
+    elif _command_exists "lynx"
+    then
+      _browser_command+=("lynx")
+    fi
+  fi
+
+  [[ -z "${_browser_command[*]:-}" ]] && return 1
+
+  if _interactive_input
+  then
+    if [[ -z "${_url:-}" ]]
+    then
+      return 0
+    else
+      "${_browser_command[@]:-}" "${_url:-}"
+      return 0
+    fi
+  else
+    if [[ "${_browser_command[*]:-}" =~ w3m ]]
+    then
+      if ((_dump))
+      then
+        "${_browser_command[@]:-}" -T text/html -dump
+      else
+        "${_browser_command[@]:-}" -T text/html
+      fi
+
+      return 0
+    elif [[ "${_browser_command[*]:-}" =~ lynx ]]
+    then
+      _arguments+=("-stdin")
+      ((_dump)) && _arguments+=("--dump")
+
+      "${_browser_command[@]:-}" "${_arguments[@]:-}"
+      return 0
+    else
+      "${_browser_command[@]}"
+      return 0
+    fi
+  fi
+}
+
 # _decrypt_file()
 #
 # Usage:
@@ -1492,24 +1608,24 @@ Can't edit archives. Export archive and expand to edit.\\n"
     fi
   fi
 
-  local _editor_command=("${EDITOR}")
+  local _editor_command="${EDITOR}"
 
   if ((_wait)) &&
      [[ "${EDITOR}" =~ gvim|mvim ]]
   then
-    _editor_command+=("-f")
+    _editor_command="${_editor_command} -f"
   elif ((_wait)) &&
        [[ "${EDITOR}" =~ code|mate|subl ]]
   then
-    _editor_command+=("--wait")
+    _editor_command="${_editor_command} --wait"
   fi
 
   if [[ -d "${_file_path}" ]] &&
      [[ "${EDITOR}" =~ vim ]]
   then
-    cd "${_file_path}" && "${_editor_command[@]}"
+    cd "${_file_path}" && "${_editor_command:-}"
   else
-    "${_editor_command[@]}" "${_file_path}"
+    eval "${_editor_command} \"${_file_path}\""
   fi
 }
 
@@ -2123,7 +2239,7 @@ _get_unique_basename() {
 
   if [[ -z "${_file_name}" ]]
   then
-    _file_name="$(date -u "+%Y%m%d%H%M%S")"
+    _file_name="$(date "+%Y%m%d%H%M%S")"
   fi
 
   local _file_type="${_file_basename#*.}"
@@ -2203,8 +2319,6 @@ _get_unique_path() {
 #   https://github.com/sharkdp/bat
 #   https://pygments.org/
 _highlight_syntax_if_available() {
-  ((_COLOR_ENABLED)) || cat "${@:-}"
-
   local _extension=
   local _path=
 
@@ -2218,10 +2332,21 @@ _highlight_syntax_if_available() {
     _extension="md"
   fi
 
+  if ! ((_COLOR_ENABLED))
+  then
+    if [[ -n "${_path:-}" ]]
+    then
+      cat "${_path}"
+    else
+      cat
+    fi
+
+    return 0
+  fi
+
   if hash "bat" 2>/dev/null
   then
     local _arguments=()
-    local _theme="${NB_SYNTAX_THEME}"
 
     if [[ -n "${_path:-}" ]]
     then
@@ -2234,7 +2359,7 @@ _highlight_syntax_if_available() {
       --paging never        \
       --color always        \
       --plain               \
-      --theme "${_theme:-}"
+      --theme "${NB_SYNTAX_THEME:-base16}"
   elif hash "highlight" 2>/dev/null
   then
     local _arguments=("-O" "ansi")
@@ -2260,7 +2385,12 @@ _highlight_syntax_if_available() {
 
     pygmentize "${_arguments[@]}" 2>/dev/null
   else
-    cat "${@}"
+    if [[ -n "${_path:-}" ]]
+    then
+      cat "${_path}"
+    else
+      cat
+    fi
   fi
 }
 
@@ -2291,9 +2421,9 @@ _interactive_input() {
 # More information:
 #   https://stackoverflow.com/a/17841619
 _join() {
-  local _delimiter="${1}"
+  local _delimiter="${1:-}"
   shift
-  printf "%s" "${1}"
+  printf "%s" "${1:-}"
   shift
   printf "%s" "${@/#/${_delimiter}}" | tr -d '[:space:]'
 }
@@ -2773,11 +2903,10 @@ _help() {
   then
     _download_from \
       "${_REPO_RAW_URL}/README.md" \
-      | if _command_exists "pandoc" && _command_exists "w3m"
+      | if _command_exists "pandoc" && _browser
         then
-          pandoc --from markdown --to html \
-            | w3m -T text/html
-            return 0
+          pandoc --from markdown --to html | _browser
+          return 0
         else
           _highlight_syntax_if_available
         fi
@@ -2930,8 +3059,8 @@ $(_color_primary "Usage:")
   ${_ME} open (<id> | <filename> | <path> | <title> | <notebook>)
   ${_ME} peek (<id> | <filename> | <path> | <title> | <notebook>)
   ${_ME} plugins [<name>] [--paths]
-  ${_ME} plugins install [<path> | <url>]
-  ${_ME} plugins uninstall <name>
+  ${_ME} plugins install [<path> | <url>] [--force]
+  ${_ME} plugins uninstall <name> [--force]
   ${_ME} remote [remove | set <url> [-f | --force]]
   ${_ME} rename (<id> | <filename> | <path> | <title>) [-f | --force]
             (<name> | --reset | --to-bookmark | --to-note)
@@ -3120,7 +3249,15 @@ _add() {
         _edit_before_commit=1
         ;;
       -e|--encrypt|--encrypted)
-        _encrypt=1
+        if [[ -z "${NB_ENCRYPTION_TOOL:-}" ]] ||
+           ! _command_exists "${NB_ENCRYPTION_TOOL:-}"
+        then
+          _exit_1 printf                        \
+            "Encryption tool not found: %s\\n"  \
+            "$(_color_primary "${NB_ENCRYPTION_TOOL:-}")"
+        else
+          _encrypt=1
+        fi
         ;;
       -f|--filename)
         _target_filename="$(_option_get_value "${__arg}" "${__val:-}")"
@@ -3328,13 +3465,24 @@ Description:
   Create, view, search, edit, and delete bookmarks.
 
   By default, the html page content is saved within the bookmark, making the
-  bookmarked page available for full-text search. When \`pandoc\` is
+  bookmarked page available for full-text search. When Pandoc [1] is
   installed, the HTML content will be converted to Markdown before saving.
+  When readability-cli [2] is install, markup is cleaned up to focus on
+  content.
+
+  \`peek\` opens the page in \`w3m\` [3] or \`lynx\` [4] when available.
+  To specify a preferred browser, set the \`\$BROWSER\` environment variable
+  in your .bashrc, .zshrc, or equivalent, e.g., \`export BROWSER="lynx"\`.
 
   Bookmarks are identified by the \`.bookmark.md\` file extension. The
   bookmark URL is the first URL in the file within "<" and ">" characters:
 
     <https://www.example.com>
+
+    1. https://pandoc.org/
+    2. https://gitlab.com/gardenappl/readability-cli
+    3. https://en.wikipedia.org/wiki/W3m
+    4. https://en.wikipedia.org/wiki/Lynx_(web_browser)
 
 Examples:
   ${_ME} https://example.com
@@ -3354,27 +3502,30 @@ HEREDOC
 _bookmark() {
   # Usage: _bookmark_view_in_terminal_browser (<url>)
   _bookmark_view_in_terminal_browser() {
-    _target_url="${1:-}"
-    if _command_exists 'w3m'
+    local _target_url="${1:-}"
+
+    if _browser
     then
-      w3m "${_target_url}"
-      return 0
-    elif _command_exists 'lynx'
-    then
-      lynx "${_target_url}"
+      _browser "${_target_url}"
       return 0
     elif _command_exists "curl" || _command_exists "wget"
     then
       _download_from "${_target_url}" \
-        | if [[ -n "${PAGER:-}" ]] && [[ ! "${PAGER:-}" =~ less ]]
-            then
-              "${PAGER}"
-            elif _command_exists "less"
-            then
-              less --CLEAR-SCREEN --prompt="$(_less_prompt)"
-            else
-              cat
-            fi
+        | if _command_exists "pandoc"
+          then
+            pandoc --from html-native_divs-native_spans --to markdown \
+              | _highlight_syntax_if_available "md"
+          else
+            cat
+          fi |  if [[ -n "${PAGER:-}" ]] && [[ ! "${PAGER:-}" =~ less ]]
+                then
+                  "${PAGER}"
+                elif _command_exists "less"
+                then
+                  less --CLEAR-SCREEN --prompt="$(_less_prompt)"
+                else
+                  cat
+                fi
 
       return 0
     else
@@ -3573,7 +3724,15 @@ _bookmark() {
       then
         if [[ "${_subcommand}" == "open" ]]
         then
-          if [[ -n "${_password}" ]]
+          if [[ -d "${_target_path}" ]] &&
+             _command_exists "xdg-open"
+          then
+            xdg-open "${_target_path}" && return 0
+          elif [[ -d "${_target_path}"    ]] &&
+               [[ "${OSTYPE}" =~ ^darwin  ]]
+          then
+            open "${_target_path}" && return 0
+          elif [[ -n "${_password}" ]]
           then
             _edit "${_selector}" --password "${_password}"
           else
@@ -3771,7 +3930,7 @@ HEREDOC
   if [[ -n "${_title:-}" ]]
   then
     if _command_exists "w3m"
-    then # convert html entities
+    then # convert html entities TODO: _browser --convert-entities
       _title="$(
         printf "%s\\n" "${_title}" | w3m -dump -T text/html -cols 99999
       )"
@@ -3797,15 +3956,15 @@ HEREDOC
       _description="$(
         cat "${_temp_file}" \
           | sed -E -n       \
-            's/.*<meta .*property=.og:description[^>]*content="([^"]+)".*/\1/p' \
-            2>/dev/null || :
+              's/.*<meta .*property=.og:description[^>]*content="([^"]+)".*/\1/p' \
+              2>/dev/null || :
       )"
     fi
 
     if [[ -n "${_description}" ]]
     then
       if _command_exists "w3m"
-      then # convert html entities
+      then # convert html entities TODO: _browser --convert-entities
         _description="$(
           printf "%s\\n" "${_description}" | w3m -dump -T text/html -cols 99999
         )"
@@ -3881,15 +4040,26 @@ HEREDOC
   then
     if ! ((_skip_content))
     then
-      if _command_exists "pandoc"
+      local _processed_content
+
+      if _command_exists "pandoc" || _command_exists "readable"
       then
-        local _processed_content
         _processed_content="$(
-          cat "${_temp_file}"                       \
-            | pandoc                                \
-              --from html-native_divs-native_spans  \
-              --to markdown-grid_tables --wrap=none \
-              2>/dev/null || cat "${_temp_file}"
+          cat "${_temp_file}" \
+            | if _command_exists "readable"
+              then
+                readable --base "${_url}" 2>/dev/null || cat
+              else
+                cat
+              fi |  if _command_exists "pandoc"
+                    then
+                      pandoc                                  \
+                        --from html-native_divs-native_spans  \
+                        --to markdown-grid_tables --wrap=none \
+                        2>/dev/null || cat
+                    else
+                      cat
+                    fi
         )"
 
         if [[ -n "${_processed_content}" ]]
@@ -3918,7 +4088,7 @@ HEREDOC
     if [[ -z "${_target_filename:-}" ]]
     then
       _basename="$(
-        _notebooks current --filename "$(date -u '+%Y%m%d%H%M%S').bookmark.md"
+        _notebooks current --filename "$(date '+%Y%m%d%H%M%S').bookmark.md"
       )"
     else
       if [[ "${_target_filename}" =~ \. ]]
@@ -4628,6 +4798,7 @@ _env() {
     printf "_ME=%s\\n" "${_ME:-}"
     printf "_MY_PATH=%s\\n" "${_MY_PATH:-}"
     printf "NB_NOTEBOOK_PATH=%s\\n" "${NB_NOTEBOOK_PATH:-}"
+    printf "BROWSER=%s\\n" "${BROWSER:-}"
     printf "EDITOR=%s\\n" "${EDITOR:-}"
     printf "PAGER=%s\\n" "${PAGER:-}"
     printf "NB_AUTO_SYNC=%s\\n" "${NB_AUTO_SYNC:-}"
@@ -4642,29 +4813,32 @@ _env() {
     printf "NB_LIMIT=%s\\n"  "${NB_LIMIT:-}"
     printf "NB_SYNTAX_THEME=%s\\n"  "${NB_SYNTAX_THEME:-}"
     printf "NBRC_PATH=%s\\n" "${NBRC_PATH:-}"
-    printf "ack:      %s\\n" "$(command -v ack)"
-    printf "ag:       %s\\n" "$(command -v ag)"
-    printf "code:     %s\\n" "$(command -v code)"
-    printf "curl:     %s\\n" "$(command -v curl)"
-    printf "emacs:    %s\\n" "$(command -v emacs)"
-    printf "git:      %s\\n" "$(command -v git)"
-    printf "gvim:     %s\\n" "$(command -v gvim)"
-    printf "gpg:      %s\\n" "$(command -v gpg)"
-    printf "less:     %s\\n" "$(command -v less)"
-    printf "lynx:     %s\\n" "$(command -v lynx)"
-    printf "macdown:  %s\\n" "$(command -v macdown)"
-    printf "mate:     %s\\n" "$(command -v mate)"
-    printf "mvim:     %s\\n" "$(command -v mvim)"
-    printf "nano:     %s\\n" "$(command -v nano)"
-    printf "nvim:     %s\\n" "$(command -v nvim)"
-    printf "openssl:  %s\\n" "$(command -v openssl)"
-    printf "pandoc:   %s\\n" "$(command -v pandoc)"
-    printf "pygments: %s\\n" "$(command -v pygmentize)"
-    printf "rg:       %s\\n" "$(command -v rg)"
-    printf "subl:     %s\\n" "$(command -v subl)"
-    printf "tig:      %s\\n" "$(command -v tig)"
-    printf "w3m:      %s\\n" "$(command -v w3m)"
-    printf "vim:      %s\\n" "$(command -v vim)"
+    printf "ack:        %s\\n" "$(command -v ack)"
+    printf "ag:         %s\\n" "$(command -v ag)"
+    printf "bat:        %s\\n" "$(command -v bat)"
+    printf "code:       %s\\n" "$(command -v code)"
+    printf "curl:       %s\\n" "$(command -v curl)"
+    printf "emacs:      %s\\n" "$(command -v emacs)"
+    printf "git:        %s\\n" "$(command -v git)"
+    printf "gvim:       %s\\n" "$(command -v gvim)"
+    printf "gpg:        %s\\n" "$(command -v gpg)"
+    printf "highlight:  %s\\n" "$(command -v highlight)"
+    printf "less:       %s\\n" "$(command -v less)"
+    printf "lynx:       %s\\n" "$(command -v lynx)"
+    printf "macdown:    %s\\n" "$(command -v macdown)"
+    printf "mate:       %s\\n" "$(command -v mate)"
+    printf "mvim:       %s\\n" "$(command -v mvim)"
+    printf "nano:       %s\\n" "$(command -v nano)"
+    printf "nvim:       %s\\n" "$(command -v nvim)"
+    printf "openssl:    %s\\n" "$(command -v openssl)"
+    printf "pandoc:     %s\\n" "$(command -v pandoc)"
+    printf "pygments:   %s\\n" "$(command -v pygmentize)"
+    printf "readable:   %s\\n" "$(command -v readable)"
+    printf "rg:         %s\\n" "$(command -v rg)"
+    printf "subl:       %s\\n" "$(command -v subl)"
+    printf "tig:        %s\\n" "$(command -v tig)"
+    printf "w3m:        %s\\n" "$(command -v w3m)"
+    printf "vim:        %s\\n" "$(command -v vim)"
     printf "bash --version: %s\\n" "$(bash --version | head -1)"
     printf "uname -a: %s\\n" "$(uname -a)"
   fi
@@ -4839,7 +5013,7 @@ _export() {
       cp "${_notebook_path}/${_basename}" "${_target_path}"
     fi &&
       printf "Exported %s to %s\\n"           \
-        "$(_color_primary "${_selector}")"    \
+        "$(_show "${_basename}" --info-line)" \
         "$(_color_primary "${_target_path}")"
   fi
 }
@@ -4873,13 +5047,11 @@ _git() {
     local _notebook_path
     _notebook_path="$(_notebooks current --path)"
 
-    cd "${_notebook_path}" || _exit_1 printf "_git() \`cd\` failed.\\n"
-
     if [[ -n "${1:-}" ]]
     then
-      git "${@}"
+      git -C "${_notebook_path}" "${@}"
     else
-      git
+      git -C "${_notebook_path}"
     fi
   fi
 }
@@ -4898,98 +5070,101 @@ _helpers() {
   local _options=("${@:2}")
 
   case "${_name:-}" in
+    browser*)
+      _browser                        "${_options[@]:-}"
+      ;;
     decrypt*)
-      _decrypt_file                   "${_options[@]}"
+      _decrypt_file                   "${_options[@]:-}"
       ;;
     download*)
-      _download_from                  "${_options[@]}"
+      _download_from                  "${_options[@]:-}"
       ;;
     edit*)
-      _edit_file                      "${_options[@]}"
+      _edit_file                      "${_options[@]:-}"
       ;;
     encrypt*)
-      _encrypt_file                   "${_options[@]}"
+      _encrypt_file                   "${_options[@]:-}"
       ;;
     *archive*)
-      _file_is_archive                "${_options[@]}"
+      _file_is_archive                "${_options[@]:-}"
       ;;
     *audio*)
-      _file_is_audio                  "${_options[@]}"
+      _file_is_audio                  "${_options[@]:-}"
       ;;
     *bookmark*)
-      _file_is_bookmark               "${_options[@]}"
+      _file_is_bookmark               "${_options[@]:-}"
       ;;
     *document*)
-      _file_is_document               "${_options[@]}"
+      _file_is_document               "${_options[@]:-}"
       ;;
     *encrypted*)
-      _file_is_encrypted              "${_options[@]}"
+      _file_is_encrypted              "${_options[@]:-}"
       ;;
     *image*)
-      _file_is_image                  "${_options[@]}"
+      _file_is_image                  "${_options[@]:-}"
       ;;
     *text*)
-      _file_is_text                   "${_options[@]}"
+      _file_is_text                   "${_options[@]:-}"
       ;;
     *video*)
-      _file_is_video                  "${_options[@]}"
+      _file_is_video                  "${_options[@]:-}"
       ;;
     *first*)
-      _get_first_line                 "${_options[@]}"
+      _get_first_line                 "${_options[@]:-}"
       ;;
     *hash*)
-      _get_hash                       "${_options[@]}"
+      _get_hash                       "${_options[@]:-}"
       ;;
     *http*)
-      _get_http_status                "${_options[@]}"
+      _get_http_status                "${_options[@]:-}"
       ;;
     *title*)
-      _get_title                      "${_options[@]}"
+      _get_title                      "${_options[@]:-}"
       ;;
     *unique*basename*)
-      _get_unique_basename            "${_options[@]}"
+      _get_unique_basename            "${_options[@]:-}"
       ;;
     *unique*path*)
-      _get_unique_path                "${_options[@]}"
+      _get_unique_path                "${_options[@]:-}"
       ;;
     *highlight*|*syntax*)
-      _highlight_syntax_if_available  "${_options[@]}"
+      _highlight_syntax_if_available  "${_options[@]:-}"
       ;;
     *interactive*|*input*)
-      _interactive_input              "${_options[@]}"
+      _interactive_input              "${_options[@]:-}"
       ;;
     join)
-      _join                           "${_options[@]}"
+      _join                           "${_options[@]:-}"
       ;;
     less*|*prompt)
-      _less_prompt                    "${_options[@]}"
+      _less_prompt                    "${_options[@]:-}"
       ;;
     line*wrap*off|unwrap)
-      _wrap off                       "${_options[@]}"
+      _wrap off                       "${_options[@]:-}"
       ;;
     line*wrap*on|wrap)
-      _wrap on                        "${_options[@]}"
+      _wrap on                        "${_options[@]:-}"
       ;;
     list*files)
-      _list_files                     "${_options[@]}"
+      _list_files                     "${_options[@]:-}"
       ;;
     print*line|line)
-      _print_line                     "${_options[@]}"
+      _print_line                     "${_options[@]:-}"
       ;;
     print*padding|padding)
-      _print_padding                  "${_options[@]}"
+      _print_padding                  "${_options[@]:-}"
       ;;
     print*welcome|welcome)
-      _print_welcome                  "${_options[@]}"
+      _print_welcome                  "${_options[@]:-}"
       ;;
     spinner)
-      _spinner                        "${_options[@]}"
+      _spinner                        "${_options[@]:-}"
       ;;
     is*email|email)
-      _string_is_email                "${_options[@]}"
+      _string_is_email                "${_options[@]:-}"
       ;;
     is*url|url)
-      _string_is_url                  "${_options[@]}"
+      _string_is_url                  "${_options[@]:-}"
       ;;
     *)
       _exit_1 _help "helpers"
@@ -5048,7 +5223,7 @@ _history() {
   fi
 
   if [[ -n "${_basename:-}" ]] && [[ -e "${_notebook_path}/${_basename}" ]]
-  then # `$_basename` is assigned and a note exists with that name.
+  then
     eval "${_log_command} -- \"${_basename}\""
   else
     eval "${_log_command}"
@@ -5182,9 +5357,9 @@ _import() {
         _index add "${_basename}" &&
           _git_checkpoint "${_notebook_path}" "[nb] Import: ${_basename}"
 
-      printf "Imported '%s' to '%s'\\n"     \
-        "$(_color_primary "${_path}")"      \
-        "$(_color_primary "${_basename}")"
+      printf "Imported %s from %s\\n"         \
+        "$(_show "${_basename}" --info-line)" \
+        "$(_color_primary "${_path}")"
       ;;
     download)
       _basename="$(basename -- "${_url}" | tr -d '[:space:]')"
@@ -5197,10 +5372,10 @@ _import() {
 
       if ((_convert))
       then
-        if ! _download_from "${_url}" \
-            | pandoc                  \
-              --from html             \
-              --to markdown           \
+        if ! _download_from "${_url}"             \
+            | pandoc                              \
+              --from html                         \
+              --to markdown                       \
               -o "${_notebook_path}/${_basename}"
         then
           _exit_1 printf "Unable to download and convert: %s\\n" "${_url}"
@@ -5218,9 +5393,9 @@ _import() {
 Source:
 ${_url}
 "
-      printf "Imported %s to %s\\n"         \
-        "$(_color_primary "${_url}")"       \
-        "$(_color_primary "${_basename}")"
+      printf "Imported %s from %s\\n"         \
+        "$(_show "${_basename}" --info-line)" \
+        "$(_color_primary "${_url}")"
       ;;
     move)
       _import_validate_path "${_path:-}"
@@ -5231,9 +5406,9 @@ ${_url}
         _index add "${_basename}"                     &&
           _git_checkpoint "${_notebook_path}" "[nb] Import: ${_basename}"
 
-      printf "Imported %s to %s\\n"         \
-        "$(_color_primary "${_path}")"      \
-        "$(_color_primary "${_basename}")"
+      printf "Imported %s from %s\\n"         \
+        "$(_show "${_basename}" --info-line)" \
+        "$(_color_primary "${_path}")"
       ;;
     notebook)
       _notebooks import "${_path:-}" "${_target_notebook_name:-}"
@@ -5738,6 +5913,7 @@ _list() {
   local _list_paths=0
   local _reverse=0
   local _selector=
+  local _filter_selectors=()
   local _sort=0
   local _type=
   local _use_pager=0
@@ -5808,13 +5984,21 @@ _list() {
         then
           _type="${__arg:2}"
         else
-          _selector="${__arg:-}"
+          if [[ -z "${_selector:-}" ]]
+          then
+            _selector="${__arg:-}"
+          fi
+
+          _filter_selectors+=("${__arg:-}")
         fi
         ;;
     esac
 
     shift
   done
+
+  local _filter_pattern=
+  _filter_pattern="$(_join "|" "${_filter_selectors[@]:-}")"
 
   local _selector_basename=
   local _selector_identifier=
@@ -5884,7 +6068,7 @@ Help information:
 HEREDOC
       else
         cat <<HEREDOC
-0 notes.
+0 items.
 
 Add a note:
   $(_color_primary "${_ME} ${_maybe_scope}add")
@@ -5922,14 +6106,14 @@ HEREDOC
             # Turn on a case-insensitive matching (-s set nocasematch)
             shopt -s nocasematch
 
-            if [[ "${__basename:-}" =~ ${_selector_identifier} ]]
+            if [[ "${__basename:-}" =~ ${_filter_pattern} ]]
             then
               # include the note in the list
               _matches=$((_matches+1))
             else
               _maybe_title="$(_get_title "${_notebook_path}/${__basename}")"
 
-              if [[ "${_maybe_title:-}" =~ ${_selector_identifier} ]]
+              if [[ "${_maybe_title:-}" =~ ${_filter_pattern} ]]
               then
                 # include the note in the list
                 _matches=$((_matches+1))
@@ -6204,8 +6388,16 @@ HEREDOC
 
       if ! ((_counter)) && [[ -n "${_selector:-}" ]]
       then
+        local _filter_message=
+        _filter_message="$(_color_primary "${_selector}")"
+
+        if [[ -n "${_type:-}" ]]
+        then
+           _filter_message="${_filter_message} Type: $(_color_primary "${_type}")"
+        fi
+
         _warn \
-          printf "Not found: %s\\n" "$(_color_primary "${_selector}")" &&
+          printf "Not found: %s\\n" "${_filter_message}" &&
           return 1
       fi
     fi
@@ -6589,6 +6781,7 @@ _ls() {
     _notebooks --names --no-color --unarchived --global || :
   ))
   local _selector=
+  local _type=
   local _use_pager=0
 
   while ((${#}))
@@ -6617,6 +6810,11 @@ _ls() {
       -l)
         : # Ignore accidental ls -l  due to muscle memory.
         ;;
+      -t|--type)
+        _type="$(_option_get_value "${__arg}" "${__val:-}")"
+        _arguments+=("${__arg}" "${__val:-}")
+        shift
+        ;;
       --[0-9]*)
         if [[ "${__arg:-}" =~ ^--[0-9]+$ ]]
         then
@@ -6624,6 +6822,10 @@ _ls() {
         else
           _arguments+=("${__arg}")
         fi
+        ;;
+      --[A-Za-z]*)
+        _type="${__arg:2}"
+        _arguments+=("${__arg}")
         ;;
       -*)
         _arguments+=("${__arg}")
@@ -6640,7 +6842,7 @@ _ls() {
         _selector="${__arg#*:}"
         ;;
       *)
-        if [[ -z "${_selector:-}"   ]]
+        if [[ -z "${_selector:-}" ]]
         then
           _selector="${__arg}"
         fi
@@ -6697,12 +6899,22 @@ _ls() {
         then
           _list "${_list_options[@]:-}"
         else
+        local _filter_message=
+        _filter_message="${_selector}"
+
           if _notebooks current --selected
           then
-            _selector="$(_notebooks current --name):${_selector}"
+            _filter_message="$(_notebooks current --name):${_filter_message}"
           fi
 
-          _warn printf "Not found: %s\\n" "$(_color_primary "${_selector}")" &&
+          _filter_message="$(_color_primary "${_filter_message}")"
+
+          if [[ -n "${_type:-}" ]]
+          then
+             _filter_message="${_filter_message} Type: $(_color_primary "${_type}")"
+          fi
+
+          _warn printf "Not found: %s\\n" "${_filter_message}" &&
             return 1
         fi
       fi
@@ -7500,9 +7712,10 @@ Please type $(_color_primary "${_name}") to confirm: " __response
 
         if ! ((_only_names)) && ! ((_only_paths))
         then
-          cd "${_notebook_paths[i]}" ||
-            _exit_1 printf "_notebooks() \`cd\` failed."
-          _origin_url="$(git config --get remote.origin.url || echo '')"
+          _origin_url="$(
+            git -C "${_notebook_paths[i]}" config --get remote.origin.url || echo ''
+          )"
+
           if [[ -n "${_origin_url:-}" ]]
           then
             _notebook_line="${_notebook_line} (${_origin_url})"
@@ -8091,10 +8304,11 @@ _alias_subcommand "peek" "preview"
 describe "plugins" <<HEREDOC
 Usage:
   ${_ME} plugins [<name>] [--paths]
-  ${_ME} plugins install [<path> | <url>]
-  ${_ME} plugins uninstall <name>
+  ${_ME} plugins install [<path> | <url>] [--force]
+  ${_ME} plugins uninstall <name> [--force]
 
 Options:
+  --force  Skip the confirmation prompt.
   --paths  Print the full path to each plugin.
 
 Subcommands:
@@ -8162,7 +8376,24 @@ _plugins() {
 
         if [[ -f "${NB_DIR}/.plugins/${_basename}" ]]
         then
-          _exit_1 printf "Plugin already installed: %s\\n" "${_basename}"
+          _warn printf "Plugin already installed: %s\\n" "${_basename}"
+
+          if ! ((_force))
+          then
+            while true
+            do
+              IFS='' read -r -e -d $'\n' -p "Reinstall? [y/N] " __yn
+              case ${__yn} in
+                [Yy]*)
+                  break
+                  ;;
+                *)
+                  printf "Exiting...\\n"
+                  exit 0
+                  ;;
+              esac
+            done
+          fi
         fi
 
         if cp "${_path}" "${NB_DIR}/.plugins/${_basename}"
@@ -8354,8 +8585,12 @@ _remote() {
         _exit_1 _help "remote"
       fi
 
-      if ((_remote_exists))
+      if ! ((_remote_exists))
       then
+        git -C "${_notebook_path}" remote add origin "${_url}"        &&
+          printf "Remote set to %s\\n" "$(_color_primary "${_url}")"  &&
+          return 0
+      else
         if [[ "${_existing_url}" == "${_url}" ]]
         then
           _exit_1 printf "Remote already set to %s\\n" \
@@ -8382,12 +8617,8 @@ _remote() {
           done
         fi
 
-        git -C "${_notebook_path}" remote set-url origin "${_url}"    &&
-          printf "Remote set to %s\\n" "$(_color_primary "${_url}")"  &&
-          return 0
-      else
-        git -C "${_notebook_path}" remote add origin "${_url}"        &&
-          printf "Remote set to %s\\n" "$(_color_primary "${_url}")"  &&
+        git -C "${_notebook_path}" remote set-url origin "${_url}"      &&
+          printf "Remote set to %s\\n" "$(_color_primary "${_url}")"    &&
           return 0
       fi
       ;;
@@ -8501,8 +8732,7 @@ _rename() {
   then
     local _file_type="${NB_DEFAULT_EXTENSION}"
 
-    # Assign filename with unicode timestamp.
-    _target_basename="$(date -r "${_source_path}" -u "+%Y%m%d%H%M%S").${_file_type}"
+    _target_basename="$(date -r "${_source_path}" "+%Y%m%d%H%M%S").${_file_type}"
   elif [[ -n "${_target_name:-}"    ]] ||
        [[ -n "${_to_target_type:-}" ]]
   then
@@ -8561,11 +8791,15 @@ _rename() {
     _exit_1 _help "rename"
   fi
 
+  local _source_info
+  _source_info="$(_show "${_source_basename}" --info-line)"
+
   if ! ((_force))
   then
     printf "Renaming %s to %s\\n"               \
-      "$(_color_primary "${_source_basename}")" \
+      "${_source_info}"                         \
       "$(_color_primary "${_target_basename}")"
+
     while true
     do
       IFS='' read -r -e -d $'\n' -p "Proceed? [y/N] " __yn
@@ -8587,7 +8821,7 @@ _rename() {
         "[nb] Rename: ${_source_basename} to ${_target_basename}"
 
   printf "%s renamed to %s\\n"                \
-    "$(_color_primary "${_source_basename}")" \
+    "${_source_info}"                         \
     "$(_color_primary "${_target_basename}")"
 }
 
@@ -8782,8 +9016,6 @@ _search() {
         #   _search_args+=("--workers" "1")
         # fi
 
-        # TODO: `ag` outputs unordered results, which breaks tests/search.bats.
-        # Determine how to test without relying on ordering.
         ag                                  \
           --hidden                          \
           --ignore-case                     \
@@ -8962,15 +9194,35 @@ _search() {
             NB_NOTEBOOK_PATH="${__notebook_path}" \
               _index get_id "${_filename_for_id}"
           )"
-          _title="$(_get_title "${_path}")"
 
-          if [[ -n "${_title}" ]]
+          if ((_filename_hit))
           then
-            _file_info="${_filename} \"${_title}\""
-            _file_info_color="${_filename_color} \"${_title}\""
+            _title="$(_get_title "${__notebook_path}/${_filename_for_id}")"
+
+            if [[ -n "${_title}" ]]
+            then
+              _file_info="${_filename} · ${_title}"
+              _file_info_color="${_filename_color} · ${_title}"
+            else
+              _file_info="${_filename}"
+              _file_info_color="${_filename_color}"
+            fi
           else
-            _file_info="${_filename}"
-            _file_info_color="${_filename_color}"
+            local _first_line=
+            _title="$(_get_title "${_path}")"
+
+            if [[ -n "${_title:-}" ]]
+            then
+              _file_info="${_title}"
+              _file_info_color="${_title}"
+            elif _first_line="$(_get_first_line "${_path}")"
+            then
+              _file_info="${_filename} · \"${_first_line}\""
+              _file_info_color="${_filename_color} · \"${_first_line}\""
+            else
+              _file_info="${_filename}"
+              _file_info_color="${_filename_color}"
+            fi
           fi
 
           if ((_all)) ||
@@ -8988,7 +9240,7 @@ _search() {
             _id_filename_color="$(_color_id_brackets "${_id}") ${_file_info_color}"
           fi
 
-          if [[ "${_last_path}" != "${_path}" ]]
+          if [[ "${_last_path}" != "${_path}" ]] || ((_filename_hit))
           then # match is in a different file than the last match
             _wrap off
             printf "%s" "${_id_filename_color}"
@@ -9002,7 +9254,7 @@ _search() {
             continue
           fi
 
-          if [[ "${_last_path}" != "${_path}" ]]
+          if [[ "${_last_path}" != "${_path}" ]] || ((_filename_hit))
           then # match is in a different file than the last match
             _wrap off
             _print_line "${_id_filename}"
@@ -9110,7 +9362,7 @@ _settings() {
     _command_exists "bat" ||
       _exit_1 printf "bat required: https://github.com/sharkdp/bat"
 
-    bat --list-themes                 \
+    bat --list-themes               \
       | grep --color=never 'Theme'  \
       | sed 's/^Theme: //g'
   }
@@ -9843,67 +10095,67 @@ HEREDOC
     eval "\"${_MY_PATH}\" ${_initial_command}"
   fi
 
-  while true
+  while IFS='' read -r -e -d $'\n' -p "${_prompt}" __input
   do
-    while IFS='' read -r -e -d $'\n' -p "${_prompt}" __input
-    do
-      history -s "${__input}"
-      if [[ "${__input}" =~ ^exit$|^quit$|^q$ ]]
+    history -s "${__input}"
+
+    if [[ "${__input}" =~ ^exit$|^quit$|^q$ ]]
+    then
+      return 0
+    else
+      # Strip leading 'n', 'nb', or 'notes'.
+      local _normalized_input=
+      _normalized_input="$(
+        printf "%s\\n" "${__input}" \
+          | sed -e 's/^n$//'        \
+          | sed -e 's/^n //'        \
+          | sed -e 's/^nb$//'       \
+          | sed -e 's/^nb //'       \
+          | sed -e 's/^notes$//'    \
+          | sed -e 's/^notes //'
+      )"
+
+      if [[ "${_normalized_input}" =~ ^help   ]] ||
+         [[ "${_normalized_input}" =~ ^help\  ]] ||
+         [[ "${_normalized_input}" =~ ^h$     ]] ||
+         [[ "${_normalized_input}" =~ ^h\     ]]
       then
-        return 0
-      else
-        # Strip leading 'n', 'nb', or 'notes'.
-        local _normalized_input=
+        eval "\"${_MY_PATH}\" ${_normalized_input}" --shell || :
+      elif [[ "${_normalized_input}" =~ ^echo\ .*   ]] ||
+           [[ "${_normalized_input}" =~ ^printf\ .* ]]
+      then
+        eval "${_normalized_input}"
+      elif _command_name="$(
+        printf "%s\\n" "${_normalized_input}" \
+          | grep --only-matching --color=never \
+              -e '^code'    \
+              -e '^emacs'   \
+              -e '^gvim'    \
+              -e '^macdown' \
+              -e '^mate'    \
+              -e '^mvim'    \
+              -e '^nano'    \
+              -e '^nvim'    \
+              -e '^subl'    \
+              -e '^vim'
+      )"
+      then
         _normalized_input="$(
-          printf "%s\\n" "${__input}" \
-            | sed -e 's/^n$//'        \
-            | sed -e 's/^n //'        \
-            | sed -e 's/^nb$//'       \
-            | sed -e 's/^nb //'       \
-            | sed -e 's/^notes$//'    \
-            | sed -e 's/^notes //'
-        )"
-
-        if [[ "${_normalized_input}" =~ ^help   ]] ||
-           [[ "${_normalized_input}" =~ ^help\  ]] ||
-           [[ "${_normalized_input}" =~ ^h$     ]] ||
-           [[ "${_normalized_input}" =~ ^h\     ]]
-        then
-          eval "\"${_MY_PATH}\" ${_normalized_input}" --shell || :
-        elif [[ "${_normalized_input}" =~ ^echo\ .*   ]] ||
-             [[ "${_normalized_input}" =~ ^printf\ .* ]]
-        then
-          eval "${_normalized_input}"
-        elif _command_name="$(
           printf "%s\\n" "${_normalized_input}" \
-            | grep --only-matching --color=never \
-                -e '^code'    \
-                -e '^emacs'   \
-                -e '^gvim'    \
-                -e '^macdown' \
-                -e '^mate'    \
-                -e '^mvim'    \
-                -e '^nano'    \
-                -e '^nvim'    \
-                -e '^subl'    \
-                -e '^vim'
+            | sed -e "s/^${_command_name} //"
         )"
-        then
-          _normalized_input="$(
-            printf "%s\\n" "${_normalized_input}" \
-              | sed -e "s/^${_command_name} //"
-          )"
 
-          eval "\"${_MY_PATH}\" edit --editor \"${_command_name}\" ${_normalized_input}"
-        else
-          eval "\"${_MY_PATH}\" ${_normalized_input}" || :
-        fi
+        eval "\"${_MY_PATH}\" edit --editor \"${_command_name}\" ${_normalized_input}"
+      else
+        eval "\"${_MY_PATH}\" ${_normalized_input}" || :
       fi
-    done
+    fi
   done
 }
 
 # show ################################################################### show
+
+# TODO: Vim highlighting bug. "\`
 
 describe "show" <<HEREDOC
 Usage:
@@ -9920,9 +10172,9 @@ Options:
   --info-line      Print the id, filename, and title of the item.
   --path           Print the full path of the item.
   -p, --print      Print to standard output / terminal.
-  -r, --render     Use \`pandoc\` [1] to render the file to HTML and display with
-                   \`lynx\` [2] (if available) or \`w3m\` [3]. If \`pandoc\` is
-                   not available, \`-r\` / \`--render\` is ignored.
+  -r, --render     Use \`pandoc\` [1] to render the file to HTML and display
+                   in the terminal web browser. If either \`pandoc\` or a
+                   browser are unavailable, \`-r\` / \`--render\` is ignored.
   --selector-id    Given a selector (e.g., notebook:example.md), print the
                    identifier portion (example.md).
   --title          Print the title of the note.
@@ -9934,11 +10186,11 @@ Options:
   -u, --updated    Print the date and time of the last recorded change.
 
 Description:
-  Show a note or notebook. Notes in text file formats can be rendered or
+  Show an item or notebook. Notes in text file formats can be rendered or
   printed to standard output. Non-text files will be opened in your system's
   preferred app or program for that file type.
 
-  By default, the note will be opened using \`less\` or the program configured
+  By default, the item will be opened using \`less\` or the program configured
   in the \`\$PAGER\` environment variable. Use the following keys to navigate
   in \`less\` (see \`man less\` for more information):
 
@@ -9957,12 +10209,16 @@ Description:
   To skip the pager and print to standard output, use the \`-p\` / \`--print\`
   option.
 
+  \`-r\` / \`--render\` automatically uses either \`w3m\` [2] or \`lynx\` [3].
+  To specify a preferred browser, set the \`\$BROWSER\` environment variable
+  in your .bashrc, .zshrc, or equivalent, e.g., \`export BROWSER="lynx"\`.
+
   If \`bat\` [4], \`highlight\` [5], or Pygments [6] is installed, notes are
   printed with syntax highlighting.
 
     1. https://pandoc.org/
-    2. https://en.wikipedia.org/wiki/Lynx_(web_browser)
-    3. https://en.wikipedia.org/wiki/W3m
+    2. https://en.wikipedia.org/wiki/W3m
+    3. https://en.wikipedia.org/wiki/Lynx_(web_browser)
     4. https://github.com/sharkdp/bat
     5. http://www.andre-simon.de/doku/highlight/en/highlight.php
     6. https://pygments.org/
@@ -10450,6 +10706,11 @@ Can't show archives. Export archive and expand to edit.\\n"
     then
       printf "Playing audio. Press %s to quit.\\n" "$(_color_primary "Ctrl-C")"
       ffplay -loglevel quiet "${_target_path}"
+    elif _command_exists "termpdf.py"     &&
+         [[ "${_target_path}" =~ pdf$ ]]  &&
+         [[ -n "${KITTY_WINDOW_ID:-}" ]]
+    then
+      termpdf.py "${_target_path}"
     elif _command_exists "pdftotext" && [[ "${_target_path}" =~ pdf$ ]]
     then
       pdftotext "${_target_path}" - \
@@ -10482,9 +10743,9 @@ Can't show archives. Export archive and expand to edit.\\n"
           fi
     elif [[ "${_target_path}" =~ epub$ ]] &&
          _command_exists "pandoc"         &&
-         _command_exists "w3m"
+         _browser
     then
-      pandoc -f epub -t html "${_target_path}" | w3m -T text/html
+      pandoc -f epub -t html "${_target_path}" | _browser
     elif _command_exists "xdg-open"
     then
       xdg-open "${_target_path}"
@@ -10495,21 +10756,14 @@ Can't show archives. Export archive and expand to edit.\\n"
   elif ((_render))              &&
        ((_print_output))        &&
        _command_exists "pandoc" &&
-       _command_exists "w3m"
-  then # `show --render --print` with `pandoc` and `w3m` available.
-    pandoc "${_target_path}" \
-      | w3m -dump -T text/html
+       _browser
+  then # `show --render --print` with `pandoc` and browser available.
+    pandoc "${_target_path}" | _browser --dump
   elif ((_render))              &&
        _command_exists "pandoc" &&
-       _command_exists "w3m"
-  then # `show --render` with `pandoc` and `w3m` available.
-    pandoc "${_target_path}" \
-      | w3m -T text/html
-  elif ((_render))              &&
-       _command_exists "pandoc" &&
-       _command_exists "lynx"
-  then # `show --render` with `pandoc` and `lynx` available.
-    pandoc "${_target_path}" | lynx -stdin
+       _browser
+  then # `show --render` with `pandoc` and browser available.
+    pandoc "${_target_path}" | _browser
   else # default
     if ((_print_output))
     then # `show --print [--no-color]`
