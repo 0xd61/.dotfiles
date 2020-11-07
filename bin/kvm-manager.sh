@@ -109,6 +109,7 @@ start_bridge() {
 
 		    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
 		    sysctl net.ipv4.ip_forward=1
+            iptables -D FORWARD -j REJECT
 		    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
 		    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 		    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
@@ -120,6 +121,7 @@ start_bridge() {
 }
 stop_bridge() {
 		__check_root
+        iptables -A FORWARD -j REJECT
 		echo "stop network bridge ${BRIDGE}"
 		ip link del ${BRIDGE}
 }
