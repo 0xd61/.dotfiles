@@ -4,3 +4,4 @@
 \\builtin alias lite="lite ./ &"
 \\builtin alias cls="\\builtin print -n \\ec"
 \\builtin alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""
+\\builtin alias screenfetch="sleep 5; xwd -root | convert - "
