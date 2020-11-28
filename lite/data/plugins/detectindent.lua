@@ -1,3 +1,4 @@
+-- TODO(dgl): Has issues with some files if two tabs are opened.
 local core = require "core"
 local command = require "core.command"
 local config = require "core.config"
