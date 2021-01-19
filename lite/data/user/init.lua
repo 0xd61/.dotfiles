@@ -60,3 +60,5 @@ config.todo_mode = "file"
 
 -- Ignore directory and ignore specific file
 table.insert(config.ignore_paths, "README.md")
+
+config.draw_whitespace = false
