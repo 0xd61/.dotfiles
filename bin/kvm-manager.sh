@@ -69,6 +69,11 @@ if [ ! -z ${SPICE_PORT} ]; then
 -device usb-redir,chardev=usbredirchardev3,id=usbredirdev3"
 fi
 
+if [ ! -z ${SHARED_FOLDER} ]; then
+		SHARED="-fsdev local,id=shared_dev${GUEST_ID},path=${SHARED_FOLDER},security_model=none \
+-device virtio-9p-pci,fsdev=shared_dev${GUEST_ID},mount_tag=9p_share"
+fi
+
 # USB 2 config
 #-device ich9-usb-ehci1,id=usb \
 #-device ich9-usb-uhci1,masterbus=usb.0,firstport=0,multifunction=on \
@@ -121,7 +126,7 @@ start_bridge() {
 
 		    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
 		    sysctl net.ipv4.ip_forward=1
-            iptables -D FORWARD -j REJECT
+        iptables -D FORWARD -j REJECT
 		    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
 		    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 		    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
@@ -175,6 +180,7 @@ start_vm_sliently() {
                 -pidfile ${FILE_PID} \
                 ${OPT_NO_ACPI} \
                 ${OPT_OTHER} \
+                ${SHARED} \
                 ${VNC} \
                 ${SPICE} &
 
@@ -366,7 +372,8 @@ init)
 	echo '#OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
 	echo '#OPT_KBD_LAYOUT="de"' >> ${DIR_BASE}/conf
 	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
-  echo '' >> ${DIR_BASE}/conf
+    echo '' >> ${DIR_BASE}/conf
+    echo '#SHARED_FOLDER="" # mount with: mount -t 9p -o trans=virtio 9p_share <mount point> -oversion=9p2000.L' >> ${DIR_BASE}/conf
 	echo '#VNC_DISPLAY=3${GUEST_ID}00'  >> ${DIR_BASE}/conf
 	echo '#SPICE_PORT=592${GUEST_ID}' >> ${DIR_BASE}/conf
 	;;
