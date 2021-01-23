@@ -142,7 +142,7 @@ if [ "$1" == "status" ]; then #Report status
   newoutf "/sys/class/scsi_host/host*/link_power_management_policy" max_performance min_power
 
   echo -e "\e[7mSound card powersave\e[0m"
-  newoutf "/sys/module/snd_hda_intel/parameters/power_save" 0 1
+  newoutf "/sys/module/snd_hda_intel/parameters/power_save" 0 120
   newoutf "/sys/module/snd_hda_intel/parameters/power_save_controller" N Y
 
   case $status in
@@ -315,7 +315,7 @@ case "$input" in
     for i in /sys/block/*/device/power/control; do echo auto > ${i} ; done
 
     # USB autosuspend
-    for i in /sys/bus/usb/devices/*/power/autosuspend; do echo 1 > $i; done
+    for i in /sys/bus/usb/devices/*/power/autosuspend; do echo 120 > $i; done
     for i in /sys/bus/usb/devices/*/power/level; do echo auto > $i; done
 
     # PCI-E ASPM
