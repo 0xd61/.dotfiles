@@ -215,3 +215,10 @@ set makeprg=./build.sh
 " - :cl to list errors
 " - :cc# to jump to error by number
 " - :cn and :cp to navigate forward and back
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Ledger
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Account completion to be sorted by level of detail/depth instead of alphabetical
+let g:ledger_detailed_first = 1
+noremap <silent><buffer> <Leader>T :call ledger#transaction_state_toggle(line('.'), ' *?!')<CR>
