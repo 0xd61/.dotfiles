@@ -4,4 +4,6 @@
 \\builtin alias lite="lite ./ &"
 \\builtin alias cls="\\builtin print -n \\ec"
 \\builtin alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""
-\\builtin alias screenfetch="sleep 5; xwd -root | convert - "
+\\builtin alias screenfetch="sleep 5; xwd -root -silent | convert xwd:- -depth 8"
+\\builtin alias streamlink="streamlink -p mpv"
+\\builtin alias "hledger_bud"="hledger balance Ausgaben -M --budget -b $(date +%Y/%m/01)"
