@@ -600,6 +600,14 @@ function enable {
 
 # misc functions
 
+# command prompt
+if (( USER_ID )); then PS1=$'\e[1;37m\$'; else PS1=$'\e[1;31m\#'; fi
+PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 25 )); then print \…${WD: -25: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;30m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'"$PS1"$'\e[0m '
+
+# history
+\\builtin export HISTSIZE=8192
+\\builtin export HISTFILE=~/.mksh_hist
+
 function clip {
 	# Copy into clipboard or from clipboard
 	if command -v xclip 1>/dev/null; then
@@ -617,12 +625,6 @@ function clip {
 	fi
 }
 
-# history
-\\builtin export HISTSIZE=8192
-\\builtin export HISTFILE=~/.mksh_hist
-
-if (( USER_ID )); then PS1=$'\e[1;37m\$'; else PS1=$'\e[1;31m\#'; fi
-PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 25 )); then print \…${WD: -25: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;30m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'"$PS1"$'\e[0m '
 
 # load alias file
 if [[ -f $HOME/.mksh_alias ]]; then
@@ -646,53 +648,6 @@ for p in ~/.local/bin ~/bin; do
 done
 
 \\builtin export SHELL=$MKSH MANWIDTH=80 LESSHISTFILE=-
-
-#\\builtin unset LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_IDENTIFICATION LC_MONETARY \
-#    LC_NAME LC_NUMERIC LC_TELEPHONE LC_TIME
-#p=en_GB.UTF-8
-#\\builtin export LANG=C LC_CTYPE=$p LC_MEASUREMENT=$p LC_MESSAGES=$p LC_PAPER=$p
-#\\builtin set -U
-
-\\builtin unset p
-
-# Taskwarrior GTD helpers
-## Inbox
-\\builtin alias in='task add +in'
-
-## Tickler
-function tw_tickle {
-    deadline=$1
-    shift
-    task add +in +tickle wait:$deadline $@
-}
-\\builtin alias tick=tw_tickle
-
-## RND (Read and Development)
-function tw_html_title {
-    curl "$*" -so - | \
-     tr -d '\n' | \
-     sed 's/ lang="\w+"//gi' | \
-     grep -iPo --color=never '(?<=<title>)(.*)(?=</title>)'
-}
-
-function tw_read_and_review {
-    link="$1"
-    title=$(tw_html_title $link)
-    echo $title
-    descr="\"Read and review: $title\""
-    id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
-    task "$id" annotate "$link"
-}
-\\builtin alias rnd="task add +rnd +next +@computer +@online"
-\\builtin alias rnr="tw_read_and_review"
-
-
-# Set rust default linker to lld (needs to be installed separately)
-# not useful for build webassembly
-#\\builtin export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
-
-\\builtin export DOCKER_HOST_IP=`ip -4 addr show scope global dev docker0 2> /dev/null | grep inet | awk '{print \$2}' | cut -d / -f 1`
-\\builtin source $HOME/.asdf/asdf.sh
 
 # st-265color error fix
 \\builtin export TERM=xterm-256color

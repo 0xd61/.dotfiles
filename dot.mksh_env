@@ -1,0 +1,46 @@
+# Android
+ANDROID_HOME="$HOME/Sources/android-sdk"
+ANDROID_SDK_ROOT="$ANDROID_HOME"
+ANDROID_NDK_HOME="$ANDROID_HOME"
+PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
+
+export ANDROID_HOME
+export ANDROID_SDK_ROOT
+export ANDROID_NDK_HOME
+# // Android
+
+# Taskwarrior GTD helpers
+## Inbox
+\\builtin alias in='task add +in'
+
+## Tickler
+function tw_tickle {
+    deadline=$1
+    shift
+    task add +in +tickle wait:$deadline $@
+}
+\\builtin alias tick=tw_tickle
+
+## RND (Read and Development)
+function tw_html_title {
+    curl "$*" -so - | \
+     tr -d '\n' | \
+     sed 's/ lang="\w+"//gi' | \
+     grep -iPo --color=never '(?<=<title>)(.*)(?=</title>)'
+}
+
+function tw_read_and_review {
+    link="$1"
+    title=$(tw_html_title $link)
+    echo $title
+    descr="\"Read and review: $title\""
+    id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
+    task "$id" annotate "$link"
+}
+\\builtin alias rnd="task add +rnd +next +@computer +@online"
+\\builtin alias rnr="tw_read_and_review"
+# // Taskwarrior GTD helpers
+
+# Load ASDF
+\\builtin source $HOME/.asdf/asdf.sh
+# // Load ASDF
