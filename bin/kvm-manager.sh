@@ -43,7 +43,7 @@ OPT_HDA=""
 OPT_HDB=""
 OPT_VGA=""
 OPT_SERIAL=""
-OPT_NIC="-nic tap,ifname=${TAP},script=no,downscript=no"
+OPT_NIC=""
 OPT_USBDEVICE="-usbdevice tablet"
 OPT_KBD_LAYOUT="de"
 OPT_OTHER=""
@@ -210,7 +210,16 @@ start_vm() {
                 echo "startup failed. check ${FILE_OUT}"
                 exit 1
         else
-                echo "startup successfully"
+        				if [ ! -z ${SPICE_PORT} ]; then
+									echo "access via spice on port ${SPICE_PORT}"
+        				fi
+
+        				if [ ! -z ${VNC_DISPLAY} ]; then
+									echo "access via vnc on port ${VNC_DISPLAY}"
+        				fi
+
+        				echo "for network access setup IP ${GUEST_IP} and gateway ${BRIDGE_IP}"
+                echo "startup successfully with ID ${GUEST_ID}"
          fi
 }
 send_cmd() {
@@ -348,13 +357,13 @@ init)
 	echo '#FILE_MONITOR=${DIR_RUN}/monitor' >> ${DIR_BASE}/conf
 	echo '#FILE_PID=${DIR_RUN}/pid' >> ${DIR_BASE}/conf
 	echo '#FILE_OUT=${DIR_RUN}/out' >> ${DIR_BASE}/conf
-	echo '#GUEST_ID=0' >> ${DIR_BASE}/conf
+	echo 'GUEST_ID=0' >> ${DIR_BASE}/conf
 	echo '#GUEST_MEMORY=1024' >> ${DIR_BASE}/conf
-	echo '#GUEST_IP=10.18.18.1${GUEST_ID}' >> ${DIR_BASE}/conf
+	echo 'GUEST_IP=10.18.18.1${GUEST_ID}' >> ${DIR_BASE}/conf
 	echo '#HOST_INTERFACE=wlp2s0' >> ${DIR_BASE}/conf
 	echo '#BRIDGE_IP=10.18.18.1/24' >> ${DIR_BASE}/conf
 	echo '#BRIDGE=vmbr0' >> ${DIR_BASE}/conf
-	echo '#TAP=tap0${GUEST_ID}' >> ${DIR_BASE}/conf
+	echo 'TAP=tap0${GUEST_ID}' >> ${DIR_BASE}/conf
   echo '' >> ${DIR_BASE}/conf
   echo '#QEMU_SYSTEM=`which qemu-system-x86_64`' >> ${DIR_BASE}/conf
   echo '#OPT_KVM="-enable kvm"' >> ${DIR_BASE}/conf
@@ -368,7 +377,7 @@ init)
 	echo '#OPT_HDB=""' >> ${DIR_BASE}/conf
 	echo '#OPT_VGA=""    # -vga qxl' >> ${DIR_BASE}/conf
 	echo '#OPT_SERIAL=""    # -serial stdio' >> ${DIR_BASE}/conf
-	echo '#OPT_NIC="-nic tap,ifname=tap0${GUEST_ID},script=no,downscript=no"' >> ${DIR_BASE}/conf
+	echo '#OPT_NIC="" # -nic tap,ifname=${TAP},script=no,downscript=no' >> ${DIR_BASE}/conf
 	echo '#OPT_USBDEVICE="-usbdevice tablet"' >> ${DIR_BASE}/conf
 	echo '#OPT_KBD_LAYOUT="de"' >> ${DIR_BASE}/conf
 	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
