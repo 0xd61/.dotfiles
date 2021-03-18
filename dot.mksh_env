@@ -1,14 +1,14 @@
 # Android
 ANDROID_HOME="$HOME/Sources/android-sdk"
 ANDROID_SDK_ROOT="$ANDROID_HOME"
-ANDROID_NDK_HOME="$ANDROID_HOME"
+
+_JAVA_AWT_WM_NONREPARENTING=1
 PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
-PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 
 export ANDROID_HOME
 export ANDROID_SDK_ROOT
-export ANDROID_NDK_HOME
+export _JAVA_AWT_WM_NONREPARENTING
 # // Android
 
 # Taskwarrior GTD helpers
