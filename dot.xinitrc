@@ -14,4 +14,5 @@ amixer sset Master mute
 # Mute Microphone
 amixer sset Capture mute
 
-exec dwm
+# launch dwm with dbus
+exec dbus-launch --sh-syntax --exit-with-session dwm
