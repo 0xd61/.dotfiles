@@ -42,7 +42,3 @@ function tw_read_and_review {
 \\builtin alias rnd="task add +rnd +next +@computer +@online"
 \\builtin alias rnr="tw_read_and_review"
 # // Taskwarrior GTD helpers
-
-# Load ASDF
-\\builtin source $HOME/.asdf/asdf.sh
-# // Load ASDF
