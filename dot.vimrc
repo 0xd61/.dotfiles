@@ -39,7 +39,7 @@ set lazyredraw " Don't redraw while executing macros (good performance config)
 set magic " For regular expressions turn magic on
 set showmatch " Show matching brackets when text indicator is over them
 set mat=2 " How many tenths of a second to blink when matching brackets
-set splitbelow " new splits are down
+"set splitbelow " new splits are down
 set splitright " new vsplits are to the right
 set history=1000
 "
@@ -55,7 +55,7 @@ set expandtab
 set showcmd
 "set number
 set linebreak
-set textwidth=80
+set textwidth=0
 set cindent
 set shiftwidth=4
 set softtabstop=4
@@ -65,7 +65,8 @@ set columns=80
 set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
-"set colorcolumn=80
+nnoremap <leader>c :execute "set colorcolumn=" . (&colorcolumn == "" ? "80" : "")<CR>
+highlight ColorColumn ctermbg=8
 
 inoremap {      {}<Left>
 inoremap {<CR>  {<CR>}<Esc>O
@@ -111,6 +112,18 @@ set wildignore+=.git\*,.hg\*,.svn\*.o,*~,*pyc
 " Provides tab-completion for all file-related tasks
 set path+=**
 " set autochdir " tells vim to search in the parent dir
+
+" find files and populate the quickfix list
+fun! FindFiles(filename)
+  let error_file = tempname()
+  silent exe '!find . -iname "*'.a:filename.'*" | xargs file | sed "s/:/:1:/" > '.error_file
+  set errorformat=%f:%l:%m
+  exe "cfile ". error_file
+  copen
+  call delete(error_file)
+endfun
+command! -nargs=1 FindFile call FindFiles(<q-args>)
+
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Backup
@@ -165,7 +178,8 @@ noremap <Leader>bt <esc>:tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 noremap <Leader>st <esc>:vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Quick file open
-nnoremap <Leader>f :find 
+"nnoremap <Leader>f :find 
+nnoremap <Leader>f :FindFile 
 
 """"""""""""""""""""""""""""""
 " => Plugin
