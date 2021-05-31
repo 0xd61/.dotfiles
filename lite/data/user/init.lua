@@ -46,7 +46,9 @@ keymap.add {
   ["ctrl++"] = "scale:increase",
 }
 
-config.ignore_files = {"^node_modules$", "^_?build$", "^deps$", "^.git$"}
+config.indent_size = 4
+
+config.ignore_files = {"^node_modules$", "^_build$", "^deps$", "^.git$"}
 config.mouse_wheel_scroll = 80 * SCALE
 
 -- highlightcomments settings:
