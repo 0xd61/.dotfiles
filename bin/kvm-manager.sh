@@ -382,7 +382,7 @@ init)
 	echo '#OPT_KBD_LAYOUT="de"' >> ${DIR_BASE}/conf
 	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
     echo '' >> ${DIR_BASE}/conf
-    echo '#SHARED_FOLDER="" # mount with: mount -t 9p -o trans=virtio 9p_share <mount point> -oversion=9p2000.L' >> ${DIR_BASE}/conf
+    echo '#SHARED_FOLDER="" # mount with: mount -t 9p -o trans=virtio 9p_share <mount point> -oversion=9p2000.L,posixacl,msize=104857600,cache=loose' >> ${DIR_BASE}/conf
 	echo '#VNC_DISPLAY=3${GUEST_ID}00'  >> ${DIR_BASE}/conf
 	echo '#SPICE_PORT=592${GUEST_ID}' >> ${DIR_BASE}/conf
 	;;
