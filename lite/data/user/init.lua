@@ -48,6 +48,8 @@ keymap.add {
 
 config.indent_size = 4
 
+config.project_scan_rate = 10
+config.fps = 30
 config.ignore_files = {"^node_modules$", "^_build$", "^deps$", "^.git$"}
 config.mouse_wheel_scroll = 80 * SCALE
 
