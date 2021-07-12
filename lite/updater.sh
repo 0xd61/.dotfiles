@@ -30,3 +30,8 @@ unzip -u ${PLUGIN_LATEST_COMMIT}.zip
 rm ${PLUGIN_LATEST_COMMIT}.zip
 rm -rf plugins.repo
 mv lite-plugins-${PLUGIN_LATEST_COMMIT} plugins.repo
+
+PLUGIN_SRC="./plugins.repo/plugins"
+PLUGIN_DEST="./data/plugins"
+for f in ${PLUGIN_SRC}/*; do filename=$(basename $f); [ -f "${PLUGIN_DEST}/$filename" ] && cp ${PLUGIN_SRC}/$filename ${PLUGIN_DEST}/$filename; done
+
