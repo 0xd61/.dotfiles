@@ -41,6 +41,8 @@ keymap.add {
 
   ["ctrl+."] = "macro:play",
   ["ctrl+shift+."] = "macro:toggle-record",
+  ["alt+."] = "console:run",
+  ["alt+shift+."] = "console:toggle",
 
   ["ctrl+-"] = "scale:decrease",
   ["ctrl++"] = "scale:increase",
