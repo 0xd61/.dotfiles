@@ -180,7 +180,7 @@ if [ "$1" == "status" ]; then #Report status
 fi
 
 if [ -t 0 ]; then #not interactive (does not work?)
-  echo " Output is redirected to /var/log/xps_power"
+  echo " Output is redirected to /var/log/xps-power"
 fi
 
 exec >> /var/log/xps-power
@@ -254,9 +254,9 @@ case "$input" in
     echo `date +%d/%m/%Y_%H:%M:%S` "  Battery mode selected"
 
     #Set limits for maximum and minimum frequency
-    echo 25  > /sys/devices/system/cpu/intel_pstate/min_perf_pct
-    echo 100  > /sys/devices/system/cpu/intel_pstate/max_perf_pct
-    echo 0   > /sys/devices/system/cpu/intel_pstate/no_turbo
+    echo 5  > /sys/devices/system/cpu/intel_pstate/min_perf_pct
+    echo 90  > /sys/devices/system/cpu/intel_pstate/max_perf_pct
+    echo 1   > /sys/devices/system/cpu/intel_pstate/no_turbo
     for i in /sys/devices/system/cpu/cpu?/cpufreq/energy_performance_preference ; do echo balance_performance > ${i} ; done
 
     # Device and disk runtime-PM and USB power control (one can do that on {usb,pci,i2c} only if needed)
@@ -272,29 +272,29 @@ case "$input" in
     for i in /sys/bus/usb/devices/*/power/level; do echo on > $i; done
 
     # PCI-E ASPM
-    echo powersave > /sys/module/pcie_aspm/parameters/policy
+    echo powersupersave > /sys/module/pcie_aspm/parameters/policy
 
     # Kernel write mode
     echo 0    > /proc/sys/vm/laptop_mode
-    echo 20   > /proc/sys/vm/dirty_ratio
-    echo 5    > /proc/sys/vm/dirty_background_ratio
-    echo 500  > /proc/sys/vm/dirty_writeback_centisecs
-    echo 1000 > /proc/sys/vm/dirty_expire_centisecs
+    echo 25   > /proc/sys/vm/dirty_ratio
+    echo 15   > /proc/sys/vm/dirty_background_ratio
+    echo 3000  > /proc/sys/vm/dirty_writeback_centisecs
+    echo 10000 > /proc/sys/vm/dirty_expire_centisecs
 
     # SATA ALPM
     for i in /sys/class/scsi_host/host*/link_power_management_policy; do echo min_power > ${i} ; done
 
     # Sound card powersave
-    echo 0 > /sys/module/snd_hda_intel/parameters/power_save
-    echo N > /sys/module/snd_hda_intel/parameters/power_save_controller
+    echo 1 > /sys/module/snd_hda_intel/parameters/power_save
+    echo y > /sys/module/snd_hda_intel/parameters/power_save_controller
 
     # Wifi powersave
-    iw dev wlp2s0 set power_save off &> /dev/null
+    iw dev wlp2s0 set power_save on &> /dev/null
 
     #Intel GPU speed
-    sudo /usr/bin/intel_gpu_frequency -m
+    sudo /usr/bin/intel_gpu_frequency -e
 
-    echo `date +%d/%m/%Y_%H:%M:%S` "  Battery mode applied"
+    echo `date +%d/%m/%Y_%H:%M:%S` "  Cool AC mode applied"
   ;;
 
   battery) # Enable power saving settings on battery
