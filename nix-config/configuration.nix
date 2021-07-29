@@ -92,7 +92,7 @@
             owner = "0xd61";
             repo = ".dotfiles";
             rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
-            sha256 = "8e7c527aae7134b18a1d1ce2325b0a2ce4c51f4503f7b3f72616cb6e1071b621";
+            sha256 = "01xfizy4k9g8z50bgal26sh2b01za9dcykhwkmlsbaqn6pfjd0gp";
           } + "/suckless.conf.d/stterm-0.8.4.config.def.h")
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -110,7 +110,7 @@
             owner = "0xd61";
             repo = ".dotfiles";
             rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
-            sha256 = "8e7c527aae7134b18a1d1ce2325b0a2ce4c51f4503f7b3f72616cb6e1071b621";
+            sha256 = "01xfizy4k9g8z50bgal26sh2b01za9dcykhwkmlsbaqn6pfjd0gp";
           } + "/suckless.conf.d/dwm-6.2.config.def.h")
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
