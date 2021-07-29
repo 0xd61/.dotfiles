@@ -82,17 +82,17 @@
     (self: super: {
       st = super.st.overrideAttrs (oldAttrs: rec {
         patches = [
-          (fetchpatch {
+          (super.fetchpatch {
             url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
             sha256 = "418e1c5df11105482f13a008218c89eadb974630c25b4a6ff3da763dc2560e44";
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
-          (fetchFromGitHub {
+          (super.fetchFromGitHub {
             owner = "0xd61";
             repo = ".dotfiles";
-            rev = "a17a696579d7b738afc774039b631c8671483aff";
-            sha256 = "46936e146b21bd8024a69074258e79d31c8e196a470726984c437d5a4367a8c1";
+            rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
+            sha256 = "8e7c527aae7134b18a1d1ce2325b0a2ce4c51f4503f7b3f72616cb6e1071b621";
           } + "/suckless.conf.d/stterm-0.8.4.config.def.h")
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -100,17 +100,17 @@
 
       dwm = super.dwm.overrideAttrs (oldAttrs: rec {
         patches = [
-          (fetchpatch {
-            url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.1.diff";
-            sha256 = "3a9e3b7c4e7fec9ac6a04be8518c8f25e93224d5afcc4427a47455999b42ecf4";
+          (super.fetchpatch {
+            url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
+            sha256 = "fff620115f9c76a65e0bb18b56bf3354a5ba9585aad52c057a88a03b4a29c52d";
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
-          (fetchFromGitHub {
+          (super.fetchFromGitHub {
             owner = "0xd61";
             repo = ".dotfiles";
-            rev = "a17a696579d7b738afc774039b631c8671483aff";
-            sha256 = "46936e146b21bd8024a69074258e79d31c8e196a470726984c437d5a4367a8c1";
+            rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
+            sha256 = "8e7c527aae7134b18a1d1ce2325b0a2ce4c51f4503f7b3f72616cb6e1071b621";
           } + "/suckless.conf.d/dwm-6.2.config.def.h")
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
