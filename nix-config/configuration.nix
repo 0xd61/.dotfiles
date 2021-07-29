@@ -84,7 +84,7 @@
         patches = [
           (super.fetchpatch {
             url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
-            sha256 = "418e1c5df11105482f13a008218c89eadb974630c25b4a6ff3da763dc2560e44";
+            sha256 = "0i0fav13sxnsydpllny26139gnzai66222502cplh18iy5fir3j1";
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
@@ -102,7 +102,7 @@
         patches = [
           (super.fetchpatch {
             url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
-            sha256 = "fff620115f9c76a65e0bb18b56bf3354a5ba9585aad52c057a88a03b4a29c52d";
+            sha256 = "0bf55553p848g82jrmdahnavm9al6fzmd2xi1dgacxlwbw8j1xpz";
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
