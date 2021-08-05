@@ -88,12 +88,10 @@
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
-          (super.fetchFromGitHub {
-            owner = "0xd61";
-            repo = ".dotfiles";
-            rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
-            sha256 = "01xfizy4k9g8z50bgal26sh2b01za9dcykhwkmlsbaqn6pfjd0gp";
-          } + "/suckless.conf.d/stterm-0.8.4.config.def.h")
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.4.config.def.h";
+            sha256 = "0r67y0nkdajiqsb3fr05x6dcpfzzyvn2i53g5rg7y0hx8b3d2mjd";
+          })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
         });
@@ -106,12 +104,10 @@
           })
         ];
         configFile = super.writeText "config.h" (builtins.readFile
-          (super.fetchFromGitHub {
-            owner = "0xd61";
-            repo = ".dotfiles";
-            rev = "cecb2fd1bdccdacb7b2999aaf67ca727ab21e3f0";
-            sha256 = "01xfizy4k9g8z50bgal26sh2b01za9dcykhwkmlsbaqn6pfjd0gp";
-          } + "/suckless.conf.d/dwm-6.2.config.def.h")
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
+            sha256 = "1wc5wqdj9g9pz4yywgw0k5aa6nkc07n15zmqb1i92s75phbyca52";
+          })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
       });
