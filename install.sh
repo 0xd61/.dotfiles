@@ -23,7 +23,6 @@ ln -s $BASEDIR/dot.gdbinit $HOME/.gdbinit
 #[ -d "$HOME/.config/ranger" ] && unlink $HOME/.config/ranger; ln -s $BASEDIR/ranger $HOME/.config/ranger
 [ -d "$HOME/.doom.d" ] && unlink $HOME/.doom.d; ln -s $BASEDIR/dot.doom.d $HOME/.doom.d
 [ -d "$HOME/.weechat" ] && unlink $HOME/.weechat; ln -s $BASEDIR/dot.weechat $HOME/.weechat
-[ -d "$HOME/.nixpkgs" ] && unlink $HOME/.nixpkgs; ln -s $BASEDIR/dot.nixpkgs $HOME/.nixpkgs
 ln -s $BASEDIR/dot.xinitrc $HOME/.xinitrc
 
 # install/update lite editor
