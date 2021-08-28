@@ -51,7 +51,6 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
-  services.xserver.displayManager.startx.enable = true;
   services.spice-vdagentd.enable = true;
   services.qemuGuest.enable = true;
 
@@ -76,6 +75,7 @@
   users.users.dgl = {
     isNormalUser = true;
     extraGroups = [ "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
+    shell = pkgs.mksh;
   };
 
   nixpkgs.overlays = with pkgs; [
@@ -119,10 +119,15 @@
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     firefox
+    thunderbird
     git
     st
     dmenu
   ];
+
+  environment.variables = {
+      EDITOR = "vim";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -150,6 +155,5 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
-
 }
 
