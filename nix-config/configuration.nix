@@ -78,7 +78,7 @@
     extraGroups = [ "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
   };
 
-  nixpkgs.overlays = [
+  nixpkgs.overlays = with pkgs; [
     (self: super: {
       dwm = super.dwm.overrideAttrs (oldAttrs: rec {
         patches = [
@@ -95,7 +95,6 @@
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
         });
-      })
       st = super.st.overrideAttrs (oldAttrs: rec {
         patches = [
           (super.fetchpatch {
