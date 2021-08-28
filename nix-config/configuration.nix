@@ -78,27 +78,9 @@
     extraGroups = [ "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
   };
 
-  nixpkgs.config = {
-    allowUnfree = true;
-
-    packageOverrides = pkgs: {
-      st = st.overrideAttrs (oldAttrs: rec {
-        patches = [
-          (super.fetchpatch {
-            url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
-            sha256 = "0i0fav13sxnsydpllny26139gnzai66222502cplh18iy5fir3j1";
-          })
-        ];
-        configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchpatch {
-            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.4.config.def.h";
-            sha256 = "0r67y0nkdajiqsb3fr05x6dcpfzzyvn2i53g5rg7y0hx8b3d2mjd";
-          })
-        );
-        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-        });
-
-      dwm = dwm.overrideAttrs (oldAttrs: rec {
+  nixpkgs.overlays = [
+    (self: super: {
+      dwm = super.dwm.overrideAttrs (oldAttrs: rec {
         patches = [
           (super.fetchpatch {
             url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
@@ -112,10 +94,25 @@
           })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+        });
+      })
+      st = super.st.overrideAttrs (oldAttrs: rec {
+        patches = [
+          (super.fetchpatch {
+            url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
+            sha256 = "0i0fav13sxnsydpllny26139gnzai66222502cplh18iy5fir3j1";
+          })
+        ];
+        configFile = writeText "config.def.h" (builtins.readFile
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.4.config.def.h";
+            sha256 = "0r67y0nkdajiqsb3fr05x6dcpfzzyvn2i53g5rg7y0hx8b3d2mjd";
+          })
+        );
+        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
       });
-    };
-
-  };
+    })
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
