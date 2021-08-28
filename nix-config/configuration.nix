@@ -51,6 +51,7 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
+  services.xserver.displayManager.startx.enable = true;
   services.spice-vdagentd.enable = true;
   services.qemuGuest.enable = true;
 
@@ -77,29 +78,7 @@
     extraGroups = [ "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
   };
 
-
-  nixpkgs.overlays = [
-    (self: super: {
-      dwn = super.dwm.overrideAttrs (oldAttrs: rec {
-        patches = [
-          (super.fetchpatch {
-            url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
-            sha256 = "0bf55553p848g82jrmdahnavm9al6fzmd2xi1dgacxlwbw8j1xpz";
-          })
-        ];
-        configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchpatch {
-            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
-            sha256 = "1wc5wqdj9g9pz4yywgw0k5aa6nkc07n15zmqb1i92s75phbyca52";
-          })
-        );
-        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-      })
-    })
-  ];
-
-
-  users.users.dgl.config = {
+  nixpkgs.config = {
     allowUnfree = true;
 
     packageOverrides = pkgs: {
@@ -118,7 +97,24 @@
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
         });
+
+      dwm = dwm.overrideAttrs (oldAttrs: rec {
+        patches = [
+          (super.fetchpatch {
+            url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
+            sha256 = "0bf55553p848g82jrmdahnavm9al6fzmd2xi1dgacxlwbw8j1xpz";
+          })
+        ];
+        configFile = writeText "config.def.h" (builtins.readFile
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
+            sha256 = "1wc5wqdj9g9pz4yywgw0k5aa6nkc07n15zmqb1i92s75phbyca52";
+          })
+        );
+        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+      });
     };
+
   };
 
   # List packages installed in system profile. To search, run:
@@ -130,7 +126,6 @@
     git
     st
     dmenu
-    dwm
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
