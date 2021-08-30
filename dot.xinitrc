@@ -1,8 +1,5 @@
 #
-while true; do
-	~/.dwm-status/status.mksh
-	sleep 10
-done &
+. .xprofile
 
 #primusrun glxinfo
 # xrandr --setprovideroutputsource modesetting NVIDIA-0

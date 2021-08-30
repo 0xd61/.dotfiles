@@ -1,4 +1,4 @@
-#!/bin/mksh
+#!/usr/bin/env mksh
 
 #--- Icons ---#
 
@@ -44,7 +44,7 @@ battery() {
     local status="$(cat /sys/class/power_supply/AC/online)"
     local battery="$(cat /sys/class/power_supply/BAT0/capacity)"
     local timer="$(acpi -b | grep "Battery" | awk '{print $5}' | cut -c 1-5)"
-    if [[ ( $status -eq "0" && $battery -gt 20 ) ]]; then 
+    if [[ ( $status -eq "0" && $battery -gt 20 ) ]]; then
         \\builtin print "$BATTERY_FULL_ICON $battery% $timer"
     elif [[ ( $status -eq "0" && $battery -le 20 ) ]]; then
         \\builtin print "$BATTERY_EMPTY_ICON $battery% $timer"

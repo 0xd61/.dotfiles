@@ -10,6 +10,13 @@
       ./hardware-configuration.nix
     ];
 
+  nix.autoOptimiseStore = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -18,6 +25,7 @@
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+  boot.kernelModules = [ "kvm-intel" ];
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -51,6 +59,8 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.libinput.enable = true;
   services.spice-vdagentd.enable = true;
   services.qemuGuest.enable = true;
 
@@ -71,10 +81,13 @@
 
   networking.networkmanager.enable = false;
 
+  # Virtualisation
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dgl = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "audio" "docker"]; # Enable ‘sudo’ for the user.
     shell = pkgs.mksh;
   };
 
@@ -123,6 +136,15 @@
     git
     st
     dmenu
+    dwm
+    jq
+    zip
+    unzip
+    xz
+    docker
+    docker-compose
+    qemu
+    pavucontrol
   ];
 
   environment.variables = {
