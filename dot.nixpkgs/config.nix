@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 let
+  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) {};
+
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -18,6 +20,17 @@ in
       paths = [
         nvidia-offload
         ctags
+        chromium
+        libreoffice-fresh
+        filezille
+        gnupg
+        pass
+        weechat
+        thunderbird
+        docker
+        docker-compose
+        xclip
+        steam
       ];
     };
   };
