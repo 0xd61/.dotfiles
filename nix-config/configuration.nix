@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
     ];
 
+  # needed for the nvidia
+  nixpkgs.config.allowUnfree = true;
   nix.autoOptimiseStore = true;
   nix.gc = {
     automatic = true;
