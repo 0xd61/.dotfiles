@@ -30,7 +30,7 @@ in
         docker
         docker-compose
         xclip
-        steam
+        zerotierone
       ];
     };
   };
