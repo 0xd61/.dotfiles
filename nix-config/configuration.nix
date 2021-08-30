@@ -131,11 +131,11 @@
   ];
 
   nixpkgs.config.packageOverrides = pkgs: {
-    steam = pkgs.steam.override {
-      nativeOnly = true;
-    };
+    #steam = pkgs.steam.override {
+    #  nativeOnly = true;
+    #};
   };
-  
+
   programs.steam.enable = true;
 
   # List packages installed in system profile. To search, run:
