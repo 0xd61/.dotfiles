@@ -61,11 +61,16 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
   services.xserver.libinput.enable = true;
   services.spice-vdagentd.enable = true;
   services.qemuGuest.enable = true;
 
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.prime = {
+    offload.enable = true;
+    intelBusId = "PCI:00:02:0";
+    nvidiaBusId = "PCI:01:00:0";
+  };
 
   # Configure keymap in X11
   services.xserver.layout = "us";
