@@ -22,7 +22,7 @@ in
         ctags
         chromium
         libreoffice-fresh
-        filezille
+        filezilla
         gnupg
         pass
         weechat
