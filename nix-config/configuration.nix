@@ -29,8 +29,8 @@
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
   boot.kernelModules = [ "kvm-intel" ];
 
-  # networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.hostName = "localdev";
+  networking.wireless.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Asuncion";
@@ -46,6 +46,7 @@
   }];
   networking.defaultGateway = "10.18.18.1";
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking.networkmanager.enable = false;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -59,31 +60,24 @@
   # };
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.windowManager.dwm.enable = true;
-  services.xserver.libinput.enable = true;
-  services.spice-vdagentd.enable = true;
-  services.qemuGuest.enable = true;
+  services.xserver = {
+    enable = true;
+    windowManager.dwm.enable = true;
+    libinput.enable = true;
+    videoDrivers = [ "nvidia" ];
+    layout = "us";
+  # xkbOptions = "eurosign:e";
+  }
 
-  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.prime = {
     offload.enable = true;
     intelBusId = "PCI:00:02:0";
     nvidiaBusId = "PCI:01:00:0";
   };
 
-  # Configure keymap in X11
-  services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable CUPS to print documents.
-  services.printing.enable = false;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-
-  networking.networkmanager.enable = false;
 
   # Virtualisation
   virtualisation.docker.enable = true;
@@ -154,6 +148,7 @@
     xz
     qemu
     pavucontrol
+    zerotierone
   ];
 
   environment.variables = {
@@ -169,6 +164,12 @@
   };
 
   # List services that you want to enable:
+  services.zerotierone.enable = true;
+  services.spice-vdagentd.enable = true;
+  services.qemuGuest.enable = true;
+
+  # Enable CUPS to print documents.
+  services.printing.enable = false;
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;

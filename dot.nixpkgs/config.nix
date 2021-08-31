@@ -30,7 +30,6 @@ in
         docker
         docker-compose
         xclip
-        zerotierone
       ];
     };
   };
