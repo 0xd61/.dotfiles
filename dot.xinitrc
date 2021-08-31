@@ -1,5 +1,5 @@
 #
-. .xprofile
+. ~/.xprofile
 
 #primusrun glxinfo
 # xrandr --setprovideroutputsource modesetting NVIDIA-0
