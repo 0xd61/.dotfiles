@@ -67,7 +67,7 @@
     videoDrivers = [ "nvidia" ];
     layout = "us";
   # xkbOptions = "eurosign:e";
-  }
+  };
 
   hardware.nvidia.prime = {
     offload.enable = true;
