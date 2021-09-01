@@ -19,6 +19,8 @@
     options = "--delete-older-than 30d";
   };
 
+  hardware.cpu.intel.updateMicrocode = true;
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
@@ -149,6 +151,8 @@
     qemu
     pavucontrol
     zerotierone
+    firmwareLinuxNonfree
+    microcodeIntel
   ];
 
   environment.variables = {
