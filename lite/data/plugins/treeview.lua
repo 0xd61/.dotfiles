@@ -161,7 +161,11 @@ function TreeView:draw()
     end
 
     -- icons
-    x = x + item.depth * style.padding.x + style.padding.x
+    -- NOTE(dgl): move the filenames left by the project_root_delta
+    local delta_depth = get_depth(core.project_delta)
+    if delta_depth > 0 then delta_depth = delta_depth + 1 end
+    
+    x = x + (item.depth - delta_depth) * style.padding.x + style.padding.x
     if item.type == "dir" then
       local icon1 = item.expanded and "-" or "+"
       local icon2 = item.expanded and "D" or "d"
