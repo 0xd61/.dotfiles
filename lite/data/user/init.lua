@@ -13,6 +13,7 @@ keymap.add {
   ["ctrl+z"] = "doc:undo",
   ["ctrl+shift+z"] = "doc:redo",
   ["alt+x"] = "core:find-command",
+  ["ctrl+shift+p"] = "core:set-project-root",
   ["ctrl+i"] = "core:find-file",
   ["ctrl+space"] = "markers:toggle-marker",
   ["ctrl+shift+space"] = "markers:go-to-next-marker",
