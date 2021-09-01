@@ -59,7 +59,7 @@ fi
 
 if [ ! -z ${SPICE_PORT} ]; then
 	SPICE="-spice port=${SPICE_PORT},disable-ticketing \
--device virtio-serial -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
+-device virtio-serial-pci -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
 -device nec-usb-xhci,id=usb \
 -chardev spicevmc,name=usbredir,id=usbredirchardev1 \
 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1 \
@@ -382,7 +382,7 @@ init)
 	echo '#OPT_KBD_LAYOUT="de"' >> ${DIR_BASE}/conf
 	echo '#OPT_OTHER=""' >> ${DIR_BASE}/conf
     echo '' >> ${DIR_BASE}/conf
-    echo '#SHARED_FOLDER="" # mount with: mount -t 9p -o trans=virtio 9p_share <mount point> -oversion=9p2000.L,posixacl,msize=104857600,cache=loose' >> ${DIR_BASE}/conf
+    echo '#SHARED_FOLDER="" # mount with: mount -t 9p -o trans=virtio 9p_share <mount point> -oversion=9p2000.L' >> ${DIR_BASE}/conf
 	echo '#VNC_DISPLAY=3${GUEST_ID}00'  >> ${DIR_BASE}/conf
 	echo '#SPICE_PORT=592${GUEST_ID}' >> ${DIR_BASE}/conf
 	;;
