@@ -23,6 +23,7 @@ in
         chromium
         libreoffice-fresh
         filezilla
+        fd
         gnupg
         pass
         weechat
