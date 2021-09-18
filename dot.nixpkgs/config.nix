@@ -31,6 +31,13 @@ in
         docker
         docker-compose
         xclip
+        teams
+        taskwarrior
+        timewarrior
+        syncthing
+        usbutils
+        pciutils
+        streamlink
       ];
     };
   };

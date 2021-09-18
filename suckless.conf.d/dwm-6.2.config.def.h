@@ -50,10 +50,10 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Firefox",                   NULL,       NULL,       1 << 2,       0,            -1 },
-	{ "thunderbird",               NULL,       NULL,       1 << 4,       0,            -1 },
+	{ "Mail",                      NULL,       NULL,       1 << 4,       0,            -1 },
     { "lite",                      NULL,       NULL,       1 << 1,       0,            -1 },
-	{ "Emacs",                     NULL,       NULL,       1 << 1,       0,            -1 },
     { "4coder",                    NULL,       NULL,       1 << 1,       0,            -1 },
+    { "microsoft teams - preview", NULL,       NULL,       1 << 8,       0,            -1 },
 };
 
 /* layout(s) */

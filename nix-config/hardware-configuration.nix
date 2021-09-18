@@ -5,21 +5,25 @@
 
 {
   imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
+    [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "xhci_pci" "virtio_pci" "floppy" "sd_mod" "sr_mod" "virtio_blk" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/cfb31763-2b6c-4bda-a7c1-b1c3f75428ba";
+    { device = "/dev/disk/by-uuid/afc2dea2-6b93-4d64-a7fc-6cb4ecb5ef6d";
       fsType = "ext4";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/0c60cbb3-d6cc-4c93-9e93-885bdc46c2c2"; }
-    ];
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/26B9-2403";
+      fsType = "vfat";
+    };
 
+  swapDevices = [ ];
+
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
