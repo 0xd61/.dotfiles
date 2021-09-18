@@ -38,6 +38,7 @@ in
         usbutils
         pciutils
         streamlink
+        mpv
       ];
     };
   };

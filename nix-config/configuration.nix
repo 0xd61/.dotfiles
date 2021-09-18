@@ -211,7 +211,7 @@
         configFile = writeText "config.def.h" (builtins.readFile
           (super.fetchpatch {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
-            sha256 = "1wc5wqdj9g9pz4yywgw0k5aa6nkc07n15zmqb1i92s75phbyca52";
+            sha256 = "0j7n7r6bp8mh29wa46wyk7kpqi81xll4k5mchg803rmpzx90zjix";
           })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
