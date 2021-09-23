@@ -39,6 +39,10 @@ in
         pciutils
         streamlink
         mpv
+        borgbackup
+        spice-gtk
+        vlc
+        SDL2.dev
       ];
     };
   };

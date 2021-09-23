@@ -1,3 +1,4 @@
+
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
@@ -6,9 +7,19 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
+  # needed for the nvidia
+  nixpkgs.config.allowUnfree = true;
+  nix.autoOptimiseStore = true;
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -32,10 +43,8 @@
     };
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
   # acpi_rev_override=1 iommu=on drm.vblankoffdelay=1 enable_fbc=1 enable_psr=1 disable_power_well=0 pci=noaer pcie_aspm=force nmi_watchdog=0 intel_pstate=no_hwp acpi.debug_level=0x2 acpi.debug_layer=0xFFFFFFFF
-  boot.kernelParams = [ "acpi_rev_override=1" "enable_psr=1" "disable_power_well=0" "acpi.debug_level=0x2" "acpi.debug_layer=0xFFFFFFFF" "pci=noaer" ];
+  boot.kernelParams = [ "acpi_rev_override=1" "enable_psr=1" "disable_power_well=0" "acpi.debug_level=0x2" "acpi.debug_layer=0xFFFFFFFF" ];
 
   boot.kernel.sysctl = {
     "vm.swappiness" = 0;
@@ -45,15 +54,35 @@
     "vm.dirty_writeback_centisecs" = 2000;
   };
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelModules = [ "acpi_call" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+  #boot.blacklistedKernelModules = [ "nouveau" ];
+
   boot.extraModprobeConfig = "
     options snd_hda_intel power_save=1 power_save_controller=y
     options i915 enable_psr=2 enable_rc6=7 enable_fbc=1 semaphores=1 lvds_downclock=1 enable_guc_loading=1 enable_guc_submission=1
     options iwldvm force_cam=0
   ";
 
+  hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
+
+  #"w /proc/acpi/call - - - - \\_SB.PCI0.PEG0.PEGP._OFF"
   systemd.tmpfiles.rules = [
     "w /sys/devices/system/cpu/cpufreq/policy?/energy_performance_preference - - - - balance_power"
   ];
+
+  # GPU
+  #services.xserver.videoDrivers = [ "nvidia" ];
+
+  #hardware.nvidia.prime = {
+  #  offload.enable = true;
+  #  intelBusId = "PCI:00:02:0";
+  #  nvidiaBusId = "PCI:01:00:0";
+  #};
+
+  # Supposedly better for the SSD
+  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
 
   services.udev = {
       extraRules = ''
@@ -104,19 +133,6 @@
       '';
   };
 
-  # Supposedly better for the SSD
-  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
-
-  # needed for the nvidia
-  nixpkgs.config.allowUnfree = true;
-  nix.autoOptimiseStore = true;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
-  hardware.cpu.intel.updateMicrocode = true;
 
   networking.hostName = "localdev";
   networking.wireless.enable = true;
@@ -148,11 +164,13 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  #networking.interfaces.enp62s0u1u1.useDHCP = true;
+  networking.interfaces.enp62s0u1u1.useDHCP = true;
+  networking.interfaces.enp61s0u1u4.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
   networking.wireless.interfaces = [ "wlp2s0"];
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
   networking.networkmanager.enable = false;
+  networking.dhcpcd.wait = "background";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -169,21 +187,11 @@
   services.xserver = {
     enable = true;
     windowManager.dwm.enable = true;
+    displayManager.startx.enable = false; # only for debugging
     libinput.enable = true;
-    videoDrivers = [ "nvidia" ];
     layout = "de";
     #xkbVariant = "intl";
   };
-
-  # I belive this is necessary for steam and wine
-  hardware.opengl.driSupport32Bit = true;
-  hardware.nvidia.prime = {
-    offload.enable = true;
-    intelBusId = "PCI:00:02:0";
-    nvidiaBusId = "PCI:01:00:0";
-  };
-  hardware.nvidia.powerManagement.enable = true;
-  hardware.nvidia.powerManagement.finegrained = true;
 
   # Enable sound.
   sound.enable = true;
@@ -209,7 +217,7 @@
           })
         ];
         configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchpatch {
+          (super.fetchurl {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
             sha256 = "0j7n7r6bp8mh29wa46wyk7kpqi81xll4k5mchg803rmpzx90zjix";
           })
@@ -224,7 +232,7 @@
           })
         ];
         configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchpatch {
+          (super.fetchurl {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.4.config.def.h";
             sha256 = "0r67y0nkdajiqsb3fr05x6dcpfzzyvn2i53g5rg7y0hx8b3d2mjd";
           })
@@ -286,6 +294,7 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
+  services.fstrim.enable = true;
   services.acpid.enable = true;
   services.undervolt = {
     enable = false; # not working with current bios
@@ -294,6 +303,11 @@
     gpuOffset = -75;
     analogioOffset = 0;
   };
+  services.thermald = {
+    enable = true;
+    debug = true;
+  };
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
