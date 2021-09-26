@@ -5,3 +5,5 @@ error.txt
 .lite*
 version
 plugins.repo
+default.nix
+result
