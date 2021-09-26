@@ -9,7 +9,7 @@ PLUGIN_REPO="rxi/lite-plugins"
 LATEST_COMMIT=$(cat ./version | grep "Lite" | cut -d @ -f 2)
 PLUGIN_LATEST_COMMIT=$(cat ./version | grep "Plugin" | cut -d @ -f 2)
 
-if curl 2> /dev/null ; then
+if which curl ; then
     LATEST_COMMIT=$(curl -s "https://api.github.com/repos/${REPO}/git/refs/heads/custom" | jq -r '.object.sha')
     PLUGIN_LATEST_COMMIT=$(curl -s "https://api.github.com/repos/${PLUGIN_REPO}/git/refs/heads/master" | jq -r '.object.sha')
 fi
