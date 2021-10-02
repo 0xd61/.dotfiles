@@ -55,7 +55,7 @@ config.project_scan_rate = 30
 config.fps = 30
 config.ignore_files = {"^node_modules$", "^_build$", "^deps$", "^.git$"}
 config.mouse_wheel_scroll = 80 * SCALE
-config.temp_file_prefix = "/tmp/.lite_temp_"
+config.temp_file_dir = "/tmp"
 
 -- highlightcomments settings:
 config.user_initials = "dgl"

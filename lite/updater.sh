@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 }
 EOF
 
-nix-env -f default.nix -i lite
+nix-env -i -f default.nix
 
 rm "${LATEST_COMMIT}.tar.gz"
 rm "${PLUGIN_LATEST_COMMIT}.tar.gz"
