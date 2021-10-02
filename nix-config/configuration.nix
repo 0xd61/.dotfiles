@@ -13,7 +13,6 @@
     ];
 
   # needed for the nvidia
-  nixpkgs.config.allowUnfree = true;
   nix.autoOptimiseStore = true;
   nix.gc = {
     automatic = true;
@@ -42,6 +41,8 @@
       preLVM = true;
     };
   };
+
+  boot.cleanTmpDir = true;
 
   # acpi_rev_override=1 iommu=on drm.vblankoffdelay=1 enable_fbc=1 enable_psr=1 disable_power_well=0 pci=noaer pcie_aspm=force nmi_watchdog=0 intel_pstate=no_hwp acpi.debug_level=0x2 acpi.debug_layer=0xFFFFFFFF
   boot.kernelParams = [ "acpi_rev_override=1" "enable_psr=1" "disable_power_well=0" "acpi.debug_level=0x2" "acpi.debug_layer=0xFFFFFFFF" ];
@@ -80,6 +81,17 @@
   #  intelBusId = "PCI:00:02:0";
   #  nvidiaBusId = "PCI:01:00:0";
   #};
+
+  hardware.opengl = {
+      driSupport32Bit = true;
+      enable = true;
+      extraPackages = with pkgs; [
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+        intel-media-driver
+      ];
+    };
 
   # Supposedly better for the SSD
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -170,7 +182,7 @@
   networking.wireless.interfaces = [ "wlp2s0"];
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
   networking.networkmanager.enable = false;
-  networking.dhcpcd.wait = "background";
+  networking.dhcpcd.wait = "if-carrier-up";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -198,7 +210,13 @@
   hardware.pulseaudio.enable = true;
 
   # Virtualisation
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {
+      dates = "weekly";
+      flags = [ "--all" "--volumes" ];
+    };
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dgl = {
@@ -219,7 +237,7 @@
         configFile = writeText "config.def.h" (builtins.readFile
           (super.fetchurl {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
-            sha256 = "0j7n7r6bp8mh29wa46wyk7kpqi81xll4k5mchg803rmpzx90zjix";
+            sha256 = "1kp8br33ixpq7q9jxam23grs650bmsa0i4r3030rnphss2kkzj11";
           })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -241,14 +259,10 @@
       });
     })
   ];
-
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.config.packageOverrides = pkgs: {
-    #steam = pkgs.steam.override {
-    #  nativeOnly = true;
-    #};
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   };
-
-  programs.steam.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -287,13 +301,12 @@
 
   # List services that you want to enable:
   services.zerotierone.enable = true;
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable the OpenSSH daemon.
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.epson-escpr ];
+  };
+  xdg.portal.enable = true; # needed by flatpak
   # services.openssh.enable = true;
-
   services.fstrim.enable = true;
   services.acpid.enable = true;
   services.undervolt = {

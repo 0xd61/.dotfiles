@@ -28,7 +28,6 @@ in
         pass
         weechat
         thunderbird
-        docker
         docker-compose
         xclip
         teams
@@ -42,7 +41,8 @@ in
         borgbackup
         spice-gtk
         vlc
-        SDL2.dev
+        lutris
+        wine-staging
       ];
     };
   };
