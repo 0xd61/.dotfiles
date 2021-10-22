@@ -106,7 +106,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 
 /* History */
 #define SETURI(p)       { .v = (char *[]){ "/bin/sh", "-c", \
-"prop=\"`dmenu.uri.sh`\" &&" \
+"prop=\"`~/.surf/dmenu.uri.sh`\" &&" \
 "xprop -id $1 -f $0 8s -set $0 \"$prop\"", \
 p, winid, NULL } }
 
