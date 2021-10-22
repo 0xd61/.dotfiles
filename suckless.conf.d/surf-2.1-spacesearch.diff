@@ -1,0 +1,14 @@
+diff -up surf-2.1.old/surf.c surf-2.1/surf.c
+--- surf-2.1.old/surf.c	2021-05-09 22:34:33.000000000 +0000
++++ surf-2.1/surf.c	2021-10-22 11:14:47.920440570 +0000
+@@ -562,7 +562,9 @@ loaduri(Client *c, const Arg *a)
+ 	if (g_strcmp0(uri, "") == 0)
+ 		return;
+
+-	if (g_str_has_prefix(uri, "http://")  ||
++	if (*uri == ' ') {
++		url = g_strdup_printf("%s%s", searchengine, uri + 1);
++	} else if (g_str_has_prefix(uri, "http://")  ||
+ 	    g_str_has_prefix(uri, "https://") ||
+ 	    g_str_has_prefix(uri, "file://")  ||
+ 	    g_str_has_prefix(uri, "about:")) {
