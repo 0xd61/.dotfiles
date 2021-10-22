@@ -169,8 +169,8 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_minus,  zoom,       { .i = -1 } },
 	{ MODKEY,                GDK_KEY_plus,   zoom,       { .i = +1 } },
 
-	{ MODKEY,                GDK_KEY_c,      clipboard,  { .i = 1 } },
-	{ MODKEY,                GDK_KEY_v,      clipboard,  { .i = 0 } },
+	{ MODKEY,                GDK_KEY_v,      clipboard,  { .i = 1 } },
+	{ MODKEY,                GDK_KEY_c,      clipboard,  { .i = 0 } },
 
 	{ MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
