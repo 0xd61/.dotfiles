@@ -100,7 +100,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "mpv --really-quiet \"$0\"", u, NULL \
+             "mpv  --really-quiet \"$0\"", u, NULL \
         } \
 }
 
@@ -141,7 +141,7 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
 	{ MODKEY,                GDK_KEY_f,      spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
 	{ MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
-	{ MODKEY,                GDK_KEY_Return, spawn,      SETURI("_SURF_GO") },
+	{ MODKEY,                GDK_KEY_p,      spawn,      SETURI("_SURF_GO") },
 
 	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 
@@ -190,6 +190,8 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
+
+	{ MODKEY,                GDK_KEY_return, newwindow,  { .i = 0 } },
 };
 
 static char *searchengine = "https://duckduckgo.com/?q=";
