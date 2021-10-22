@@ -191,7 +191,7 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
 
-	{ MODKEY,                GDK_KEY_return, newwindow,  { .i = 0 } },
+	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_Return, newwindow,  { 1 } },
 };
 
 static char *searchengine = "https://duckduckgo.com/?q=";
