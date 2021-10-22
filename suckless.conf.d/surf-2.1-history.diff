@@ -1,0 +1,53 @@
+diff -up surf-2.1.old/surf.c surf-2.1/surf.c
+--- surf-2.1.old/surf.c	2021-05-09 22:34:33.000000000 +0000
++++ surf-2.1/surf.c	2021-10-22 12:45:14.964237785 +0000
+@@ -177,6 +177,7 @@ static void spawn(Client *c, const Arg *
+ static void msgext(Client *c, char type, const Arg *a);
+ static void destroyclient(Client *c);
+ static void cleanup(void);
++static void updatehistory(const char *u, const char *t);
+
+ /* GTK/WebKit */
+ static WebKitWebView *newview(Client *c, WebKitWebView *rv);
+@@ -350,6 +351,7 @@ setup(void)
+ 	cookiefile = buildfile(cookiefile);
+ 	scriptfile = buildfile(scriptfile);
+ 	certdir    = buildpath(certdir);
++	historyfile = buildfile(historyfile);
+ 	if (curconfig[Ephemeral].val.i)
+ 		cachedir = NULL;
+ 	else
+@@ -1088,9 +1090,25 @@ cleanup(void)
+ 	g_free(scriptfile);
+ 	g_free(stylefile);
+ 	g_free(cachedir);
++	g_free(historyfile);
+ 	XCloseDisplay(dpy);
+ }
+
++void
++updatehistory(const char *u, const char *t)
++{
++	FILE *f;
++	f = fopen(historyfile, "a+");
++
++	char b[20];
++	time_t now = time (0);
++	strftime (b, 20, "%Y-%m-%d %H:%M:%S", localtime (&now));
++	fputs(b, f);
++
++	fprintf(f, " %s %s\n", u, t);
++	fclose(f);
++}
++
+ WebKitWebView *
+ newview(Client *c, WebKitWebView *rv)
+ {
+@@ -1530,6 +1548,7 @@ loadchanged(WebKitWebView *v, WebKitLoad
+ 		break;
+ 	case WEBKIT_LOAD_FINISHED:
+ 		seturiparameters(c, uri, loadfinished);
++		updatehistory(uri, c->title);
+ 		/* Disabled until we write some WebKitWebExtension for
+ 		 * manipulating the DOM directly.
+ 		evalscript(c, "document.documentElement.style.overflow = '%s'",
