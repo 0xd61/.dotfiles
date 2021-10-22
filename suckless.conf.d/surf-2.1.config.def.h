@@ -129,7 +129,7 @@ static SiteSpecific certs[] = {
 	{ "://suckless\\.org/", "suckless.org.crt" },
 };
 
-#define MODKEY GDK_CONTROL_MASK
+#define MODKEY GDK_ALT_MASK
 
 /* hotkeys */
 /*
