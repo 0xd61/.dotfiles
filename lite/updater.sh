@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   src = ../lite;
 
-  buildInputs = [ SDL2 clang zip unzip binutils ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ SDL2 clang zip unzip binutils go elixir nodejs ];
 
   patchPhase = ''
     patchShebangs \
@@ -47,6 +48,11 @@ stdenv.mkDerivation rec {
     cp lite "\$out/bin/"
     cp version "\$out/bin/"
     ls -s "\$out/bin/lite" "\$out/bin/"
+    runHook postInstall
+  '';
+
+  postInstall = with lib; ''
+      wrapProgram \$out/bin/lite --prefix PATH : \${makeBinPath [ go elixir nodejs ]}
   '';
 
   meta = {

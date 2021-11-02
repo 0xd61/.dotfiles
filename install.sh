@@ -17,6 +17,7 @@ ln -s $BASEDIR/dot.vimrc $HOME/.vimrc
 ln -s $BASEDIR/dot.ctags $HOME/.ctags
 ln -s $BASEDIR/dot.nbrc $HOME/.nbrc
 ln -s $BASEDIR/dot.gdbinit $HOME/.gdbinit
+ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.vim" ] && unlink $HOME/.vim; ln -s $BASEDIR/dot.vim $HOME/.vim
 [ -d "$HOME/.dwm-status" ] && unlink $HOME/.dwm-status; ln -s $BASEDIR/dot.dwm-status $HOME/.dwm-status
 [ -d "$HOME/.local/bin" ] && unlink $HOME/.local/bin; ln -s $BASEDIR/bin $HOME/.local/bin
@@ -26,6 +27,7 @@ ln -s $BASEDIR/dot.gdbinit $HOME/.gdbinit
 [ -d "$HOME/.nixpkgs" ] && unlink $HOME/.nixpkgs; ln -s $BASEDIR/dot.nixpkgs $HOME/.nixpkgs
 ln -s $BASEDIR/dot.xprofile $HOME/.xprofile
 ln -s $BASEDIR/dot.xinitrc $HOME/.xinitrc
+[ -d "$HOME/.config/mpv" ] && unlink $HOME/.config/mpv; ln -s $BASEDIR/mpv $HOME/.config/mpv
 
 # install/update lite editor
 cd lite > /dev/null

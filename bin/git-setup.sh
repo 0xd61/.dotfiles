@@ -81,3 +81,8 @@ git_email=`git config user.email`
 read -p "Git email: [${git_email}] " input
 git_email=${input:-$git_email}
 git config user.email "${git_email}"
+
+git_signing=`git config commit.gpgsign`
+read -p "Git signing: [${git_signing}] " input
+git_signing=${input:-$git_signing}
+git config commit.gpgsign "${git_signing}"

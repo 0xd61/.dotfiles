@@ -5,6 +5,13 @@
 
 { config, pkgs, ... }:
 
+let
+  hostblock = pkgs.fetchurl {
+    url = "https://github.com/StevenBlack/hosts/blob/4dad78108e4e9e752f625433522eeb47254379c5/alternates/fakenews-porn-social/hosts?raw=true";
+    sha256 = "1n18hiizaq1ly6sandan4rv93mwbx0ssvv6685v2npv1c37z333x";
+  };
+
+in
 {
   imports =
     [
@@ -12,7 +19,6 @@
       ./hardware-configuration.nix
     ];
 
-  # needed for the nvidia
   nix.autoOptimiseStore = true;
   nix.gc = {
     automatic = true;
@@ -55,10 +61,8 @@
     "vm.dirty_writeback_centisecs" = 2000;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "acpi_call" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
-  #boot.blacklistedKernelModules = [ "nouveau" ];
 
   boot.extraModprobeConfig = "
     options snd_hda_intel power_save=1 power_save_controller=y
@@ -74,24 +78,24 @@
   ];
 
   # GPU
-  #services.xserver.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-  #hardware.nvidia.prime = {
-  #  offload.enable = true;
-  #  intelBusId = "PCI:00:02:0";
-  #  nvidiaBusId = "PCI:01:00:0";
-  #};
+  hardware.nvidia.prime = {
+    offload.enable = true;
+    intelBusId = "PCI:00:02:0";
+    nvidiaBusId = "PCI:01:00:0";
+  };
+  hardware.nvidia.powerManagement.enable = true;
 
   hardware.opengl = {
       driSupport32Bit = true;
       enable = true;
-      extraPackages = with pkgs; [
-        vaapiIntel
-        vaapiVdpau
-        libvdpau-va-gl
-        intel-media-driver
-      ];
-    };
+  };
+
+  # Power down gpu after xinitialization
+  #services.xserver.displayManager.setupCommands = ''
+  #  echo "\_SB.PCI0.PEG0.PEGP._OFF" > /proc/acpi/call
+  #'';
 
   # Supposedly better for the SSD
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
@@ -147,6 +151,7 @@
 
 
   networking.hostName = "localdev";
+  networking.hostFiles = [ hostblock ];
   networking.wireless.enable = true;
   networking.wireless.userControlled.enable = true;
   networking.wireless.networks = {
@@ -176,8 +181,8 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp62s0u1u1.useDHCP = true;
-  networking.interfaces.enp61s0u1u4.useDHCP = true;
+  #networking.interfaces.enp62s0u1u1.useDHCP = true;
+  #networking.interfaces.enp61s0u1u4.useDHCP = true;
   networking.interfaces.wlp2s0.useDHCP = true;
   networking.wireless.interfaces = [ "wlp2s0"];
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
@@ -199,7 +204,7 @@
   services.xserver = {
     enable = true;
     windowManager.dwm.enable = true;
-    displayManager.startx.enable = false; # only for debugging
+    # displayManager.startx.enable = false; # only for debugging
     libinput.enable = true;
     layout = "de";
     #xkbVariant = "intl";
@@ -227,17 +232,25 @@
 
   nixpkgs.overlays = with pkgs; [
     (self: super: {
+      dmenu = super.dmenu.overrideAttrs (oldAttrs: rec {
+        patches = [
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dmenu-5.0-backspace-delete-word.diff";
+            sha256 = "0614rxmsvvp3d72r5hfgpwk3ljb3zpy6hm8kb3li2km6bz33sw8j";
+          })
+        ];
+        });
       dwm = super.dwm.overrideAttrs (oldAttrs: rec {
         patches = [
           (super.fetchpatch {
             url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
-            sha256 = "0bf55553p848g82jrmdahnavm9al6fzmd2xi1dgacxlwbw8j1xpz";
+            sha256 = "1z0zx7rd9k971niy58yznzq5hb0qsxbgfq4dy0nng7hw6k5cmg2k";
           })
         ];
         configFile = writeText "config.def.h" (builtins.readFile
           (super.fetchurl {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
-            sha256 = "1kp8br33ixpq7q9jxam23grs650bmsa0i4r3030rnphss2kkzj11";
+            sha256 = "02p9qhw5vxvkimfxi1vgpgq5s0mk6agxbrpkbssljiwxsxa7qbqb";
           })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -257,6 +270,38 @@
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
       });
+
+      surf = super.surf.overrideAttrs (oldAttrs: rec {
+        patches = [
+          (super.fetchpatch {
+            url = "https://surf.suckless.org/patches/popup-on-gesture/surf-popup-2.0.diff";
+            sha256 = "13g282q479961mvvzlxz1qbv52giihzqaivj9qlfwyk88zrxza4k";
+          })
+          (super.fetchpatch {
+            url = "https://surf.suckless.org/patches/clipboard-instead-of-primary/surf-clipboard-20200112-a6a8878.diff";
+            sha256 = "0nshb2k26w9dci816g9ysxasvcn8k2fk7mp77vj48w02mkf1jg3q";
+          })
+          (super.fetchpatch {
+            url = "https://surf.suckless.org/patches/playexternal/surf-playexternal-20190724-b814567.diff";
+            sha256 = "1dl94vlfq7dg1higmdc2zan3bk8pzahcs8db0vm3lc6l83skczgc";
+          })
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1-history.diff";
+            sha256 = "1anndmj5i0jrrq9kyh49qcsqcjgswg3kb7w00hsnmq0vikp1mwq6";
+          })
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1-spacesearch.diff";
+            sha256 = "14l0nfm1rsqrl1bb0hn6z11z16w6dsx2ixjd1p2j1pqccsg5qzcp";
+          })
+        ];
+        configFile = writeText "config.def.h" (builtins.readFile
+          (super.fetchurl {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1.config.def.h";
+            sha256 = "15ylpf7vfllrc8d2wriqzxwhj41imh4dp8wal6y6x2vzm7gr9csj";
+          })
+        );
+        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+      });
     })
   ];
   nixpkgs.config.allowUnfree = true;
@@ -269,11 +314,11 @@
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
-    firefox
     git
     st
     dmenu
     dwm
+    surf
     jq
     zip
     unzip
@@ -323,8 +368,8 @@
 
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 22000 ];
+  networking.firewall.allowedUDPPorts = [ 22000 21027 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 

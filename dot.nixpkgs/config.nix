@@ -288,6 +288,7 @@ in
         usbutils
         pciutils
         streamlink
+        yt-dlp
         mpv
         borgbackup
         spice-gtk
