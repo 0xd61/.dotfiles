@@ -1,6 +1,6 @@
 diff -up dmenu-5.0.old/dmenu.c dmenu-5.0/dmenu.c
 --- dmenu-5.0.old/dmenu.c	2020-09-02 16:37:07.000000000 +0000
-+++ dmenu-5.0/dmenu.c	2021-11-02 20:08:56.828005241 +0000
++++ dmenu-5.0/dmenu.c	2021-11-02 20:30:49.142400955 +0000
 @@ -349,6 +349,7 @@ keypress(XKeyEvent *ev)
  			insert(NULL, 0 - cursor);
  			break;
@@ -9,12 +9,15 @@ diff -up dmenu-5.0.old/dmenu.c dmenu-5.0/dmenu.c
  			while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
  				insert(NULL, nextrune(-1) - cursor);
  			while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
-@@ -405,6 +406,8 @@ insert:
+@@ -405,6 +406,11 @@ insert:
  		cursor = nextrune(+1);
  		/* fallthrough */
  	case XK_BackSpace:
-+		if (ev->state & ControlMask)
++		if (ev->state & ControlMask) {
++			buf[0] = ' ';
++			insert(buf, 1);
 +			return;
++		}
  		if (cursor == 0)
  			return;
  		insert(NULL, nextrune(-1) - cursor);
