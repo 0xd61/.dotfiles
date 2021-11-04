@@ -9,23 +9,7 @@ diff -up surf-2.1.old/config.def.h surf-2.1/config.def.h
  	[HideBackground]      =       { { .i = 0 },     },
  	[Inspector]           =       { { .i = 0 },     },
  	[Java]                =       { { .i = 1 },     },
-@@ -67,10 +68,12 @@ static WebKitFindOptions findopts = WEBK
- /* SETPROP(readprop, setprop, prompt)*/
- #define SETPROP(r, s, p) { \
-         .v = (const char *[]){ "/bin/sh", "-c", \
--             "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
--             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\")\" " \
--             "| dmenu -p \"$4\" -w $1)\" && xprop -id $1 -f $3 8s -set $3 \"$prop\"", \
--             "surf-setprop", winid, r, s, p, NULL \
-+             "prop=\"$(printf '%b' \"$(xprop -id $1 "r" " \
-+             "| sed -e 's/^"r"(UTF8_STRING) = \"\\(.*\\)\"/\\1/' " \
-+             "      -e 's/\\\\\\(.\\)/\\1/g')\" " \
-+             "| dmenu -p '"p"' -w $1)\" " \
-+             "&& xprop -id $1 -f "s" 8u -set "s" \"$prop\"", \
-+             "surf-setprop", winid, NULL \
-         } \
- }
- 
+
 diff -up surf-2.1.old/surf.c surf-2.1/surf.c
 --- surf-2.1.old/surf.c	2021-05-09 22:34:33.000000000 +0000
 +++ surf-2.1/surf.c	2021-11-04 21:20:19.372770210 +0000
