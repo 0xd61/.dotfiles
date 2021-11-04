@@ -29,6 +29,7 @@ static Parameter defconfig[ParameterLast] = {
 	[FontSize]            =       { { .i = 14 },    },
 	[FrameFlattening]     =       { { .i = 0 },     },
 	[Geolocation]         =       { { .i = 0 },     },
+	[HardwareAcceleration]=       { { .i = 1 },     }, // 0 = WEBKIT_HARDWARE_ACCELERATION_POLICY_ON_DEMAND, 1 = WEBKIT_HARDWARE_ACCELERATION_POLICY_ALWAYS, 2 = WEBKIT_HARDWARE_ACCELERATION_POLICY_NEVER
 	[HideBackground]      =       { { .i = 0 },     },
 	[Inspector]           =       { { .i = 1 },     },
 	[Java]                =       { { .i = 1 },     },
@@ -69,10 +70,12 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 /* SETPROP(readprop, setprop, prompt)*/
 #define SETPROP(r, s, p) { \
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
-             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\")\" " \
-             "| dmenu -p \"$4\" -w $1)\" && xprop -id $1 -f $3 8s -set $3 \"$prop\"", \
-             "surf-setprop", winid, r, s, p, NULL \
+             "prop=\"$(printf '%b' \"$(xprop -id $1 "r" " \
+             "| sed -e 's/^"r"(UTF8_STRING) = \"\\(.*\\)\"/\\1/' " \
+             "      -e 's/\\\\\\(.\\)/\\1/g')\" " \
+             "| dmenu -p '"p"' -w $1)\" " \
+             "&& xprop -id $1 -f "s" 8u -set "s" \"$prop\"", \
+             "surf-setprop", winid, NULL \
         } \
 }
 
