@@ -51,16 +51,17 @@ battery() {
     else
         \\builtin print "$BATTERY_CHARGE_ICON $battery%"
     fi
+    \\builtin print "$BATTERY_CHARGE_ICON"
 }
 
 # CPU Temp
 temp() {
- \\builtin print "$THERMAL_ICON $(cat /sys/class/thermal/thermal_zone8/temp | awk '{printf "%s°C", $1/1000}')"
+ \\builtin print "$THERMAL_ICON CPU: $(sensors | awk '/^CPUTIN/ { print $2 }'), SYS: $(sensors | awk '/^SYSTIN/ { print $2 }')"
 }
 
 # Wifi
 wifi() {
- if [ $(cat /sys/class/net/wlp2s0/operstate) == "up" ]; then \\builtin print "$WIFI_ICON"; else \\builtin print "$WIFI_OFF_ICON"; fi
+ if [ $(cat /sys/class/net/enp6s0/operstate) == "up" ]; then \\builtin print "$ETHERNET_ICON"; else \\builtin print "$ETHERNET_OFF_ICON"; fi
 }
 # Status to be displayed
 
@@ -69,7 +70,7 @@ wifi() {
 # one parameter reaches dangerous values so we can change it with \x03
 # without affecting the rest - yeah it's programmed in a weird way, don't ask.
 
-STATUS="$(wifi) $SEPARATOR $(volume) $SEPARATOR $(battery) $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $(temp) $SEPARATOR $DATE,$TIME"
+STATUS="$(wifi) $SEPARATOR $(volume) $SEPARATOR $CPU_USAGE $SEPARATOR $MEMORY_USAGE $SEPARATOR $(temp) $SEPARATOR $DATE,$TIME"
 #STATUS="$DATE,$TIME"
 
 # Piping it to the root X window, which dwm uses as status bar

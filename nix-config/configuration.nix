@@ -17,6 +17,7 @@ in
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <nix-ld/modules/nix-ld.nix>
     ];
 
   nix.autoOptimiseStore = true;
@@ -50,129 +51,25 @@ in
 
   boot.cleanTmpDir = true;
 
-  # acpi_rev_override=1 iommu=on drm.vblankoffdelay=1 enable_fbc=1 enable_psr=1 disable_power_well=0 pci=noaer pcie_aspm=force nmi_watchdog=0 intel_pstate=no_hwp acpi.debug_level=0x2 acpi.debug_layer=0xFFFFFFFF
-  boot.kernelParams = [ "acpi_rev_override=1" "enable_psr=1" "disable_power_well=0" "acpi.debug_level=0x2" "acpi.debug_layer=0xFFFFFFFF" ];
-
-  boot.kernel.sysctl = {
-    "vm.swappiness" = 0;
-    "kernel.sysrq" = 1;
-    "kernel.nmi_watchdog" = 0;
-    "vm.laptop_mode" = 5;
-    "vm.dirty_writeback_centisecs" = 2000;
-  };
-
-  boot.kernelModules = [ "acpi_call" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
-
-  boot.extraModprobeConfig = "
-    options snd_hda_intel power_save=1 power_save_controller=y
-    options i915 enable_psr=2 enable_rc6=7 enable_fbc=1 semaphores=1 lvds_downclock=1 enable_guc_loading=1 enable_guc_submission=1
-    options iwldvm force_cam=0
-  ";
-
-  hardware.cpu.intel.updateMicrocode = config.hardware.enableRedistributableFirmware;
-
-  #"w /proc/acpi/call - - - - \\_SB.PCI0.PEG0.PEGP._OFF"
-  systemd.tmpfiles.rules = [
-    "w /sys/devices/system/cpu/cpufreq/policy?/energy_performance_preference - - - - balance_power"
-  ];
-
-  # GPU
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.nvidia.prime = {
-    offload.enable = true;
-    intelBusId = "PCI:00:02:0";
-    nvidiaBusId = "PCI:01:00:0";
-  };
-  hardware.nvidia.powerManagement.enable = true;
+  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
+  boot.initrd.kernelModules = [ "amdgpu" "nct6775" ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   hardware.opengl = {
-      driSupport32Bit = true;
-      enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+    enable = true;
+    extraPackages = with pkgs; [
+      rocm-opencl-icd
+      rocm-opencl-runtime
+    ];
   };
-
-  # Power down gpu after xinitialization
-  #services.xserver.displayManager.setupCommands = ''
-  #  echo "\_SB.PCI0.PEG0.PEGP._OFF" > /proc/acpi/call
-  #'';
 
   # Supposedly better for the SSD
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
 
-  services.udev = {
-      extraRules = ''
-        # disable bluetooth
-        SUBSYSTEM=="rfkill", ATTR{type}=="bluetooth", ATTR{state}="0"
-
-        # Powersave wifi
-        ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save on"
-
-        # PCI pm
-        SUBSYSTEM=="pci", ATTR{power/control}="auto"
-
-        # USB autosuspend
-        # blacklist for usb autosuspend
-        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="0416", ATTR{idProduct}=="0123", GOTO="power_usb_rules_end"
-        ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="046d", ATTR{idProduct}=="c52b", ATTR{power/autosuspend}="20"
-
-        ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
-        LABEL="power_usb_rules_end"
-
-        # Sata
-        ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", ATTR{link_power_management_policy}="med_power_with_dipm"
-
-        # CPU frequency
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo 5  > /sys/devices/system/cpu/intel_pstate/min_perf_pct'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo 80  > /sys/devices/system/cpu/intel_pstate/max_perf_pct'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo 1   > /sys/devices/system/cpu/intel_pstate/no_turbo'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu2/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu3/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu4/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu5/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu6/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="0", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_power > /sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference'"
-
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo 5  > /sys/devices/system/cpu/intel_pstate/min_perf_pct'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo 90  > /sys/devices/system/cpu/intel_pstate/max_perf_pct'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo 1   > /sys/devices/system/cpu/intel_pstate/no_turbo'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu1/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu2/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu3/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu4/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu5/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu6/cpufreq/energy_performance_preference'"
-        SUBSYSTEM=="power_supply", ENV{POWER_SUPPLY_ONLINE}=="1", RUN+="${pkgs.bash}/bin/sh -c 'echo balance_performance > /sys/devices/system/cpu/cpu7/cpufreq/energy_performance_preference'"
-      '';
-  };
-
-
   networking.hostName = "localdev";
   networking.hostFiles = [ hostblock ];
-  networking.wireless.enable = true;
-  networking.wireless.userControlled.enable = true;
-  networking.wireless.networks = {
-    "samuu tech s.r.l" = {
-      pskRaw = "6c6eb28ce0ef7f12245c4b12fe39ad72a3a9937367b3bfa3c2293b87c70a7035";
-    };
-    "405 Wi-Fi not allowed" = {
-      pskRaw = "06da83698df67a3061dab1a5b5822932534035013b7d63b0fc6786131fbffafa";
-      priority = 60;
-    };
-    "404 Wi-Fi not found" = {
-      pskRaw = "83664cc2285d791b21fe990215f1c77737ef58c20c1f6414eff3b91a0540abe2";
-      priority = 60;
-    };
-    "Fb590_52_E" = {
-      pskRaw = "1177aa2ef3bc66732e3afa0297eb1dc2bf4858ac7914313b3a557b5036d679b5";
-    };
-    "Segensquelle" = {
-      pskRaw = "70b81ca01ffdadfcec82d3d6b5d8cee79dbea292d570cf4ae62c0d424f2a2880";
-    };
-  };
 
   # Set your time zone.
   time.timeZone = "UTC";
@@ -181,13 +78,9 @@ in
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  #networking.interfaces.enp62s0u1u1.useDHCP = true;
-  #networking.interfaces.enp61s0u1u4.useDHCP = true;
-  networking.interfaces.wlp2s0.useDHCP = true;
-  networking.wireless.interfaces = [ "wlp2s0"];
+  networking.interfaces.enp6s0.useDHCP = true;
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
   networking.networkmanager.enable = false;
-  networking.dhcpcd.wait = "if-carrier-up";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -197,7 +90,7 @@ in
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "de";
+    keyMap = "us";
   };
 
   # Enable the X11 windowing system.
@@ -206,8 +99,8 @@ in
     windowManager.dwm.enable = true;
     # displayManager.startx.enable = false; # only for debugging
     libinput.enable = true;
-    layout = "de";
-    #xkbVariant = "intl";
+    layout = "us";
+    xkbVariant = "intl";
   };
 
   # Enable sound.
@@ -232,11 +125,35 @@ in
 
   nixpkgs.overlays = with pkgs; [
     (self: super: {
+      #webkitgtk = super.webkitgtk.overrideAttrs (oldAttrs: rec {
+      #  propagatedBuildInputs = [
+      #    gtk3
+      #    libsoup
+      #  ];
+
+      #  cmakeFlags = [
+      #    "-DPORT=GTK"
+      #    "-DUSE_LIBHYPHEN=OFF"
+      #    "-DENABLE_GAMEPAD=OFF"
+      #    "-DENABLE_GTKDOC=OFF"
+      #    "-DENABLE_MINIBROWSER=OFF"
+      #    "-DENABLE_VIDEO=OFF"
+      #    "-DENABLE_WEB_AUDIO=OFF"
+      #    "-DENABLE_GEOLOCATION=OFF"
+      #    "-DENABLE_TOUCH_EVENTS=OFF"
+      #    "-DENABLE_DRAG_SUPPORT=OFF"
+      #    "-DENABLE_WAYLAND_TARGET=OFF"
+      #    "-DUSE_WPE_RENDERER=ON"
+      #    "-DUSE_SYSTEM_MALLOC=OFF"
+      #    "-DUSE_GSTREAMER_GL=OFF"
+      #    "-DUSE_SOUP2=ON"
+      #  ];
+      #  });
       dmenu = super.dmenu.overrideAttrs (oldAttrs: rec {
         patches = [
           (super.fetchpatch {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dmenu-5.0-backspace-delete-word.diff";
-            sha256 = "0614rxmsvvp3d72r5hfgpwk3ljb3zpy6hm8kb3li2km6bz33sw8j";
+            sha256 = "0abqi59zp1ynmzmf0k524n4s589cnli07kxi2y9ngkyzhvbjav7k";
           })
         ];
         });
@@ -259,7 +176,7 @@ in
         patches = [
           (super.fetchpatch {
             url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
-            sha256 = "0i0fav13sxnsydpllny26139gnzai66222502cplh18iy5fir3j1";
+            sha256 = "0valvkbsf2qbai8551id6jc0szn61303f3l6r8wfjmjnn4054r3c";
           })
         ];
         configFile = writeText "config.def.h" (builtins.readFile
@@ -275,29 +192,33 @@ in
         patches = [
           (super.fetchpatch {
             url = "https://surf.suckless.org/patches/popup-on-gesture/surf-popup-2.0.diff";
-            sha256 = "13g282q479961mvvzlxz1qbv52giihzqaivj9qlfwyk88zrxza4k";
+            sha256 = "0zqf4cfzz5l0gqayj8xba6xqzzyc2ifqjclw0k7v4b4him9y3l3m";
           })
           (super.fetchpatch {
             url = "https://surf.suckless.org/patches/clipboard-instead-of-primary/surf-clipboard-20200112-a6a8878.diff";
-            sha256 = "0nshb2k26w9dci816g9ysxasvcn8k2fk7mp77vj48w02mkf1jg3q";
+            sha256 = "1rnqis9s9fqa4nj2c6mjzjxqcnlvcjmhmd39qf45z6lv77byb7rh";
           })
           (super.fetchpatch {
             url = "https://surf.suckless.org/patches/playexternal/surf-playexternal-20190724-b814567.diff";
-            sha256 = "1dl94vlfq7dg1higmdc2zan3bk8pzahcs8db0vm3lc6l83skczgc";
+            sha256 = "19r6mgsi47w0gy9hl4knkl8z65ghl42p9rb4pps0681wzn3hk2cz";
           })
           (super.fetchpatch {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1-history.diff";
-            sha256 = "1anndmj5i0jrrq9kyh49qcsqcjgswg3kb7w00hsnmq0vikp1mwq6";
+            sha256 = "07fgh6msd3za79p5yf1g52kchvg4cfdxbrnzymr1ljq0wkcni8h5";
           })
           (super.fetchpatch {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1-spacesearch.diff";
-            sha256 = "14l0nfm1rsqrl1bb0hn6z11z16w6dsx2ixjd1p2j1pqccsg5qzcp";
+            sha256 = "0mwwkqyqchq6n9r3x1qdpm4mvzcba257waf61h7hpjcqi41ql94i";
+          })
+          (super.fetchpatch {
+            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1-hardware-acceleration.diff";
+            sha256 = "1vgs7qii2yccvfghjd6phf3j12vslxwzr5sw2k8sfll2fvqxilq0";
           })
         ];
         configFile = writeText "config.def.h" (builtins.readFile
           (super.fetchurl {
             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/surf-2.1.config.def.h";
-            sha256 = "15ylpf7vfllrc8d2wriqzxwhj41imh4dp8wal6y6x2vzm7gr9csj";
+            sha256 = "0dk5kzdyg4lk64yg3d6311lmywzcf4z62h0blssyq3ymrg173sll";
           })
         );
         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -305,9 +226,6 @@ in
     })
   ];
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -329,7 +247,6 @@ in
     firmwareLinuxNonfree
     htop
     acpi
-    intel-gpu-tools
   ];
 
   environment.variables = {
@@ -344,6 +261,15 @@ in
     enableSSHSupport = true;
   };
 
+  #nix.sandboxPaths = [ "/var/cache/ccache" ];
+  #programs.ccache = {
+  #  enable = true;
+  #  cacheDir = "/var/cache/ccache";
+  #  packageNames = [
+  #    "zerotierone"
+  #  ];
+  #};
+
   # List services that you want to enable:
   services.zerotierone.enable = true;
   services.printing = {
@@ -354,22 +280,12 @@ in
   # services.openssh.enable = true;
   services.fstrim.enable = true;
   services.acpid.enable = true;
-  services.undervolt = {
-    enable = false; # not working with current bios
-    verbose = true;
-    coreOffset = -125;
-    gpuOffset = -75;
-    analogioOffset = 0;
-  };
-  services.thermald = {
-    enable = true;
-    debug = true;
-  };
+  services.fwupd.enable = true;
 
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22000 ];
-  networking.firewall.allowedUDPPorts = [ 22000 21027 ];
+  networking.firewall.allowedUDPPorts = [ 22000 21027 8888 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 

@@ -20,6 +20,10 @@ in
   allowUnfree = true;
 
   packageOverrides = pkgs : with pkgs; rec {
+    spice-gtk = pkgs.spice-gtk.override {
+        withPolkit = true;
+    };
+
     my_vim = pkgs.vim_configurable.customize {
       name = "vim";
       wrapGui = true;
@@ -298,6 +302,11 @@ in
         my_vim
         openvpn
         flameshot
+        man-pages
+        man-pages-posix
+        liquidctl
+        v4l-utils
+        lm_sensors
       ];
     };
   };
