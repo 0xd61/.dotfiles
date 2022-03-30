@@ -1,10 +1,13 @@
 local core = require "core"
+local config = require "core.config"
 local style = require "core.style"
 local DocView = require "core.docview"
 
+config.timetxt_filename = "time.*%.txt$"
+
 local default_draw_line_gutter = DocView.draw_line_gutter
 local default_get_gutter_width = DocView.get_gutter_width
-local filename = "time.*%.txt$"
+
 
 local function maybe_get_default(value, default)
   if value == nil then return default else return value end
@@ -67,16 +70,13 @@ local function get_hours_by_line(line)
   difftime = difftime - (minutes * 60)
   local seconds = difftime
 
-  print(hours)
-  print(minutes)
-  print(seconds)
-
   return string.format("%02d:%02d:%02d", hours, minutes, seconds)
 end
 
 function DocView:draw_line_gutter(idx, x, y)
   local dv = core.active_view
-  if dv.doc.filename:match(filename) then
+  local filename = dv.doc.filename or ""
+  if filename:match(config.timetxt_filename) then
     local color = style.line_number
     local line1, _, line2, _ = self.doc:get_selection(true)
     if idx >= line1 and idx <= line2 then
@@ -95,7 +95,8 @@ end
 
 function DocView:get_gutter_width()
   local dv = core.active_view
-  if dv.doc.filename:match(filename) then
+  local filename = dv.doc.filename or ""
+  if filename:match(config.timetxt_filename) then
     return self:get_font():get_width(os.date("%H:%M:%S")) + style.padding.x * 2
   else
     -- NOTE(dgl): hiding line numbers
