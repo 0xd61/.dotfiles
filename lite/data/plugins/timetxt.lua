@@ -98,7 +98,6 @@ function DocView:get_gutter_width()
   local dv = core.active_view
   local filename = dv.doc and dv.doc.filename or ""
   if filename:match(config.timetxt_filename) then
-    print("here")
     return self:get_font():get_width(os.date("%H:%M:%S")) + style.padding.x * 2
   else
     return default_get_gutter_width(self)
