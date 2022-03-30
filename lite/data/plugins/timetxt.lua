@@ -5,8 +5,8 @@ local DocView = require "core.docview"
 
 config.timetxt_filename = "time.*%.txt$"
 
-local default_draw_line_gutter = DocView.draw_line_gutter
-local default_get_gutter_width = DocView.get_gutter_width
+local default_draw_line_gutter = function() end
+local default_get_gutter_width = function() return style.padding.x end
 
 
 local function maybe_get_default(value, default)
@@ -44,7 +44,7 @@ local function parse_date(datetime)
   local offset = (offsethour * 60 + offsetmin) * 60 + offsetsec
   if offsetsign == "-" then offset = offset * -1 end
 
-  return timestamp + offset
+  return timestamp - offset
 end
 
 
@@ -75,7 +75,8 @@ end
 
 function DocView:draw_line_gutter(idx, x, y)
   local dv = core.active_view
-  local filename = dv.doc.filename or ""
+
+  local filename = dv.doc and dv.doc.filename or ""
   if filename:match(config.timetxt_filename) then
     local color = style.line_number
     local line1, _, line2, _ = self.doc:get_selection(true)
@@ -95,11 +96,14 @@ end
 
 function DocView:get_gutter_width()
   local dv = core.active_view
-  local filename = dv.doc.filename or ""
+  local filename = dv.doc and dv.doc.filename or ""
   if filename:match(config.timetxt_filename) then
+    print("here")
     return self:get_font():get_width(os.date("%H:%M:%S")) + style.padding.x * 2
   else
-    -- NOTE(dgl): hiding line numbers
-    return style.padding.x
+    return default_get_gutter_width(self)
   end
+
+  -- NOTE(dgl): never called
+  return 0
 end
