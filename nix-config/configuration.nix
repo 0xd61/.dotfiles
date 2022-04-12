@@ -3,27 +3,28 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
+# TODO(dgl):
+# - ST fix to show current dir in title
+
 { config, pkgs, ... }:
 
 let
   hostblock = pkgs.fetchurl {
-    url = "https://github.com/StevenBlack/hosts/blob/4dad78108e4e9e752f625433522eeb47254379c5/alternates/fakenews-porn-social/hosts?raw=true";
-    sha256 = "1n18hiizaq1ly6sandan4rv93mwbx0ssvv6685v2npv1c37z333x";
+    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
+    sha256 = "0mfsclm6fz5f9khdb9d1byij19248sb978zkz799dv2l94w0jai1";
   };
-
 in
 {
   imports =
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <nix-ld/modules/nix-ld.nix>
     ];
 
   nix.autoOptimiseStore = true;
   nix.gc = {
     automatic = true;
-    dates = "weekly";
+    dates = "monthly";
     options = "--delete-older-than 30d";
   };
 
@@ -51,18 +52,22 @@ in
 
   boot.cleanTmpDir = true;
 
-  boot.kernelParams = [ "acpi_enforce_resources=lax" ];
   boot.initrd.kernelModules = [ "amdgpu" "nct6775" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  swapDevices = [
+    {
+      device = "/var/swapfile";
+      size = 1024 * 8 * 2; # twice the RAM should leave enough space for hibernation
+    }
+  ];
+
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl = {
     driSupport = true;
     driSupport32Bit = true;
     enable = true;
-    extraPackages = with pkgs; [
-      rocm-opencl-icd
-      rocm-opencl-runtime
-    ];
   };
 
   # Supposedly better for the SSD
@@ -72,7 +77,7 @@ in
   networking.hostFiles = [ hostblock ];
 
   # Set your time zone.
-  time.timeZone = "UTC";
+  time.timeZone = "America/Asuncion";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -81,6 +86,10 @@ in
   networking.interfaces.enp6s0.useDHCP = true;
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
   networking.networkmanager.enable = false;
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="net", ACTION=="add", ATTRS{idVendor}=="2a70", ATTRS{idProduct}=="9024", NAME="usb0"
+  '';
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -96,11 +105,17 @@ in
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
+    videoDrivers = [ "amdgpu" ];
     windowManager.dwm.enable = true;
     # displayManager.startx.enable = false; # only for debugging
     libinput.enable = true;
     layout = "us";
     xkbVariant = "intl";
+  };
+  services.picom = {
+    enable = true;
+    backend = "glx";
+    vSync = true;
   };
 
   # Enable sound.
@@ -115,6 +130,7 @@ in
       flags = [ "--all" "--volumes" ];
     };
   };
+  virtualisation.spiceUSBRedirection.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dgl = {
@@ -261,14 +277,13 @@ in
     enableSSHSupport = true;
   };
 
-  #nix.sandboxPaths = [ "/var/cache/ccache" ];
-  #programs.ccache = {
-  #  enable = true;
-  #  cacheDir = "/var/cache/ccache";
-  #  packageNames = [
-  #    "zerotierone"
-  #  ];
-  #};
+  nix.sandboxPaths = [ "/var/cache/ccache" ];
+  programs.ccache = {
+    enable = true;
+    cacheDir = "/var/cache/ccache";
+    packageNames = [
+    ];
+  };
 
   # List services that you want to enable:
   services.zerotierone.enable = true;
@@ -276,15 +291,29 @@ in
     enable = true;
     drivers = [ pkgs.epson-escpr ];
   };
-  xdg.portal.enable = true; # needed by flatpak
-  # services.openssh.enable = true;
+
+  services.openssh.enable = true;
   services.fstrim.enable = true;
   services.acpid.enable = true;
   services.fwupd.enable = true;
 
+  systemd.services.openrgb = {
+    enable = true;
+    description = "OpenRGB server";
+    unitConfig = {
+      After = [ "network.target" "lm_sensors.service" ];
+    };
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.coreutils}/bin/nice -n 19 ${pkgs.openrgb}/bin/openrgb --server -d 0 -c 040403 -d 1 -z 0 -s 24 -c 040403";
+      RemainAfterExit = "yes";
+      Restart = "always";
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
 
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22000 ];
+  # Open ports in the firewall.           # syncthing
+  networking.firewall.allowedTCPPorts = [ 22000            ];
   networking.firewall.allowedUDPPorts = [ 22000 21027 8888 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;

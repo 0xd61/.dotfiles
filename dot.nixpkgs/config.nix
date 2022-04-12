@@ -280,6 +280,7 @@ in
         fd
         gnupg
         pass
+        git-crypt
         weechat
         thunderbird
         docker-compose
@@ -297,16 +298,14 @@ in
         borgbackup
         spice-gtk
         vlc
-        lutris
-        wine-staging
         my_vim
         openvpn
         flameshot
         man-pages
         man-pages-posix
-        liquidctl
         v4l-utils
         lm_sensors
+        openrgb
       ];
     };
   };
