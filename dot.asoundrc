@@ -44,8 +44,8 @@ pcm.dmixed  {
 				nonblock true
 
 				type hw
-				card 0
-				device 0
+				card 1
+				device 1
 				subdevice 0
 			}
 			# mplayer2 chooses 1024
