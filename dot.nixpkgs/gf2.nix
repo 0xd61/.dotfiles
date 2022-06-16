@@ -8,16 +8,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gf2";
-  version = "e49f7895fa2b568631f220f7d20b52c3d0d5a99a";
+  version = "c62c4a992268e5fc032a11bbf6298d719d61609d";
 
   src = fetchgit {
     url = "https://github.com/nakst/gf.git";
     rev = "${version}";
-    sha256 = "0mhwr8f84mpcakqbavxsg575jli5mrff5y6q5bizcy6af69bpwwm";
+    sha256 = "1635kiayqwfh0n6xrh0r1b909vxmyxy2vqrbap984f8lz1f18lrr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ xorg.libX11 gdb ];
+  buildInputs = [ xorg.libX11 gdb freetype ];
 
   patchPhase = ''
     echo #!/usr/bin/env bash > build.sh

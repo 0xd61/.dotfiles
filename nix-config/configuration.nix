@@ -10,8 +10,8 @@
 
 let
   hostblock = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
-    sha256 = "0mfsclm6fz5f9khdb9d1byij19248sb978zkz799dv2l94w0jai1";
+    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts";
+    sha256 = "1mqd3k6jz5y21i7fmby7za47mgni53862d6yxfn7m6wwwizbk1pj";
   };
 in
 {
@@ -135,7 +135,7 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dgl = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "audio" "lp" "docker"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "audio" "lp" "docker" "dialout" "adbusers"]; # Enable ‘sudo’ for the user.
     shell = pkgs.mksh;
   };
 
@@ -269,6 +269,7 @@ in
       EDITOR = "vim";
   };
 
+  programs.adb.enable = true;
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
