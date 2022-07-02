@@ -26,7 +26,7 @@ FILE_OUT=${DIR_RUN}/out
 GUEST_ID=0
 GUEST_MEMORY=1024
 GUEST_IP=10.18.18.1${GUEST_ID}
-HOST_INTERFACE=wlp2s0
+HOST_INTERFACE=enp6s0
 BRIDGE=vmbr0
 BRIDGE_IP=10.18.18.1/24
 
@@ -126,7 +126,9 @@ start_bridge() {
 
 		    sysctl net.ipv4.conf.${HOST_INTERFACE}.proxy_arp=1
 		    sysctl net.ipv4.ip_forward=1
-        iptables -D FORWARD -j REJECT
+
+		    # TODO(dgl): use separate chain
+        	iptables -D FORWARD -j REJECT
 		    iptables -t nat -A POSTROUTING -o ${HOST_INTERFACE} -j MASQUERADE
 		    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 		    iptables -A FORWARD -i ${BRIDGE} -o ${HOST_INTERFACE} -j ACCEPT
