@@ -6,7 +6,7 @@ static const float bordercolor[]    = {0.5, 0.5, 0.5, 1.0};
 static const float focuscolor[]     = {1.0, 0.0, 0.0, 1.0};
 
 /* tagging */
-static const char *tags[] = { "\ue7a2", "\ue796", "\uf269", "\uf1de", "\uf6ed", "\uf8b2", "\uf8b5", "\uf8b8", "\uf8bb" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const Rule rules[] = {
 	/* xprop(1):
