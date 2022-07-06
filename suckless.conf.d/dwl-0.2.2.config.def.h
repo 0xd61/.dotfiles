@@ -21,14 +21,14 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* app_id                      title                   tags mask     isfloating    monitor */
-	{ "Firefox",                   NULL,       NULL,       1 << 2,       0,            -1 },
-	{ "firefox",                   NULL,       NULL,       1 << 2,       0,            -1 },
-	{ "Thunderbird",               NULL,       NULL,       1 << 4,       0,            -1 },
-	{ "lite",                      NULL,       NULL,       1 << 1,       0,            -1 },
-	{ "4coder",                    NULL,       NULL,       1 << 1,       0,            -1 },
-	{ "Microsoft Teams - Preview", NULL,       NULL,       1 << 8,       0,            -1 },
-	{ "Surf",                      NULL,       NULL,       1 << 2,       0,            -1 },
+	/* app_id                      title       tags mask     isfloating    monitor */
+	{ "Firefox",                   NULL,       1 << 2,       0,            -1 },
+	{ "firefox",                   NULL,       1 << 2,       0,            -1 },
+	{ "Thunderbird",               NULL,       1 << 4,       0,            -1 },
+	{ "lite",                      NULL,       1 << 1,       0,            -1 },
+	{ "4coder",                    NULL,       1 << 1,       0,            -1 },
+	{ "Microsoft Teams - Preview", NULL,       1 << 8,       0,            -1 },
+	{ "Surf",                      NULL,       1 << 2,       0,            -1 },
 };
 
 /* layout(s) */
