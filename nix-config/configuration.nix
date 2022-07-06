@@ -3,16 +3,15 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-# TODO(dgl):
-# - ST fix to show current dir in title
-
 { config, pkgs, ... }:
 
 let
   hostblock = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts";
-    sha256 = "1mqd3k6jz5y21i7fmby7za47mgni53862d6yxfn7m6wwwizbk1pj";
+    sha256 = "/ifWEZX8VruHw9ONKIVwYI/KxiWj8oiQmDbDakxJq08=";
   };
+
+  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
 in
 {
   imports =
@@ -32,35 +31,10 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Lower GRUB resolution for faster rendering
-  boot.loader.grub.gfxmodeEfi = "1024x768";
-
-  boot.loader.grub = {
-    enable = true;
-    version = 2;
-    efiSupport = true;
-    enableCryptodisk = true;
-    device = "nodev";
-  };
-
-  boot.initrd.luks.devices = {
-    crypted = {
-      device = "/dev/disk/by-uuid/45dce0a7-ac47-42ce-b99e-3d4d2c153731";
-      preLVM = true;
-    };
-  };
-
   boot.cleanTmpDir = true;
 
   boot.initrd.kernelModules = [ "amdgpu" "nct6775" ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  swapDevices = [
-    {
-      device = "/var/swapfile";
-      size = 1024 * 8 * 2; # twice the RAM should leave enough space for hibernation
-    }
-  ];
+  boot.kernelPackages = unstable.linuxPackages_xanmod_latest;
 
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
@@ -73,19 +47,45 @@ in
   # Supposedly better for the SSD
   fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
 
-  networking.hostName = "localdev";
-  networking.hostFiles = [ hostblock ];
-
   # Set your time zone.
   time.timeZone = "America/Asuncion";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp6s0.useDHCP = true;
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
-  networking.networkmanager.enable = false;
+  networking.hostName = "localdev";
+  networking.hostFiles = [ hostblock ];
+
+  networking = {
+    useDHCP = false;
+    useNetworkd = true;
+    networkmanager.enable = false;
+  };
+
+  systemd.network.networks = let
+    networkConfig = {
+      DHCP = "yes";
+      DNSSEC = "yes";
+      DNSOverTLS = "yes";
+      DNS = [ "1.1.1.1" "1.0.0.1" ];
+    };
+  in {
+    # Config for all useful interfaces
+    "40-wired" = {
+      enable = true;
+      name = "en*";
+      inherit networkConfig;
+      dhcpV4Config.RouteMetric = 1024; # Better be explicit
+    };
+    "40-wireless" = {
+      enable = true;
+      name = "wl*";
+      inherit networkConfig;
+      dhcpV4Config.RouteMetric = 2048; # Prefer wired
+    };
+  };
+
+  # Wait for any interface to become available, not for all
+  systemd.services."systemd-networkd-wait-online".serviceConfig.ExecStart = [
+    "" "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any"
+  ];
 
   services.udev.extraRules = ''
     SUBSYSTEM=="net", ACTION=="add", ATTRS{idVendor}=="2a70", ATTRS{idProduct}=="9024", NAME="usb0"
@@ -173,36 +173,37 @@ in
           })
         ];
         });
-      dwm = super.dwm.overrideAttrs (oldAttrs: rec {
-        patches = [
-          (super.fetchpatch {
-            url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-6.2.diff";
-            sha256 = "1z0zx7rd9k971niy58yznzq5hb0qsxbgfq4dy0nng7hw6k5cmg2k";
-          })
-        ];
-        configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchurl {
-            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.2.config.def.h";
-            sha256 = "02p9qhw5vxvkimfxi1vgpgq5s0mk6agxbrpkbssljiwxsxa7qbqb";
-          })
-        );
-        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-        });
-      st = super.st.overrideAttrs (oldAttrs: rec {
-        patches = [
-          (super.fetchpatch {
-            url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.4.diff";
-            sha256 = "0valvkbsf2qbai8551id6jc0szn61303f3l6r8wfjmjnn4054r3c";
-          })
-        ];
-        configFile = writeText "config.def.h" (builtins.readFile
-          (super.fetchurl {
-            url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.4.config.def.h";
-            sha256 = "0r67y0nkdajiqsb3fr05x6dcpfzzyvn2i53g5rg7y0hx8b3d2mjd";
-          })
-        );
-        postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-      });
+       dwm = super.dwm.overrideAttrs (oldAttrs: rec {
+         patches = [
+           (super.fetchpatch {
+             url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-20220527-d3f93c7.diff";
+             sha256 = "twTkfKjOMGZCQdxHK0vXEcgnEU3CWg/7lrA3EftEAXc=";
+           })
+         ];
+         configFile = writeText "config.def.h" (builtins.readFile
+           (super.fetchurl {
+             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.3.config.def.h";
+             sha256 = "X32/KJOsyk9l5KrbNn9TSNkQcSHREck2N//iF9wLlC8=";
+           })
+         );
+         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+         });
+       st = super.st.overrideAttrs (oldAttrs: rec {
+         patches = [
+           (super.fetchpatch {
+             url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.5.diff";
+             sha256 = "ZZAbrWyIaYRtw+nqvXKw8eXRWf0beGNJgoupRKsr2lc=";
+           })
+         ];
+         configFile = writeText "config.def.h" (builtins.readFile
+           (super.fetchurl {
+             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.5.config.def.h";
+             sha256 = "DLQUqfa8FDsff0m4ioZCKO4hVJ0vFKSLhvXmxOxvDf8=";
+           })
+         );
+         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+       });
+
 
       surf = super.surf.overrideAttrs (oldAttrs: rec {
         patches = [
@@ -252,7 +253,6 @@ in
     st
     dmenu
     dwm
-    surf
     jq
     zip
     unzip
@@ -278,14 +278,6 @@ in
     enableSSHSupport = true;
   };
 
-  nix.sandboxPaths = [ "/var/cache/ccache" ];
-  programs.ccache = {
-    enable = true;
-    cacheDir = "/var/cache/ccache";
-    packageNames = [
-    ];
-  };
-
   # List services that you want to enable:
   services.zerotierone.enable = true;
   services.printing = {
@@ -297,21 +289,6 @@ in
   services.fstrim.enable = true;
   services.acpid.enable = true;
   services.fwupd.enable = true;
-
-  systemd.services.openrgb = {
-    enable = true;
-    description = "OpenRGB server";
-    unitConfig = {
-      After = [ "network.target" "lm_sensors.service" ];
-    };
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.coreutils}/bin/nice -n 19 ${pkgs.openrgb}/bin/openrgb --server -d 0 -c 040403 -d 1 -z 0 -s 24 -c 040403";
-      RemainAfterExit = "yes";
-      Restart = "always";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
 
   # Open ports in the firewall.           # syncthing
   networking.firewall.allowedTCPPorts = [ 22000            ];
@@ -325,6 +302,6 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = "22.05"; # Did you read the comment?
 }
 
