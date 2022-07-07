@@ -39,9 +39,9 @@ in
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
   hardware.opengl = {
-    driSupport = true;
-    driSupport32Bit = true;
     enable = true;
+    driSupport = true;
+    driSupport32Bit = (pkgs.system=="x86_64-linux");
   };
 
   # Supposedly better for the SSD
@@ -120,7 +120,14 @@ in
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse.enable = true;
+  };
 
   # Virtualisation
   virtualisation.docker = {
@@ -141,30 +148,15 @@ in
 
   nixpkgs.overlays = with pkgs; [
     (self: super: {
-      #webkitgtk = super.webkitgtk.overrideAttrs (oldAttrs: rec {
-      #  propagatedBuildInputs = [
-      #    gtk3
-      #    libsoup
-      #  ];
-
-      #  cmakeFlags = [
-      #    "-DPORT=GTK"
-      #    "-DUSE_LIBHYPHEN=OFF"
-      #    "-DENABLE_GAMEPAD=OFF"
-      #    "-DENABLE_GTKDOC=OFF"
-      #    "-DENABLE_MINIBROWSER=OFF"
-      #    "-DENABLE_VIDEO=OFF"
-      #    "-DENABLE_WEB_AUDIO=OFF"
-      #    "-DENABLE_GEOLOCATION=OFF"
-      #    "-DENABLE_TOUCH_EVENTS=OFF"
-      #    "-DENABLE_DRAG_SUPPORT=OFF"
-      #    "-DENABLE_WAYLAND_TARGET=OFF"
-      #    "-DUSE_WPE_RENDERER=ON"
-      #    "-DUSE_SYSTEM_MALLOC=OFF"
-      #    "-DUSE_GSTREAMER_GL=OFF"
-      #    "-DUSE_SOUP2=ON"
-      #  ];
-      #  });
+        dwl = super.dwl.overrideAttrs (oldAttrs: rec {
+          configFile = writeText "config.def.h" (builtins.readFile
+            (super.fetchurl {
+              url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwl-0.2.2.config.def.h";
+              hash = "sha256-l47V7Zmuo6Mjgdmjc8oivdcymFW8wJUVrPygIr0RsUo=";
+            })
+          );
+          postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+      });
       dmenu = super.dmenu.overrideAttrs (oldAttrs: rec {
         patches = [
           (super.fetchpatch {
@@ -173,36 +165,36 @@ in
           })
         ];
         });
-       dwm = super.dwm.overrideAttrs (oldAttrs: rec {
-         patches = [
-           (super.fetchpatch {
-             url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-20220527-d3f93c7.diff";
-             sha256 = "twTkfKjOMGZCQdxHK0vXEcgnEU3CWg/7lrA3EftEAXc=";
-           })
-         ];
-         configFile = writeText "config.def.h" (builtins.readFile
-           (super.fetchurl {
-             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.3.config.def.h";
-             sha256 = "X32/KJOsyk9l5KrbNn9TSNkQcSHREck2N//iF9wLlC8=";
-           })
-         );
-         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-         });
-       st = super.st.overrideAttrs (oldAttrs: rec {
-         patches = [
-           (super.fetchpatch {
-             url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.5.diff";
-             sha256 = "ZZAbrWyIaYRtw+nqvXKw8eXRWf0beGNJgoupRKsr2lc=";
-           })
-         ];
-         configFile = writeText "config.def.h" (builtins.readFile
-           (super.fetchurl {
-             url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.5.config.def.h";
-             sha256 = "DLQUqfa8FDsff0m4ioZCKO4hVJ0vFKSLhvXmxOxvDf8=";
-           })
-         );
-         postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
-       });
+        dwm = super.dwm.overrideAttrs (oldAttrs: rec {
+          patches = [
+            (super.fetchpatch {
+              url = "https://dwm.suckless.org/patches/fancybar/dwm-fancybar-20220527-d3f93c7.diff";
+              sha256 = "twTkfKjOMGZCQdxHK0vXEcgnEU3CWg/7lrA3EftEAXc=";
+            })
+          ];
+          configFile = writeText "config.def.h" (builtins.readFile
+            (super.fetchurl {
+              url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.3.config.def.h";
+              sha256 = "X32/KJOsyk9l5KrbNn9TSNkQcSHREck2N//iF9wLlC8=";
+            })
+          );
+          postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+        });
+        st = super.st.overrideAttrs (oldAttrs: rec {
+          patches = [
+            (super.fetchpatch {
+              url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.5.diff";
+              sha256 = "ZZAbrWyIaYRtw+nqvXKw8eXRWf0beGNJgoupRKsr2lc=";
+            })
+          ];
+          configFile = writeText "config.def.h" (builtins.readFile
+            (super.fetchurl {
+              url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/stterm-0.8.5.config.def.h";
+              sha256 = "DLQUqfa8FDsff0m4ioZCKO4hVJ0vFKSLhvXmxOxvDf8=";
+            })
+          );
+          postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
+        });
 
 
       surf = super.surf.overrideAttrs (oldAttrs: rec {
@@ -253,12 +245,16 @@ in
     st
     dmenu
     dwm
+    bemenu
+    dwl
+    yambar
+    inotify-tools
+    foot
     jq
     zip
     unzip
     xz
     qemu
-    pavucontrol
     zerotierone
     firmwareLinuxNonfree
     htop
@@ -295,6 +291,44 @@ in
   networking.firewall.allowedUDPPorts = [ 22000 21027 8888 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
+
+  systemd.user.services = {
+        dwl = {
+          description = "Window Manager";
+          enable = true;
+          serviceConfig = {
+            Type      = "simple";
+            ExecStart = "${pkgs.dwl}/bin/dwl";
+            Restart   = "always";
+            RestartSec   = 10;
+          };
+          wantedBy = [ "graphical.target" ];
+        };
+        yambar = {
+          description = "Menubar";
+          enable = true;
+          requires = "dwl.service";
+          serviceConfig = {
+            Type      = "simple";
+            ExecStart = "${pkgs.yambar}/bin/yambar";
+            Restart   = "always";
+            RestartSec   = 10;
+          };
+          wantedBy = [ "graphical.target" ];
+        };
+        foot = {
+          description = "Terminal Server";
+          enable = true;
+          requires = "dwl.service";
+          serviceConfig = {
+            Type      = "simple";
+            ExecStart = "${pkgs.foot}/bin/foot --server";
+            Restart   = "always";
+            RestartSec   = 10;
+          };
+          wantedBy = [ "graphical.target" ];
+        };
+    };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
