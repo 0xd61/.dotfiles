@@ -1,0 +1,255 @@
+# Typical laptop setup, with wifi, brightness, battery etc, for
+# i3/Sway.
+
+# For X11/i3, you'll want to replace calls to swaymsg with i3-msg, and
+# the sway-xkb module with the xkb module.
+
+# fonts we'll be re-using here and
+textfont: &textfont SourceCodePro-regular:pixelsize=12
+smallIcon: &smallIcon SauceCodePro NF:pixelsize=14
+default-margin: &default-margin 6
+state-margin: &state-margin 6
+
+# This is THE bar configuration
+bar:
+  height: 20
+  location: top
+  spacing: 5
+  margin: 0
+
+  # Default font
+  font: SauceCodePro NF:pixelsize=20
+
+  foreground: ffffffff
+  background: 111111cc
+
+  border:
+    width: 1
+    color: 999999cc
+    margin: 0
+    top-margin: 0
+
+  left:
+    - script:
+        path: /home/dgl/.config/yambar/dwl-tags.sh
+        args: [1]
+        anchors:
+          - occupied: &occupied {foreground: 57bbf4ff}
+          - focused: &focused {foreground: fc65b0ff}
+          - default: &default {foreground: d2ccd6ff}
+        content:
+          - map:
+              margin: *default-margin
+              tag: tag_0_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_0_focused
+                    values:
+                      true: {string: {text: "{tag_0}", <<: *focused}}
+                      false: {string: {text: "{tag_0}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_0_focused
+                    values:
+                      true: {string: {text: "{tag_0}", <<: *focused}}
+                      false: {string: {text: "{tag_0}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_1_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_1_focused
+                    values:
+                      true: {string: {text: "{tag_1}", <<: *focused}}
+                      false: {string: {text: "{tag_1}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_1_focused
+                    values:
+                      true: {string: {text: "{tag_1}", <<: *focused}}
+                      false: {string: {text: "{tag_1}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_2_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_2_focused
+                    values:
+                      true: {string: {text: "{tag_2}", <<: *focused}}
+                      false: {string: {text: "{tag_2}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_2_focused
+                    values:
+                      true: {string: {text: "{tag_2}", <<: *focused}}
+                      false: {string: {text: "{tag_2}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_3_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_3_focused
+                    values:
+                      true: {string: {text: "{tag_3}", <<: *focused}}
+                      false: {string: {text: "{tag_3}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_3_focused
+                    values:
+                      true: {string: {text: "{tag_3}", <<: *focused}}
+                      false: {string: {text: "{tag_3}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_4_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_4_focused
+                    values:
+                      true: {string: {text: "{tag_4}", <<: *focused}}
+                      false: {string: {text: "{tag_4}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_4_focused
+                    values:
+                      true: {string: {text: "{tag_4}", <<: *focused}}
+                      false: {string: {text: "{tag_4}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_5_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_5_focused
+                    values:
+                      true: {string: {text: "{tag_5}", <<: *focused}}
+                      false: {string: {text: "{tag_5}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_5_focused
+                    values:
+                      true: {string: {text: "{tag_5}", <<: *focused}}
+                      false: {string: {text: "{tag_5}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_6_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_6_focused
+                    values:
+                      true: {string: {text: "{tag_6}", <<: *focused}}
+                      false: {string: {text: "{tag_6}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_6_focused
+                    values:
+                      true: {string: {text: "{tag_6}", <<: *focused}}
+                      false: {string: {text: "{tag_6}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_7_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_7_focused
+                    values:
+                      true: {string: {text: "{tag_7}", <<: *focused}}
+                      false: {string: {text: "{tag_7}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_7_focused
+                    values:
+                      true: {string: {text: "{tag_7}", <<: *focused}}
+                      false: {string: {text: "{tag_7}", <<: *default}}
+          - map:
+              margin: *default-margin
+              tag: tag_8_occupied
+              values:
+                true:
+                  map:
+                    tag: tag_8_focused
+                    values:
+                      true: {string: {text: "{tag_8}", <<: *focused}}
+                      false: {string: {text: "{tag_8}", <<: *occupied}}
+                false:
+                  map:
+                    tag: tag_8_focused
+                    values:
+                      true: {string: {text: "{tag_8}", <<: *focused}}
+                      false: {string: {text: "{tag_8}", <<: *default}}
+          - list:
+              spacing: *default-margin
+              margin: *default-margin
+              items:
+                  - string: {text: "{layout}", font: *textfont}
+                  - string: {text: "{title}", font: *textfont}
+  right:
+    - network:
+        name: enp5s0
+        poll-interval: 5
+        content:
+          map:
+            tag: state
+            values:
+                down:
+                  - string: {text: "\uf701", margin: *state-margin, font: *smallIcon}
+                up:
+                  - string: {text: "\uf700", margin: *state-margin, font: *smallIcon}
+    - label:
+        content:
+          - string: {text: "\ue621", font: *smallIcon}
+    - alsa:
+        card: pipewire
+        mixer: Master
+        content:
+          map:
+            tag: muted
+            values:
+              true: {string: {text: "\uf466", margin: *state-margin}}
+              false:
+                - ramp:
+                    tag: volume
+                    items:
+                      - string: {text: "\uf026", margin: *state-margin}
+                      - string: {text: "\uf027", margin: *state-margin}
+                      - string: {text: "\uf028", margin: *state-margin}
+                - string: {text: "{percent}%", font: *textfont}
+    - label:
+        content:
+          - string: {text: "\ue621", font: *smallIcon}
+    - cpu:
+        interval: 2500
+        content:
+          - string: {text: "\ue266", margin: *state-margin}
+          - string: {text: "{cpu}%", font: *textfont}
+    - label:
+        content:
+          - string: {text: "\ue621", margin: *state-margin, font: *smallIcon}
+    - mem:
+        interval: 2500
+        content:
+          - string: {text: "\uf85a", margin: *state-margin}
+          - string: {text: "{percent_used}%", font: *textfont}
+    - label:
+        content:
+          - string: {text: "\ue621", font: *smallIcon}
+    - script:
+        path: /home/dgl/.config/yambar/temperature.sh
+        args: [3]
+        content:
+          - string: {text: "\uf2c7", margin: *state-margin, font: *smallIcon}
+          - string: {text: "CPU: {cpu}, SYS: {system}", font: *textfont}
+    - label:
+        content:
+          - string: {text: "\ue621", margin: *state-margin, font: *smallIcon}
+    - clock:
+        date-format: "%a %d %b"
+        time-format: "%H:%M"
+        content:
+          - string: {text: "{date}, {time}", font: *textfont, right-margin: *default-margin}
+
