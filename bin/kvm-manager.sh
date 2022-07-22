@@ -58,8 +58,8 @@ if [ ! -z ${VNC_DISPLAY} ]; then
 fi
 
 if [ ! -z ${SPICE_PORT} ]; then
-	SPICE="-spice port=${SPICE_PORT},disable-ticketing \
--device virtio-serial-pci -chardev spicevmc,id=vdagent,name=vdagent -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
+	SPICE="-spice unix=on,addr=${DIR_RUN}/vm_spice.socket,disable-ticketing=on \
+-device virtio-serial-pci -device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0 -chardev spicevmc,id=spicechannel0,name=vdagent \
 -device nec-usb-xhci,id=usb \
 -chardev spicevmc,name=usbredir,id=usbredirchardev1 \
 -device usb-redir,chardev=usbredirchardev1,id=usbredirdev1 \
@@ -366,9 +366,9 @@ init)
 	echo '#BRIDGE_IP=10.18.18.1/24' >> ${DIR_BASE}/conf
 	echo '#BRIDGE=vmbr0' >> ${DIR_BASE}/conf
 	echo 'TAP=tap0${GUEST_ID}' >> ${DIR_BASE}/conf
-  echo '' >> ${DIR_BASE}/conf
-  echo '#QEMU_SYSTEM=`which qemu-system-x86_64`' >> ${DIR_BASE}/conf
-  echo '#OPT_KVM="-enable kvm"' >> ${DIR_BASE}/conf
+	echo '' >> ${DIR_BASE}/conf
+	echo '#QEMU_SYSTEM=`which qemu-system-x86_64`' >> ${DIR_BASE}/conf
+	echo '#OPT_KVM="-enable kvm"' >> ${DIR_BASE}/conf
 	echo '#OPT_CPU="-cpu host"' >> ${DIR_BASE}/conf
 	echo '#OPT_SMP="-smp 4"' >> ${DIR_BASE}/conf
 	echo '#OPT_BOOT=""    # -boot c' >> ${DIR_BASE}/conf
@@ -392,97 +392,101 @@ start-kvm)
 	start_kvm
 	;;
 start-net)
-				start_bridge
-        start_net
-        ;;
+	start_bridge
+	start_net
+	;;
 
 start-vm)
-        start_vm
-        ;;
+	start_vm
+	;;
 
 start)
-        start_net
-        start_vm
-        ;;
+	start_net
+	start_vm
+	;;
 
 status)
-        check_net_status
-        check_vm_status
-        ;;
+	check_net_status
+	check_vm_status
+	;;
 
 cad)
-        send_cmd "sendkey ctrl-alt-delete"
-        ;;
+	send_cmd "sendkey ctrl-alt-delete"
+	;;
 
+spice)
+		# TODO(dgl): make this work without sudo
+		sudo remote-viewer --spice-disable-effects=all spice+unix://./run/vm_spice.socket
+		;;
 vnc)
-        vncviewer localhost:${VNC_PORT} &
-        ;;
+	vncviewer localhost:${VNC_PORT} &
+	;;
 
 rdesktop)
-        rdesktop $2 $3 ${GUEST_IP} &
-        ;;
+	rdesktop $2 $3 ${GUEST_IP} &
+	;;
 
 ssh)
-        ssh ${GUEST_IP}
-        ;;
+	ssh ${GUEST_IP}
+	;;
 
 ping)
-        ping ${GUEST_IP}
-        ;;
+	ping ${GUEST_IP}
+	;;
 
 halt)
-        ssh root@${GUEST_IP} halt
-        ;;
+	ssh root@${GUEST_IP} halt
+	;;
 
 reset)
-        send_cmd "system_reset"
-        ;;
+	send_cmd "system_reset"
+	;;
 
 stop-vm)
-        stop_vm
-        ;;
+	stop_vm
+	;;
 
 stop-net)
-		stop_bridge
-		stop_net
-		;;
+	stop_bridge
+	stop_net
+	;;
 stop)
-    stop_vm
-    stop_net
-    ;;
+	stop_vm
+	stop_net
+	;;
 stop-kvm)
-		stop_kvm
-		;;
+	stop_kvm
+	;;
 kill)
-    kill_vm
-    sleep 1
-    stop_net
-    ;;
+	kill_vm
+	sleep 1
+	stop_net
+	;;
 
 *)
-		echo "KVM manager version 0.1, Samuel Bally"
-		echo "usage: kvm-manager [options] [path]"
-		echo ""
-		echo "Standard options:"
-		echo "You need to specify a action, available actions are:"
-		echo "[init] creates default config file"
-	  echo "[start-net] start network interfaces"
-	  echo "[start-vm] start vm"
-	  echo "[start] start both"
-	  echo "[status] check the status of network and virtual machine"
-	  echo "[cad] ctrl-alt-delete"
-	  echo "[vnc] use vinagre to view the vnc of the guest"
-	  echo "[rdesktop] remote desktop to the guest"
-	  echo "[ssh] ssh to the guest"
-	  echo "[ping] ping guest"
-	  echo "[halt] ssh to the guest and halt the guest"
-	  echo "[reset] reset the virtual machine"
-	  echo "[stop-net] stop network interfaces"
-  	echo "[stop-vm] stop vm"
-  	echo "[stop] stop both"
-		echo "[kill] kill the viritual machine and network"
-    exit 1
-    ;;
+	echo "KVM manager version 0.1, Samuel Bally"
+	echo "usage: kvm-manager [options] [path]"
+	echo ""
+	echo "Standard options:"
+	echo "You need to specify a action, available actions are:"
+	echo "[init] creates default config file"
+	echo "[start-net] start network interfaces"
+	echo "[start-vm] start vm"
+	echo "[start] start both"
+	echo "[status] check the status of network and virtual machine"
+	echo "[cad] ctrl-alt-delete"
+	echo "[vnc] use vinagre to view the vnc of the guest"
+	echo "[rdesktop] remote desktop to the guest"
+	echo "[ssh] ssh to the guest"
+	echo "[ping] ping guest"
+	echo "[halt] ssh to the guest and halt the guest"
+	echo "[reset] reset the virtual machine"
+	echo "[stop-net] stop network interfaces"
+	echo "[stop-vm] stop vm"
+	echo "[stop] stop both"
+	echo "[kill] kill the viritual machine and network"
+	exit 1
+	;;
 
 esac
 exit
