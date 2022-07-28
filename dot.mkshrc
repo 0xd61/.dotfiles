@@ -595,20 +595,21 @@ function enable {
 	\\builtin return $rv
 }
 
-
 \: place customisations below this line
 
 # misc functions
+function prompt_command {
+    printf "\033]0;%s\007" "$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 20 )); then print \…${WD: -20: -1}; else print $WD; fi)"
+}
 
 # command prompt
 # if we are in a nix shell we add a nix prefix
-PS1='#'; (( USER_ID )) && PS1='$';
+PS1='$(prompt_command)#'; (( USER_ID )) && PS1='$(prompt_command)$';
 if [ ! -z "$IN_NIX_SHELL" ]; then
-        PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 25 )); then print \…${WD: -25: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;36mNIX \e[1;37m'"$PS1"$'\e[0m '
+        PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;36mNIX \e[1;37m'"$PS1"$'\e[0m '
 else
-    PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 25 )); then print \…${WD: -25: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;37m'"$PS1"$'\e[0m '
+    PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;37m'"$PS1"$'\e[0m '
 fi
-
 
 # history
 \\builtin export HISTSIZE=8192
@@ -656,7 +657,7 @@ done
 \\builtin export SHELL=$MKSH MANWIDTH=80 LESSHISTFILE=-
 
 # st-265color error fix
-\\builtin export TERM=xterm-256color
+\\builtin export TERM=alacritty
 \\builtin export EDITOR=vim
 
 \: place customisations above this line
