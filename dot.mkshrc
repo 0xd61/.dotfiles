@@ -602,13 +602,18 @@ function prompt_command {
     printf "\033]0;%s\007" "$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 20 )); then print \…${WD: -20: -1}; else print $WD; fi)"
 }
 
+# Indicate if we have a remote session
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	PS1_REMOTE=" - REMOTE"
+fi
+
 # command prompt
 # if we are in a nix shell we add a nix prefix
 PS1='$(prompt_command)#'; (( USER_ID )) && PS1='$(prompt_command)$';
 if [ ! -z "$IN_NIX_SHELL" ]; then
-        PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;36mNIX \e[1;37m'"$PS1"$'\e[0m '
+    PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\e[1;36m$PS1_REMOTE\e[1;32m\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;36mNIX \e[1;37m'"$PS1"$'\e[0m '
 else
-    PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;37m'"$PS1"$'\e[0m '
+    PS1=$'\e[1;32m[$(local WD=${PWD/#$HOME/"~"}; if (( ${#WD} > 40 )); then print \…${WD: -40: -1}; else print $WD; fi)$(local GIT=$(git branch 2>/dev/null | grep "\*" | tr -d "\* "); if (( ${#GIT} > 0 )); then print "\e[1;36m@\e[1;37m$GIT"; fi)\e[1;32m]\e[1;36m$PS1_REMOTE\e[1;32m\n$(local STATUS=$?; if [[ $STATUS -ne "0" ]]; then print "\e[1;31m$STATUS "; fi)'$'\e[1;37m'"$PS1"$'\e[0m '
 fi
 
 # history
