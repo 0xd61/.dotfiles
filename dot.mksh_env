@@ -1,44 +1,6 @@
-# Android
-ANDROID_HOME="$HOME/Sources/android-sdk"
-ANDROID_SDK_ROOT="$ANDROID_HOME"
+\\builtin export SHELL=$MKSH MANWIDTH=80 LESSHISTFILE=-
 
-_JAVA_AWT_WM_NONREPARENTING=1
-PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/tools/bin
-PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+# st-265color error fix
+\\builtin export TERM=xterm-256color
+\\builtin export EDITOR=vim
 
-export ANDROID_HOME
-export ANDROID_SDK_ROOT
-export _JAVA_AWT_WM_NONREPARENTING
-# // Android
-
-# Taskwarrior GTD helpers
-## Inbox
-\\builtin alias in='task add +in'
-
-## Tickler
-function tw_tickle {
-    deadline=$1
-    shift
-    task add +in +tickle wait:$deadline $@
-}
-\\builtin alias tick=tw_tickle
-
-## RND (Read and Development)
-function tw_html_title {
-    curl "$*" -so - | \
-     tr -d '\n' | \
-     sed 's/ lang="\w+"//gi' | \
-     grep -iPo --color=never '(?<=<title>)(.*)(?=</title>)'
-}
-
-function tw_read_and_review {
-    link="$1"
-    title=$(tw_html_title $link)
-    echo $title
-    descr="\"Read and review: $title\""
-    id=$(task add +next +rnr "$descr" | sed -n 's/Created task \(.*\)./\1/p')
-    task "$id" annotate "$link"
-}
-\\builtin alias rnd="task add +rnd +next +@computer +@online"
-\\builtin alias rnr="tw_read_and_review"
-# // Taskwarrior GTD helpers
