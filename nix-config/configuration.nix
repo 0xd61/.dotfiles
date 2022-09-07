@@ -7,8 +7,8 @@
 
 let
   hostblock = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn-social/hosts";
-    sha256 = "/ifWEZX8VruHw9ONKIVwYI/KxiWj8oiQmDbDakxJq08=";
+    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
+    hash = "sha256-INn+eVL4Ches63sttny0DnoamqbSUdKULK7VZJUoVJA=";
   };
 
   unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
@@ -19,6 +19,7 @@ in
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+  nixpkgs.config.allowUnfree = true;
 
   nix.autoOptimiseStore = true;
   nix.gc = {
@@ -29,6 +30,7 @@ in
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 15;
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.cleanTmpDir = true;
@@ -36,8 +38,11 @@ in
   boot.initrd.kernelModules = [ "amdgpu" "nct6775" ];
   boot.kernelPackages = unstable.linuxPackages_xanmod_latest;
 
-  hardware.enableRedistributableFirmware = true;
-  hardware.cpu.amd.updateMicrocode = true;
+  hardware = {
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
+  };
+
   hardware.opengl = {
     enable = true;
     driSupport = true;
@@ -107,7 +112,6 @@ in
     enable = true;
     videoDrivers = [ "amdgpu" ];
     windowManager.dwm.enable = true;
-    # displayManager.startx.enable = false; # only for debugging
     libinput.enable = true;
     layout = "us";
     xkbVariant = "intl";
@@ -119,13 +123,11 @@ in
   };
 
   # Enable sound.
-  sound.enable = true;
+  security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
-    alsa = {
-      enable = true;
-      support32Bit = true;
-    };
+    alsa.enable = true;
+    alsa.support32Bit = true;
     pulse.enable = true;
   };
 
@@ -149,10 +151,11 @@ in
   nixpkgs.overlays = with pkgs; [
     (self: super: {
         dwl = super.dwl.overrideAttrs (oldAttrs: rec {
+          enable-xwayland = true;
           configFile = writeText "config.def.h" (builtins.readFile
             (super.fetchurl {
               url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwl-0.2.2.config.def.h";
-              hash = "sha256-l47V7Zmuo6Mjgdmjc8oivdcymFW8wJUVrPygIr0RsUo=";
+              hash = "sha256-WopZLgeXpBjdyrMcUlwe/GzcVZP+k8jssHAC7cpaypM=";
             })
           );
           postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -175,7 +178,7 @@ in
           configFile = writeText "config.def.h" (builtins.readFile
             (super.fetchurl {
               url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.3.config.def.h";
-              sha256 = "X32/KJOsyk9l5KrbNn9TSNkQcSHREck2N//iF9wLlC8=";
+              hash = "sha256-Umi0wlGqUxfHPEQffjiQu2yk0IWMiePXXupmcKds2XU=";
             })
           );
           postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";
@@ -234,7 +237,6 @@ in
       });
     })
   ];
-  nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -243,20 +245,22 @@ in
     wget
     git
     st
-    dmenu
     dwm
-    bemenu
-    dwl
-    yambar
-    inotify-tools
-    foot
+    dmenu
+    alacritty
+    #xwayland
+    #bemenu
+    #wl-clipboard
+    #dwl
+    #yambar
+    #inotify-tools
+    #foot
     jq
     zip
     unzip
     xz
     qemu
     zerotierone
-    firmwareLinuxNonfree
     htop
     acpi
   ];
@@ -291,44 +295,6 @@ in
   networking.firewall.allowedUDPPorts = [ 22000 21027 8888 ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
-
-  systemd.user.services = {
-        dwl = {
-          description = "Window Manager";
-          enable = true;
-          serviceConfig = {
-            Type      = "simple";
-            ExecStart = "${pkgs.dwl}/bin/dwl";
-            Restart   = "always";
-            RestartSec   = 10;
-          };
-          wantedBy = [ "graphical.target" ];
-        };
-        yambar = {
-          description = "Menubar";
-          enable = true;
-          requires = "dwl.service";
-          serviceConfig = {
-            Type      = "simple";
-            ExecStart = "${pkgs.yambar}/bin/yambar";
-            Restart   = "always";
-            RestartSec   = 10;
-          };
-          wantedBy = [ "graphical.target" ];
-        };
-        foot = {
-          description = "Terminal Server";
-          enable = true;
-          requires = "dwl.service";
-          serviceConfig = {
-            Type      = "simple";
-            ExecStart = "${pkgs.foot}/bin/foot --server";
-            Restart   = "always";
-            RestartSec   = 10;
-          };
-          wantedBy = [ "graphical.target" ];
-        };
-    };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
