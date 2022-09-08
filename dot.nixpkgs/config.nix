@@ -16,13 +16,9 @@ in
   allowUnfree = true;
 
   packageOverrides = pkgs : with pkgs; rec {
-    spice-gtk = pkgs.spice-gtk.override {
-        withPolkit = true;
-    };
-
     my_gf = unstable.gf.override {
         extensions = [
-            /home/dgl/Sync/extensions_v4/extensions.cpp
+            /home/dgl/Sync/extensions_v5/extensions.cpp
         ];
     };
 
@@ -276,8 +272,6 @@ noremap <silent><buffer> <Leader>T :call ledger#transaction_state_toggle(line('.
         chromium
         libreoffice-fresh
         filezilla
-        fd
-        gnupg
         pass
         git-crypt
         weechat
@@ -290,16 +284,10 @@ noremap <silent><buffer> <Leader>T :call ledger#transaction_state_toggle(line('.
         streamlink
         yt-dlp
         mpv
-        borgbackup
-        spice-gtk
         my_vim
         openvpn
         flameshot
-        man-pages
-        man-pages-posix
         v4l-utils
-        lm_sensors
-        openrgb
         my_gf
       ];
     };
