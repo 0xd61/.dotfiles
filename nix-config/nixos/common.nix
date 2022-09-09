@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, unstable, ...}:
 let
   hostblock = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
@@ -6,7 +6,6 @@ let
   };
 in
 {
-  nix.autoOptimiseStore = true;
   nix.gc = {
     automatic = true;
     dates = "monthly";
@@ -16,16 +15,17 @@ in
   nix.settings = {
     allowed-users = [ "dgl" ];
     experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
   };
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = lib.mkDefault true;
-  boot.loader.systemd-boot.configurationLimit = 15;
+  boot.loader.systemd-boot.configurationLimit = lib.mkDefault 15;
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.cleanTmpDir = true;
 
-  boot.kernelPackages = lib.mkDefault pkgs.unstable.linuxPackages_latest;
+  boot.kernelPackages = lib.mkDefault unstable.linuxPackages_latest;
 
   hardware.opengl = {
     enable = true;

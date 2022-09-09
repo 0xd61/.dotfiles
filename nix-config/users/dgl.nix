@@ -1,30 +1,20 @@
-{ pkgs, ... }:
-
+{ pkgs, unstable, ...}:
 let
-  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
-    export __NV_PRIME_RENDER_OFFLOAD=1
-    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
-    export __GLX_VENDOR_LIBRARY_NAME=nvidia
-    export __VK_LAYER_NV_optimus=NVIDIA_only
-    exec -a "$0" "$@"
-  '';
-
-  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
-
+  gf = unstable.gf.override {
+    extensions = [
+      /home/dgl/Sync/extensions_v5/extensions.cpp
+    ];
+  };
 in
 {
-  allowUnfree = true;
+  programs.home-manager.enable = true;
+  programs.git = {
+    enable = true;
+    userName  = "Daniel Glinka";
+    userEmail = "dgl@degit.co";
+  };
 
-  packageOverrides = pkgs : with pkgs; rec {
-    my_gf = unstable.gf.override {
-        extensions = [
-            /home/dgl/Sync/extensions_v5/extensions.cpp
-        ];
-    };
-
-    my_vim = pkgs.vim_configurable.customize {
-      name = "vim";
-      vimrcConfig.customRC = ''
+  programs.vim.extraConfig = ''
 " Credits:
 " - to Max Cantor for his no-plugin config https://github.com/changemewtf/no_plugins/blob/master/no_plugins.vim
 " - to Micha Mettke for his config https://github.com/vurtun/dotfiles/blob/master/.vimrc
@@ -263,33 +253,28 @@ set makeprg=./build.sh
 " Account completion to be sorted by level of detail/depth instead of alphabetical
 let g:ledger_detailed_first = 1
 noremap <silent><buffer> <Leader>T :call ledger#transaction_state_toggle(line('.'), ' *?!')<CR>
-      '';
-    };
-    all = pkgs.buildEnv {
-      name = "all";
-      paths = [
-        ctags
-        chromium
-        libreoffice-fresh
-        filezilla
-        pass
-        git-crypt
-        weechat
-        thunderbird
-        docker-compose
-        xclip
-        syncthing
-        usbutils
-        pciutils
-        streamlink
-        yt-dlp
-        mpv
-        my_vim
-        openvpn
-        flameshot
-        v4l-utils
-        my_gf
-      ];
-    };
-  };
+'';
+
+  home.packages = [
+    pkgs.ctags
+    pkgs.chromium
+    pkgs.libreoffice-fresh
+    pkgs.filezilla
+    pkgs.pass
+    pkgs.git-crypt
+    pkgs.weechat
+    pkgs.thunderbird
+    pkgs.docker-compose
+    pkgs.xclip
+    pkgs.syncthing
+    pkgs.usbutils
+    pkgs.pciutils
+    pkgs.streamlink
+    pkgs.yt-dlp
+    pkgs.mpv
+    pkgs.openvpn
+    pkgs.flameshot
+    pkgs.v4l-utils
+    gf
+  ];
 }

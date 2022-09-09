@@ -1,21 +1,28 @@
 {
-  # Based on https://github.com/dustinlyons/nixos-config
+  # Based on
+  # - https://github.com/dustinlyons/nixos-config
+  # - https://github.com/jordanisaacs/dotfiles
+  # - https://github.com/hlissner/dotfiles
+  # - https://github.com/jkachmar/dotnix
   description = "Daniels NixOS Config";
 
   inputs = {
-    nixosPkgs.url = "github:nixos/nixpkgs/nixos-22.05";
-    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-22.05";
+    unstable.url = "nixpkgs/nixos-unstable";
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-22.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = inputs@{ self, nixosPkgs, unstable, ... }:
+  outputs = inputs@{ self, nixpkgs, unstable, home-manager, ... }:
   let
       # Utility function to construct a package set based on the given system
       # along with the shared `nixpkgs` configuration defined in this repo.
       mkPkgsFor = system: pkgset:
         import pkgset {
           inherit system;
-          config = {
-            allowUnfree = true;
-          };
+          config.allowUnfree = true;
           overlays =
             # Apply each overlay found in the ./overlays directory
             let path = ./overlays; in with builtins;
@@ -24,19 +31,40 @@
                             pathExists (path + ("/" + n + "/default.nix")))
                         (attrNames (readDir path)));
         };
-      mkNixOSConfiguration = system: modules: nixosPkgs.lib.nixosSystem {
+      mkNixOSConfiguration = system: modules: nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
-          nixosPkgs.nixosModules.notDetected
+          nixpkgs.nixosModules.notDetected
         ] ++ modules;
         specialArgs = {
           inherit inputs;
-          pkgs = mkPkgsFor system nixosPkgs;
+          pkgs = mkPkgsFor system nixpkgs;
           unstable = mkPkgsFor system inputs.unstable;
         };
       };
+
+      mkHomeManagerConfiguration = system: username: configuration: home-manager.lib.homeManagerConfiguration {
+        inherit system;
+        inherit username;
+        stateVersion = "22.05";
+        pkgs = mkPkgsFor system nixpkgs;
+        extraModules = [
+          {
+            _module.args.inputs = inputs;
+            _module.args.unstable = mkPkgsFor system unstable;
+          }
+        ];
+        homeDirectory = "/home/${username}";
+        configuration.imports = configuration;
+      };
   in
   {
+    homeConfigurations = {
+      dgl = mkHomeManagerConfiguration "x86_64-linux" "dgl" [
+        ./users/dgl.nix
+      ];
+    };
+
     nixosConfigurations = {
       home = mkNixOSConfiguration "x86_64-linux" [
           ./nixos/home.nix
