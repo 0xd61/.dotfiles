@@ -107,6 +107,7 @@ in
   };
 
   # Enable sound.
+  sound.enable = lib.mkDefault true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

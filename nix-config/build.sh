@@ -28,7 +28,7 @@ build_system() {
 build_user() {
     local FLAKE="${1}"
     echo -e "${GREEN_TERMINAL_OUTPUT}Building system for ${FLAKE}${CLEAR}"
-    if which home-manager 2>&1 /dev/null; then
+    if which home-manager > /dev/null; then
         home-manager switch --impure --flake "./#${FLAKE}"
     else
         nix build --impure --no-link "./\#homeConfigurations.${FLAKE}.activationPackage"
@@ -58,8 +58,8 @@ usage() {
 
 COMMAND="${1}"
 shift
-[ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
 FLAKE="${1}"
+[ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
 shift
 ARGS="${@}"
 
