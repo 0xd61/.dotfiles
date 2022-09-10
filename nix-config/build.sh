@@ -25,27 +25,48 @@ build_system() {
     nixos-rebuild switch --flake "./#${FLAKE}"
 }
 
-build_home() {
+build_user() {
     local FLAKE="${1}"
     echo -e "${GREEN_TERMINAL_OUTPUT}Building system for ${FLAKE}${CLEAR}"
-    if which home-manager > /dev/null; then
+    if which home-manager 2>&1 /dev/null; then
         home-manager switch --impure --flake "./#${FLAKE}"
     else
-        nix build --impure --no-link ./\#homeConfigurations.${FLAKE}.activationPackage
-        "$(nix path-info \#homeConfigurations.${FLAKE}.activationPackage)"/activate
+        nix build --impure --no-link "./\#homeConfigurations.${FLAKE}.activationPackage"
+        "$(nix path-info --impure ./\#homeConfigurations.${FLAKE}.activationPackage)/activate"
     fi
 }
 
-FLAKE="${1}"
-[ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; exit 1; }
+usage() {
+    echo
+    echo "Usage: build.sh [COMMAND] [FLAKE]"
+    echo
+    echo "    Install a system or home nix configuration provided by flakes."
+    echo
+    echo "      COMMAND :"
+    echo "          build_system:   installing the specified nixos system"
+    echo "          build_user:     installing the specified user config"
+    echo "          update_system:  updating the system channels and the flake"
+    echo "          update_user:    updating the user channels and the flake"
+    echo "          upgrade_system: updating the system channels and the flake and installing the updated system packages"
+    echo "          upgrade_user:   updating the user channels and the flake and installing the updated user packages"
+    echo
+    echo "    Example:"
+    echo
+    echo "        $ ./build.sh build_system home"
+    echo
+}
 
-shift
 COMMAND="${1}"
+shift
+[ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
+FLAKE="${1}"
+shift
+ARGS="${@}"
 
 case "${COMMAND}" in
 build_system)
     check_root
-    build_system
+    build_system "${FLAKE}"
 ;;
 update_system)
     update
@@ -55,17 +76,17 @@ upgrade_system)
     update
     build_system "${FLAKE}"
 ;;
-build_home)
-    build_home "${FLAKE}"
+build_user)
+    build_user "${FLAKE}"
 ;;
-update_home)
+update_user)
     update
 ;;
-upgrade_home)
+upgrade_user)
     update
-    build_home "${FLAKE}"
+    build_user "${FLAKE}"
 ;;
 *)
-    build_home "${FLAKE}"
+    usage
 ;;
 esac
