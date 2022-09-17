@@ -19,6 +19,7 @@ in
   home.packages = [
     pkgs.ctags
     unstable.chromium
+    unstable.firefox
     pkgs.libreoffice-fresh
     pkgs.filezilla
     pkgs.pass
@@ -36,6 +37,18 @@ in
     pkgs.openvpn
     pkgs.flameshot
     pkgs.v4l-utils
+    pkgs.git
+    pkgs.fd
+    pkgs.gnupg
+    pkgs.jq
+    pkgs.zip
+    pkgs.unzip
+    pkgs.xz
+    pkgs.man-pages
+    pkgs.man-pages-posix
+    pkgs.qemu
+    pkgs.virt-viewer
+    pkgs.spice-gtk
     gf
   ];
 }

@@ -53,7 +53,7 @@ in
       DHCP = "yes";
       DNSSEC = "yes";
       DNSOverTLS = "yes";
-      DNS = [ "1.1.1.1" "1.0.0.1" ];
+      DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3"];
     };
   in {
     # Config for all useful interfaces
