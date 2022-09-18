@@ -1,1 +1,0 @@
-../xps_power/xps_power.sh
