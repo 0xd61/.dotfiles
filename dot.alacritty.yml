@@ -745,6 +745,8 @@ live_config_reload: false
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
+key_bindings:
+  - { key: Return,   mods: Control|Shift, action: CreateNewWindow }
 #key_bindings:
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }
