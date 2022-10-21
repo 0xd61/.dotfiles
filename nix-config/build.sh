@@ -13,8 +13,9 @@ check_root() {
 }
 
 update() {
-    echo -e "${GREEN_TERMINAL_OUTPUT}Updating channels${CLEAR}"
-    nix-channel --update
+# NOTE(dgl): We keep the channel upgrade separate
+#     echo -e "${GREEN_TERMINAL_OUTPUT}Updating channels${CLEAR}"
+#     nix-channel --update
     echo -e "${GREEN_TERMINAL_OUTPUT}Updating flakes${CLEAR}"
     nix flake update
 }
@@ -58,31 +59,30 @@ usage() {
 
 COMMAND="${1}"
 shift
-FLAKE="${1}"
-[ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
-shift
+FLAKE="${1}" && [ ! -z "${FLAKE}" ] && shift
 ARGS="${@}"
 
 case "${COMMAND}" in
-build_system)
+update)
+    update
+;;
+system_build)
+    [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
     check_root
     build_system "${FLAKE}"
 ;;
-update_system)
-    update
-;;
-upgrade_system)
+system_upgrade)
+    [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
     check_root
     update
     build_system "${FLAKE}"
 ;;
-build_user)
+user_build)
+    [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
     build_user "${FLAKE}"
 ;;
-update_user)
-    update
-;;
-upgrade_user)
+user_upgrade)
+    [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
     update
     build_user "${FLAKE}"
 ;;

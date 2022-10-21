@@ -49,6 +49,7 @@ in
     pkgs.qemu
     pkgs.virt-viewer
     pkgs.spice-gtk
+    pkgs.broot
     gf
   ];
 }

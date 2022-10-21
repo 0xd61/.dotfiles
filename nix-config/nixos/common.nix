@@ -2,16 +2,10 @@
 let
   hostblock = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
-    hash = "sha256-S33JvAN+rJ7SxxwjfXFgpALAb5EVS0Uee/31CIH8T7U=";
+    hash = "sha256-ru7qR0WKWY8q9lQRX2iXqbOaiI14taRC66FIidIFxeQ=";
   };
 in
 {
-  nix.gc = {
-    automatic = true;
-    dates = "monthly";
-    options = "--delete-older-than 30d";
-  };
-
   nix.settings = {
     allowed-users = [ "dgl" ];
     experimental-features = [ "nix-command" "flakes" ];
