@@ -5,6 +5,12 @@ let
       /home/dgl/Sync/extensions_v5/extensions.cpp
     ];
   };
+
+  tex = (pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-small
+      ;
+      #(setq org-latex-compiler "xelatex")
+  });
 in
 {
   programs.home-manager.enable = true;
@@ -23,12 +29,10 @@ in
     pkgs.libreoffice-fresh
     pkgs.filezilla
     pkgs.pass
-    pkgs.git-crypt
     pkgs.weechat
     pkgs.thunderbird
     pkgs.docker-compose
     pkgs.xclip
-    pkgs.syncthing
     pkgs.usbutils
     pkgs.pciutils
     pkgs.streamlink
@@ -49,7 +53,9 @@ in
     pkgs.qemu
     pkgs.virt-viewer
     pkgs.spice-gtk
-    pkgs.broot
+    pkgs.pandoc
+    pkgs.obsidian
     gf
+    tex
   ];
 }
