@@ -10,6 +10,7 @@ with pkgs; [
   acpi
   lm_sensors
   zerotierone
+  wireguard-tools
 
   # Tools
   borgbackup

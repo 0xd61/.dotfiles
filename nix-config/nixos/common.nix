@@ -45,9 +45,9 @@ in
   systemd.network.networks = let
     networkConfig = {
       DHCP = "yes";
-      DNSSEC = "yes";
-      DNSOverTLS = "yes";
-      DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3" "172.30.121.21"];
+      DNSSEC = "no";
+      DNSOverTLS = "no";
+      DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3"];
     };
   in {
     # Config for all useful interfaces
@@ -151,8 +151,8 @@ in
   services.fwupd.enable = true;
 
   # Open ports in the firewall.           # syncthing
-  networking.firewall.allowedTCPPorts = [ 22000            ];
-  networking.firewall.allowedUDPPorts = [ 22000 21027 8888 ];
+  networking.firewall.allowedTCPPorts = [ 22000                 ];
+  networking.firewall.allowedUDPPorts = [ 22000 21027 8888 51820];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 }

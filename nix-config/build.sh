@@ -12,6 +12,14 @@ check_root() {
     fi
 }
 
+check_no_root() {
+    if [ "$USER" == "root" ]
+    then
+        echo -e "${RED_TERMINAL_OUTPUT}Please run this as non-root${CLEAR}"
+        exit 2
+    fi
+}
+
 update() {
 # NOTE(dgl): We keep the channel upgrade separate
 #     echo -e "${GREEN_TERMINAL_OUTPUT}Updating channels${CLEAR}"
@@ -79,10 +87,12 @@ system_upgrade)
 ;;
 user_build)
     [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
+    check_no_root
     build_user "${FLAKE}"
 ;;
 user_upgrade)
     [ -z "${FLAKE}" ] && { echo -e "${RED_TERMINAL_OUTPUT}No flake provided${CLEAR}"; usage; exit 1; }
+    check_no_root
     update
     build_user "${FLAKE}"
 ;;

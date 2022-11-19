@@ -55,6 +55,7 @@ in
     pkgs.spice-gtk
     pkgs.pandoc
     pkgs.obsidian
+    pkgs.htop
     gf
     tex
   ];
