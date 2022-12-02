@@ -7,11 +7,11 @@
   description = "Daniels NixOS Config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-22.05";
+    nixpkgs.url = "nixpkgs/nixos-22.11";
     unstable.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.05";
+      url = "github:nix-community/home-manager/release-22.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -44,18 +44,20 @@
       };
 
       mkHomeManagerConfiguration = system: username: configuration: home-manager.lib.homeManagerConfiguration {
-        inherit system;
-        inherit username;
-        stateVersion = "22.05";
         pkgs = mkPkgsFor system nixpkgs;
-        extraModules = [
+        modules = [
           {
             _module.args.inputs = inputs;
             _module.args.unstable = mkPkgsFor system unstable;
           }
-        ];
-        homeDirectory = "/home/${username}";
-        configuration.imports = configuration;
+          {
+            home = {
+              username = "${username}";
+              stateVersion = "22.11";
+              homeDirectory = "/home/${username}";
+            };
+          }
+        ] ++ configuration;
       };
   in
   {

@@ -23,6 +23,7 @@ in
   programs.vim.extraConfig = builtins.readFile ../dot.vimrc;
 
   home.packages = [
+    pkgs.source-code-pro
     pkgs.ctags
     unstable.chromium
     unstable.firefox
@@ -38,7 +39,6 @@ in
     pkgs.streamlink
     pkgs.yt-dlp
     pkgs.mpv
-    pkgs.openvpn
     pkgs.flameshot
     pkgs.v4l-utils
     pkgs.git

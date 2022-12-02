@@ -36,9 +36,20 @@ in
     pkgs.obsidian
     pkgs.testdisk
     pkgs.pigz
+    pkgs.openvpn_24
+    pkgs.update-systemd-resolved
   ];
 
+  services.teamviewer.enable = true;
+
   services.xrdp.enable = true;
+
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 1024 * 8;
+    }
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

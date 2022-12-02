@@ -2,7 +2,7 @@
 let
   hostblock = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
-    hash = "sha256-+OiiuOvttxjoZko9sCk2444pRf4AL+Lr1jRgyLks/4E=";
+    hash = "sha256-zf5/OSdxBnwyD7bqEJnA/b78y8UI57XQ/eQTe3Wxw8I=";
   };
 in
 {
@@ -38,7 +38,7 @@ in
 
   networking = {
     useDHCP = false;
-    useNetworkd = true;
+    useNetworkd = lib.mkDefault true;
     networkmanager.enable = false;
   };
 
@@ -47,7 +47,7 @@ in
       DHCP = "yes";
       DNSSEC = "yes";
       DNSOverTLS = "yes";
-      DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3"];
+      DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3" "172.30.121.21"];
     };
   in {
     # Config for all useful interfaces
@@ -69,10 +69,6 @@ in
   systemd.services."systemd-networkd-wait-online".serviceConfig.ExecStart = [
     "" "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online --any"
   ];
-
-  services.udev.extraRules = ''
-    SUBSYSTEM=="net", ACTION=="add", ATTRS{idVendor}=="2a70", ATTRS{idProduct}=="9024", NAME="usb0"
-  '';
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
