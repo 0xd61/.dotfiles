@@ -1,0 +1,17 @@
+str compilerTemplate #option;
+
+void Start() {
+	str platformFlags = "";
+
+	if SystemGetHostName() == "Windows" {
+		platformFlags = "";
+	} else if SystemGetHostName() == "Linux" {
+		platformFlags = "-lm";
+	} else {
+		return;
+	}
+
+	assert compilerTemplate != "";
+	SystemShellExecute(StringReplaceFirst(StringReplaceFirst(compilerTemplate, "[SRC]", "modules/imaging/native.c"), "[DST]", "module_imaging")
+			+ " %platformFlags%");
+}
