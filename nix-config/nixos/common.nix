@@ -140,19 +140,12 @@ in
 
   # List services that you want to enable:
   services.zerotierone.enable = true;
-  services.printing = {
-    enable = true;
-    drivers = [ pkgs.epson-escpr ];
-  };
 
   services.openssh.enable = true;
   services.fstrim.enable = true;
   services.acpid.enable = true;
   services.fwupd.enable = true;
 
-  # Open ports in the firewall.           # syncthing
-  networking.firewall.allowedTCPPorts = [ 22000                 ];
-  networking.firewall.allowedUDPPorts = [ 22000 21027 8888 51820];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
 }

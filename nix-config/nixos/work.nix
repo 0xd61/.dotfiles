@@ -40,6 +40,24 @@ in
     pkgs.update-systemd-resolved
   ];
 
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.brlaser ];
+    extraConf = ''
+      Browsing Yes
+      <Location />
+          Order allow,deny
+          Allow localhost
+          Allow 192.168.20.*
+          Listen 0.0.0.0:631
+      </Location>
+    '';
+  };
+
+  # Open ports in the firewall.           # cups
+  networking.firewall.allowedTCPPorts = [ 631       ];
+  networking.firewall.allowedUDPPorts = [ 8888 51820];
+
   services.teamviewer.enable = true;
 
   services.xrdp.enable = true;

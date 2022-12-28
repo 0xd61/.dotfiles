@@ -14,6 +14,11 @@ in
   environment.systemPackages = common-packages ++ [
   ];
 
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.epson-escpr ];
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
