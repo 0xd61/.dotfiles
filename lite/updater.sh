@@ -89,7 +89,7 @@ else
     UNZIP_FLAGS="-u";
     [ "$1" == "--quiet" ] && UNZIP_FLAGS="-o"
 
-    unzip "${UNZIP_FLAGS}" "lite.zip" -x "data/user/init.lua"
+    unzip "${UNZIP_FLAGS}" "lite.zip" -x "data/user/init.lua" -x "data/plugins/language_c.lua"
     rm "lite.zip"
 
     # NOTE(dgl): if we only handle the && case, we still get an error code 1
