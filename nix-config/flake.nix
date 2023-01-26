@@ -65,12 +65,18 @@
       dgl = mkHomeManagerConfiguration "x86_64-linux" "dgl" [
         ./users/dgl.nix
       ];
+      dgl-wsl = mkHomeManagerConfiguration "x86_64-linux" "dgl" [
+        ./users/dgl-wsl.nix
+      ];
     };
 
     nixosConfigurations = {
       home = mkNixOSConfiguration "x86_64-linux" [
           ./nixos/home.nix
           ./hardware/amd.nix
+      ];
+      wsl = mkNixOSConfiguration "x86_64-linux" [
+          ./nixos/wsl.nix
       ];
       work = mkNixOSConfiguration "x86_64-linux" [
           ./nixos/work.nix

@@ -23,24 +23,12 @@ in
   programs.vim.extraConfig = builtins.readFile ../dot.vimrc;
 
   home.packages = [
+    pkgs.neovim
     pkgs.source-code-pro
     pkgs.ctags
-    unstable.chromium
-    unstable.firefox
-    pkgs.libreoffice-fresh
-    pkgs.filezilla
     pkgs.pass
     pkgs.weechat
-    pkgs.thunderbird
-    pkgs.docker-compose
     pkgs.xclip
-    pkgs.usbutils
-    pkgs.pciutils
-    pkgs.streamlink
-    pkgs.yt-dlp
-    pkgs.mpv
-    pkgs.flameshot
-    pkgs.v4l-utils
     pkgs.git
     pkgs.fd
     pkgs.gnupg
@@ -53,9 +41,6 @@ in
     pkgs.qemu
     pkgs.virt-viewer
     pkgs.spice-gtk
-    pkgs.pandoc
-    pkgs.obsidian
     pkgs.htop
-    tex
   ];
 }
