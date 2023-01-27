@@ -14,12 +14,6 @@ let
 in
 {
   programs.home-manager.enable = true;
-  programs.git = {
-    enable = true;
-    userName  = "Daniel Glinka";
-    userEmail = "dgl@degit.co";
-  };
-
   programs.vim.extraConfig = builtins.readFile ../dot.vimrc;
 
   home.packages = [
@@ -29,7 +23,6 @@ in
     pkgs.pass
     pkgs.weechat
     pkgs.xclip
-    pkgs.git
     pkgs.fd
     pkgs.gnupg
     pkgs.jq

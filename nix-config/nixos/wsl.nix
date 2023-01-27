@@ -21,7 +21,7 @@ in
     # docker-native.enable = true;
 
     # Enable integration with Docker Desktop (needs to be installed)
-    docker-desktop.enable = false;
+    docker-desktop.enable = true;
   };
 
   users.users.dgl = {
@@ -29,10 +29,20 @@ in
     shell = pkgs.mksh;
   };
 
+  # not working with mksh
+  #environment.variables.EDITOR = [ "nvim" ];
+  #environment.variables.VISUAL = [ "lite" ];
+
+  #environment.interactiveShellInit = ''
+  #  alias vim="nvim"
+  #  alias git="/mnt/c/Users/danie/Tools/cmder/vendor/git-for-windows/bin/git.exe"
+  #'';
+
   # Enable nix flakes
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
+    auto-optimise-store = true
   '';
 
   system.stateVersion = "22.05";
