@@ -12,8 +12,10 @@
 (setq dgl-linux (featurep 'x))
 (setq dgl-win32 (not (or dgl-aquamacs dgl-linux)))
 
-;(setq dgl-todo-file "w:/handmade/code/todo.txt")
-;(setq dgl-log-file "w:/handmade/code/log.txt")
+(setq dgl-todo-file "./todo.txt")
+(setq dgl-log-file "./log.txt")
+(setq dgl-project-file "./.project.el")
+
 
 (global-hl-line-mode 1)
 (set-face-background 'hl-line "#013137")
@@ -26,7 +28,7 @@
 
 (when dgl-win32
   (setq dgl-makescript "build.teak")
-  (setq dgl-font "outline-Liberation Mono")
+  (setq dgl-font "outline-Consolas")
 )
 
 (when dgl-aquamacs
@@ -58,6 +60,14 @@
 (require 'ido)
 (require 'compile)
 (ido-mode t)
+
+;; Remember last edited files
+(recentf-mode 1)
+;; Save what you enter into minibuffer prompts
+(setq history-length 25)
+(savehist-mode 1)
+;; Remember and restore the last cursor location of opened files
+(save-place-mode 1)
 
 ; Setup my find-files
 (define-key global-map "\ef" 'find-file)
@@ -187,7 +197,7 @@
                                     (access-label          . -4)
                                     (substatement-open     .  0)
                                     (statement-case-intro  .  4)
-                                    (statement-block-intro .  c-lineup-for)
+                                    ;(statement-block-intro .  c-lineup-for)
                                     (case-label            .  4)
                                     (block-open            .  0)
                                     (inline-open           .  0)
@@ -262,7 +272,8 @@
         ((string-match "[.]hin" buffer-file-name) (dgl-source-format))
         ((string-match "[.]cin" buffer-file-name) (dgl-source-format))
         ((string-match "[.]h" buffer-file-name) (dgl-header-format))
-        ((string-match "[.]cpp" buffer-file-name) (dgl-source-format)))
+        ((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
+        ((string-match "[.]c" buffer-file-name) (dgl-source-format)))
 
   (defun dgl-find-corresponding-file ()
     "Find the file that corresponds to this one."
@@ -388,7 +399,9 @@
 )
 
 (define-key global-map [C-right] 'forward-word)
+(define-key global-map [C-S-right] 'end-of-line)
 (define-key global-map [C-left] 'backward-word)
+(define-key global-map [C-S-left] 'beginning-of-line)
 (define-key global-map [C-up] 'previous-blank-line)
 (define-key global-map [C-down] 'next-blank-line)
 (define-key global-map [home] 'beginning-of-line)
@@ -397,6 +410,8 @@
 (define-key global-map [pgdown] 'backward-page)
 (define-key global-map [C-next] 'scroll-other-window)
 (define-key global-map [C-prior] 'scroll-other-window-down)
+(define-key global-map [C-+] 'text-scale-increase)
+(define-key global-map [C-_] 'text-scale-decrese)
 
 ; ALT-alternatives
 (defadvice set-mark-command (after no-bloody-t-m-m activate)
@@ -439,7 +454,7 @@
 (define-key global-map "" 'copy-region-as-kill)
 (define-key global-map "" 'yank)
 (define-key global-map "" 'nil)
-(define-key global-map "" 'rotate-yank-pointer)
+;(define-key global-map "" 'rotate-yank-pointer)
 (define-key global-map "\eu" 'undo)
 (define-key global-map "\e6" 'upcase-word)
 (define-key global-map "\e^" 'captilize-word)
@@ -454,6 +469,7 @@
 		    (replace-string old-word new-word)
 		    ))
   )
+
 (define-key global-map "\el" 'dgl-replace-in-region)
 
 (define-key global-map "\eo" 'query-replace)
@@ -465,7 +481,7 @@
 
 (define-key global-map "\e[" 'start-kbd-macro)
 (define-key global-map "\e]" 'end-kbd-macro)
-(define-key global-map "\e'" 'call-last-kbd-macro)
+(define-key global-map "\e\\" 'call-last-kbd-macro)
 
 ; Buffers
 ;(define-key global-map "\er" 'revert-buffer)
@@ -478,12 +494,12 @@
     (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
      compilation-error-regexp-alist))
 
-(defun find-project-directory-recursive ()
-  "Recursively search for a makefile."
+(defun find-project-directory-recursive (project-file)
+  "Recursively search for the file."
   (interactive)
-  (if (file-exists-p dgl-makescript) t
+  (if (file-exists-p project-file) t
       (cd "../")
-      (find-project-directory-recursive)))
+      (find-project-directory-recursive project-file)))
 
 (defun lock-compilation-directory ()
   "The compilation process should NOT hunt for a makefile"
@@ -498,13 +514,13 @@
   (message "Compilation directory is roaming."))
 
 (defun find-project-directory ()
-  "Find the project directory."
+  "Find the project directory of the make script."
   (interactive)
   (setq find-project-from-directory default-directory)
   (switch-to-buffer-other-window "*compilation*")
   (if compilation-directory-locked (cd last-compilation-directory)
   (cd find-project-from-directory)
-  (find-project-directory-recursive)
+  (find-project-directory-recursive dgl-makescript)
   (setq last-compilation-directory default-directory)))
 
 (defun make-without-asking ()
@@ -515,10 +531,12 @@
 (define-key global-map "\em" 'make-without-asking)
 
 ; Commands
-(set-variable 'grep-command "grep -irHn ")
+(set-variable 'grep-command "git --no-pager grep -irHn ")
 (when dgl-win32
-    (setq grep-use-null-device t)
-    (set-variable 'grep-command "findstr -s -n -i -l "))
+    ; for findstr this has to be set to t
+    (setq grep-use-null-device nil)
+    ;(set-variable 'grep-command "findstr -s -n -i -l "))
+    (set-variable 'grep-command "git --no-pager grep -irHn "))
 
 ; Smooth scroll
 (setq scroll-step 3)
@@ -576,13 +594,20 @@
 (set-face-attribute 'font-lock-function-name-face nil :foreground "#D6B58D")
 (set-face-attribute 'font-lock-keyword-face nil :foreground "#E8E6E1")
 (set-face-attribute 'font-lock-string-face nil :foreground "#2CB1BC")
-(set-face-attribute 'font-lock-type-face nil :foreground "#625D52")
+(set-face-attribute 'font-lock-type-face nil :foreground "#D6B58D")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
 (set-face-attribute 'region nil :background "#24335E")
 ;(set-face-attribute 'mode-line nil :background "#93876c")
 ;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
 (set-face-attribute 'fringe nil :background "#01282d")
 (set-face-attribute 'vertical-border nil :foreground "#625D52")
+
+(defun load-project-settings ()
+  (interactive)
+  (setq find-project-from-directory default-directory)
+  (cd find-project-from-directory)
+  (find-project-directory-recursive dgl-project-file)
+  (load-file dgl-project-file))
 
 (defun post-load-stuff ()
   (interactive)
@@ -591,6 +616,7 @@
   (set-cursor-color "#65D6AD")
   (set-foreground-color "tan")
   (set-background-color "#012326")
-  
-)
+  (load-project-settings)
+  )
+
 (add-hook 'window-setup-hook 'post-load-stuff t)
