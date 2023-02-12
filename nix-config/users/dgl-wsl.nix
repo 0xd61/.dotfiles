@@ -2,7 +2,7 @@
 let
   gf = unstable.gf.override {
     extensions = [
-      /home/dgl/Sync/extensions_v5/extensions.cpp
+      /mnt/c/Users/danie/Projects/extensions_v5/extensions.cpp
     ];
   };
 
@@ -17,7 +17,6 @@ in
   programs.vim.extraConfig = builtins.readFile ../dot.vimrc;
 
   home.packages = [
-    pkgs.neovim
     pkgs.source-code-pro
     pkgs.ctags
     pkgs.pass
@@ -35,5 +34,6 @@ in
     pkgs.virt-viewer
     pkgs.spice-gtk
     pkgs.htop
+    gf
   ];
 }

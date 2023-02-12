@@ -8,8 +8,6 @@
 \\builtin alias "hledger_bud"="hledger balance Ausgaben -M --budget -b $(date +%Y/%m/01)"
 
 if grep microsoft /proc/version > /dev/null; then
-    \\builtin export EDITOR="nvim"
     \\builtin export VISUAL="lite"
-    \\builtin alias git="/mnt/c/Users/danie/Tools/cmder/vendor/git-for-windows/bin/git.exe"
-    \\builtin alias vim="nvim"
+    \\builtin alias git="/mnt/c/Program\ Files/Git/bin/git.exe"
 fi

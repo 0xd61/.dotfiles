@@ -22,6 +22,8 @@ in
 
     # Enable integration with Docker Desktop (needs to be installed)
     docker-desktop.enable = true;
+
+    wslConf.interop.appendWindowsPath = false;
   };
 
   users.users.dgl = {
@@ -37,6 +39,23 @@ in
   #  alias vim="nvim"
   #  alias git="/mnt/c/Users/danie/Tools/cmder/vendor/git-for-windows/bin/git.exe"
   #'';
+
+  environment.systemPackages = with pkgs; [
+    pinentry-curses
+  ];
+
+  services.pcscd.enable = true;
+  programs.gnupg.agent = {
+     enable = true;
+     pinentryFlavor = "curses";
+     enableSSHSupport = true;
+  };
+
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+  };
 
   # Enable nix flakes
   nix.package = pkgs.nixFlakes;
