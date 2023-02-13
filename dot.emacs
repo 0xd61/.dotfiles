@@ -548,7 +548,6 @@
 (setq next-line-add-newlines nil)
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows nil)
-(split-window-horizontally)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -584,6 +583,7 @@
     "Never, ever split a window. Why would anyone EVER want you to do that??"
     nil)
 (setq split-window-preferred-function 'dgl-never-split-a-window)
+(split-window-horizontally)
 
 (add-to-list 'default-frame-alist '(font . "Consolas-12"))
 (set-face-attribute 'default t :font "Consolas-12")
@@ -619,4 +619,12 @@
   (load-project-settings)
   )
 
-(add-hook 'window-setup-hook 'post-load-stuff t)
+(defun daemon-post-load-stuff ()
+  (interactive)
+  (split-window-horizontally)
+  (post-load-stuff)
+  )
+
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
+  (add-hook 'window-setup-hook 'post-load-stuff t))
