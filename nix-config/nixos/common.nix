@@ -95,6 +95,11 @@ in
     backend = "glx";
     vSync = true;
   };
+  
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs;
+  };
 
   # Enable sound.
   sound.enable = lib.mkDefault true;

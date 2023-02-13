@@ -45,6 +45,11 @@ in
   ];
 
   services.pcscd.enable = true;
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs;
+  };
+
   programs.gnupg.agent = {
      enable = true;
      pinentryFlavor = "curses";
