@@ -3,7 +3,7 @@ self: super: {
     patches = [
       (super.fetchpatch {
         url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dmenu-5.0-backspace-delete-word.diff";
-        sha256 = "0abqi59zp1ynmzmf0k524n4s589cnli07kxi2y9ngkyzhvbjav7k";
+        hash = "sha256-82wl14bfz2eTF7HPAyK1LKGiiSWiTODqr9aH+1OJeCk=";
       })
     ];
     });
@@ -18,7 +18,7 @@ self: super: {
     configFile = self.writeText "config.def.h" (builtins.readFile
       (super.fetchurl {
         url = "https://raw.githubusercontent.com/0xd61/.dotfiles/master/suckless.conf.d/dwm-6.3.config.def.h";
-        hash = "sha256-Umi0wlGqUxfHPEQffjiQu2yk0IWMiePXXupmcKds2XU=";
+        hash = "sha256-Iiu1YmTCHYwQzYbJWOuFM/X3V1tsSdmgT4j7z7zLE3Y=";
       })
     );
     postPatch = oldAttrs.postPatch or "" + "\necho 'Using own config file...'\n cp ${configFile} config.def.h";

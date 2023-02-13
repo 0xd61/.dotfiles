@@ -16,15 +16,11 @@
 (setq dgl-log-file "./log.txt")
 (setq dgl-project-file "./.project.el")
 
-
-(global-hl-line-mode 1)
-(set-face-background 'hl-line "#013137")
-
 (setq compilation-directory-locked nil)
 (scroll-bar-mode -1)
 (setq shift-select-mode nil)
 (setq enable-local-variables nil)
-(setq dgl-font "outline-Consolas")
+;(setq dgl-font "outline-Consolas")
 
 (when dgl-win32
   (setq dgl-makescript "build.teak")
@@ -36,7 +32,6 @@
   (osx-key-mode 0)
   (tabbar-mode 0)
   (setq mac-command-modifier 'meta)
-  (setq x-select-enable-clipboard t)
   (setq aquamacs-save-options-on-quit 0)
   (setq special-display-regexps nil)
   (setq special-display-buffer-names nil)
@@ -49,7 +44,8 @@
 
 (when dgl-linux
   (setq dgl-makescript "./build.teak")
-  (display-battery-mode 1)
+  (setq dgl-font "Source Code Pro-11")
+  ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
 )
 
 ; Turn off the toolbar
@@ -60,6 +56,8 @@
 (require 'ido)
 (require 'compile)
 (ido-mode t)
+
+(setq x-select-enable-clipboard t)
 
 ;; Remember last edited files
 (recentf-mode 1)
@@ -494,12 +492,13 @@
     (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
      compilation-error-regexp-alist))
 
-(defun find-project-directory-recursive (project-file)
+(defun find-project-directory-recursive (project-file depth)
   "Recursively search for the file."
   (interactive)
   (if (file-exists-p project-file) t
       (cd "../")
-      (find-project-directory-recursive project-file)))
+      (if (>= depth 0) t
+          (find-project-directory-recursive project-file (- depth 1)))))
 
 (defun lock-compilation-directory ()
   "The compilation process should NOT hunt for a makefile"
@@ -520,7 +519,7 @@
   (switch-to-buffer-other-window "*compilation*")
   (if compilation-directory-locked (cd last-compilation-directory)
   (cd find-project-from-directory)
-  (find-project-directory-recursive dgl-makescript)
+  (find-project-directory-recursive dgl-makescript 5)
   (setq last-compilation-directory default-directory)))
 
 (defun make-without-asking ()
@@ -529,6 +528,13 @@
   (if (find-project-directory) (compile dgl-makescript))
   (other-window 1))
 (define-key global-map "\em" 'make-without-asking)
+
+; Fix colors in compilation window
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 ; Commands
 (set-variable 'grep-command "git --no-pager grep -irHn ")
@@ -585,8 +591,11 @@
 (setq split-window-preferred-function 'dgl-never-split-a-window)
 (split-window-horizontally)
 
-(add-to-list 'default-frame-alist '(font . "Consolas-12"))
-(set-face-attribute 'default t :font "Consolas-12")
+(global-hl-line-mode 1)
+(global-font-lock-mode 1)
+(set-face-background 'hl-line "#013137")
+
+;(add-to-list 'default-frame-alist '(font . dgl-font))
 (set-face-attribute 'font-lock-builtin-face nil :foreground "#D6B58D")
 (set-face-attribute 'font-lock-comment-face nil :foreground "#31B72C")
 (set-face-attribute 'font-lock-constant-face nil :foreground "#65D6AD")
@@ -606,11 +615,15 @@
   (interactive)
   (setq find-project-from-directory default-directory)
   (cd find-project-from-directory)
-  (find-project-directory-recursive dgl-project-file)
-  (load-file dgl-project-file))
+  (find-project-directory-recursive dgl-project-file 5)
+  (if (file-exists-p dgl-project-file)
+      (load-file dgl-project-file))
+  (cd find-project-from-directory)
+  )
 
 (defun post-load-stuff ()
   (interactive)
+  (set-face-attribute 'default nil :font dgl-font)
   (menu-bar-mode -1)
   (maximize-frame)
   (set-cursor-color "#65D6AD")
@@ -627,4 +640,5 @@
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
-  (add-hook 'window-setup-hook 'post-load-stuff t))
+  (add-hook 'window-setup-hook 'post-load-stuff t)
+)

@@ -2,7 +2,7 @@
 let
   hostblock = pkgs.fetchurl {
     url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
-    hash = "sha256-7rLZ/fo9WyRdnqRBGT1uBGvTxa0W9SS7F20HCVm0W6o=";
+    hash = "sha256-VQHuSpp6r2SrYKS0BFo0l+uRnMdBpwNHSuGaQ3ryCaM=";
   };
 in
 {
@@ -42,10 +42,10 @@ in
     networkmanager.enable = false;
   };
 
-  systemd.network.networks = let
+  systemd.network.networks = lib.mkDefault (let
     networkConfig = {
       DHCP = "yes";
-      DNSSEC = "no";
+      DNSSEC = "allow-downgrade";
       DNSOverTLS = "no";
       DNS = [ "45.90.28.183" "45.90.30.183" "1.1.1.3"];
     };
@@ -63,7 +63,7 @@ in
       inherit networkConfig;
       dhcpV4Config.RouteMetric = 2048; # Prefer wired
     };
-  };
+  });
 
   # Wait for any interface to become available, not for all
   systemd.services."systemd-networkd-wait-online".serviceConfig.ExecStart = [
@@ -96,11 +96,6 @@ in
     vSync = true;
   };
   
-  services.emacs = {
-    enable = true;
-    package = pkgs.emacs;
-  };
-
   # Enable sound.
   sound.enable = lib.mkDefault true;
   security.rtkit.enable = true;
