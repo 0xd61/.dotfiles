@@ -48,7 +48,11 @@
   (setq dgl-font "Source Code Pro-11")
   (add-to-list 'load-path "~/.emacs.plugins")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
-)
+  )
+
+; Load plugins
+(autoload 'go-mode "go-mode" nil t)
+(autoload 'bb-mode "bb-mode" nil t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -145,7 +149,6 @@
 
 					; Accepted file extensions and their appropriate modes
 
-(autoload 'go-mode "go-mode" nil t)
 (setq auto-mode-alist
       (append
        '(("\\.cpp$"    . c++-mode)
@@ -163,7 +166,12 @@
          ("\\.ms$" . fundamental-mode)
          ("\\.m$" . objc-mode)
          ("\\.mm$" . objc-mode)
-	 ("\\.go\\'" . go-mode)
+	 ("\\.go$" . go-mode)
+	 ("\\.bb$" . bb-mode)
+	 ("\\.inc$" . bb-mode)
+	 ("\\.bbappend$" . bb-mode)
+	 ("\\.bbclass$" . bb-mode)
+	 ("\\.conf$" . bb-mode)
          ) auto-mode-alist))
 
 ; C++ indentation style
@@ -556,6 +564,9 @@
     (setq grep-use-null-device nil)
     ;(set-variable 'grep-command "findstr -s -n -i -l "))
     (set-variable 'grep-command "git --no-pager grep -irHn "))
+
+; Group digits for calc
+(setq calc-group-digit t)
 
 ; Smooth scroll
 (setq scroll-step 3)
