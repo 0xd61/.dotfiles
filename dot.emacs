@@ -51,8 +51,10 @@
   )
 
 ; Load plugins
-(autoload 'go-mode "go-mode" nil t)
-(autoload 'bb-mode "bb-mode" nil t)
+(autoload 'go-mode     "go-mode" "Go mode"                            t)
+(autoload 'bb-mode     "bb-mode" "Bitbake mode"                       t)
+(autoload 'bm-toggle   "bm"      "Toggle bookmark in current buffer." t)
+(autoload 'bm-next     "bm"      "Goto bookmark."                     t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -439,7 +441,7 @@
   (append-next-kill)
   (copy-region-as-kill (mark) (point))
 )
-(define-key global-map "\e " 'set-mark-command)
+;(define-key global-map "\e " 'set-mark-command)
 (define-key global-map "\eq" 'append-as-kill)
 (define-key global-map "\ea" 'yank)
 (define-key global-map "\ez" 'kill-region)
@@ -461,11 +463,14 @@
 (define-key global-map "\eg" 'goto-line)
 (define-key global-map "\ej" 'imenu)
 
+(define-key global-map "\e " 'bm-toggle)
+(define-key global-map "\e," 'bm-next)
+
 ; Editting
 (define-key global-map "" 'copy-region-as-kill)
 (define-key global-map "" 'yank)
 (define-key global-map "" 'nil)
-;(define-key global-map "" 'rotate-yank-pointer)
+(define-key global-map "" 'rotate-yank-pointer)
 (define-key global-map "\eu" 'undo)
 (define-key global-map "\e6" 'upcase-word)
 (define-key global-map "\e^" 'captilize-word)
@@ -495,7 +500,7 @@
 (define-key global-map "\e\\" 'call-last-kbd-macro)
 
 ; Buffers
-;(define-key global-map "\er" 'revert-buffer)
+(define-key global-map "\er" 'revert-buffer)
 (define-key global-map "\ek" 'kill-this-buffer)
 (define-key global-map "\es" 'save-buffer)
 
