@@ -19,6 +19,7 @@ ln -s $BASEDIR/dot.vimrc $HOME/.vimrc
 #ln -s $BASEDIR/dot.gdbinit $HOME/.gdbinit
 ln -s $BASEDIR/dot.alacritty.yml $HOME/.alacritty.yml
 ln -s $BASEDIR/dot.emacs $HOME/.emacs
+[ -d "$HOME/.emacs.plugins" ] && unlink $HOME/.emacs.plugins; ln -s $BASEDIR/dot.emacs.plugins $HOME/.emacs.plugins
 ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.vim" ] && unlink $HOME/.vim; ln -s $BASEDIR/dot.vim $HOME/.vim
 [ -d "$HOME/.dwm-status" ] && unlink $HOME/.dwm-status; ln -s $BASEDIR/dot.dwm-status $HOME/.dwm-status

@@ -25,6 +25,7 @@
 (when dgl-win32
   (setq dgl-makescript "build.teak")
   (setq dgl-font "Consolas-12")
+  (add-to-list 'load-path "t:/emacs/plugins")
 )
 
 (when dgl-aquamacs
@@ -45,6 +46,7 @@
 (when dgl-linux
   (setq dgl-makescript "./build.teak")
   (setq dgl-font "Source Code Pro-11")
+  (add-to-list 'load-path "~/.emacs.plugins")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
 )
 
@@ -141,7 +143,9 @@
  (modify-face 'font-lock-important-face "Red" nil nil t nil t nil nil)
  (modify-face 'font-lock-note-face "Yellow" nil nil t nil t nil nil)
 
-; Accepted file extensions and their appropriate modes
+					; Accepted file extensions and their appropriate modes
+
+(autoload 'go-mode "go-mode" nil t)
 (setq auto-mode-alist
       (append
        '(("\\.cpp$"    . c++-mode)
@@ -159,6 +163,7 @@
          ("\\.ms$" . fundamental-mode)
          ("\\.m$" . objc-mode)
          ("\\.mm$" . objc-mode)
+	 ("\\.go\\'" . go-mode)
          ) auto-mode-alist))
 
 ; C++ indentation style
