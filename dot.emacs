@@ -20,11 +20,11 @@
 (scroll-bar-mode -1)
 (setq shift-select-mode nil)
 (setq enable-local-variables nil)
-;(setq dgl-font "outline-Consolas")
+(setq dgl-font "DejaVu Sans Mono-12")
 
 (when dgl-win32
   (setq dgl-makescript "build.teak")
-  (setq dgl-font "outline-Consolas")
+  (setq dgl-font "Consolas-12")
 )
 
 (when dgl-aquamacs
@@ -536,6 +536,14 @@
     (ansi-color-apply-on-region (point-min) (point-max))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
+;; Minimize garbage collection during startup
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Lower threshold back to 8 MiB (default is 800kB)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (expt 2 23))))
+
 ; Commands
 (set-variable 'grep-command "git --no-pager grep -irHn ")
 (when dgl-win32
@@ -632,13 +640,16 @@
   (load-project-settings)
   )
 
-(defun daemon-post-load-stuff ()
-  (interactive)
-  (split-window-horizontally)
-  (post-load-stuff)
-  )
+;(defun daemon-post-load-stuff ()
+;  (interactive)
+;  (split-window-horizontally)
+;  (post-load-stuff)
+;  )
 
-(if (daemonp)
-    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
-  (add-hook 'window-setup-hook 'post-load-stuff t)
-)
+; Startup hook
+
+;(if (daemonp)
+;    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
+(add-hook 'window-setup-hook 'post-load-stuff t)
+;)
+
