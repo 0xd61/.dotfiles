@@ -53,8 +53,8 @@
 ; Load plugins
 (autoload 'go-mode     "go-mode" "Go mode"                            t)
 (autoload 'bb-mode     "bb-mode" "Bitbake mode"                       t)
-(autoload 'bm-toggle   "bm"      "Toggle bookmark in current buffer." t)
-(autoload 'bm-next     "bm"      "Goto bookmark."                     t)
+;(autoload 'bm-toggle   "bm"      "Toggle bookmark in current buffer." t)
+;(autoload 'bm-next     "bm"      "Goto bookmark."                     t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -333,7 +333,7 @@
 
   (define-key c++-mode-map "\e/" 'c-mark-function)
 
-  (define-key c++-mode-map "\e " 'set-mark-command)
+  ;(define-key c++-mode-map "\e " 'set-mark-command)
   (define-key c++-mode-map "\eq" 'append-as-kill)
   (define-key c++-mode-map "\ea" 'yank)
   (define-key c++-mode-map "\ez" 'kill-region)
@@ -463,8 +463,8 @@
 (define-key global-map "\eg" 'goto-line)
 (define-key global-map "\ej" 'imenu)
 
-(define-key global-map "\e " 'bm-toggle)
-(define-key global-map "\e," 'bm-next)
+(define-key global-map "\e " 'bookmark-set)
+(define-key global-map "\e," 'bookmark-bmenu-list)
 
 ; Editting
 (define-key global-map "" 'copy-region-as-kill)
@@ -564,6 +564,7 @@
 
 ; Commands
 (set-variable 'grep-command "git --no-pager grep -irHn ")
+(setq grep-use-null-device nil)
 (when dgl-win32
     ; for findstr this has to be set to t
     (setq grep-use-null-device nil)
