@@ -441,7 +441,7 @@
   (append-next-kill)
   (copy-region-as-kill (mark) (point))
 )
-;(define-key global-map "\e " 'set-mark-command)
+(define-key global-map "\e " 'set-mark-command)
 (define-key global-map "\eq" 'append-as-kill)
 (define-key global-map "\ea" 'yank)
 (define-key global-map "\ez" 'kill-region)
@@ -463,8 +463,8 @@
 (define-key global-map "\eg" 'goto-line)
 (define-key global-map "\ej" 'imenu)
 
-(define-key global-map "\e " 'bookmark-set)
-(define-key global-map "\e," 'bookmark-bmenu-list)
+(define-key global-map "\e," 'bookmark-set)
+(define-key global-map "\e<" 'bookmark-bmenu-list)
 
 ; Editting
 (define-key global-map "" 'copy-region-as-kill)
