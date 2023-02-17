@@ -51,10 +51,9 @@
   )
 
 ; Load plugins
-(autoload 'go-mode     "go-mode" "Go mode"                            t)
-(autoload 'bb-mode     "bb-mode" "Bitbake mode"                       t)
-;(autoload 'bm-toggle   "bm"      "Toggle bookmark in current buffer." t)
-;(autoload 'bm-next     "bm"      "Goto bookmark."                     t)
+(autoload 'go-mode		"go-mode"       "Go mode"        t)
+(autoload 'bb-mode		"bb-mode"       "Bitbake mode"   t)
+(autoload 'markdown-mode	"markdown-mode" "Markdown mode"  t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -154,27 +153,28 @@
 
 (setq auto-mode-alist
       (append
-       '(("\\.cpp$"    . c++-mode)
-         ("\\.hin$"    . c++-mode)
-         ("\\.cin$"    . c++-mode)
-         ("\\.inl$"    . c++-mode)
-         ("\\.rdc$"    . c++-mode)
-         ("\\.h$"    . c++-mode)
-         ("\\.c$"   . c++-mode)
-         ("\\.cc$"   . c++-mode)
-         ("\\.c8$"   . c++-mode)
-         ("\\.txt$" . indented-text-mode)
-         ("\\.emacs$" . emacs-lisp-mode)
-         ("\\.gen$" . gen-mode)
-         ("\\.ms$" . fundamental-mode)
-         ("\\.m$" . objc-mode)
-         ("\\.mm$" . objc-mode)
-	 ("\\.go$" . go-mode)
-	 ("\\.bb$" . bb-mode)
-	 ("\\.inc$" . bb-mode)
+       '(("\\.cpp$"      . c++-mode)
+         ("\\.hin$"      . c++-mode)
+         ("\\.cin$"      . c++-mode)
+         ("\\.inl$"      . c++-mode)
+         ("\\.rdc$"      . c++-mode)
+         ("\\.h$"        . c++-mode)
+         ("\\.c$"        . c++-mode)
+         ("\\.cc$"       . c++-mode)
+         ("\\.c8$"       . c++-mode)
+         ("\\.txt$"      . indented-text-mode)
+         ("\\.emacs$"    . emacs-lisp-mode)
+         ("\\.gen$"      . gen-mode)
+         ("\\.ms$"       . fundamental-mode)
+         ("\\.m$"        . objc-mode)
+         ("\\.mm$"       . objc-mode)
+	 ("\\.go$"       . go-mode)
+	 ("\\.bb$"       . bb-mode)
+	 ("\\.inc$"      . bb-mode)
 	 ("\\.bbappend$" . bb-mode)
-	 ("\\.bbclass$" . bb-mode)
-	 ("\\.conf$" . bb-mode)
+	 ("\\.bbclass$"  . bb-mode)
+	 ("\\.conf$"     . bb-mode)
+	 ("\\.md$"       . markdown-mode)
          ) auto-mode-alist))
 
 ; C++ indentation style
@@ -464,8 +464,7 @@
 (define-key global-map "\eg" 'goto-line)
 (define-key global-map "\ej" 'imenu)
 
-(define-key global-map "\e," 'bookmark-set)
-(define-key global-map "\e<" 'bookmark-bmenu-list)
+(define-key global-map "\e," 'align-regexp)
 
 ; Editting
 (define-key global-map "" 'copy-region-as-kill)
@@ -601,6 +600,16 @@
     (forward-line 1)
     (transpose-lines 1)
     (forward-line -1)))
+
+(defun duplicate-line ()
+  (interactive)
+  (save-column
+    (beginning-of-line)
+    (kill-line)
+    (yank)
+    (newline)
+    (yank)))
+
 (setq ryo-modal-cursor-color "red")
 ; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
 (setq ryo-modal-default-cursor-color "#65D6AD")
@@ -609,13 +618,21 @@
 (ryo-modal-keys
    ("," ryo-modal-repeat)
    ("q" ryo-modal-mode)
+   ("a" ryo-modal-mode)
    ("h" backward-char)
    ("j" next-line)
    ("k" previous-line)
    ("l" forward-char)
-   ("<C-up>" move-line-up)
-   ("<C-down>" move-line-down)
+   ("<C-S-up>" move-line-up)
+   ("<C-S-down>" move-line-down)
    ("d" kill-whole-line)
+   ("y" yank)
+   ("f" duplicate-line)
+   ("u" undo)
+   ("SPC" set-mark-command)
+   ("c" cua-selection-mode)
+   ("b" (("b" bookmark-set)
+         ("SPC" bookmark-bmenu-list)))
    )
 
 ; Startup windowing
@@ -629,7 +646,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-save-default nil)
- '(auto-save-interval 0)
  '(auto-save-list-file-prefix nil)
  '(auto-save-timeout 0)
  '(auto-show-mode t t)
