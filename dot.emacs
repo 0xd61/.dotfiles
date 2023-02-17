@@ -63,6 +63,7 @@
 (require 'cc-mode)
 (require 'ido)
 (require 'compile)
+(require 'ryo-modal)
 (ido-mode t)
 
 (setq x-select-enable-clipboard t)
@@ -580,6 +581,43 @@
 ; Clock
 (display-time)
 
+; Modal Keymap
+(defmacro save-column (&rest body)
+  `(let ((column (current-column)))
+     (unwind-protect
+         (progn ,@body)
+       (move-to-column column))))
+(put 'save-column 'lisp-indent-function 0)
+
+(defun move-line-up ()
+  (interactive)
+  (save-column
+    (transpose-lines 1)
+    (forward-line -2)))
+
+(defun move-line-down ()
+  (interactive)
+  (save-column
+    (forward-line 1)
+    (transpose-lines 1)
+    (forward-line -1)))
+(setq ryo-modal-cursor-color "red")
+; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
+(setq ryo-modal-default-cursor-color "#65D6AD")
+(define-key global-map [C-return] 'ryo-modal-mode)
+(define-key global-map [M-return] 'ryo-modal-mode)
+(ryo-modal-keys
+   ("," ryo-modal-repeat)
+   ("q" ryo-modal-mode)
+   ("h" backward-char)
+   ("j" next-line)
+   ("k" previous-line)
+   ("l" forward-char)
+   ("<C-up>" move-line-up)
+   ("<C-down>" move-line-down)
+   ("d" kill-whole-line)
+   )
+
 ; Startup windowing
 (setq next-line-add-newlines nil)
 (setq-default truncate-lines t)
@@ -640,6 +678,7 @@
 ;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
 (set-face-attribute 'fringe nil :background "#01282d")
 (set-face-attribute 'vertical-border nil :foreground "#625D52")
+(set-face-attribute 'cursor nil :background "#65D6AD")
 
 (defun load-project-settings ()
   (interactive)
@@ -656,7 +695,7 @@
   (set-face-attribute 'default nil :font dgl-font)
   (menu-bar-mode -1)
   (maximize-frame)
-  (set-cursor-color "#65D6AD")
+  ;(set-cursor-color "#65D6AD")
   (set-foreground-color "tan")
   (set-background-color "#012326")
   (load-project-settings)
