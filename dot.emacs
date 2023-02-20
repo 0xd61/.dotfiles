@@ -7,6 +7,8 @@
 (setq undo-limit 20000000)
 (setq undo-strong-limit 40000000)
 
+(setq dgl-initials "dgl")
+
 ; Determine the underlying operating system
 (setq dgl-aquamacs (featurep 'aquamacs))
 (setq dgl-linux (featurep 'x))
@@ -588,20 +590,20 @@
        (move-to-column column))))
 (put 'save-column 'lisp-indent-function 0)
 
-(defun move-line-up ()
+(defun dgl-move-line-up ()
   (interactive)
   (save-column
     (transpose-lines 1)
     (forward-line -2)))
 
-(defun move-line-down ()
+(defun dgl-move-line-down ()
   (interactive)
   (save-column
     (forward-line 1)
     (transpose-lines 1)
     (forward-line -1)))
 
-(defun duplicate-line ()
+(defun dgl-duplicate-line ()
   (interactive)
   (save-column
     (beginning-of-line)
@@ -610,6 +612,36 @@
     (newline)
     (yank)))
 
+(defun dgl-kill-line ()
+  (interactive)
+  (save-column
+    (kill-whole-line)))
+
+(defun dgl-git-grep ()
+  "Run git-grep recursively"
+  (interactive)
+  (let ((command (read-from-minibuffer "Run git-grep: "
+				       "git --no-pager grep -irHn ")))
+    (grep command)))
+  
+(defun dgl-grep ()
+  "Run grep recursively from the directory of the current buffer or the default directory"
+    (interactive)
+    (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
+      (let ((command (read-from-minibuffer "Run grep: "
+	                                   (cons (concat "grep -irHn  " dir) 13))))
+	(grep command))))
+
+(defun dgl-insert-todo ()
+  (interactive)
+  (insert (concat "// TODO(" dgl-initials "): "))
+  (end-of-line))
+
+(defun dgl-insert-note ()
+  (interactive)
+  (insert (concat "// NOTE(" dgl-initials "): "))
+  (end-of-line))
+  
 (setq ryo-modal-cursor-color "red")
 ; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
 (setq ryo-modal-default-cursor-color "#65D6AD")
@@ -623,16 +655,20 @@
    ("j" next-line)
    ("k" previous-line)
    ("l" forward-char)
-   ("<C-S-up>" move-line-up)
-   ("<C-S-down>" move-line-down)
-   ("d" kill-whole-line)
+   ("<C-S-up>" dgl-move-line-up)
+   ("<C-S-down>" dgl-move-line-down)
    ("y" yank)
-   ("f" duplicate-line)
+   ("d" dgl-kill-line)
+   ("f" dgl-duplicate-line)
    ("u" undo)
    ("SPC" set-mark-command)
    ("c" cua-selection-mode)
    ("b" (("b" bookmark-set)
          ("SPC" bookmark-bmenu-list)))
+   ("g" dgl-git-grep)
+   ("G" dgl-grep)
+   ("t" dgl-insert-todo)
+   ("n" dgl-insert-note)
    )
 
 ; Startup windowing
