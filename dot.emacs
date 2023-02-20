@@ -629,7 +629,7 @@
     (interactive)
     (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
       (let ((command (read-from-minibuffer "Run grep: "
-	                                   (cons (concat "grep -irHn  " dir) 13))))
+	                                   (cons (concat "grep -irHn  " dir) 12))))
 	(grep command))))
 
 (defun dgl-insert-todo ()
@@ -648,9 +648,10 @@
 (define-key global-map [C-return] 'ryo-modal-mode)
 (define-key global-map [M-return] 'ryo-modal-mode)
 (ryo-modal-keys
+   ("SPC" set-mark-command)
    ("," ryo-modal-repeat)
-   ("q" ryo-modal-mode)
    ("a" ryo-modal-mode)
+   ("i" ryo-modal-mode)
    ("h" backward-char)
    ("j" next-line)
    ("k" previous-line)
@@ -661,7 +662,6 @@
    ("d" dgl-kill-line)
    ("f" dgl-duplicate-line)
    ("u" undo)
-   ("SPC" set-mark-command)
    ("c" cua-selection-mode)
    ("b" (("b" bookmark-set)
          ("SPC" bookmark-bmenu-list)))
