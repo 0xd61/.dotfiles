@@ -53,9 +53,10 @@
   )
 
 ; Load plugins
-(autoload 'go-mode		"go-mode"       "Go mode"        t)
-(autoload 'bb-mode		"bb-mode"       "Bitbake mode"   t)
-(autoload 'markdown-mode	"markdown-mode" "Markdown mode"  t)
+(autoload 'go-mode		"go-mode"         "Go mode"						 t)
+(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+(autoload 'markdown-mode	"markdown-mode"   "Markdown mode"					 t)
+(autoload 'json-mode		"json-mode"       "JSON mode"						 t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -144,7 +145,7 @@
 	  '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
 	    ("\\<\\(STUDY\\)" 1 'font-lock-study-face t)
 	    ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
-            ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+	    ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
 	fixme-modes)
  (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
  (modify-face 'font-lock-study-face "Dark Green" nil nil t nil t nil nil)
@@ -156,20 +157,21 @@
 (setq auto-mode-alist
       (append
        '(("\\.cpp$"      . c++-mode)
-         ("\\.hin$"      . c++-mode)
-         ("\\.cin$"      . c++-mode)
-         ("\\.inl$"      . c++-mode)
-         ("\\.rdc$"      . c++-mode)
-         ("\\.h$"        . c++-mode)
-         ("\\.c$"        . c++-mode)
-         ("\\.cc$"       . c++-mode)
-         ("\\.c8$"       . c++-mode)
-         ("\\.txt$"      . indented-text-mode)
-         ("\\.emacs$"    . emacs-lisp-mode)
-         ("\\.gen$"      . gen-mode)
-         ("\\.ms$"       . fundamental-mode)
-         ("\\.m$"        . objc-mode)
-         ("\\.mm$"       . objc-mode)
+	 ("\\.hin$"      . c++-mode)
+	 ("\\.cin$"      . c++-mode)
+	 ("\\.inl$"      . c++-mode)
+	 ("\\.rdc$"      . c++-mode)
+	 ("\\.h$"        . c++-mode)
+	 ("\\.c$"        . c++-mode)
+	 ("\\.cc$"       . c++-mode)
+	 ("\\.c8$"       . c++-mode)
+	 ("\\.teak$"     . c++-mode)
+	 ("\\.txt$"      . indented-text-mode)
+	 ("\\.emacs$"    . emacs-lisp-mode)
+	 ("\\.gen$"      . gen-mode)
+	 ("\\.ms$"       . fundamental-mode)
+	 ("\\.m$"        . objc-mode)
+	 ("\\.mm$"       . objc-mode)
 	 ("\\.go$"       . go-mode)
 	 ("\\.bb$"       . bb-mode)
 	 ("\\.inc$"      . bb-mode)
@@ -177,7 +179,10 @@
 	 ("\\.bbclass$"  . bb-mode)
 	 ("\\.conf$"     . bb-mode)
 	 ("\\.md$"       . markdown-mode)
-         ) auto-mode-alist))
+	 ("\\.js$"       . javascript-mode)
+	 ("\\.json$"     . javascript-mode)
+	 ("\\workspace.dsl$" . javascript-mode)
+	 ) auto-mode-alist))
 
 ; C++ indentation style
 (defconst dgl-big-fun-c-style
@@ -185,42 +190,42 @@
     (c-tab-always-indent         . t)
     (c-comment-only-line-offset  . 0)
     (c-hanging-braces-alist      . ((class-open)
-                                    (class-close)
-                                    (defun-open)
-                                    (defun-close)
-                                    (inline-open)
-                                    (inline-close)
-                                    (brace-list-open)
-                                    (brace-list-close)
-                                    (brace-list-intro)
-                                    (brace-list-entry)
-                                    (block-open)
-                                    (block-close)
-                                    (substatement-open)
-                                    (statement-case-open)
-                                    (class-open)))
+				    (class-close)
+				    (defun-open)
+				    (defun-close)
+				    (inline-open)
+				    (inline-close)
+				    (brace-list-open)
+				    (brace-list-close)
+				    (brace-list-intro)
+				    (brace-list-entry)
+				    (block-open)
+				    (block-close)
+				    (substatement-open)
+				    (statement-case-open)
+				    (class-open)))
     (c-hanging-colons-alist      . ((inher-intro)
-                                    (case-label)
-                                    (label)
-                                    (access-label)
-                                    (access-key)
-                                    (member-init-intro)))
+				    (case-label)
+				    (label)
+				    (access-label)
+				    (access-key)
+				    (member-init-intro)))
     (c-cleanup-list              . (scope-operator
-                                    list-close-comma
-                                    defun-close-semi))
+				    list-close-comma
+				    defun-close-semi))
     (c-offsets-alist             . ((arglist-close         .  c-lineup-arglist)
-                                    (label                 . -4)
-                                    (access-label          . -4)
-                                    (substatement-open     .  0)
-                                    (statement-case-intro  .  4)
-                                    ;(statement-block-intro .  c-lineup-for)
-                                    (case-label            .  4)
-                                    (block-open            .  0)
-                                    (inline-open           .  0)
-                                    (topmost-intro-cont    .  0)
-                                    (knr-argdecl-intro     . -4)
-                                    (brace-list-open       .  0)
-                                    (brace-list-intro      .  4)))
+				    (label                 . -4)
+				    (access-label          . -4)
+				    (substatement-open     .  0)
+				    (statement-case-intro  .  4)
+				    ;(statement-block-intro .  c-lineup-for)
+				    (case-label            .  4)
+				    (block-open            .  0)
+				    (inline-open           .  0)
+				    (topmost-intro-cont    .  0)
+				    (knr-argdecl-intro     . -4)
+				    (brace-list-open       .  0)
+				    (brace-list-intro      .  4)))
     (c-echo-syntactic-information-p . t))
     "Casey's Big Fun C++ Style")
 
@@ -232,7 +237,7 @@
 
   ; 4-space tabs
   (setq tab-width 4
-        indent-tabs-mode nil)
+	indent-tabs-mode nil)
 
   ; Additional style stuff
   (c-set-offset 'member-init-intro '++)
@@ -285,11 +290,11 @@
   )
 
   (cond ((file-exists-p buffer-file-name) t)
-        ((string-match "[.]hin" buffer-file-name) (dgl-source-format))
-        ((string-match "[.]cin" buffer-file-name) (dgl-source-format))
-        ((string-match "[.]h" buffer-file-name) (dgl-header-format))
-        ((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
-        ((string-match "[.]c" buffer-file-name) (dgl-source-format)))
+	((string-match "[.]hin" buffer-file-name) (dgl-source-format))
+	((string-match "[.]cin" buffer-file-name) (dgl-source-format))
+	((string-match "[.]h" buffer-file-name) (dgl-header-format))
+	((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
+	((string-match "[.]c" buffer-file-name) (dgl-source-format)))
 
   (defun dgl-find-corresponding-file ()
     "Find the file that corresponds to this one."
@@ -323,6 +328,8 @@
   (define-key c++-mode-map "\eC" 'dgl-find-corresponding-file-other-window)
 
   (define-key c++-mode-map "\es" 'dgl-save-buffer)
+  ; Save buffer without converting tabs to spaces
+  (define-key c++-mode-map "\eS" 'save-buffer)
 
   (define-key c++-mode-map "\t" 'dabbrev-expand)
   (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
@@ -370,17 +377,20 @@
       (untabify (point-min) (point-max))))
   (save-buffer))
 
+
 ; TXT mode handling
 (defun dgl-big-fun-text-hook ()
   ; 4-space tabs
   (setq tab-width 4
-        indent-tabs-mode nil)
+	indent-tabs-mode nil)
 
   ; Newline indents, semi-colon doesn't
   (define-key text-mode-map "\C-m" 'newline-and-indent)
 
   ; Prevent overriding of alt-s
   (define-key text-mode-map "\es" 'dgl-save-buffer)
+  ; Save buffer without converting tabs to spaces
+  (define-key text-mode-map "\eS" 'save-buffer)
   )
 (add-hook 'text-mode-hook 'dgl-big-fun-text-hook)
 
@@ -464,6 +474,8 @@
 (define-key global-map "\eN" 'previous-error)
 
 (define-key global-map "\eg" 'goto-line)
+(define-key global-map "\eh" 'dgl-git-grep)
+(define-key global-map "\eH" 'dgl-grep)
 (define-key global-map "\ej" 'imenu)
 
 (define-key global-map "\e," 'align-regexp)
@@ -487,6 +499,12 @@
 		    (replace-string old-word new-word)
 		    ))
   )
+
+(defun dgl-backward-kill-word ()
+      "Better backward-kill-word."
+      (interactive)
+      (fixup-whitespace)
+      (backward-delete-char-untabify 1))
 
 (define-key global-map "\el" 'dgl-replace-in-region)
 
@@ -518,7 +536,7 @@
   (if (file-exists-p project-file) t
       (cd "../")
       (if (>= depth 0) t
-          (find-project-directory-recursive project-file (- depth 1)))))
+	  (find-project-directory-recursive project-file (- depth 1)))))
 
 (defun lock-compilation-directory ()
   "The compilation process should NOT hunt for a makefile"
@@ -561,8 +579,8 @@
 
 ;; Lower threshold back to 8 MiB (default is 800kB)
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold (expt 2 23))))
+	  (lambda ()
+	    (setq gc-cons-threshold (expt 2 23))))
 
 ; Commands
 (set-variable 'grep-command "git --no-pager grep -irHn ")
@@ -586,7 +604,7 @@
 (defmacro save-column (&rest body)
   `(let ((column (current-column)))
      (unwind-protect
-         (progn ,@body)
+	 (progn ,@body)
        (move-to-column column))))
 (put 'save-column 'lisp-indent-function 0)
 
@@ -623,13 +641,13 @@
   (let ((command (read-from-minibuffer "Run git-grep: "
 				       "git --no-pager grep -irHn ")))
     (grep command)))
-  
+
 (defun dgl-grep ()
   "Run grep recursively from the directory of the current buffer or the default directory"
     (interactive)
     (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
       (let ((command (read-from-minibuffer "Run grep: "
-	                                   (cons (concat "grep -irHn  " dir) 12))))
+					   (cons (concat "grep -irHn  " dir) 12))))
 	(grep command))))
 
 (defun dgl-insert-todo ()
@@ -641,7 +659,7 @@
   (interactive)
   (insert (concat "// NOTE(" dgl-initials "): "))
   (end-of-line))
-  
+
 (setq ryo-modal-cursor-color "red")
 ; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
 (setq ryo-modal-default-cursor-color "#65D6AD")
@@ -664,9 +682,10 @@
    ("u" undo)
    ("c" cua-selection-mode)
    ("b" (("b" bookmark-set)
-         ("SPC" bookmark-bmenu-list)))
-   ("g" dgl-git-grep)
-   ("G" dgl-grep)
+	 ("SPC" bookmark-bmenu-list)))
+   ("g" goto-line)
+   ("h" dgl-git-grep)
+   ("H" dgl-grep)
    ("t" dgl-insert-todo)
    ("n" dgl-insert-note)
    )
@@ -725,6 +744,7 @@
 (set-face-attribute 'font-lock-string-face nil :foreground "#2CB1BC")
 (set-face-attribute 'font-lock-type-face nil :foreground "#D6B58D")
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
+(set-face-attribute 'font-lock-preprocessor-face nil :foreground "#625D52")
 (set-face-attribute 'region nil :background "#24335E")
 ;(set-face-attribute 'mode-line nil :background "#93876c")
 ;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
@@ -765,4 +785,3 @@
 ;    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
 (add-hook 'window-setup-hook 'post-load-stuff t)
 ;)
-
