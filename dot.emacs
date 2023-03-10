@@ -474,6 +474,7 @@
 (define-key global-map "\eN" 'previous-error)
 
 (define-key global-map "\eg" 'goto-line)
+(define-key global-map "\eG" 'dgl-git-find-file)
 (define-key global-map "\eh" 'dgl-git-grep)
 (define-key global-map "\eH" 'dgl-grep)
 (define-key global-map "\ej" 'imenu)
@@ -635,10 +636,21 @@
   (save-column
     (kill-whole-line)))
 
+(defun dgl-git-find-file ()
+  "Find file with git"
+  (interactive)
+  (let* ((command (read-from-minibuffer "Run git ls-files: "
+				       (cons "git ls-files --recurse-submodules -c --exclude-standard **" 58)))
+	(files (shell-command-to-string  command)))
+    (find-file
+     (ido-completing-read
+      "Find in git repo: "
+      (delete "" (split-string files "\n"))))))
+       
 (defun dgl-git-grep ()
   "Run git-grep recursively"
   (interactive)
-  (let ((command (read-from-minibuffer "Run git-grep: "
+  (let ((command (read-from-minibuffer "Run git grep: "
 				       "git --no-pager grep -irHn ")))
     (grep command)))
 
@@ -684,6 +696,7 @@
    ("b" (("b" bookmark-set)
 	 ("SPC" bookmark-bmenu-list)))
    ("g" goto-line)
+   ("G" dgl-git-find-file)
    ("h" dgl-git-grep)
    ("H" dgl-grep)
    ("t" dgl-insert-todo)
