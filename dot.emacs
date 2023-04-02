@@ -28,6 +28,7 @@
   (setq dgl-makescript "build.teak")
   (setq dgl-font "Consolas-12")
   (add-to-list 'load-path "t:/emacs/plugins")
+  (setq hledger-jfile "w:/vault/ledger/private.ledger")
 )
 
 (when dgl-aquamacs
@@ -49,6 +50,7 @@
   (setq dgl-makescript "./build.teak")
   (setq dgl-font "Source Code Pro-11")
   (add-to-list 'load-path "~/.emacs.plugins")
+  (setq hledger-jfile "~/vault/ledger/private.ledger")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
   )
 
@@ -56,7 +58,7 @@
 (autoload 'go-mode		"go-mode"         "Go mode"						 t)
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
 (autoload 'markdown-mode	"markdown-mode"   "Markdown mode"					 t)
-(autoload 'json-mode		"json-mode"       "JSON mode"						 t)
+(autoload 'hledger-mode		"hledger-mode"    "hledger mode"					 t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -181,6 +183,7 @@
 	 ("\\.md$"       . markdown-mode)
 	 ("\\.js$"       . javascript-mode)
 	 ("\\.json$"     . javascript-mode)
+	 ("\\.ledger$"   . hledger-mode)
 	 ("\\workspace.dsl$" . javascript-mode)
 	 ) auto-mode-alist))
 
@@ -261,19 +264,24 @@
      "Format the given file as a header file."
      (interactive)
      (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-     (insert "#if !defined(")
+     (insert "#ifndef ")
      (push-mark)
      (insert BaseFileName)
      (upcase-region (mark) (point))
      (pop-mark)
-     (insert "_H)\n")
+     (insert "_H\n")
      (insert "#define ")
      (push-mark)
      (insert BaseFileName)
      (upcase-region (mark) (point))
      (pop-mark)
      (insert "_H\n")
-     (insert "#endif")
+     (insert "#endif //")
+     (push-mark)
+     (insert BaseFileName)
+     (upcase-region (mark) (point))
+     (pop-mark)
+     (insert "_H\n")
   )
 
   (defun dgl-source-format ()
