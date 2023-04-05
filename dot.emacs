@@ -403,6 +403,13 @@
   )
 (add-hook 'text-mode-hook 'dgl-big-fun-text-hook)
 
+; Hledger mode handling
+(defun dgl-big-fun-ledger-hook ()
+  (setq tab-width 4
+	indent-tabs-mode nil)
+  )
+(add-hook 'hledger-mode-hook 'dgl-big-fun-ledger-hook)
+
 ; Window Commands
 (defun w32-restore-frame ()
     "Restore a minimized frame"
