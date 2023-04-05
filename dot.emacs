@@ -22,6 +22,7 @@
 (scroll-bar-mode -1)
 (setq shift-select-mode nil)
 (setq enable-local-variables nil)
+(setq column-number-mode t)
 (setq dgl-font "DejaVu Sans Mono-12")
 
 (when dgl-win32
