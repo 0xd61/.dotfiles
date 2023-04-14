@@ -60,6 +60,7 @@
 (autoload 'go-mode		"go-mode"         "Go mode"						 t)
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
 (autoload 'markdown-mode	"markdown-mode"   "Markdown mode"					 t)
+(autoload 'yaml-mode		"yaml-mode"       "Yaml mode"					         t)
 (autoload 'hledger-mode		"hledger-mode"    "hledger mode"					 t)
 (autoload 'todotxt		"todotxt"         "todotxt"					         t)
 
