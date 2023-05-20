@@ -30,6 +30,7 @@
   (setq dgl-font "Consolas-12")
   (add-to-list 'load-path "t:/emacs/plugins")
   (setq hledger-jfile "w:/vault/ledger/private.ledger")
+  (setq todotxt-file "w:/vault/todo.txt")
 )
 
 (when dgl-aquamacs
@@ -60,6 +61,7 @@
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
 (autoload 'markdown-mode	"markdown-mode"   "Markdown mode"					 t)
 (autoload 'hledger-mode		"hledger-mode"    "hledger mode"					 t)
+(autoload 'todotxt		"todotxt"         "todotxt"					         t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -662,7 +664,7 @@
      (ido-completing-read
       "Find in git repo: "
       (delete "" (split-string files "\n"))))))
-       
+
 (defun dgl-git-grep ()
   "Run git-grep recursively"
   (interactive)
