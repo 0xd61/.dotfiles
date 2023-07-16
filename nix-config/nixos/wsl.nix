@@ -2,7 +2,7 @@
 
 with lib;
 let
-  nixos-wsl = import "${fetchTarball { url = "https://github.com/nix-community/NixOS-WSL/archive/17f1ff26c7540e6bbd13e5cb7cc387310b4ec5ae.tar.gz"; sha256 = "sha256:0njm448mp2b98v2a9ja2canx8hwj2gnb5d4bpaxlz4ihj4m5pgqj"; } }";
+  nixos-wsl = import "${fetchTarball { url = "https://github.com/nix-community/NixOS-WSL/archive/20a1f182aed3d2bbc72f62f5814fc3dd34a1cf0c.tar.gz"; sha256 = "sha256:0fzvf90ms3n04n8iamgx26j66zz3p7jqkkjhs9s6qd38yk8jdxqb"; } }";
   common-packages = import ./packages.nix { pkgs = pkgs; };
 in
 {
@@ -13,7 +13,6 @@ in
 
   wsl = {
     enable = true;
-    automountPath = "/mnt";
     defaultUser = "dgl";
     startMenuLaunchers = true;
 
@@ -22,7 +21,9 @@ in
 
     # Enable integration with Docker Desktop (needs to be installed)
     docker-desktop.enable = true;
+    nativeSystemd = true;
 
+    wslConf.automount.root = "/mnt";
     wslConf.interop.appendWindowsPath = false;
   };
 
