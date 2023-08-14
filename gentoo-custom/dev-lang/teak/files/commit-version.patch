@@ -1,0 +1,13 @@
+diff --git a/build.teak b/build.teak
+index c630d1d..cb276e2
+--- a/build.teak
++++ b/build.teak
+@@ -62,7 +62,7 @@ void Start() {
+ 	bool okay;
+ 	str executable;
+ 	str moduleCompilerTemplate;
+-	str commit = StringSplitByCharacter(StringSplitByCharacter(SystemShellEvaluate("git log"), "\n", false)[0], " ", false)[1];
++	str commit = "b258ee8df6fce699612797804f9acb1f28da5bf9";
+ 
+ 	ProcessBaseModule();
+ 
