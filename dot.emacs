@@ -25,10 +25,15 @@
 (setq column-number-mode t)
 (setq dgl-font "DejaVu Sans Mono-12")
 
+(setq default-buffer-file-coding-system 'utf-8-unix)
+
 (when dgl-win32
   (setq dgl-makescript "build.teak")
   (setq dgl-font "Consolas-12")
-  (add-to-list 'load-path "t:/emacs/plugins")
+  ;(add-to-list 'load-path "t:/emacs/plugins")
+  (let ((default-directory  "t:/emacs/plugins"))
+    (normal-top-level-add-subdirs-to-load-path))
+  (setq package-user-dir "t:/emacs/packages")
   (setq hledger-jfile "w:/vault/ledger/private.ledger")
   (setq todotxt-file "w:/vault/todo.txt")
 )
@@ -51,18 +56,23 @@
 (when dgl-linux
   (setq dgl-makescript "./build.teak")
   (setq dgl-font "Source Code Pro-11")
-  (add-to-list 'load-path "~/.emacs.plugins")
+  ;(add-to-list 'load-path "~/.emacs.d/plugins")
+  (let ((default-directory  "~/.emacs.d/plugins"))
+    (normal-top-level-add-subdirs-to-load-path))
+  (setq package-user-dir "~/.emacs.d/packages")
   (setq hledger-jfile "~/vault/ledger/private.ledger")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
   )
 
 ; Load plugins
-(autoload 'go-mode		"go-mode"         "Go mode"						 t)
+; Upstream Packages
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+; Local Packages/Plugins
+(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
-(autoload 'markdown-mode	"markdown-mode"   "Markdown mode"					 t)
-(autoload 'yaml-mode		"yaml-mode"       "Yaml mode"					         t)
-(autoload 'hledger-mode		"hledger-mode"    "hledger mode"					 t)
-(autoload 'todotxt		"todotxt"         "todotxt"					         t)
 
 ; Turn off the toolbar
 (tool-bar-mode 0)
@@ -113,7 +123,7 @@
   (interactive)
   (find-file dgl-todo-file)
 )
-(define-key global-map "\et" 'load-todo)
+(define-key global-map "\et" 'dgl-insert-todo)
 
 (defun insert-timeofday ()
    (interactive "*")
@@ -134,7 +144,7 @@
   (newline-and-indent)
   (end-of-buffer)
 )
-(define-key global-map "\eT" 'load-log)
+(define-key global-map "\eT" 'dgl-insert-note)
 
 ; no screwing with my middle mouse button
 (global-unset-key [mouse-2])
@@ -188,6 +198,7 @@
 	 ("\\.js$"       . javascript-mode)
 	 ("\\.json$"     . javascript-mode)
 	 ("\\.ledger$"   . hledger-mode)
+	 ("\\.ebuild$"   . ebuild-mode)
 	 ("\\workspace.dsl$" . javascript-mode)
 	 ) auto-mode-alist))
 
@@ -718,8 +729,8 @@
    ("G" dgl-git-find-file)
    ("h" dgl-git-grep)
    ("H" dgl-grep)
-   ("t" dgl-insert-todo)
-   ("n" dgl-insert-note)
+   ("t" load-todo)
+   ("T" load-log)
    )
 
 ; Startup windowing
