@@ -1,0 +1,14 @@
+
+# Kernel
+sys-kernel/gentoo-sources symlink
+
+# Docker
+app-emulation/docker apparmor
+app-emulation/runc apparmor
+app-emulation/libvirt apparmor virt-network
+
+# App alternatives
+app-alternatives/gzip -reference pigz
+
+# Openvpn
+net-vpn/openvpn iproute2

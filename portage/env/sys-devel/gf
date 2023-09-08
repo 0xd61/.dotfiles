@@ -1,0 +1,5 @@
+# gf extension override
+
+src_configure() {
+    cp -r /opt/gf/extensions_v5/* ${S}
+}
