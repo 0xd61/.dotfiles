@@ -1,8 +1,0 @@
-# Globally disable the unwanted USE flags which were enabled by the profile
-*/* -bluetooth
-
-# required by app-admin/pass-1.7.4-r2::gentoo
-# required by @dgl-base
-# required by @selected
-# required by @world (argument)
->=media-gfx/qrencode-4.1.1 png

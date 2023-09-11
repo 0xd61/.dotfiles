@@ -1,4 +1,3 @@
-
 # Kernel
 sys-kernel/gentoo-sources symlink
 
@@ -12,3 +11,17 @@ app-alternatives/gzip -reference pigz
 
 # Openvpn
 net-vpn/openvpn iproute2
+
+# Emacs
+app-editors/emacs jit gtk xft gui -X
+app-emacs/emacs-common gui
+
+# LVM
+sys-fs/lvm2 lvm
+
+# Doas
+app-admin/doas persist
+
+# Sound
+media-video/pipewire sound-server
+media-sound/pulseaudio -daemon

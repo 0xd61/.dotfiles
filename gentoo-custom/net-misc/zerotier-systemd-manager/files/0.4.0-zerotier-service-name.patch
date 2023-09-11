@@ -1,0 +1,14 @@
+diff --git a/contrib/zerotier-systemd-manager.service b/contrib/zerotier-systemd-manager.service
+index 3f8ed54..6f989cf 100644
+--- a/contrib/zerotier-systemd-manager.service
++++ b/contrib/zerotier-systemd-manager.service
+@@ -1,7 +1,7 @@
+ [Unit]
+ Description=Update zerotier per-interface DNS settings
+-Requires=zerotier-one.service
+-After=zerotier-one.service
++Requires=zerotier.service
++After=zerotier.service
+ 
+ [Service]
+ Type=oneshot

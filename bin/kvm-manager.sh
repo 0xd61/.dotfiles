@@ -164,7 +164,7 @@ start_vm_sliently() {
         fi
 
         ${QEMU_SYSTEM} \
-        				${OPT_KVM} \
+        		${OPT_KVM} \
                 ${OPT_HDA} \
                 ${OPT_HDB} \
                 ${OPT_DRIVE} \
@@ -416,7 +416,7 @@ cad)
 
 spice)
 		# TODO(dgl): make this work without sudo
-		sudo remote-viewer --spice-disable-effects=all spice+unix://./run/vm_spice.socket
+    doas remote-viewer --spice-disable-effects=all spice+unix://./run/vm_spice.socket
 		;;
 vnc)
 	vncviewer localhost:${VNC_PORT} &

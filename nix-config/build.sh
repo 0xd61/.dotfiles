@@ -31,7 +31,7 @@ update() {
 build_system() {
     local FLAKE="${1}"
     echo -e "${GREEN_TERMINAL_OUTPUT}Building system for ${FLAKE}${CLEAR}"
-    nixos-rebuild switch --flake "./#${FLAKE}"
+    nixos-rebuild --install-bootloader boot --flake "./#${FLAKE}"
 }
 
 build_user() {

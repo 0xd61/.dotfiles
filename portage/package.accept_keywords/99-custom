@@ -1,0 +1,5 @@
+net-misc/teamviewer ~amd64
+net-misc/zerotier ~amd64
+www-client/google-chrome ~amd64
+sys-kernel/gentoo-sources ~amd64
+sys-kernel/zen-sources ~amd64

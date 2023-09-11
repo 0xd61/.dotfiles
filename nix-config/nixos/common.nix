@@ -1,9 +1,5 @@
 { config, pkgs, lib, unstable, ...}:
 let
-  hostblock = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/fakenews-gambling-porn/hosts";
-    hash = "sha256-VQHuSpp6r2SrYKS0BFo0l+uRnMdBpwNHSuGaQ3ryCaM=";
-  };
 in
 {
   nix.settings = {
@@ -34,7 +30,6 @@ in
   time.timeZone = "America/Asuncion";
 
   networking.hostName = "localdev";
-  networking.hostFiles = [ hostblock ];
 
   networking = {
     useDHCP = false;

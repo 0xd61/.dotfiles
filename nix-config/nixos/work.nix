@@ -21,13 +21,6 @@ in
     device = "nodev";
   };
 
-  boot.initrd.luks.devices = {
-    crypted = {
-      device = "/dev/disk/by-uuid/45dce0a7-ac47-42ce-b99e-3d4d2c153731";
-      preLVM = true;
-    };
-  };
-
   systemd.network.networks = let
     networkConfig = {
       DHCP = "yes";
@@ -51,13 +44,13 @@ in
     };
     "50-zerotier" = {
       enable = true;
-      name = "ztukuqoxti";
+      name = "ztc3qrtb6r";
       networkConfig = {
         DHCP = "no";
         DNSSEC = "allow-downgrade";
         DNSOverTLS = "no";
-        DNS = [ "10.3.1.1" ];
-        Domains = "~consul ~1.244.10.in-addr.arpa";
+        DNS = [ "10.0.1.80" ];
+        Domains = "~avantys.de ~143.144.10.in-addr.arpa";
       };
       extraConfig = ''
         ConfigureWithoutCarrier=true
@@ -74,7 +67,6 @@ in
     pkgs.obsidian
     pkgs.testdisk
     pkgs.pigz
-    pkgs.openvpn_24
     pkgs.update-systemd-resolved
   ];
 

@@ -1,0 +1,23 @@
+Only in dmenu-5.0: config.h
+diff -up dmenu-5.0.old/dmenu.c dmenu-5.0/dmenu.c
+--- dmenu-5.0.old/dmenu.c	2020-09-02 16:37:07.000000000 +0000
++++ dmenu-5.0/dmenu.c	2021-11-02 20:44:55.663240770 +0000
+@@ -349,6 +349,7 @@ keypress(XKeyEvent *ev)
+ 			insert(NULL, 0 - cursor);
+ 			break;
+ 		case XK_w: /* delete word */
++		case XK_BackSpace:
+ 			while (cursor > 0 && strchr(worddelimiters, text[nextrune(-1)]))
+ 				insert(NULL, nextrune(-1) - cursor);
+ 			while (cursor > 0 && !strchr(worddelimiters, text[nextrune(-1)]))
+@@ -405,6 +406,10 @@ insert:
+ 		cursor = nextrune(+1);
+ 		/* fallthrough */
+ 	case XK_BackSpace:
++		if (ev->state & ControlMask) {
++			insert(buf, 0);
++			break;
++		}
+ 		if (cursor == 0)
+ 			return;
+ 		insert(NULL, nextrune(-1) - cursor);
