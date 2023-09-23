@@ -82,3 +82,11 @@ tags
 # End of https://www.gitignore.io/api/vim,emacs
 
 result
+
+/dot.fonts/Input_Fonts/
+/dot.fonts/ChangeLog.txt
+/dot.emacs.d/eln-cache/
+/dot.emacs.d/history
+/dot.emacs.d/ido.last
+/dot.emacs.d/places
+/dot.emacs.d/recentf

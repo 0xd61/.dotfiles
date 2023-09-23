@@ -1,3 +1,4 @@
 >x11-wm/dwm-6.3
 >x11-misc/dmenu-5.0
 dev-lang/rust # use the binary version
+>dev-qt/qtwebengine-5.15.10_p20230623

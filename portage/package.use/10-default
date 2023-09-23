@@ -27,3 +27,85 @@
 # required by @selected
 # required by @world (argument)
 >=dev-libs/libdbusmenu-16.04.0-r2 gtk3
+# required by media-gfx/freecad-0.20.2-r1::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-libs/OpenNI2-2.2_beta2-r1 opengl
+# required by media-gfx/freecad-0.20.2-r1::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-libs/xerces-c-3.2.4-r2 icu
+# required by media-gfx/freecad-0.20.2-r1::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+=sci-libs/opencascade-7.6.3-r2 vtk json
+# required by media-gfx/freecad-0.20.2-r1::gentoo[fem]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=sci-libs/vtk-9.2.5 qt5
+# required by media-gfx/freecad-0.20.2-r1::gentoo[gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-qt/qtwebengine-5.15.10_p20230623 widgets
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-python/pyside2-5.15.10 svg webengine webchannel positioning quick qml designer widgets xml
+# required by dev-python/pyside2-5.15.10::gentoo[gui]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-qt/qtgui-5.15.10-r1 jpeg
+# required by dev-python/pyside2-5.15.10::gentoo[quick]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-qt/qtquickcontrols2-5.15.10 widgets
+# required by dev-qt/qtwebengine-5.15.10_p20230623::gentoo
+# required by dev-python/pyside2-5.15.10::gentoo[webengine]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-qt/qtwebchannel-5.15.10 qml
+# required by dev-python/matplotlib-3.7.2::gentoo[-test]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-python/pillow-10.0.0 webp
+# required by dev-qt/qtwebengine-5.15.10_p20230623::gentoo
+# required by dev-python/pyside2-5.15.10::gentoo[webengine]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-libs/libxml2-2.11.4 icu
+# required by sci-libs/vtk-9.2.5::gentoo
+# required by sci-libs/opencascade-7.6.3-r2::gentoo[vtk]
+# required by media-gfx/freecad-0.20.2-r1::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=sci-libs/cgnslib-4.3.0-r2 hdf5
+# required by dev-python/matplotlib-3.7.2::gentoo[-test]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=virtual/imagemagick-tools-0-r1 jpeg tiff
+# required by virtual/imagemagick-tools-0-r1::gentoo
+# required by dev-python/matplotlib-3.7.2::gentoo[-test]
+# required by media-gfx/freecad-0.20.2-r1::gentoo[python_single_target_python3_11,gui]
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=media-gfx/imagemagick-7.1.1.6-r1 jpeg tiff

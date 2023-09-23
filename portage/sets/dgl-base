@@ -17,3 +17,6 @@ sys-devel/gf
 sys-process/htop
 sys-process/lsof
 x11-base/xorg-server
+app-portage/gentoolkit
+media-gfx/flameshot
+sys-block/zram-init

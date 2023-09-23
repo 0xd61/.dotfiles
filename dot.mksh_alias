@@ -1,5 +1,5 @@
 \\builtin alias r="ranger"
-#\\builtin alias sudo="doas"
+\\builtin alias sudo="doas"
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
 \\builtin alias lite="lite ./ &"
 \\builtin alias em="emacs . &"

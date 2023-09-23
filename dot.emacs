@@ -55,7 +55,7 @@
 
 (when dgl-linux
   (setq dgl-makescript "./build.teak")
-  (setq dgl-font "Source Code Pro-11")
+  (setq dgl-font "Input Mono Narrow-12")
   ;(add-to-list 'load-path "~/.emacs.d/plugins")
   (let ((default-directory  "~/.emacs.d/plugins"))
     (normal-top-level-add-subdirs-to-load-path))

@@ -13,7 +13,7 @@ app-alternatives/gzip -reference pigz
 net-vpn/openvpn iproute2
 
 # Emacs
-app-editors/emacs jit gtk xft gui -X
+app-editors/emacs jit gtk xft gui
 app-emacs/emacs-common gui
 
 # LVM
@@ -25,3 +25,6 @@ app-admin/doas persist
 # Sound
 media-video/pipewire sound-server
 media-sound/pulseaudio -daemon
+
+# FreeCAD
+sci-libs/hdf5 -threads
