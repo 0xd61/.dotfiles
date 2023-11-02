@@ -25,6 +25,7 @@
 (setq column-number-mode t)
 (setq dgl-font "DejaVu Sans Mono-12")
 
+(setq ledger-reconcile-default-commodity "Gs")
 (setq default-buffer-file-coding-system 'utf-8-unix)
 
 (when dgl-win32
@@ -34,7 +35,7 @@
   (let ((default-directory  "t:/emacs/plugins"))
     (normal-top-level-add-subdirs-to-load-path))
   (setq package-user-dir "t:/emacs/packages")
-  (setq hledger-jfile "w:/vault/ledger/private.ledger")
+  (setq hledger-jfile "w:/vault/finance/journal.ledger")
   (setq todotxt-file "w:/vault/todo.txt")
 )
 
@@ -60,7 +61,7 @@
   (let ((default-directory  "~/.emacs.d/plugins"))
     (normal-top-level-add-subdirs-to-load-path))
   (setq package-user-dir "~/.emacs.d/packages")
-  (setq hledger-jfile "~/vault/ledger/private.ledger")
+  (setq hledger-jfile "~/vault/finance/journal.ledger")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
   )
 
@@ -197,7 +198,7 @@
 	 ("\\.md$"       . markdown-mode)
 	 ("\\.js$"       . javascript-mode)
 	 ("\\.json$"     . javascript-mode)
-	 ("\\.ledger$"   . hledger-mode)
+	 ("\\.ledger$"   . ledger-mode)
 	 ("\\.ebuild$"   . ebuild-mode)
 	 ("\\workspace.dsl$" . javascript-mode)
 	 ) auto-mode-alist))
@@ -748,16 +749,24 @@
  '(auto-save-timeout 0)
  '(auto-show-mode t t)
  '(delete-auto-save-files nil)
- '(delete-old-versions (quote other))
+ '(delete-old-versions 'other)
  '(imenu-auto-rescan t)
  '(imenu-auto-rescan-maxout 500000)
  '(kept-new-versions 5)
  '(kept-old-versions 5)
- '(make-backup-file-name-function (quote ignore))
+ '(ledger-reports
+   '(("test" "ledger balance")
+     ("bal" "%(binary) -f %(ledger-file) bal")
+     ("reg" "%(binary) -f %(ledger-file) reg")
+     ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+     ("account" "%(binary) -f %(ledger-file) reg %(account)")))
+ '(make-backup-file-name-function 'ignore)
  '(make-backup-files nil)
  '(mouse-wheel-follow-mouse nil)
  '(mouse-wheel-progressive-speed nil)
- '(mouse-wheel-scroll-amount (quote (15)))
+ '(mouse-wheel-scroll-amount '(15))
+ '(package-selected-packages
+   '(ledger-mode todotxt ryo-modal markdown-mode hledger-mode go-mode))
  '(version-control nil))
 
 (define-key global-map "\t" 'dabbrev-expand)
@@ -789,6 +798,7 @@
 (set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
 (set-face-attribute 'font-lock-preprocessor-face nil :foreground "#625D52")
 (set-face-attribute 'region nil :background "#24335E")
+(set-face-attribute 'highlight nil :background "#01282d")
 ;(set-face-attribute 'mode-line nil :background "#93876c")
 ;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
 (set-face-attribute 'fringe nil :background "#01282d")
@@ -828,3 +838,9 @@
 ;    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
 (add-hook 'window-setup-hook 'post-load-stuff t)
 ;)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
