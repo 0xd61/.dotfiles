@@ -173,7 +173,9 @@
 
 (setq auto-mode-alist
       (append
-       '(("\\.cpp$"      . c++-mode)
+       '(("\\workspace.dsl$" . javascript-mode)
+	 ("\\todo.txt$"  . todotxt-mode)
+	 ("\\.cpp$"      . c++-mode)
 	 ("\\.hin$"      . c++-mode)
 	 ("\\.cin$"      . c++-mode)
 	 ("\\.inl$"      . c++-mode)
@@ -200,7 +202,6 @@
 	 ("\\.json$"     . javascript-mode)
 	 ("\\.ledger$"   . ledger-mode)
 	 ("\\.ebuild$"   . ebuild-mode)
-	 ("\\workspace.dsl$" . javascript-mode)
 	 ) auto-mode-alist))
 
 ; C++ indentation style
@@ -417,13 +418,6 @@
   (define-key text-mode-map "\eS" 'save-buffer)
   )
 (add-hook 'text-mode-hook 'dgl-big-fun-text-hook)
-
-; Hledger mode handling
-(defun dgl-big-fun-ledger-hook ()
-  (setq tab-width 4
-	indent-tabs-mode nil)
-  )
-(add-hook 'hledger-mode-hook 'dgl-big-fun-ledger-hook)
 
 ; Window Commands
 (defun w32-restore-frame ()
