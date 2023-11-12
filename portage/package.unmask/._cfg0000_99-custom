@@ -1,7 +1,0 @@
-# required by sys-devel/gcc:5.3.0 (argument)
-# /var/db/repos/gentoo/profiles/package.mask:
-# Sam James <sam@gentoo.org> (2022-05-28)
-# GCC 9 and older no longer receive upstream support or fixes for
-# bugs. Please switch to a newer GCC version using gcc-config.
-# The lowest supported version of GCC is GCC 10.
-=sys-devel/gcc-5.3.0

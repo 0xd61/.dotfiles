@@ -2,3 +2,5 @@ net-misc/teamviewer TeamViewer
 net-misc/zerotier BUSL-1.1
 sys-kernel/linux-firmware @BINARY-REDISTRIBUTABLE
 www-client/google-chrome google-chrome
+net-print/hplip-plugin hplip-plugin
+app-text/obsidian Obsidian-EULA

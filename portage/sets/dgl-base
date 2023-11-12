@@ -20,3 +20,11 @@ x11-base/xorg-server
 app-portage/gentoolkit
 media-gfx/flameshot
 sys-block/zram-init
+net-vpn/protonvpn-cli
+sys-fs/ntfs3g
+app-misc/jq
+media-libs/libsdl2
+net-misc/streamlink
+media-video/mpv
+app-office/ledger
+app-text/obsidian

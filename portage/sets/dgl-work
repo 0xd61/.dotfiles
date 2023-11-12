@@ -8,6 +8,7 @@ net-misc/teamviewer
 net-misc/zerotier
 net-misc/zerotier-systemd-manager
 net-print/cups
+net-print/brlaser
 net-vpn/openvpn
 sys-apps/lm-sensors
 sys-boot/grub
@@ -28,3 +29,7 @@ x11-terms/alacritty
 x11-wm/dwm
 sys-devel/clang
 media-gfx/freecad
+app-office/libreoffice-bin
+virtual/wine
+net-libs/nodejs
+app-arch/dpkg

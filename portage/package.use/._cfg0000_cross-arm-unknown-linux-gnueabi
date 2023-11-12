@@ -1,0 +1,8 @@
+cross-arm-unknown-linux-gnueabi/binutils -multilib
+cross-arm-unknown-linux-gnueabi/linux-headers -selinux -multilib
+cross-arm-unknown-linux-gnueabi/glibc -selinux -libraries -multilib
+cross-arm-unknown-linux-gnueabi/gcc -selinux -boundschecking -d -gcj -gtk -libffi -mudflap -objc -objc++ -objc-gc -sanitize -multilib
+# required by net-print/hplip-3.23.5::gentoo[snmp,-minimal]
+# required by net-print/hplip-plugin-3.23.5::gentoo
+# required by net-print/hplip-plugin (argument)
+>=net-dns/avahi-0.8-r7 python

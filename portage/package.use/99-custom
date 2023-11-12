@@ -28,3 +28,9 @@ media-sound/pulseaudio -daemon
 
 # FreeCAD
 sci-libs/hdf5 -threads
+
+# Remmina
+net-misc/remmina rdp
+
+# Nodejs
+net-libs/nodejs npm
