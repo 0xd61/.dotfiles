@@ -23,6 +23,7 @@ ln -s $BASEDIR/dot.tmux.conf $HOME/.tmux.conf
 [ -d "$HOME/.emacs.d" ] && unlink $HOME/.emacs.d; ln -s $BASEDIR/dot.emacs.d $HOME/.emacs.d
 ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.vim" ] && unlink $HOME/.vim; ln -s $BASEDIR/dot.vim $HOME/.vim
+[ -d "$HOME/config/nvim" ] && unlink $HOME/.config/nvim; ln -s $BASEDIR/dot.nvim $HOME/.config/nvim
 [ -d "$HOME/.dwm-status" ] && unlink $HOME/.dwm-status; ln -s $BASEDIR/dot.dwm-status $HOME/.dwm-status
 [ -d "$HOME/.local/bin" ] && unlink $HOME/.local/bin; ln -s $BASEDIR/bin $HOME/.local/bin
 #[ -d "$HOME/.config/ranger" ] && unlink $HOME/.config/ranger; ln -s $BASEDIR/ranger $HOME/.config/ranger
