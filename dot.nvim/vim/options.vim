@@ -41,6 +41,7 @@ set mat=2 " How many tenths of a second to blink when matching brackets
 "set splitbelow " new splits are down
 set splitright " new vsplits are to the right
 set history=10000
+set cursorline
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text

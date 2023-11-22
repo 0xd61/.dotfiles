@@ -21,9 +21,6 @@ if !exists("g:dgl_terminalcolors")
   let g:dgl_termcolors = 256
 endif
 
-" == COLOR PALETTE == 
-"
-" TODO: Cterm values here are OG from Challenger Deep
 
 " Space
 let s:space0 = { "gui": "#100E23", "cterm": "232", "cterm16": "0"}
@@ -55,32 +52,54 @@ let s:dark_purple = { "gui": "#7676ff", "cterm": "75", "cterm16": "12"}
 let s:cyan = { "gui": "#ABF8F7", "cterm": "122", "cterm16": "6"}
 let s:dark_cyan = { "gui": "#63f2f1", "cterm": "121", "cterm16": "14"}
 
+
+" == COLOR PALETTE == 
+"
+" TODO: Cterm values here are OG from Challenger Deep
+
 " dgl
-let s:hl_line = { "gui": "#013137", "cterm": "121", "cterm16": "14"}
-let s:face = { "gui": "#D6B58D", "cterm": "121", "cterm16": "14"}
-let s:comment = { "gui": "#31B72C", "cterm": "121", "cterm16": "14"}
-let s:constant = { "gui": "#65D6AD", "cterm": "121", "cterm16": "14"}
-let s:doc = { "gui": "#E8E6E1", "cterm": "121", "cterm16": "14"}
-let s:function = { "gui": "#D6B58D", "cterm": "121", "cterm16": "14"}
-let s:keyword = { "gui": "#E8E6E1", "cterm": "121", "cterm16": "14"}
-let s:string = { "gui": "#2CB1BC", "cterm": "121", "cterm16": "14"}
-let s:type = { "gui": "#D6B58D", "cterm": "121", "cterm16": "14"}
-let s:variable = { "gui": "#D6B58D", "cterm": "121", "cterm16": "14"}
-let s:preprocessor = { "gui": "#625D52", "cterm": "121", "cterm16": "14"}
+let s:green = { "gui": "#31B72C", "cterm": "121", "cterm16": "14"}
+let s:teal0 = { "gui": "#012326", "cterm": "121", "cterm16": "14"}
+let s:teal1 = { "gui": "#01282d", "cterm": "121", "cterm16": "14"}
+let s:teal2 = { "gui": "#013137", "cterm": "121", "cterm16": "14"}
+let s:teal3 = { "gui": "#65D6AD", "cterm": "121", "cterm16": "14"}
 let s:region = { "gui": "#24335E", "cterm": "121", "cterm16": "14"}
-let s:highlight = { "gui": "#01282d", "cterm": "121", "cterm16": "14"}
-let s:fringe = { "gui": "#01282d", "cterm": "121", "cterm16": "14"}
-let s:border = { "gui": "#625D52", "cterm": "121", "cterm16": "14"}
-let s:cursor = { "gui": "#65D6AD", "cterm": "121", "cterm16": "14"}
-let s:background = { "gui": "#012326", "cterm": "121", "cterm16": "14"}
-let s:foreground = { "gui": "#d2b48c", "cterm": "121", "cterm16": "14"}
+let s:blue0= { "gui": "#24335E", "cterm": "121", "cterm16": "14"}
+let s:blue = { "gui": "#2CB1BC", "cterm": "121", "cterm16": "14"}
+let s:teak0 = { "gui": "#625D52", "cterm": "121", "cterm16": "14"}
+let s:teak1 = { "gui": "#d2b48c", "cterm": "121", "cterm16": "14"}
+let s:white = { "gui": "#E8E6E1", "cterm": "121", "cterm16": "14"}
+let s:red = { "gui": "#ff0000", "cterm": "121", "cterm16": "14"}
+let s:yellow = { "gui": "#ffff00", "cterm": "121", "cterm16": "14"}
 
 
-let s:bg              = s:background
-let s:bg_dark       = s:background
-let s:bg_bright         = s:border
-let s:norm            = s:foreground
-let s:norm_subtle     = s:face
+let s:comment = s:green
+let s:constant = s:teal3
+let s:string = s:blue
+let s:number = s:teak1
+let s:boolean = s:blue
+let s:float = s:teak1
+let s:identifier = s:teak1
+let s:function = s:teak1
+let s:statement = s:white
+let s:label = s:white
+let s:operator = s:teak1
+let s:keyword = s:white
+let s:preproc = s:teak0
+let s:type = s:teak1
+let s:special = s:teak1
+let s:underlined = s:blue
+let s:ignore = s:teal0
+let s:error = s:red
+let s:todo = s:red
+
+
+
+let s:bg              = s:teal0
+let s:bg_dark         = s:teal1
+let s:bg_bright       = s:teal2
+let s:norm            = s:teak1
+let s:norm_subtle     = s:teak1
 let s:visual          = s:region
 
 let s:head_a         = s:dark_blue
@@ -138,52 +157,52 @@ endfunction
 " Generated with `:help E669`
 "
 " Nested descriptions fallback to parent rule
-call s:h("Comment",       {"fg": s:norm_subtle, "gui": s:maybe_italic(""), "cterm": s:maybe_italic("")})
+call s:h("Comment",       {"fg": s:comment, "gui": s:maybe_italic(""), "cterm": s:maybe_italic("")})
 
 " * Constant any constant
-call s:h("Constant",      {"fg": s:purple})
+call s:h("Constant",      {"fg": s:constant})
 "   String  a string constant: "this is a string"
-call s:h("String",      {"fg": s:yellow})
+call s:h("String",      {"fg": s:string})
 "   Character a character constant: 'c', '\n'
 "   Number  a number constant: 234, 0xff
-call s:h("Number",    {"fg": s:dark_yellow})
+call s:h("Number",    {"fg": s:number})
 "   Boolean a boolean constant: TRUE, false
-call s:h("Boolean",    {"fg": s:dark_yellow})
+call s:h("Boolean",    {"fg": s:boolean})
 "   Float  a floating point constant: 2.3e10
-call s:h("Float",    {"fg": s:dark_yellow})
+call s:h("Float",    {"fg": s:float})
 
 " * Identifier any variable name
-call s:h("Identifier", {"fg": s:norm})
+call s:h("Identifier", {"fg": s:identifier})
 "   Function function name (also: methods for classes)
-call s:h("Function",      {"fg": s:red})
+call s:h("Function",      {"fg": s:function})
 
 " * Statement - any statement
-call s:h("Statement",  {"fg": s:green})
+call s:h("Statement",  {"fg": s:statement})
 "   Conditional if, then, else, endif, switch, etc.
 "   Repeat  for, do, while, etc.
 "   Label  case, default, etc.
-call s:h("Label",        {"fg": s:dark_blue})
+call s:h("Label",        {"fg": s:label})
 "   Operator "sizeof", "+", "*", etc.
-call s:h("Operator",     {"fg": s:dark_cyan})
+call s:h("Operator",     {"fg": s:operator})
 "   Keyword any other keyword
-call s:h("Keyword",       {"fg": s:green})
+call s:h("Keyword",       {"fg": s:keyword})
 "   Exception try, catch, throw
 
 " * PreProc generic Preprocessor
-call s:h("PreProc",       {"fg": s:green})
+call s:h("PreProc",       {"fg": s:preproc})
 "   Include preprocessor #include
 "   Define  preprocessor #define
 "   Macro  same as Define
 "   PreCondit preprocessor #if, #else, #endif, etc.
 
 " * Type  int, long, char, etc.
-call s:h("Type",          {"fg": s:purple})
+call s:h("Type",          {"fg": s:type})
 "   StorageClass static, register, volatile, etc.
 "   Structure struct, union, enum, etc.
 "   Typedef A typedef
 
 " * Special any special symbol
-call s:h("Special",       {"fg": s:cyan})
+call s:h("Special",       {"fg": s:special})
 "   SpecialChar special character in a constant
 "   Tag  you can use CTRL-] on this
 "   Delimiter character that needs attention
@@ -191,34 +210,35 @@ call s:h("Special",       {"fg": s:cyan})
 "   Debug  debugging statements
 
 " * Underlined text that stands out, HTML links
-call s:h("Underlined",    {"fg": s:norm, "gui": "underline", "cterm": "underline"})
+call s:h("Underlined",    {"fg": s:underlined, "gui": "underline", "cterm": "underline"})
 
 " * Ignore  left blank, hidden  |hl-Ignore|
-call s:h("Ignore",        {"fg": s:bg})
+call s:h("Ignore",        {"fg": s:ignore})
 
 " * Error  any erroneous construct
-call s:h("Error",         {"fg": s:dark_red, "bg": s:bg_dark , "gui": "bold", "cterm": "bold"})
+call s:h("Error",         {"fg": s:error, "gui": "bold", "cterm": "bold"})
 
 " * Todo  anything that needs extra attention; mostly the
 "    keywords TODO FIXME and XXX
-call s:h("Todo",          {"fg": s:dark_yellow, "bg": s:bg, "gui": "bold", "cterm": "bold"})
+call s:h("Todo",          {"fg": s:todo, "gui": "bold", "cterm": "bold"})
 
 
 " == UI CHROME ==
 " Generated with `:help highlight-default`
 "
 " ColorColumn - Used for the columns set with 'colorcolumn'.
-call s:h("ColorColumn",   {"bg": s:space2})
+call s:h("ColorColumn",   {"bg": s:teal2})
 " Conceal - Placeholder characters substituted for concealed
-call s:h("Conceal",       {"fg": s:norm})
+call s:h("Conceal",       {"fg": s:teal3})
 " Cursor - Character under the cursor.
-call s:h("Cursor",        {"bg": s:blue, "fg": s:bg_bright})
+call s:h("Cursor",        {"bg": s:teal3, "fg": s:teak1})
+call s:h("Cursor2",        {"bg": s:teak1, "fg": s:teal3})
 " CursorColumn - Screen-column at the cursor, when 'cursorcolumn' is set.
-call s:h("CursorColumn",  {"bg": s:bg_dark})
+call s:h("CursorColumn",  {"bg": s:teal0})
 " CursorLine - Screen-line at the cursor, when 'cursorline' is set.
-call s:h("CursorLine",    {"bg": s:bg_dark})
+call s:h("CursorLine",    {"bg": s:teal2})
 " Directory -Directory names (and other special names in listings).
-call s:h("Directory",     {"fg": s:purple})
+call s:h("Directory",     {"fg": s:teak0})
 " DiffAdd - Diff mode: Added line. |diff.txt|
 call s:h("DiffAdd",       {"bg": s:diff_add})
 " DiffChange - Diff mode: Changed line. |diff.txt|
@@ -229,34 +249,34 @@ call s:h("DiffDelete",    {"fg": s:visual, "bg": s:diff_del})
 call s:h("DiffText",      {"bg": s:diff_changed, "gui": "underline"})
 " EndOfBuffer	Filler lines (~) after the end of the buffer.
 " ErrorMsg - Error messages on the command line.
-call s:h("ErrorMsg",      {"fg": s:dark_red})
+call s:h("ErrorMsg",      {"fg": s:red})
 " WinSeparator - Separators between window splits.
-call s:h("WinSeparator",     {"fg": s:bg_dark})
+call s:h("WinSeparator",     {"fg": s:teak0})
 " Folded - Line used for closed folds.
-call s:h("Folded",        {"fg": s:dark_purple})
+call s:h("Folded",        {"fg": s:teal2})
 " FoldColumn - 'foldcolumn'
-call s:h("FoldColumn",    {"fg": s:dark_purple})
+call s:h("FoldColumn",    {"fg": s:teal2})
 " SignColumn - Column where |signs| are displayed.
 call s:h("SignColumn",    {"fg": s:green})
 " IncSearch - 'incsearch' highlighting; also used for the text replaced with
-call s:h("IncSearch",     {"bg": s:yellow, "fg": s:bg})
+call s:h("IncSearch",     {"bg": s:teak1, "fg": s:blue0})
 " Substitute - |:substitute| replacement text highlighting.
 " LineNr -Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-call s:h("LineNr",        {"fg": s:space4})
+call s:h("LineNr",        {"fg": s:teak0})
 " CursorLineNr - Like LineNr when 'cursorline' is set and 'cursorlineopt'
-call s:h("CursorLineNr",  {"bg": s:bg_dark, "fg": s:blue, "gui": "bold"})
+call s:h("CursorLineNr",  {"fg": s:teak0, "gui": "bold"})
 " CursorLineFold - Like FoldColumn when 'cursorline' is set for the cursor line.
 " MatchParen - Character under the cursor or just before it, if it
-call s:h("MatchParen",    {"bg": s:bg_dark, "fg": s:purple, "gui": "bold", "cterm": "bold"})
+call s:h("MatchParen",    {"bg": s:blue0, "gui": "bold", "cterm": "bold"})
 " ModeMsg - 'showmode' message (e.g., "-- INSERT --").
-call s:h("ModeMsg",       {"fg": s:norm_subtle, "gui": "bold", "cterm": "bold"})
+call s:h("ModeMsg",       {"fg": s:teak1, "gui": "bold", "cterm": "bold"})
 " MsgArea - Area for messages and cmdline.
 " MoreMsg - |more-prompt|
 hi! link MoreMsg ModeMsg
 " NonText - '@' at the end of the window, characters from 'showbreak'
-call s:h("NonText",       {"fg": s:bg_bright})
+call s:h("NonText",       {"fg": s:teal2})
 " Normal - Normal text.
-call s:h("Normal",        {"bg": s:bg, "fg": s:norm})
+call s:h("Normal",        {"bg": s:bg, "fg": s:teak1})
 " NormalFloat - Normal text in floating windows.
 " Pmenu - Popup menu: Normal item.
 call s:h("Pmenu",         {"fg": s:norm, "bg": s:space2})
@@ -279,7 +299,7 @@ if has("gui_running")
   call s:h("SpellBad",    {"gui": "underline", "sp": s:dark_red})
 " SpellCap - Word that should start with a capital. |spell|
   call s:h("SpellCap",    {"gui": "underline", "sp": s:green})
-" SpellLocal - Word that is recognized by the spellchecker as one that is
+" SpellLocal - Word that is recognized by spellchecker as one that is
   call s:h("SpellLocal",  {"gui": "underline", "sp": s:dark_green})
 " SpellRare - Word that is recognized by the spellchecker as one that is
   call s:h("SpellRare",   {"gui": "underline", "sp": s:red})
@@ -296,13 +316,13 @@ else
   call s:h("SpellLocal",  {"gui": "underline", "sp": s:dark_green})
 endif
 " StatusLine - Status line of current window.
-call s:h("StatusLine",    {"bg": s:bg, "fg": s:norm})
+call s:h("StatusLine",    {"bg": s:teak1, "fg": s:teal0})
 " StatusLineNC - Status lines of not-current windows.
-call s:h("StatusLineNC",  {"bg": s:bg})
+call s:h("StatusLineNC",  {"bg": s:teal0})
 " TabLine - Tab pages line, not active tab page label.
-call s:h("TabLine",       {"fg": s:norm_subtle, "bg": s:bg})
+call s:h("TabLine",       {"fg": s:teak1, "bg": s:teal1})
 " TabLineFill - Tab pages line, where there are no labels.
-call s:h("TabLineFill",   {"fg": s:norm_subtle, "bg": s:bg})
+call s:h("TabLineFill",   {"fg": s:teak1, "bg": s:teal1})
 " TabLineSel Tab pages line, active tab page label.
 call s:h("TabLineSel",    {"fg": s:norm, "bg": s:visual, "gui": "bold", "cterm": "bold"})
 " Title - Titles for output from ":set all", ":autocmd" etc.
@@ -348,14 +368,14 @@ if has('nvim')
   call s:h("DiagnosticUnderlineError", {"cterm": "undercurl", "gui": "undercurl", "fg": s:red})
 
   " Telescope support
-  call s:h("TelescopeNormal", {"fg": s:astral0})
+  call s:h("TelescopeNormal", {"fg": s:teak1})
   hi link TelescopeBorder LineNr
-  call s:h("TelescopeSelection", {"bg": s:visual, "fg": s:astral1})
+  call s:h("TelescopeSelection", {"bg": s:teal2, "fg": s:teak1})
   hi link TelescopeMatching String
-  call s:h("TelescopePreviewTitle", {"fg": s:space0, "bg": s:purple})
-  call s:h("TelescopePromptTitle", {"fg": s:space0, "bg": s:green})
+  call s:h("TelescopePreviewTitle", {"fg": s:teak1, "bg": s:teal0})
+  call s:h("TelescopePromptTitle", {"fg": s:teak1, "bg": s:teal0})
   hi link TelescopePromptNormal Normal
-  call s:h("TelescopeResultsTitle", {"fg": s:space0, "bg": s:blue})
+  call s:h("TelescopeResultsTitle", {"fg": s:teak1, "bg": s:teal0})
   hi link TelescopePromptPrefix Type
   hi link TelescopeResultsDiffAdd GitGutterAdd
   hi link TelescopeResultsDiffChange GitGutterChange
@@ -363,9 +383,9 @@ if has('nvim')
   hi link TelescopeResultsDiffUntracked Title
 
   " Nvim-tree support
-  call s:h("NvimTreeFolderIcon", {"fg": s:purple})
-  call s:h("NvimTreeFolderName", {"fg": s:blue})
-  call s:h("NvimTreeRootFolder", {"fg": s:green})
+  call s:h("NvimTreeFolderIcon", {"fg": s:teak0})
+  call s:h("NvimTreeFolderName", {"fg": s:teak0})
+  call s:h("NvimTreeRootFolder", {"fg": s:teak0})
 
   " nvim-cmp support
   hi link CmpItemMenu Comment
@@ -419,162 +439,162 @@ endif
 " == PLUGIN SUPPORT GROUPS ==
 "
 " vim-sneak
-hi link Sneak Search
-
-" HTML syntax
-hi! link htmlTag          Special
-hi! link htmlEndTag       htmlTag
-
-hi! link htmlTagName      KeyWord
-" html5 tags show up as htmlTagN
-hi! link htmlTagN         Keyword
-
-" HTML content
-call s:h("htmlH1",        {"fg": s:head_a, "gui": s:maybe_italic("bold"), "cterm": "bold"     })
-call s:h("htmlH2",        {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"     })
-call s:h("htmlH3",        {"fg": s:head_b, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
-call s:h("htmlH4",        {"fg": s:head_b, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
-call s:h("htmlH5",        {"fg": s:head_c                                            })
-call s:h("htmlH6",        {"fg": s:head_c                                            })
-call s:h("htmlLink",      {"fg": s:blue  , "gui": "underline"  , "cterm": "underline"})
-call s:h("htmlItalic",    {                "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
-call s:h("htmlBold",      {                "gui": "bold"       , "cterm": "bold"     })
-call s:h("htmlBoldItalic",{                "gui": s:maybe_italic("bold"), "cterm": "bold"     })
+"hi link Sneak Search
+"
+"" HTML syntax
+"hi! link htmlTag          Special
+"hi! link htmlEndTag       htmlTag
+"
+"hi! link htmlTagName      KeyWord
+"" html5 tags show up as htmlTagN
+"hi! link htmlTagN         Keyword
+"
+"" HTML content
+"call s:h("htmlH1",        {"fg": s:head_a, "gui": s:maybe_italic("bold"), "cterm": "bold"     })
+"call s:h("htmlH2",        {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"     })
+"call s:h("htmlH3",        {"fg": s:head_b, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
+"call s:h("htmlH4",        {"fg": s:head_b, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
+"call s:h("htmlH5",        {"fg": s:head_c                                            })
+"call s:h("htmlH6",        {"fg": s:head_c                                            })
+"call s:h("htmlLink",      {"fg": s:blue  , "gui": "underline"  , "cterm": "underline"})
+"call s:h("htmlItalic",    {                "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")   })
+"call s:h("htmlBold",      {                "gui": "bold"       , "cterm": "bold"     })
+"call s:h("htmlBoldItalic",{                "gui": s:maybe_italic("bold"), "cterm": "bold"     })
 " hi htmlString     guifg=#87875f guibg=NONE gui=NONE        ctermfg=101 ctermbg=NONE cterm=NONE
 
 " Javascript
-hi! link jsAsyncKeyword  PreProc
-hi! link jsForAwait  PreProc
-call s:h("jsClassKeyword", {"fg": s:purple})
-hi! link jsClassDefinition Type
-hi! link jsConditional PreProc
-hi! link jsExtendsKeyword PreProc
-hi! link jsReturn PreProc
-hi! link jsRepeat PreProc
-call s:h("jsxOpenPunct", {"fg": s:norm_subtle})
-hi! link jsxClosePunct jsxOpenPunct
+""hi! link jsAsyncKeyword  PreProc
+""hi! link jsForAwait  PreProc
+""call s:h("jsClassKeyword", {"fg": s:purple})
+""hi! link jsClassDefinition Type
+""hi! link jsConditional PreProc
+""hi! link jsExtendsKeyword PreProc
+""hi! link jsReturn PreProc
+""hi! link jsRepeat PreProc
+""call s:h("jsxOpenPunct", {"fg": s:norm_subtle})
+""hi! link jsxClosePunct jsxOpenPunct
 
 " Elixir
-call s:h("elixirVariable", {"fg": s:purple})
-call s:h("elixirAtom", {"fg": s:yellow})
+"call s:h("elixirVariable", {"fg": s:purple})
+"call s:h("elixirAtom", {"fg": s:yellow})
 
 " tpope/vim-markdown
-call s:h("markdownBlockquote",          {"fg": s:norm})
-call s:h("markdownBold",                {"fg": s:norm  , "gui": "bold"       , "cterm": "bold"  })
-call s:h("markdownBoldItalic",          {"fg": s:norm  , "gui": s:maybe_italic("bold"), "cterm": "bold"  })
-call s:h("markdownEscape",              {"fg": s:norm})
-call s:h("markdownH1",                  {"fg": s:head_a, "gui": s:maybe_italic("bold"), "cterm": "bold"  })
-call s:h("markdownH2",                  {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"  })
-call s:h("markdownH3",                  {"fg": s:head_a, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
-call s:h("markdownH4",                  {"fg": s:head_a, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
-call s:h("mckarkdownH5",                  {"fg": s:head_a})
-call s:h("markdownH6",                  {"fg": s:head_a})
-call s:h("markdownHeadingDelimiter",    {"fg": s:norm})
-call s:h("markdownHeadingRule",         {"fg": s:norm})
-call s:h("markdownId",                  {"fg": s:norm_subtle})
-call s:h("markdownIdDeclaration",       {"fg": s:norm_subtle})
-call s:h("markdownItalic",              {"fg": s:norm  , "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
-call s:h("markdownLinkDelimiter",       {"fg": s:norm_subtle})
-call s:h("markdownLinkText",            {"fg": s:norm})
-call s:h("markdownLinkTextDelimiter",   {"fg": s:norm_subtle})
-call s:h("markdownListMarker",          {"fg": s:norm})
-call s:h("markdownOrderedListMarker",   {"fg": s:norm})
-call s:h("markdownRule",                {"fg": s:norm})
-call s:h("markdownUrl",                 {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
-call s:h("markdownUrlDelimiter",        {"fg": s:norm_subtle})
-call s:h("markdownUrlTitle",            {"fg": s:norm})
-call s:h("markdownUrlTitleDelimiter",   {"fg": s:norm_subtle})
-call s:h("markdownCode",                {"fg": s:norm})
-call s:h("markdownCodeDelimiter",       {"fg": s:norm})
-
-" plasticboy/vim-markdown
-call s:h("mkdBlockQuote",               {"fg": s:norm})
-call s:h("mkdDelimiter",                {"fg": s:norm_subtle})
-call s:h("mkdID",                       {"fg": s:norm_subtle})
-call s:h("mkdLineContinue",             {"fg": s:norm})
-call s:h("mkdLink",                     {"fg": s:norm})
-call s:h("mkdLinkDef",                  {"fg": s:norm_subtle})
-call s:h("mkdListItem",                 {"fg": s:norm})
-call s:h("mkdNonListItemBlock",         {"fg": s:norm})  " bug in syntax?
-call s:h("mkdRule",                     {"fg": s:norm})
-call s:h("mkdUrl",                      {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
-call s:h("mkdCode",                     {"fg": s:norm})
-call s:h("mkdIndentCode",               {"fg": s:norm})
-
-" gabrielelana/vim-markdown
-call s:h("markdownBlockquoteDelimiter", {"fg": s:norm})
-call s:h("markdownInlineDelimiter",     {"fg": s:norm})
-call s:h("markdownItemDelimiter",       {"fg": s:norm})
-call s:h("markdownLinkReference",       {"fg": s:norm_subtle})
-call s:h("markdownLinkText",            {"fg": s:norm})
-call s:h("markdownLinkTextContainer",   {"fg": s:norm_subtle})
-call s:h("markdownLinkUrl",             {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
-call s:h("markdownLinkUrlContainer",    {"fg": s:norm_subtle})
-call s:h("markdownFencedCodeBlock",     {"fg": s:norm})
-call s:h("markdownInlineCode",          {"fg": s:norm})
-
-" mattly/vim-markdown-enhancements
-call s:h("mmdFootnoteDelimiter",        {"fg": s:norm_subtle})
-call s:h("mmdFootnoteMarker",           {"fg": s:norm})
-call s:h("mmdTableAlign",               {"fg": s:norm})
-call s:h("mmdTableDelimiter",           {"fg": s:norm})
-call s:h("mmdTableHeadDelimiter",       {"fg": s:norm})
-call s:h("mmdTableHeader",              {"fg": s:norm})
-call s:h("mmdTableCaptionDelimiter",    {"fg": s:norm})
-call s:h("mmdTableCaption",             {"fg": s:norm})
-
-" XML content
-hi! link xmlTag                     htmlTag
-hi! link xmlEndTag                  xmlTag
-hi! link xmlTagName                 htmlTagName
-
-call s:h("qfLineNr",      {"fg": s:norm_subtle})
-
-" Signify, git-gutter
-hi link SignifySignAdd              LineNr
-hi link SignifySignDelete           LineNr
-hi link SignifySignChange           LineNr
-call s:h("GitGutterAdd",{"fg": s:green, "bg": s:bg})
-call s:h("GitGutterDelete",{"fg": s:red, "bg": s:bg})
-call s:h("GitGutterChange",{"fg": s:yellow, "bg": s:bg})
-call s:h("GitGutterChangeDelete",{"fg": s:red, "bg": s:bg})
-
-" Fugitive
-call s:h("diffAdded",     {"fg": s:green})
-call s:h("diffRemoved",   {"fg": s:red})
-call s:h("diffFile",      {"fg": s:purple})
-call s:h("diffIndexLine", {"fg": s:purple})
-call s:h("diffOldFile",   {"fg": s:blue})
-call s:h("diffNewFile",   {"fg": s:blue})
-call s:h("diffLine",      {"fg": s:purple})
-call s:h("diffSubname",   {"fg": s:norm})
-
-" Ale
-call s:h("ALEErrorSign", {"fg": s:red, "bg": s:bg})
-call s:h("ALEWarningSign", {"fg": s:dark_yellow, "bg": s:bg})
-call s:h("ALEVirtualTextWarning", {"fg": s:dark_yellow})
-" CTRLP
-call s:h("CtrlpMatch", {"fg": s:yellow})
-call s:h("NERDTreeDir", {"fg": s:blue})
-call s:h("NERDTreeFlags", {"fg": s:green})
-
-let g:terminal_color_0 = s:bg_bright.gui
-let g:terminal_color_1 = s:red.gui
-let g:terminal_color_2 = s:green.gui
-let g:terminal_color_3 = s:yellow.gui
-let g:terminal_color_4 = s:blue.gui
-let g:terminal_color_5 = s:purple.gui
-let g:terminal_color_6 = s:cyan.gui
-let g:terminal_color_7 = s:bg.gui
-let g:terminal_color_8 = s:bg_bright.gui
-let g:terminal_color_9 = s:dark_red.gui
-let g:terminal_color_10 = s:dark_green.gui
-let g:terminal_color_11 = s:dark_yellow.gui
-let g:terminal_color_12 = s:dark_blue.gui
-let g:terminal_color_13 = s:dark_purple.gui
-let g:terminal_color_14 = s:dark_cyan.gui
-let g:terminal_color_15 = s:norm_subtle.gui
-
+"call s:h("markdownBlockquote",          {"fg": s:norm})
+"call s:h("markdownBold",                {"fg": s:norm  , "gui": "bold"       , "cterm": "bold"  })
+"call s:h("markdownBoldItalic",          {"fg": s:norm  , "gui": s:maybe_italic("bold"), "cterm": "bold"  })
+"call s:h("markdownEscape",              {"fg": s:norm})
+"call s:h("markdownH1",                  {"fg": s:head_a, "gui": s:maybe_italic("bold"), "cterm": "bold"  })
+"call s:h("markdownH2",                  {"fg": s:head_a, "gui": "bold"       , "cterm": "bold"  })
+"call s:h("markdownH3",                  {"fg": s:head_a, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
+"call s:h("markdownH4",                  {"fg": s:head_a, "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
+"call s:h("mckarkdownH5",                  {"fg": s:head_a})
+"call s:h("markdownH6",                  {"fg": s:head_a})
+"call s:h("markdownHeadingDelimiter",    {"fg": s:norm})
+"call s:h("markdownHeadingRule",         {"fg": s:norm})
+"call s:h("markdownId",                  {"fg": s:norm_subtle})
+"call s:h("markdownIdDeclaration",       {"fg": s:norm_subtle})
+"call s:h("markdownItalic",              {"fg": s:norm  , "gui": s:maybe_italic("")     , "cterm": s:maybe_italic("")})
+"call s:h("markdownLinkDelimiter",       {"fg": s:norm_subtle})
+"call s:h("markdownLinkText",            {"fg": s:norm})
+"call s:h("markdownLinkTextDelimiter",   {"fg": s:norm_subtle})
+"call s:h("markdownListMarker",          {"fg": s:norm})
+"call s:h("markdownOrderedListMarker",   {"fg": s:norm})
+"call s:h("markdownRule",                {"fg": s:norm})
+"call s:h("markdownUrl",                 {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
+"call s:h("markdownUrlDelimiter",        {"fg": s:norm_subtle})
+"call s:h("markdownUrlTitle",            {"fg": s:norm})
+"call s:h("markdownUrlTitleDelimiter",   {"fg": s:norm_subtle})
+"call s:h("markdownCode",                {"fg": s:norm})
+"call s:h("markdownCodeDelimiter",       {"fg": s:norm})
+"
+"" plasticboy/vim-markdown
+"call s:h("mkdBlockQuote",               {"fg": s:norm})
+"call s:h("mkdDelimiter",                {"fg": s:norm_subtle})
+"call s:h("mkdID",                       {"fg": s:norm_subtle})
+"call s:h("mkdLineContinue",             {"fg": s:norm})
+"call s:h("mkdLink",                     {"fg": s:norm})
+"call s:h("mkdLinkDef",                  {"fg": s:norm_subtle})
+"call s:h("mkdListItem",                 {"fg": s:norm})
+"call s:h("mkdNonListItemBlock",         {"fg": s:norm})  " bug in syntax?
+"call s:h("mkdRule",                     {"fg": s:norm})
+"call s:h("mkdUrl",                      {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
+"call s:h("mkdCode",                     {"fg": s:norm})
+"call s:h("mkdIndentCode",               {"fg": s:norm})
+"
+"" gabrielelana/vim-markdown
+"call s:h("markdownBlockquoteDelimiter", {"fg": s:norm})
+"call s:h("markdownInlineDelimiter",     {"fg": s:norm})
+"call s:h("markdownItemDelimiter",       {"fg": s:norm})
+"call s:h("markdownLinkReference",       {"fg": s:norm_subtle})
+"call s:h("markdownLinkText",            {"fg": s:norm})
+"call s:h("markdownLinkTextContainer",   {"fg": s:norm_subtle})
+"call s:h("markdownLinkUrl",             {"fg": s:norm_subtle, "gui": "underline", "cterm": "underline"})
+"call s:h("markdownLinkUrlContainer",    {"fg": s:norm_subtle})
+"call s:h("markdownFencedCodeBlock",     {"fg": s:norm})
+"call s:h("markdownInlineCode",          {"fg": s:norm})
+"
+"" mattly/vim-markdown-enhancements
+"call s:h("mmdFootnoteDelimiter",        {"fg": s:norm_subtle})
+"call s:h("mmdFootnoteMarker",           {"fg": s:norm})
+"call s:h("mmdTableAlign",               {"fg": s:norm})
+"call s:h("mmdTableDelimiter",           {"fg": s:norm})
+"call s:h("mmdTableHeadDelimiter",       {"fg": s:norm})
+"call s:h("mmdTableHeader",              {"fg": s:norm})
+"call s:h("mmdTableCaptionDelimiter",    {"fg": s:norm})
+"call s:h("mmdTableCaption",             {"fg": s:norm})
+"
+"" XML content
+"hi! link xmlTag                     htmlTag
+"hi! link xmlEndTag                  xmlTag
+"hi! link xmlTagName                 htmlTagName
+"
+"call s:h("qfLineNr",      {"fg": s:norm_subtle})
+"
+"" Signify, git-gutter
+"hi link SignifySignAdd              LineNr
+"hi link SignifySignDelete           LineNr
+"hi link SignifySignChange           LineNr
+"call s:h("GitGutterAdd",{"fg": s:green, "bg": s:bg})
+"call s:h("GitGutterDelete",{"fg": s:red, "bg": s:bg})
+"call s:h("GitGutterChange",{"fg": s:yellow, "bg": s:bg})
+"call s:h("GitGutterChangeDelete",{"fg": s:red, "bg": s:bg})
+"
+"" Fugitive
+"call s:h("diffAdded",     {"fg": s:green})
+"call s:h("diffRemoved",   {"fg": s:red})
+"call s:h("diffFile",      {"fg": s:purple})
+"call s:h("diffIndexLine", {"fg": s:purple})
+"call s:h("diffOldFile",   {"fg": s:blue})
+"call s:h("diffNewFile",   {"fg": s:blue})
+"call s:h("diffLine",      {"fg": s:purple})
+"call s:h("diffSubname",   {"fg": s:norm})
+"
+"" Ale
+"call s:h("ALEErrorSign", {"fg": s:red, "bg": s:bg})
+"call s:h("ALEWarningSign", {"fg": s:dark_yellow, "bg": s:bg})
+"call s:h("ALEVirtualTextWarning", {"fg": s:dark_yellow})
+"" CTRLP
+"call s:h("CtrlpMatch", {"fg": s:yellow})
+"call s:h("NERDTreeDir", {"fg": s:blue})
+"call s:h("NERDTreeFlags", {"fg": s:green})
+"
+"let g:terminal_color_0 = s:bg_bright.gui
+"let g:terminal_color_1 = s:red.gui
+"let g:terminal_color_2 = s:green.gui
+"let g:terminal_color_3 = s:yellow.gui
+"let g:terminal_color_4 = s:blue.gui
+"let g:terminal_color_5 = s:purple.gui
+"let g:terminal_color_6 = s:cyan.gui
+"let g:terminal_color_7 = s:bg.gui
+"let g:terminal_color_8 = s:bg_bright.gui
+"let g:terminal_color_9 = s:dark_red.gui
+"let g:terminal_color_10 = s:dark_green.gui
+"let g:terminal_color_11 = s:dark_yellow.gui
+"let g:terminal_color_12 = s:dark_blue.gui
+"let g:terminal_color_13 = s:dark_purple.gui
+"let g:terminal_color_14 = s:dark_cyan.gui
+"let g:terminal_color_15 = s:norm_subtle.gui
+"
 " 256-color terminal colors
 let g:terminal_ansi_colors = [
     \ s:bg_bright.gui, s:red.gui,         s:green.gui,      s:yellow.gui,
