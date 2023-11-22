@@ -1,2 +1,28 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-require("config.lazy")
+vim.loader.enable() -- use updated loader
+
+vim.opt.termguicolors = true
+vim.cmd("colorscheme dgl")
+
+local core_conf_files = {
+  "globals.lua", -- some global settings
+  "options.vim", -- setting options in nvim
+  -- "autocommands.vim", -- various autocommands
+  "keymaps.lua", -- all the user-defined mappings
+  "plugins.lua", -- all the plugins installed and their configurations
+  "commands.lua", -- custom commands
+  -- "colorschemes.lua", -- colorscheme settings
+}
+
+local vim_conf_dir = vim.fn.stdpath("config").."/vim"
+-- source all the core config files
+for _, file_name in ipairs(core_conf_files) do
+  if vim.endswith(file_name, 'vim') then
+    local path = string.format("%s/%s", vim_conf_dir, file_name)
+    local source_cmd = "source " .. path
+    vim.cmd(source_cmd)
+  else
+    local module_name, _ = string.gsub(file_name, "%.lua", "")
+    package.loaded[module_name] = nil
+    require(module_name)
+  end
+end
