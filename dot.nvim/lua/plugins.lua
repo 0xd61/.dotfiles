@@ -22,7 +22,7 @@ local spec = {
     "ap/vim-css-color",
   },
   {
-      "ledger/vim-ledger",
+    "ledger/vim-ledger",
   },
   {
     "hrsh7th/nvim-cmp",
@@ -31,7 +31,8 @@ local spec = {
     dependencies = {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-vsnip",
+      "L3MON4D3/LuaSnip",
+      "saadparwaiz1/cmp_luasnip",
       "piero-vic/cmp-ledger",
     },
     config = function()
@@ -40,8 +41,7 @@ local spec = {
       cmp.setup {
         snippet = {
           expand = function(args)
-            -- For `ultisnips` user.
-            vim.fn["vsnip#anonymous"](args.body)
+            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
           end,
         },
         mapping = cmp.mapping.preset.insert {
@@ -61,12 +61,12 @@ local spec = {
             end,
             ["<CR>"] = cmp.mapping.confirm { select = true },
             ["<C-e>"] = cmp.mapping.abort(),
-            ["<Esc>"] = cmp.mapping.close(),
+            ["<ESC>"] = cmp.mapping.close(),
             ["<C-d>"] = cmp.mapping.scroll_docs(-4),
             ["<C-f>"] = cmp.mapping.scroll_docs(4),
           },
           sources = {
-            { name = "vsnip" }, 
+            { name = 'luasnip' }, -- For luasnip users.
             { name = "ledger" }, -- for ledger completion
             { name = "path" }, -- for path completion
             { name = "buffer", keyword_length = 2 }, -- for buffer word completion
@@ -112,9 +112,14 @@ local spec = {
                               "yaml",
                              },
           sync_install = false,
-          highlight = { enable = true },
+          highlight = { 
+              enable = true,
+              additional_vim_regex_highlighting = false,
+          },
           indent = { enable = false },
         })
+
+        vim.api.nvim_set_hl(0, "@text.note", { link = "Search" })
     end,
   }
 }

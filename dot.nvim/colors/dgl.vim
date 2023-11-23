@@ -216,11 +216,11 @@ call s:h("Underlined",    {"fg": s:underlined, "gui": "underline", "cterm": "und
 call s:h("Ignore",        {"fg": s:ignore})
 
 " * Error  any erroneous construct
-call s:h("Error",         {"fg": s:error, "gui": "bold", "cterm": "bold"})
+call s:h("Error",         {"fg": s:red, "gui": "bold", "cterm": "bold"})
 
 " * Todo  anything that needs extra attention; mostly the
 "    keywords TODO FIXME and XXX
-call s:h("Todo",          {"fg": s:todo, "gui": "bold", "cterm": "bold"})
+call s:h("Todo",          {"fg": s:red, "gui": "bold", "cterm": "bold"})
 
 
 " == UI CHROME ==
@@ -290,7 +290,7 @@ call s:h("PmenuThumb",    {"fg": s:norm, "bg": s:bg_dark})
 call s:h("Question",      {"fg": s:green})
 " QuickFixLine - Current |quickfix| item in the quickfix window. Combined with
 " Search - Last search pattern highlighting (see 'hlsearch').
-call s:h("Search",        {"bg": s:dark_yellow, "fg": s:bg})
+call s:h("Search",        {"bg": s:yellow, "fg": s:bg})
 " SpecialKey - Unprintable chars: Text displayed differently from what it is
 call s:h("SpecialKey",    {"fg": s:blue})
 " SpellBad Word that is not recognized by the spellchecker. |spell|

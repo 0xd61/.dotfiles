@@ -7,9 +7,10 @@ local core_conf_files = {
   "globals.lua", -- some global settings
   "options.vim", -- setting options in nvim
   -- "autocommands.vim", -- various autocommands
-  "keymaps.lua", -- all the user-defined mappings
   "plugins.lua", -- all the plugins installed and their configurations
+  "keymaps.lua", -- all the user-defined mappings
   "commands.lua", -- custom commands
+  "snippets.lua", -- luasnip snippets
   -- "colorschemes.lua", -- colorscheme settings
 }
 
