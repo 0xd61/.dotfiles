@@ -407,28 +407,28 @@ if has('nvim')
 
   if has('nvim-0.8')
     " Treesitter support
-    call s:h("@punctuation.bracket", {"fg": s:norm})
+    call s:h("@punctuation.bracket", {"fg": s:teak1})
 
-    call s:h("@string.special", {"fg": s:dark_blue})
-    call s:h("@string.escape", {"fg": s:cyan})
+    call s:h("@string.special", {"fg": s:blue})
+    call s:h("@string.escape", {"fg": s:blue})
 
-    call s:h("@function", {"fg": s:red})
-    call s:h("@function.call", {"fg": s:blue})
-    call s:h("@constructor", {"fg": s:purple})
+    call s:h("@function", {"fg": s:teak1})
+    call s:h("@function.call", {"fg": s:teak1})
+    call s:h("@constructor", {"fg": s:teak1})
 
-    call s:h("@keyword.operator", {"fg": s:cyan})
+    call s:h("@keyword.operator", {"fg": s:teak1})
 
     hi! link @constant.builtin Special
-    call s:h("@variable.builtin", {"fg": s:cyan})
-    call s:h("@symbol", {"fg": s:yellow})
+    call s:h("@variable.builtin", {"fg": s:blue})
+    call s:h("@symbol", {"fg": s:blue})
 
-    call s:h("@text.literal", {"fg": s:cyan})
+    call s:h("@text.literal", {"fg": s:blue})
     call s:h("@text.uri", {"fg": s:blue})
-    call s:h("@text.reference", {"fg": s:purple})
+    call s:h("@text.reference", {"fg": s:blue})
     call s:h("@text.strong", {"gui": "bold"})
     call s:h("@text.emphasis", {"gui": s:maybe_italic("")})
-    call s:h("@text.todo.unchecked", {"fg": s:dark_cyan, "gui": "bold"})
-    call s:h("@text.todo.checked", {"fg": s:norm_subtle})
+    call s:h("@text.todo.unchecked", {"fg": s:red, "gui": "bold"})
+    call s:h("@text.todo.checked", {"fg": s:red})
 
     hi! link @tag Keyword
     hi! link @tag.delimiter Special
