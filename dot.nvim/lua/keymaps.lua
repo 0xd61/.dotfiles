@@ -2,6 +2,7 @@ local ls = require("luasnip")
 
 -- Misc
 vim.keymap.set({ "", "!" }, "<C-g>", "<esc><esc>", { noremap = true, silent = true, desc = "<ESC>" })
+vim.keymap.set({ "i" }, "jk", "<esc>", { noremap = true, silent = true, desc = "<ESC>" })
 vim.keymap.set({ "", "!" }, "<A-x>", "<esc>:", { noremap = true, desc = "Enter command mode" })
 
 -- Navigation
@@ -25,7 +26,7 @@ vim.keymap.set({ "v" }, "c", ":norm 0i", { noremap = true, desc = "Comment/uncom
 
 -- Telescope
 vim.keymap.set({ "", "!" }, "<A-b>", "<cmd>Telescope buffers<cr>", { noremap = true, desc = "Open buffers" })
-vim.keymap.set({ "", "!" }, "<A-S-b>", "<cmd>vsp .scratch<cr>", { noremap = true, desc = "Open scratch buffer" })
+vim.keymap.set({ "", "!" }, "<A-S-b>", "<cmd>vsp .scratch<cr>", { noremap = true, desc = "Open scratch buffer in new window" })
 vim.keymap.set({ "", "!" }, "<A-k>", "<cmd>bd<cr>", { noremap = true, desc = "Close buffer" })
 vim.keymap.set({ "", "!" }, "<A-y>", "<cmd>Telescope registers<cr>", { noremap = true, desc = "Open registers" })
 vim.keymap.set({ "", "!" }, "<A-f>", "<cmd>Telescope fd<cr>", { noremap = true, desc = "Open files" })
@@ -38,7 +39,7 @@ vim.keymap.set({"i", "s"}, "<C-]>", function() ls.jump(-1) end, {noremap = true,
 -- Windows
 
 -- Terminal
-vim.keymap.set({ "", "!" }, "<A-n>", "<cmd>vsp | terminal<cr>", { noremap = true, desc = "Open terminal" })
+vim.keymap.set({ "", "!" }, "<A-n>", "<cmd>terminal<cr>", { noremap = true, desc = "Open terminal" })
 vim.keymap.set({ "t" }, "<esc>", "<C-\\><C-n>", { noremap = true, desc = "Open terminal" })
 vim.keymap.set({ "", "!" }, "<A-m>", "<cmd>make<cr>", { noremap = true, desc = "Run make command" })
 
