@@ -55,7 +55,7 @@ set smarttab
 set expandtab
 set showcmd
 "set number
-set linebreak
+"set linebreak
 set textwidth=0
 set cindent
 set shiftwidth=4
@@ -65,7 +65,7 @@ set tabstop=4
 "set columns=120
 set ai "Auto indent
 set si "Smart indent
-"set wrap "Wrap lines
+set wrap "Wrap lines
 "nnoremap <leader>c :execute "set colorcolumn=" . (&colorcolumn == "" ? "80" : "")<CR>
 highlight ColorColumn ctermbg=8
 

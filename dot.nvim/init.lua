@@ -27,3 +27,22 @@ for _, file_name in ipairs(core_conf_files) do
     require(module_name)
   end
 end
+
+local proj_conf_files = {
+    ".project.vim",
+    ".project.lua",
+}
+
+-- source all the core config files
+for _, file_name in ipairs(proj_conf_files) do
+  if io.open(file_name) then
+    if vim.endswith(file_name, 'vim') then
+      local source_cmd = "source " .. file_name
+      vim.cmd(source_cmd)
+    else
+      local module_name, _ = string.gsub(file_name, "%.lua", "")
+      package.loaded[module_name] = nil
+      require(module_name)
+    end
+  end
+end
