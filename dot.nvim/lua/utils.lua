@@ -32,4 +32,9 @@ function Utils.may_create_dir(dir)
   end
 end
 
+function Utils:insert_text(text)
+    local row, col = unpack(api.nvim_win_get_cursor(0))
+    api.nvim_buf_set_text(0, row, col, row, col, { text })
+end
+
 return Utils

@@ -4,45 +4,51 @@ vim.opt.termguicolors = true
 vim.cmd("colorscheme dgl")
 
 local core_conf_files = {
-  "globals.lua", -- some global settings
-  "options.vim", -- setting options in nvim
-  -- "autocommands.vim", -- various autocommands
-  "plugins.lua", -- all the plugins installed and their configurations
-  "keymaps.lua", -- all the user-defined mappings
-  "commands.lua", -- custom commands
-  "snippets.lua", -- luasnip snippets
-  -- "colorschemes.lua", -- colorscheme settings
+    "globals.lua", -- some global settings
+    "options.vim", -- setting options in nvim
+    -- "autocommands.vim", -- various autocommands
+    "plugins.lua", -- all the plugins installed and their configurations
+    "keymaps.lua", -- all the user-defined mappings
+    "commands.lua", -- custom commands
+    "snippets.lua", -- luasnip snippets
+    -- "colorschemes.lua", -- colorscheme settings
 }
 
 local vim_conf_dir = vim.fn.stdpath("config").."/vim"
 -- source all the core config files
 for _, file_name in ipairs(core_conf_files) do
-  if vim.endswith(file_name, 'vim') then
-    local path = string.format("%s/%s", vim_conf_dir, file_name)
-    local source_cmd = "source " .. path
-    vim.cmd(source_cmd)
-  else
-    local module_name, _ = string.gsub(file_name, "%.lua", "")
-    package.loaded[module_name] = nil
-    require(module_name)
-  end
+    if vim.endswith(file_name, 'vim') then
+        local path = string.format("%s/%s", vim_conf_dir, file_name)
+        local source_cmd = "source " .. path
+        vim.cmd(source_cmd)
+    else
+        local module_name, _ = string.gsub(file_name, "%.lua", "")
+        package.loaded[module_name] = nil
+        require(module_name)
+    end
 end
 
 local proj_conf_files = {
-    ".project.vim",
-    ".project.lua",
+    "linux/.project.vim",
+    "windows/.project.vim",
+    -- ".project.lua", -- does not work with hidden files...
 }
 
 -- source all the core config files
 for _, file_name in ipairs(proj_conf_files) do
-  if io.open(file_name) then
-    if vim.endswith(file_name, 'vim') then
-      local source_cmd = "source " .. file_name
-      vim.cmd(source_cmd)
-    else
-      local module_name, _ = string.gsub(file_name, "%.lua", "")
-      package.loaded[module_name] = nil
-      require(module_name)
+    if io.open(file_name) then
+        if (vim.g.is_windows and string.match(file_name, "windows")) or
+            (vim.g.is_linux and string.match(file_name, "linux")) then
+            if vim.endswith(file_name, 'vim') then
+                local source_cmd = "source " .. file_name
+                vim.cmd(source_cmd)
+            else
+                local module_name, _ = string.gsub(file_name, "%.lua", "")
+                --package.path = package.path .. ";" .. vim.fn.getcwd()
+                --dofile(vim.fn.getcwd() .. "/" .. file_name)
+                package.loaded[module_name] = nil
+                require(module_name)
+            end
+        end
     end
-  end
 end
