@@ -37,18 +37,15 @@ local proj_conf_files = {
 -- source all the core config files
 for _, file_name in ipairs(proj_conf_files) do
     if io.open(file_name) then
-        if (vim.g.is_windows and string.match(file_name, "windows")) or
-            (vim.g.is_linux and string.match(file_name, "linux")) then
-            if vim.endswith(file_name, 'vim') then
-                local source_cmd = "source " .. file_name
-                vim.cmd(source_cmd)
-            else
-                local module_name, _ = string.gsub(file_name, "%.lua", "")
-                --package.path = package.path .. ";" .. vim.fn.getcwd()
-                --dofile(vim.fn.getcwd() .. "/" .. file_name)
-                package.loaded[module_name] = nil
-                require(module_name)
-            end
+        if vim.endswith(file_name, 'vim') then
+            local source_cmd = "source " .. file_name
+            vim.cmd(source_cmd)
+        else
+            local module_name, _ = string.gsub(file_name, "%.lua", "")
+            --package.path = package.path .. ";" .. vim.fn.getcwd()
+            --dofile(vim.fn.getcwd() .. "/" .. file_name)
+            package.loaded[module_name] = nil
+            require(module_name)
         end
     end
 end
