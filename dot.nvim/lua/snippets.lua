@@ -45,6 +45,21 @@ ls.add_snippets(nil, {
             func(function(args) return { "", "", "#endif // " .. args[1][1] } end, {1}),
         })
     },
+    cpp = {
+        snip("todo", {
+            func(todo, {}, { user_args = { "//" }}),
+        }),
+        snip("note", {
+            func(note, {}, { user_args = { "//" }}),
+        }),
+        snip("guard", {
+            text "#ifndef ",
+            insert(1, "Name"),
+            func(function(args) return { "", "#define " .. args[1][1], "" } end, {1}),
+            insert(0),
+            func(function(args) return { "", "", "#endif // " .. args[1][1] } end, {1}),
+        })
+    },
     go = {
         snip("todo", {
             func(todo, {}, { user_args = { "//" }}),

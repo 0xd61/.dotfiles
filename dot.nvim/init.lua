@@ -29,8 +29,7 @@ for _, file_name in ipairs(core_conf_files) do
 end
 
 local proj_conf_files = {
-    "linux/.project.vim",
-    "windows/.project.vim",
+    ".project.vim",
     -- ".project.lua", -- does not work with hidden files...
 }
 

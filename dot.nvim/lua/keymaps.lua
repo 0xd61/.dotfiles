@@ -18,6 +18,13 @@ vim.keymap.set({ "", "!" }, "<C-S-Right>", "<esc>$", { noremap = true, desc = "E
 
 vim.keymap.set({ "", "!" }, "<A-w>", "<esc><C-w>w", { noremap = true, desc = "Move to other window" })
 
+vim.keymap.set({ "", "!" }, "<A-t>", "<C-]>", { noremap = true, desc = "Jump to tag" })
+vim.keymap.set({ "", "!" }, "<A-S-t>", "<C-t>", { noremap = true, desc = "Jump back up the tag stack" })
+
+
+vim.keymap.set({ "", "!" }, "<A-c>", "<cmd>HeaderToggle<cr>", { noremap = true, desc = "Jump back up the tag stack" })
+
+
 -- Editor
 vim.keymap.set({ "", "!" }, "<C-k>", "d$", { noremap = true, desc = "Kill line" })
 vim.keymap.set({ "", "!" }, "<A-s>", "<cmd>w<cr>", { noremap = true, desc = "Save buffer" })

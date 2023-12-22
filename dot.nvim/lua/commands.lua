@@ -27,4 +27,30 @@ api.nvim_create_user_command(
     { nargs = '?' }
 )
 
-
+api.nvim_create_user_command(
+    'HeaderToggle',
+    function()
+        local file_path = vim.fn.expand("%")
+        local file_name = vim.fn.expand("%:t:r")
+        local extension = vim.fn.expand("%:e")
+        local err_msg = "There is no file "
+        if extension == "c" or extension == "cpp" then
+            local next_file = file_name .. ".h"
+            local ok, result = pcall(vim.cmd, ':tag ' .. next_file)
+            if not ok then
+                print(err_msg .. next_file .. '\n' .. result)
+            end
+        elseif extension == "h" then
+            local next_file = file_name .. ".c"
+            local ok, result = pcall(vim.cmd, ':tag ' .. next_file)
+            if not ok then
+                next_file = file_name .. ".cpp"
+                local ok, result = pcall(vim.cmd, ':tag ' .. next_file)
+                if not ok then
+                    print(err_msg .. next_file .. '\n' .. result)
+                end
+            end
+        end
+    end,
+    { nargs = '?' }
+)

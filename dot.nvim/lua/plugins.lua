@@ -92,6 +92,7 @@ local spec = {
           ensure_installed = {"bash",
                               "bitbake",
                               "c",
+                              "cpp",
                               "cmake",
                               "diff",
                               "go",
