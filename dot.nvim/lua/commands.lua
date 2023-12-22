@@ -71,9 +71,9 @@ api.nvim_create_user_command(
 api.nvim_create_user_command(
     'MakeDirSave',
     function()
-        local mkdir_cmd = "!mkdir -p %:p:h"
-        if vim.g.is_windows then
-            mkdir_cmd = "!mkdir %:p:h"
+        local mkdir_cmd = "!mkdir %:p:h"
+        if vim.g.is_linux then
+            mkdir_cmd = "!mkdir -p %:p:h"
         end
         local ok, result = pcall(vim.cmd, mkdir_cmd)
         if ok then
