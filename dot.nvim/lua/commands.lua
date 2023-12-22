@@ -28,7 +28,7 @@ api.nvim_create_user_command(
 )
 
 api.nvim_create_user_command(
-    'HeaderToggle',
+    'CtagHeaderToggle',
     function()
         local file_path = vim.fn.expand("%")
         local file_name = vim.fn.expand("%:t:r")
@@ -54,3 +54,34 @@ api.nvim_create_user_command(
     end,
     { nargs = '?' }
 )
+
+api.nvim_create_user_command(
+    'CtagUpdate',
+    function()
+        local ok, result = pcall(vim.cmd, '!ctags -a -u -R --extras=+f ' .. vim.fn.getcwd())
+        if ok then
+            print("ctags updated!\n")
+        else
+            print(result)
+        end
+    end,
+    { nargs = '?' }
+)
+
+api.nvim_create_user_command(
+    'MakeDirSave',
+    function()
+        local mkdir_cmd = "!mkdir -p %:p:h"
+        if vim.g.is_windows then
+            mkdir_cmd = "!mkdir %:p:h"
+        end
+        local ok, result = pcall(vim.cmd, mkdir_cmd)
+        if ok then
+            vim.cmd(":w")
+        else
+            print(result)
+        end
+    end,
+    { nargs = '?' }
+)
+

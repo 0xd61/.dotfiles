@@ -22,13 +22,13 @@ vim.keymap.set({ "", "!" }, "<A-t>", "<C-]>", { noremap = true, desc = "Jump to 
 vim.keymap.set({ "", "!" }, "<A-S-t>", "<C-t>", { noremap = true, desc = "Jump back up the tag stack" })
 
 
-vim.keymap.set({ "", "!" }, "<A-c>", "<cmd>HeaderToggle<cr>", { noremap = true, desc = "Jump back up the tag stack" })
+vim.keymap.set({ "", "!" }, "<A-c>", "<cmd>CtagHeaderToggle<cr>", { noremap = true, desc = "Jump back up the tag stack" })
 
 
 -- Editor
 vim.keymap.set({ "", "!" }, "<C-k>", "d$", { noremap = true, desc = "Kill line" })
 vim.keymap.set({ "", "!" }, "<A-s>", "<cmd>w<cr>", { noremap = true, desc = "Save buffer" })
-vim.keymap.set({ "", "!" }, "<A-S-s>", "<cmd>silent !mkdir -p %:p:h<cr><cmd>w<cr>", { noremap = true, desc = "Create dir and save buffer" })
+vim.keymap.set({ "", "!" }, "<A-S-s>", "<cmd>MakeDirSave<cr>", { noremap = true, desc = "Create dir and save buffer" })
 vim.keymap.set({ "v" }, "c", ":norm 0i", { noremap = true, desc = "Comment/uncomment region" })
 
 -- Telescope
