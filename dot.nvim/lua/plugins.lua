@@ -31,6 +31,8 @@ local spec = {
     dependencies = {
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
+      "lukas-reineke/cmp-rg",
+      "delphinus/cmp-ctags",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
       "piero-vic/cmp-ledger",
@@ -69,7 +71,20 @@ local spec = {
             { name = 'luasnip' }, -- For luasnip users.
             { name = "ledger" }, -- for ledger completion
             { name = "path" }, -- for path completion
-            { name = "buffer", keyword_length = 2 }, -- for buffer word completion
+            { name = "buffer", 
+                keyword_length = 2,
+                option = {
+                    get_bufnrs = function()
+                        local bufs = {}
+                        for _, win in ipairs(vim.api.nvim_list_wins()) do
+                            bufs[vim.api.nvim_win_get_buf(win)] = true
+                        end
+                        return vim.tbl_keys(bufs)
+                    end
+                }
+            }, -- for buffer word completion
+            { name = "rg", keyword_length = 2 }, -- ripgrep completion
+            { name = "ctags"}, -- ctags completion
           },
           completion = {
             keyword_length = 1,
@@ -91,8 +106,6 @@ local spec = {
       configs.setup({
           ensure_installed = {"bash",
                               "bitbake",
-                              "c",
-                              "cpp",
                               "cmake",
                               "diff",
                               "go",
@@ -112,12 +125,12 @@ local spec = {
                               "vimdoc",
                               "yaml",
                              },
-          sync_install = false,
+          sync_install = true,
           highlight = { 
               enable = true,
               additional_vim_regex_highlighting = false,
           },
-          indent = { enable = false },
+          indent = { enable = true },
         })
 
         vim.api.nvim_set_hl(0, "@text.note", { link = "Search" })
