@@ -15,8 +15,12 @@ local spec = {
   {
     "nvim-telescope/telescope.nvim",
     dependencies = {
-      "nvim-lua/plenary.nvim"
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-file-browser.nvim"
     },
+    config = function(_, opts)
+        require("telescope").load_extension "file_browser"
+      end,
   },
   {
     "ap/vim-css-color",
@@ -84,8 +88,14 @@ local spec = {
                 }
             }, -- for buffer word completion
             { name = "rg", keyword_length = 2 }, -- ripgrep completion
-            { name = "ctags"}, -- ctags completion
-          },
+            { name = "ctags",
+                option = {
+                    executable = "ctags",
+                    trigger_characters = { ".", "->" },
+                    trigger_characters_ft = {},
+                }
+           }, -- ctags completion
+         },
           completion = {
             keyword_length = 1,
             completeopt = "menu,noselect",

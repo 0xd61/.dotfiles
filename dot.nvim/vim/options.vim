@@ -57,6 +57,7 @@ set showcmd
 "set number
 "set linebreak
 set textwidth=0
+set tw=0
 set cindent
 set shiftwidth=4
 set softtabstop=4

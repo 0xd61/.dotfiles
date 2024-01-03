@@ -36,7 +36,7 @@ vim.keymap.set({ "", "!" }, "<A-b>", "<cmd>Telescope buffers<cr>", { noremap = t
 vim.keymap.set({ "", "!" }, "<A-S-b>", "<cmd>vsp .scratch<cr>", { noremap = true, desc = "Open scratch buffer in new window" })
 vim.keymap.set({ "", "!" }, "<A-k>", "<cmd>bd<cr>", { noremap = true, desc = "Close buffer" })
 vim.keymap.set({ "", "!" }, "<A-y>", "<cmd>Telescope registers<cr>", { noremap = true, desc = "Open registers" })
-vim.keymap.set({ "", "!" }, "<A-f>", "<cmd>Telescope fd<cr>", { noremap = true, desc = "Open files" })
+vim.keymap.set({ "", "!" }, "<A-f>", "<cmd>Telescope file_browser auto_depth=true<cr>", { noremap = true, desc = "Open files" })
 vim.keymap.set({ "", "!" }, "<A-g>", "<cmd>Telescope live_grep<cr>", { noremap = true, desc = "Search in files" })
 
 -- Autocomplete/Snippets
