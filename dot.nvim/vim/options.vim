@@ -9,6 +9,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Map leader
 let mapleader=" "
+let maplocalleader=" "
 set autoread
 " :W sudo saves the file
 " (useful for handling the permission-denied error)

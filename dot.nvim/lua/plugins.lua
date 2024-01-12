@@ -29,6 +29,9 @@ local spec = {
     "ledger/vim-ledger",
   },
   {
+    "freitass/todo.txt-vim",
+  },
+  {
     "hrsh7th/nvim-cmp",
     -- event = 'InsertEnter',
     event = "VeryLazy",

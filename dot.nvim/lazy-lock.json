@@ -12,6 +12,7 @@
   "plenary.nvim": { "branch": "master", "commit": "55d9fe89e33efd26f532ef20223e5f9430c8b0c0" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "4bd5657b14b58e069287f5ac591a647bb860b2ed" },
   "telescope.nvim": { "branch": "master", "commit": "f336f8cfab38a82f9f00df380d28f0c2a572f862" },
+  "todo.txt-vim": { "branch": "master", "commit": "ed9d639de2e34eafb82f2682010ab361966ee40f" },
   "vim-css-color": { "branch": "master", "commit": "6cc65734bc7105d9677ca54e2255fcbc953ba6bf" },
   "vim-ledger": { "branch": "master", "commit": "281346a221434574dd7f8767a352b2bf0b218b74" }
 }
