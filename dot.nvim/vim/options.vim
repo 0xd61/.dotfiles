@@ -59,6 +59,8 @@ set showcmd
 "set linebreak
 set textwidth=0
 set tw=0
+set wrapmargin=0
+set linebreak
 set cindent
 set shiftwidth=4
 set softtabstop=4
@@ -91,6 +93,27 @@ set tags=tags; "tells vim that the name of your tags file will always be the sam
 
 " THINGS TO CONSIDER:
 " - This doesn't help if you want a visual list of tags
+
+" FILE BROWSING:
+
+" Tweaks for browsing
+let g:netrw_banner=0        " disable annoying banner
+let g:netrw_keepdir=0     " sync browsing and current dir
+"let g:netrw_browse_split=4  " open in prior window
+"let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+"let g:netrw_list_hide=netrw_gitignore#Hide()
+"let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+"let g:netrw_winsize = 15
+"augroup ProjectDrawer
+"  autocmd!
+"  autocmd VimEnter * :Vexplore
+"augroup END
+
+" NOW WE CAN:
+" - :edit a folder to open a file browser
+" - <CR>/v/t to open in an h-split/v-split/tab
+" - check |netrw-browse-maps| for more mappings
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Build Config
