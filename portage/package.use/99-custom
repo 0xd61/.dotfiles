@@ -26,11 +26,22 @@ app-admin/doas persist
 media-video/pipewire sound-server
 media-sound/pulseaudio -daemon
 
-# FreeCAD
-sci-libs/hdf5 -threads
-
 # Remmina
 net-misc/remmina rdp
 
 # Nodejs
 net-libs/nodejs npm
+
+# Imagemagick
+media-gfx/imagemagick svg png xml
+
+# VBAM
+games-emulation/vbam wxwidgets sdl
+# required by games-emulation/vbam-2.1.7::gentoo[wxwidgets]
+# required by games-emulation/vbam (argument)
+>=x11-libs/wxGTK-3.2.2.1-r3 opengl
+
+# required by net-print/hplip-3.23.5::gentoo[snmp,-minimal]
+# required by net-print/hplip-plugin-3.23.5::gentoo
+# required by net-print/hplip-plugin (argument)
+>=net-dns/avahi-0.8-r7 python

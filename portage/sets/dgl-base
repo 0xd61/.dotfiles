@@ -1,8 +1,9 @@
 app-admin/doas
 app-admin/pass
 app-containers/docker-cli
+dev-util/ctags
 app-editors/emacs
-app-editors/vim
+app-editors/neovim
 app-eselect/eselect-repository
 app-misc/tmux
 app-portage/genlop
@@ -16,7 +17,6 @@ sys-apps/fd
 sys-devel/gf
 sys-process/htop
 sys-process/lsof
-x11-base/xorg-server
 app-portage/gentoolkit
 media-gfx/flameshot
 sys-block/zram-init
@@ -28,3 +28,9 @@ net-misc/streamlink
 media-video/mpv
 app-office/ledger
 app-text/obsidian
+sys-apps/usbutils
+sys-kernel/genkernel
+sys-apps/ripgrep
+media-libs/glfw # needed for whitebox
+x11-drivers/xf86-video-amdgpu
+www-client/firefox-bin

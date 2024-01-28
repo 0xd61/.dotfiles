@@ -128,3 +128,9 @@
 # required by net-print/hplip-plugin-3.23.5::gentoo
 # required by net-print/hplip-plugin (argument)
 >=net-dns/avahi-0.8-r7 python
+# required by media-libs/mesa-23.3.1::gentoo[X]
+# required by x11-base/xorg-server-21.1.11::gentoo[-minimal]
+# required by @dgl-base
+# required by @selected
+# required by @world (argument)
+>=x11-libs/xcb-util-keysyms-0.4.1 abi_x86_32

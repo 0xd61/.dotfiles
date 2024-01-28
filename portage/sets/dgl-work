@@ -1,4 +1,6 @@
 app-containers/docker
+app-containers/docker-buildx
+app-containers/docker-compose
 media-sound/alsa-utils
 media-sound/pavucontrol
 net-dns/bind-tools
@@ -17,10 +19,8 @@ sys-fs/lvm2
 sys-kernel/dracut
 sys-kernel/gentoo-kernel
 sys-kernel/gentoo-sources
-sys-kernel/installkernel-gentoo
+sys-kernel/installkernel
 sys-kernel/linux-firmware
-www-client/firefox-bin
-www-client/google-chrome
 x11-apps/xinit
 x11-apps/xrandr
 x11-apps/xsetroot
@@ -28,8 +28,12 @@ x11-misc/dmenu
 x11-terms/alacritty
 x11-wm/dwm
 sys-devel/clang
-media-gfx/freecad
-app-office/libreoffice-bin
 virtual/wine
 net-libs/nodejs
 app-arch/dpkg
+app-containers/devcontainer
+app-editors/vscode
+app-admin/terraform
+sys-cluster/kubectl
+www-client/google-chrome
+app-office/libreoffice-bin

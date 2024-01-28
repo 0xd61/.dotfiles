@@ -5,3 +5,5 @@ sys-kernel/zen-sources ~amd64
 sys-devel/gcc ~amd64
 net-vpn/protonvpn-cli ~amd64
 app-text/obsidian ~amd64
+app-containers/devcontainer ~amd64
+games-emulation/vbam ~amd64

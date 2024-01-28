@@ -1,0 +1,3 @@
+# necessary for whitebox
+sys-libs/ncurses tinfo
+sys-libs/ncurses-compat tinfo
