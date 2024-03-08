@@ -16,7 +16,8 @@ local spec = {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-file-browser.nvim"
+      "nvim-telescope/telescope-file-browser.nvim",
+      "GustavoKatel/telescope-asynctasks.nvim"
     },
     config = function(_, opts)
         require("telescope").load_extension "file_browser"
@@ -30,6 +31,12 @@ local spec = {
   },
   {
     "freitass/todo.txt-vim",
+  },
+  {
+    "skywind3000/asynctasks.vim",
+    dependencies = {
+        "skywind3000/asyncrun.vim"
+    },
   },
   {
     "hrsh7th/nvim-cmp",

@@ -69,6 +69,25 @@ api.nvim_create_user_command(
 )
 
 api.nvim_create_user_command(
+    'QFixToggle',
+    function()
+        local height = vim.fn.winheight(0)
+        local qf_exists = false
+        for _, win in pairs(vim.fn.getwininfo()) do
+            if win["quickfix"] == 1 then
+                qf_exists = true
+            end
+        end
+        if qf_exists == true then
+            vim.cmd("cclose")
+        else
+            vim.cmd("copen" .. height)
+        end
+    end,
+    { nargs = '?' }
+)
+
+api.nvim_create_user_command(
     'MakeDirSave',
     function()
         local mkdir_cmd = "!mkdir %:p:h"

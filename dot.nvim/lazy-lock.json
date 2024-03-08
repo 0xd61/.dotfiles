@@ -1,5 +1,7 @@
 {
   "LuaSnip": { "branch": "master", "commit": "57c9f5c31b3d712376c704673eac8e948c82e9c1" },
+  "asyncrun.vim": { "branch": "master", "commit": "915e36a2ed84b73741e13d2df3edc8e01ca56f5b" },
+  "asynctasks.vim": { "branch": "master", "commit": "851da4282ffb2ce3d5e4c2f70d2d09da7839d48f" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-ctags": { "branch": "main", "commit": "8d9ddae9ea20c303bdc0888b663c0459b0dc72c2" },
   "cmp-ledger": { "branch": "main", "commit": "4b278333d4a4b59fd960383eac687eb47c23abe5" },
@@ -10,6 +12,7 @@
   "nvim-cmp": { "branch": "main", "commit": "538e37ba87284942c1d76ed38dd497e54e65b891" },
   "nvim-treesitter": { "branch": "master", "commit": "454c3a9ba86f841dc3b5bb17d150a873a16b77b4" },
   "plenary.nvim": { "branch": "master", "commit": "55d9fe89e33efd26f532ef20223e5f9430c8b0c0" },
+  "telescope-asynctasks.nvim": { "branch": "main", "commit": "065300fb0a8ba6a1c81991da1873c73e136dcdc0" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "4bd5657b14b58e069287f5ac591a647bb860b2ed" },
   "telescope.nvim": { "branch": "master", "commit": "f336f8cfab38a82f9f00df380d28f0c2a572f862" },
   "todo.txt-vim": { "branch": "master", "commit": "ed9d639de2e34eafb82f2682010ab361966ee40f" },

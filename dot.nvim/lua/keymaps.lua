@@ -30,6 +30,7 @@ vim.keymap.set({ "", "!" }, "<C-k>", "d$", { noremap = true, desc = "Kill line" 
 vim.keymap.set({ "", "!" }, "<A-s>", "<cmd>w<cr>", { noremap = true, desc = "Save buffer" })
 vim.keymap.set({ "", "!" }, "<A-S-s>", "<cmd>MakeDirSave<cr>", { noremap = true, desc = "Create dir and save buffer" })
 vim.keymap.set({ "v" }, "c", ":norm 0i", { noremap = true, desc = "Comment/uncomment region" })
+vim.keymap.set({ "", "!" }, "<A-Return>", "<cmd>QFixToggle<cr>", { noremap = true, desc = "Toggle quckfix window" })
 
 -- Telescope
 vim.keymap.set({ "", "!" }, "<A-b>", "<cmd>Telescope buffers<cr>", { noremap = true, desc = "Open buffers" })
@@ -48,7 +49,8 @@ vim.keymap.set({"i", "s"}, "<C-]>", function() ls.jump(-1) end, {noremap = true,
 -- Terminal
 vim.keymap.set({ "", "!" }, "<A-n>", "<cmd>terminal<cr>", { noremap = true, desc = "Open terminal" })
 vim.keymap.set({ "t" }, "<esc>", "<C-\\><C-n>", { noremap = true, desc = "Open terminal" })
-vim.keymap.set({ "", "!" }, "<A-m>", "<cmd>make<cr>", { noremap = true, desc = "Run make command" })
+vim.keymap.set({ "", "!" }, "<A-S-m>", "<cmd>Telescope asynctasks all<cr>", { noremap = true, desc = "Show async task list" })
+vim.keymap.set({ "", "!" }, "<A-m>", "<cmd>AsyncTaskLast<cr>", { noremap = true, desc = "Run last async task" })
 
 -- Exit
 vim.keymap.set({ "" }, "<A-q>", "<cmd>q<cr>", { noremap = true, desc = "Close nvim" })

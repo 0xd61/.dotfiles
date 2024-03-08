@@ -116,7 +116,7 @@ let g:netrw_liststyle=3     " tree view
 " - check |netrw-browse-maps| for more mappings
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Build Config
+" => Build Config (using async tasks plugin)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TODO(dgl): make this overridable in a local config
-set makeprg=./build.teak
+" split quickfix buffer and show in vsplit window
+set switchbuf=vsplit
