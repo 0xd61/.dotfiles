@@ -2,6 +2,7 @@
   "LuaSnip": { "branch": "master", "commit": "57c9f5c31b3d712376c704673eac8e948c82e9c1" },
   "asyncrun.vim": { "branch": "master", "commit": "915e36a2ed84b73741e13d2df3edc8e01ca56f5b" },
   "asynctasks.vim": { "branch": "master", "commit": "851da4282ffb2ce3d5e4c2f70d2d09da7839d48f" },
+  "blame.nvim": { "branch": "main", "commit": "562661972085a273914c8f702b11924f8aa573ea" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-ctags": { "branch": "main", "commit": "8d9ddae9ea20c303bdc0888b663c0459b0dc72c2" },
   "cmp-ledger": { "branch": "main", "commit": "4b278333d4a4b59fd960383eac687eb47c23abe5" },

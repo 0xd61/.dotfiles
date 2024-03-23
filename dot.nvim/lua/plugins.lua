@@ -33,6 +33,9 @@ local spec = {
     "freitass/todo.txt-vim",
   },
   {
+    "FabijanZulj/blame.nvim",
+  },
+  {
     "skywind3000/asynctasks.vim",
     dependencies = {
         "skywind3000/asyncrun.vim"
