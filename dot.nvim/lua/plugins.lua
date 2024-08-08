@@ -40,6 +40,9 @@ local spec = {
     },
   },
   {
+    "tpope/vim-sleuth",
+  },
+  {
     "hrsh7th/nvim-cmp",
     -- event = 'InsertEnter',
     event = "VeryLazy",
@@ -128,6 +131,8 @@ local spec = {
           ensure_installed = {"bash",
                               "bitbake",
                               "cmake",
+                              "devicetree",
+                              "diff",
                               "diff",
                               "go",
                               "html",
