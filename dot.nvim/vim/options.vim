@@ -57,10 +57,6 @@ set smarttab
 set expandtab
 set showcmd
 "set number
-"set linebreak
-set textwidth=0
-set tw=0
-set wrapmargin=0
 set linebreak
 set cindent
 set shiftwidth=4
