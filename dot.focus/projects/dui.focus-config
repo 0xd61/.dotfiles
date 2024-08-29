@@ -4,12 +4,14 @@
 # These directories and files will be scanned when a workspace is opened so that search etc. works.
 # Example:
 /home/dgl/Projects/degit/dui
+W:/dui
 # C:/projects/my-project
 # C:/jai
+[ignore]
+external/**
 
 
 [[build commands]]
-build_working_dir:      /home/dgl/Projects/degit/dui
 open_panel_on_build:    true  #  <- any settings specified here will apply to all commands unless overridden
 close_panel_on_success: false
 clear_build_output_before_running: true
@@ -28,6 +30,12 @@ auto_jump_to_error:     true
 build_command:          bash -c "gcc ./first.c -o first && ./first"  # should be an executable or a script
 #run_command:            ./first
 error_regex:            ^(?P<file>.*):(?P<line>\d+):(?P<col>\d+): (?P<type>error|warning|note): (?P<msg>.*) (\[(?P<msg1>.*)\])?$
+
+[Build Windows]   # <- command name. Can be arbitrary
+build_command:          cmd /c "cl first.c && del first.obj && first.exe release"  # should be an executable or a script
+#run_command:            ./first
+# we removed the warning there because warnings converted to errors cause a regex match error
+error_regex:            ^(?P<file>.*)\((?P<line>\d+),?(?P<col>\d+)?\)[ ]?: (?P<type>error) (?P<msg>.*)$
 
 # [Run]                   # <- You could have commands that don't build anything and just run something
 # run_command:            test
