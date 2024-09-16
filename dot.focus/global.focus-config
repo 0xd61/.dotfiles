@@ -1,4 +1,4 @@
-[5]  # Version number. Do not delete.
+[6]  # Version number. Do not delete.
 
 [[workspace]]
 # These directories and files will be scanned when a workspace is opened so that search etc. works.
@@ -35,12 +35,12 @@ open_on_the_biggest_monitor:            false
 cursor_as_block:                        true
 cursor_blink_time_in_seconds:           5
 highlight_selection_occurrences:        true
-disable_that_annoying_paste_effect:     false
+show_paste_effect:                      true
 disable_file_open_close_animations:     false
-double_shift_to_search_in_workspace:    false
+double_shift_to_search_in_workspace:    true
 tab_size:                               4
 insert_spaces_when_pressing_tab:        true
-strip_trailing_whitespace_on_save:      true
+strip_trailing_whitespace_on_save:      except_lines_with_cursor  # options: all, except_lines_with_cursor, disabled
 smooth_scrolling:                       true
 scroll_beyond_last_line:                true
 line_height_scale_percent:              120
@@ -59,7 +59,7 @@ auto_surround_with_brackets_and_quotes: true
 auto_close_brackets:                    false
 prefer_system_file_dialogs:             false  # Windows only
 show_cursors_off_screen:                true
-persist_local_search_results:           false  # if true, search results will stay highlighted and you have to dismiss them using the `escape` action
+persist_local_search_results:           true  # if true, search results will stay highlighted and you have to dismiss them using the `escape` action
 
 build_panel_stays_in_one_place:         false  # if false, the build panel will flip to the inactive pane in two pane layouts
 build_panel_line_wrap_always_on:        true
@@ -72,11 +72,15 @@ save_current_buffer_on_build:           false
 # Added after migration to version [5]
 window_width:                                  -1
 window_height:                                 -1
-insert_final_newline_on_save:                  false
+insert_final_newline_on_save:                  true
 status_bar_position:                           bottom  # options: top, bottom
-load_most_recent_project_on_start:             false
+load_most_recent_project_on_start:             true
 color_preview_popup:                           enabled  # options: enabled, minimized, disabled
-highlight_matching_brackets:                   false
+highlight_matching_brackets:                   true
+
+# Added after migration to version [6]
+search_is_case_sensitive_when_uppercase_present: false
+projects_sorting_order:                          most_recent_first  #options: most_recent_first, alphabetical, alphabetical_no_case
 
 
 # This is an example configuration for build commands
@@ -256,11 +260,11 @@ Ctrl-Shift-P                show_commands
 Ctrl-Alt-P                  switch_to_project
 
 #Alt-F                       search_in_buffer
-Alt-F                       search_in_buffer_dropdown_mode
-Alt-Shift-F                 search_in_project
+Alt-G                       search_in_buffer_dropdown_mode
+Alt-Shift-G                 search_in_project
 
-Alt-O                       open_file_by_name
-Alt-Shift-O                 navigate_to_file
+Alt-F                       open_file_by_name
+Alt-Shift-F                 navigate_to_file
 #Ctrl-Shift-O                navigate_to_file_from_root
 Alt-B                       switch_between_open_files
 
@@ -327,7 +331,6 @@ Ctrl-N                      go_to_next_build_error
 Ctrl-Shift-F8               go_to_previous_build_error
 #Shift-Ctrl-F8              go_to_previous_build_error_on_the_side
 
-# Added after migration to version [5]
 {Shift}-Ctrl-M              jump_to_matching_bracket
 
 
