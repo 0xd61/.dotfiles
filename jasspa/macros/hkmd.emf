@@ -1,0 +1,170 @@
+; -!- emf -!-
+; This is part of the JASSPA MicroEmacs macro files
+; Copyright (C) 1999-2009 JASSPA (www.jasspa.com)
+; See the file me.emf for copying and conditions.
+;
+; Created:    Sun Nov 15 2020
+; Authors:    Detlef Groth
+; Synopsis:   Markdown file hook (https://www.markdownguide.org/)
+;
+define-macro fhook-md
+  set-variable #l0 &con &isin ".rmd" $buffer-bname "rmd" "md"
+  @# buffer-init "md" #l0
+  buffer-init-hooks
+!emacro
+
+; buffer-init variables
+set-variable .fhook-md.name "Markdown"
+set-variable .fhook-md.setup &reg "/history/fhook/md" "bfghijnopswx"
+set-variable .fhook-md.setup-mask "abefghijkmnopstuwx"
+set-variable .fhook-md.comment "|<!---|-->|-|  -- | --||"
+
+; setup item-list
+set-variable .fhook-md.item-list-s1 "^# \\(\.+\\)"
+set-variable .fhook-md.item-list-r1 "H1 \ecB\\1\ecA"
+set-variable .fhook-md.item-list-s2 "^## <a \.+>\\(\.+\\)</a>"
+set-variable .fhook-md.item-list-r2 "H2 \ecB\\1\ecA"
+set-variable .fhook-md.item-list-s3 "^## \\(\[^<\]\.+\\)"
+set-variable .fhook-md.item-list-r3 "H2 \ecB\\1\ecA"
+
+!if &sin "f" .fhook-md.setup
+  ; setup emf collapsing
+  set-variable .fhook-md.collapse-open  "^\\(# \\|## \\|---\\)"
+  set-variable .fhook-md.collapse-close "^\\(# \\|## \\|---\\|\\'\\)"
+  set-variable .fhook-md.collapse-mnext "-1"
+!endif
+
+!if &and &sin "h" .fhook-md.setup &band .hilight.flags 0x02
+  !if &not &exi .hilight.md
+    set-variable .hilight.md &pinc .hilight.next 1
+    set-variable .hilight.mdB &pinc .hilight.next 1
+    set-variable .hilight.mdI &pinc .hilight.next 1
+    set-variable .hilight.mdBI &pinc .hilight.next 1
+    set-variable .hilight.mdH &pinc .hilight.next 1
+    set-variable .hilight.mdA &pinc .hilight.next 1
+    set-variable .hilight.mdL &pinc .hilight.next 1
+    set-variable .hilight.mdU &pinc .hilight.next 1
+    set-variable .hilight.mdC &pinc .hilight.next 1
+  !endif
+  0 hilight .hilight.md 3 100           $global-scheme
+  hilight .hilight.md 4 "<!--" "-->" "" .scheme.comment
+  hilight .hilight.md 2 "^#"            .scheme.header
+  hilight .hilight.md 4 "\"" "\"" "\\"  .scheme.string
+  hilight .hilight.md 0 "'[^']+'"       .scheme.quote
+  hilight .hilight.md 0 "\\\\\\}[-[-]`*_{}<>()#+.!|]" .scheme.hide
+  
+  hilight .hilight.md 0x890 "\\*\\}\\S" .hilight.mdI .scheme.hide
+  hilight .hilight.md 0x890 "\\W\\{_\\}\\S" .hilight.mdI .scheme.hide
+  hilight .hilight.md 0x890 "\\*\\*\\}\\S" .hilight.mdB .scheme.hide
+  hilight .hilight.md 0x890 "\\W\\{__\\}\\S" .hilight.mdB .scheme.hide
+  hilight .hilight.md 0 "\\*\\*\\*+"    $global-scheme
+  hilight .hilight.md 0 "___+"          $global-scheme
+  hilight .hilight.md 0x890 "!\\["      .hilight.mdA .scheme.hide
+  hilight .hilight.md 0x890 "\\["       .hilight.mdL .scheme.hide
+
+  hilight .hilight.md 0x890 "==\\}\\S"  .hilight.mdH .scheme.hide
+  hilight .hilight.md 0 "===+"          $global-scheme
+  
+  ; HTTP links etc.
+  hilight .hilight.md 0 "file:[-@~_a-zA-Z#%=\\.:\\/0-9]+"    .scheme.link
+  hilight .hilight.md 0 "http:[-@~_a-zA-Z#%?&=\\.:\\/0-9]+"  .scheme.link
+  hilight .hilight.md 0 "https:[-@~_a-zA-Z#%?&=\\.:\\/0-9]+" .scheme.link
+  hilight .hilight.md 0 "ftp:[-@~_a-zA-Z#%\\.:\\/0-9]+"      .scheme.link
+  hilight .hilight.md 0 "ftps:[-@~_a-zA-Z#%\\.:\\/0-9]+"     .scheme.link
+  hilight .hilight.md 0 "mailto:[-@~_a-zA-Z#%\\.:\\/0-9]+"   .scheme.link
+  hilight .hilight.md 0 "news:[-@~_a-zA-Z#%\\.:\\/0-9]+"     .scheme.link 
+  ; bullet and item lists
+  hilight .hilight.md 0x20 "\\-\\} "                   .scheme.keyword
+  hilight .hilight.md 0x20 "\\d+\\.\\} "               .scheme.keyword
+  ; footnotes and task lists
+  hilight .hilight.md 0 "\\[^\\{\\d+\\}]"              .scheme.link
+  hilight .hilight.md 0x20 "\\[^\\d+]:"                .scheme.bold
+  hilight .hilight.md 0x20 "- \\{\\[ ] "               .scheme.bold
+  hilight .hilight.md 0x20 "- \\{\\[X] "               .scheme.bold
+  
+  0 hilight .hilight.mdB 0                             .scheme.bold
+  hilight   .hilight.mdB 0 "\\\\."                     .scheme.bold
+  hilight   .hilight.mdB 0x80 "\\*\\*" .hilight.md     .scheme.hide
+  hilight   .hilight.mdB 0x80 "__\\}\\W" .hilight.md   .scheme.hide
+  hilight   .hilight.mdB 0x80 "\\*" .hilight.mdBI      .scheme.hide
+  hilight   .hilight.mdB 0x80 "\\W\\{_\\}\\S" .hilight.mdBI .scheme.hide
+  
+  0 hilight .hilight.mdI 0                             .scheme.italic
+  hilight   .hilight.mdI 0 "\\\\."                     .scheme.italic
+  hilight   .hilight.mdI 0x80 "\\*" .hilight.md        .scheme.hide
+  hilight   .hilight.mdI 0x80 "_\\}\\W" .hilight.md    .scheme.hide
+  hilight   .hilight.mdI 0x80 "\\*\\*" .hilight.mdBI   .scheme.hide
+  hilight   .hilight.mdI 0x80 "\\W\\{__\\}\\S" .hilight.mdBI .scheme.hide
+  
+  0 hilight .hilight.mdBI 0                            .scheme.bold-italic
+  hilight   .hilight.mdBI 0 "\\\\."                    .scheme.bold-italic
+  hilight   .hilight.mdBI 0x80 "\\*\\*" .hilight.mdI   .scheme.hide
+  hilight   .hilight.mdBI 0x80 "__\\}\\W" .hilight.mdI .scheme.hide
+  hilight   .hilight.mdBI 0x80 "\\*" .hilight.mdB      .scheme.hide
+  hilight   .hilight.mdBI 0x80 "_\\}\\W" .hilight.mdB  .scheme.hide
+  
+  0 hilight .hilight.mdH 0                             .scheme.hlblue
+  hilight   .hilight.mdH 0 "\\\\."                     .scheme.bold
+  hilight   .hilight.mdH 0x80 "==" .hilight.md         .scheme.hide
+
+  0 hilight .hilight.mdA 0                             $global-scheme
+  hilight   .hilight.mdA 0 "\\\\."                     .scheme.link
+  hilight   .hilight.mdA 0x80 "](" .hilight.mdU        .scheme.hide
+  hilight   .hilight.mdA 0x80 "]" .hilight.md          .scheme.error
+  
+  0 hilight .hilight.mdL 0                             .scheme.link
+  hilight   .hilight.mdL 0 "\\\\."                     .scheme.link
+  hilight   .hilight.mdL 0x80 "](" .hilight.mdU        .scheme.hide
+  hilight   .hilight.mdL 0x80 "]" .hilight.md          .scheme.error
+
+  0 hilight .hilight.mdU 0                             .scheme.hide
+  hilight   .hilight.mdU 0 "\\\\."                     .scheme.hide
+  hilight   .hilight.mdU 0x80 ")" .hilight.md          .scheme.hide
+
+  ; Code blocks
+  hilight .hilight.md 1 "`[^`]+`"     .scheme.quote
+  hilight .hilight.md 0x300 "```"
+  hilight .hilight.md 0x180 "```.*"   .hilight.mdC .scheme.hide
+  
+  0 hilight .hilight.mdC 0            $global-scheme
+  hilight   .hilight.mdC 0x180 "```"  .hilight.md .scheme.hide
+  
+  ; Allow inserts into the markdown mode. You may add to the inserts in your mymd.emf file
+  0 define-macro md-add-file-support
+    set-variable #l0 @1
+    set-variable #l1 @2
+    ; Force the hilighting mode to load if not already loaded.
+    !if &not &exi &cat ".hilight." #l0
+      !force execute-file &cat "hk" #l0
+      ml-write &cat "executed " #l0
+    !endif
+    ; If the hilighting mode is loaded then modify it, else leave to the default code block hilighter
+    !if &sin "h" &ind &spr ".fhook-%s.setup" #l0 &band .hilight.flags 0x02 
+      hilight .hilight.md 0x180 &spr "```{%s}" #l1 &ind &cat ".hilight." #l0 .scheme.hide
+      hilight .hilight.md 0x180 &spr "```{\\.%s}" #l1 &ind &cat ".hilight." #l0 .scheme.hide
+      hilight .hilight.md 0x180 &spr "```{%s[, ][^}]+}" #l1 &ind &cat ".hilight." #l0 .scheme.hide
+      hilight .hilight.md 0x180 &spr "```{\\.%s[, ][^}]+}" #l1 &ind &cat ".hilight." #l0 .scheme.hide
+      hilight &ind &cat ".hilight." #l0 0x180 "```" .hilight.md .scheme.hide
+    !endif
+  !emacro
+  md-add-file-support "tcl" "tcl"
+  md-add-file-support "r" "r"
+  md-add-file-support "dot" "dot"
+  md-add-file-support "python" "python"
+  md-add-file-support "python" "py"
+  md-add-file-support "sql" "sql"
+  md-add-file-support "emf" "emf"
+!endif
+
+!if &sin "x" .fhook-md.setup
+  ; only define the b & e hooks if time stamping is enabled
+  0 define-macro bhook-md
+    set-variable .timestamp $timestamp
+    set-variable $timestamp "%Y-%M-%D %h:%m"
+  !emacro
+  0 define-macro ehook-md
+    set-variable $timestamp .bhook-md.timestamp
+  !emacro
+!endif
+
+buffer-init-fhook "md" 

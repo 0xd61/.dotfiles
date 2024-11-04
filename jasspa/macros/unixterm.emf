@@ -1,0 +1,91 @@
+; -!- emf -!-
+; This is part of the JASSPA MicroEmacs macro files
+; Copyright (C) 1995-2009 JASSPA (www.jasspa.com)
+; See the file me.emf for copying and conditions.
+;
+; Synopsis:    Common unix setup file
+; Authors:     Steven Phillips
+;
+define-macro-file hkman man
+define-macro-file hkipipe ishell gdb dbx perldb
+add-file-hook ".C" fhook-cpp
+0 define-macro pipe-me
+  !if &not &exi .mcmd
+    !if &seq "mec" &mid &set #l0 $progname &set #l3 &rsin "/" #l0 3
+    !elif &seq "R" &stat "t" &set #l2 &cat &set #l1 &lef #l0 #l3 "mec"
+      set-variable #l0 #l2
+    !elif &seq "R" &stat "t" &set #l2 &cat #l1 "mecw"
+      set-variable #l0 #l2
+    !elif &not &seq "ERROR" &set #l2 &which "mec"
+      set-variable #l0 #l2
+    !elif &not &seq "ERROR" &set #l2 &which "mecw"
+      set-variable #l0 #l2
+    !endif
+    !iif &sin " " #l0  set-variable #l0 &spr "\"%s\"" #l0
+    !iif &sin "/mecw" #l0  set-variable #l0 &cat #l0 " -n"
+    set-variable .mcmd #l0
+  !endif
+  ipipe-shell-command &spr "%s %s %s" .mcmd &con &ban @# 2 "-P" "-p" @1 @mna
+!emacro
+!if &band $system 0x01
+  ; Not using X
+  ; if no color - change the window chars so osd is more usable
+  !iif &not &band $system 0x02  set-variable $window-chars &spr "%s=x*[>]<%s" &lef $window-chars 47 &rig $window-chars 54
+!else
+  !iif &not &seq &set #l0 &reg &spr "/history/%s/font" $platform "" ""  !force change-font #l0
+  define-macro change-font-size
+    !if &not &and @? @#
+      set-variable .dpth &lget .ofnt 5
+      5 change-font &lget .ofnt 8
+      ml-write &spr "[Text Zoom reset  (%s-%s: %dx%d)]" &lget &lget .ofnt 8 1 &lget &lget .ofnt 8 2 &lget .ofnt 4 &lget .ofnt 5
+      !return
+    !elif &exi .font
+      set-variable #l1 .font
+    !elif &xse &lget .ofnt 8 "\\(-[^-]*-[^-]*-[^-]*-[^-]*-\\)[^-]*-[^-]*-[^-]*-[^-]*-[^-]*\\(-[^-]*-\\)[^-]*\\(-.*\\)"
+      set-variable #l1 &spr "%s*-*-%%d-*-*%s*%s" @s1 @s2 @s3
+    !else
+      -8 ml-write "[Current font name cannot be broken down]"
+    !endif
+    ; try up to five times to increase/decrease font actual size (given in $result)
+    2 change-font      
+    set-variable #l2 &lget $result 5
+    set-variable #l3 5
+    !repeat
+      !iif &les &set #l0 &add .dpth @# 5  -8 ml-write "[Text too small]"
+      set-variable .dpth #l0
+      !force change-font &spr #l1 #l0
+      !if &not $status
+      !elif &sub &lget &set #l4 $result 5 #l2
+        ml-write &spr "[Text Zoom: %d%%  (%s-%s: %dx%d)]" &div &mul &lget #l4 5 100 &lget .ofnt 5 &lget &lget #l4 8 1 &lget &lget #l4 8 2 &lget #l4 4 &lget #l4 5
+        !return
+      !endif
+    !until &not &dec #l3 1
+    ml-write &spr "[Current font not available at size %d]" #l0
+  !emacro
+  2 change-font
+  set-variable .change-font-size.ofnt $result
+  set-variable .change-font-size.dpth &lget .change-font-size.ofnt 5
+  global-bind-key change-font-size "C-="
+  1 global-bind-key change-font-size "C-+"
+  -1 global-bind-key change-font-size "C--"
+!endif
+;
+; Setup ipipe terminal, vt100-nam is preferred but not supported on all so init to basic vt100
+set-variable %ipipe-term "TERM=vt100"
+;
+; setup the next-error stuff including grep and compiling
+set-variable $file-template "[!-9;-z~]+"
+set-variable $line-template "[0-9]+"
+; Compile - Add support for GNU gcc & Java style errors and warning
+0 add-next-line "*compile*"
+add-next-line "*compile*" "^ *\\(\\[\\m+\\] \\)?%f:%l:\\(\\d+:\\)? \\(fatal error\\|error\\|warning\\)"
+; Grep stuff
+set-variable %xgrep-com "grep -n"
+; RCS stuff
+set-variable $rcs-file     "RCS/%f,v"
+set-variable $rcs-co-com   "co %f"
+set-variable $rcs-cou-com  "co -l %f"
+set-variable $rcs-ci-com   "ci -u -m\"%m\" %f"
+;set-variable $rcs-cif-com  "ci -u -m\"%m\" %f"
+; Declare the .dir file found in X11 font directory, this is not an info file.
+add-file-hook ".dir" fhook-txt

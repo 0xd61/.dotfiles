@@ -1,0 +1,13 @@
+;-!- emf -!-
+; This is part of the JASSPA MicroEmacs macro files
+; Copyright (C) 1995-2009 JASSPA (www.jasspa.com)
+; See the file me.emf for copying and conditions.
+;
+; Synopsis:    Setup file for SunOS boxes.
+; Authors:     Steven Phillips
+;
+; Load up common unix stuff
+execute-file "unixterm"
+;
+; SunOS Compile stuff
+add-next-line "*compile*" "\"%f\", line %l:"

@@ -1,26 +1,18 @@
-enfs1CACEDAHBBADACCEHFJDBDvars
-platformwindows
-system1571618
+enfs1CACEDAIBBAEBBFCEBCECFvars
+platformlinux
+system1177762
 update1
 amark0
 kill1
-w-scroll2
+w-scroll1
+c-scroll1
 w-sbar446
-w-framew120
-w-framed50
-enfs1CACEDAHBBADACCEHFJDBDhist
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
+c-sbar0
+w-framew213
+c-framew238
+w-framed70
+c-framed55
+enfs1CACEDAIBBAEBBFCEBCECFhist
 0
 0
 0
@@ -28,7 +20,19 @@
 0
 0
 023+3
+0Input Mono
+01
+0InputMono
 0dgl
+0./ ~ .svn/ tags .o
+00
+0DGL Default Theme
+020
+0user
+0user *
+0rg
+0rg 
+0
 1
 1
 1
@@ -63,12 +67,12 @@
 2
 2
 2
-2
-2
-2
-2
-2
 2copy-region
+2user-setup
+2scheme-editor
+2list-commands
+2quick-exit
+2shell
 3
 3
 3
@@ -105,68 +109,61 @@
 4
 4
 4
-4
 4insert
 4menu
 4main
-enfs1CACEDAHBBADACCEHFJDBDbuff
-C:/Users/dgl/Tools/me/
-*files*5060BclMTV
-
-C:/Users/dgl/Tools/me/dgl.emf
-dgl.emf8080aBcElMTtU
-
-enfs1CACEDAHBBADACCEHFJDBDkill
-ind-key "find-file" "A-f"
-GLOBAL-BIND-KEY "GIT" "A-G"
-enfs1CACEDAHBBADACCEHFJDBDkill
+4grep
+enfs1CACEDAIBBAEBBFCEBCECFbuff
+enfs1CACEDAIBBAEBBFCEBCECFkill
 GLOBAL-BIND-KEY "GIT" "A-G"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-bind
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 ;global-bind-key "display-main-menu" "f10"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-w"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-s"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-S-s"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-b"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "A-f"
 
-enfs1CACEDAHBBADACCEHFJDBDkill
+enfs1CACEDAIBBAEBBFCEBCECFkill
 global-unbind-key "C-x g"
 
-enfs1CACEDAHBBADACCEHFJDBDwin
-0111948
-0101393269000*directory*
-00401119327190040*bindings*
-100331194850000*git-console*
-enfs1CACEDAHBBADACCEHFJDBDend
+enfs1CACEDAIBBAEBBFCEBCECFkill
+global-bind-key "git" "C-x g"
+
+enfs1CACEDAIBBAEBBFCEBCECFwin
+0121268
+10011056810000*scratch*
+0010612126810000*scratch*
+enfs1CACEDAIBBAEBBFCEBCECFend
 

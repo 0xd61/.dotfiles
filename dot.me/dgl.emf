@@ -1,12 +1,11 @@
 
 ; Keybinds
-global-bind-key "next-window" "A-w"
-global-bind-key "save-buffer" "A-s"
-global-bind-key "save-all" "A-S-s"
-global-bind-key "find-buffer" "A-b"
+global-bind-key "next-window" "esc w"
+global-bind-key "save-buffer" "esc s"
+global-bind-key "save-all" "esc S-s"
+global-bind-key "find-buffer" "esc b"
 global-bind-key "find-file" "A-f"
-global-bind-key "git" "C-x g"
+global-bind-key "find-file" "esc f"
 
 ; Commands
-display-main-menu
 split-window-horizontally
