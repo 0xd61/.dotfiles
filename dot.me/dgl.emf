@@ -1,11 +1,57 @@
+; Macros
+define-macro autocomplete-word 
+    ; remember position 
+    set-alpha-mark "t" 
+    set-mark 
+    backward-word 
+    exchange-point-and-mark 
+    copy-region 
+    ; copy clip to variable 
+    set-variable #l0 @y 
+    ; how many letters ? 
+    set-variable #l1 &len #l0 
+    ; empty clipboard 
+    -1 yank 
+    backward-word 
+    ; search clip and extract rest of the word 
+    search-backward #l0 
+    #l1 forward-char 
+    set-mark 
+    forward-word 
+    exchange-point-and-mark 
+    copy-region 
+    goto-alpha-mark "t" 
+    yank 
+    -1 yank 
+!emacro 
+
+define-macro repeat-line 
+    backward-line 
+    set-mark 
+    end-of-line 
+    exchange-point-and-mark 
+    copy-region 
+    forward-line 
+    yank 
+    -1 yank 
+!emacro 
+
 
 ; Keybinds
 global-bind-key "next-window" "esc w"
+global-bind-key "next-window" "A-w"
 global-bind-key "save-buffer" "esc s"
+global-bind-key "save-buffer" "A-s"
 global-bind-key "save-all" "esc S-s"
+global-bind-key "save-all" "A-S-s"
 global-bind-key "find-buffer" "esc b"
-global-bind-key "find-file" "A-f"
+global-bind-key "find-buffer" "A-b"
 global-bind-key "find-file" "esc f"
+global-bind-key "find-file" "A-f"
+global-bind-key "undo" "A-u"
+global-bind-key "undo" "esc u"
+global-bind-key "query-replace-string" "A-r"
+global-bind-key "query-replace-string"  "esc r"
+global-bind-key "ishell" "C-x c"
 
-; Commands
-split-window-horizontally
+global-bind-key "split-window-horizontally" "C-\\"

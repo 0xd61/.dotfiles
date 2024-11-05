@@ -1,24 +1,18 @@
-enfs1CACEDAIBBAEBBFCEBCECFvars
-platformlinux
-system1177762
+enfs1CACEDAIBBAEBCCCDCDDAAvars
+platformwindows
+system1440546
 update1
 amark0
 kill1
-w-scroll1
+w-scroll2
 c-scroll1
 w-sbar446
 c-sbar0
-w-framew213
+w-framew120
 c-framew238
-w-framed70
+w-framed50
 c-framed55
-enfs1CACEDAIBBAEBBFCEBCECFhist
-0
-0
-0
-0
-0
-0
+enfs1CACEDAIBBAEBCCCDCDDAAhist
 023+3
 0Input Mono
 01
@@ -32,6 +26,12 @@
 0user *
 0rg
 0rg 
+0global .
+0global *
+0global . *
+0gl . *
+0*
+0global
 0
 1
 1
@@ -46,21 +46,13 @@
 1
 1
 1
-1
-1
-1
-1dgl.emf
 1*scratch*
 1*files*
 1*directory*
-2
-2
-2
-2
-2
-2
-2
-2
+1dgl.emf
+1*shell*
+1source/
+1*commands*
 2
 2
 2
@@ -70,9 +62,17 @@
 2copy-region
 2user-setup
 2scheme-editor
-2list-commands
 2quick-exit
 2shell
+2list-commands
+2Brag
+2split-window-horizontally
+2item-list
+2grep
+2rgrep
+2sch
+2au
+2autocomplete-word
 3
 3
 3
@@ -87,11 +87,11 @@
 3
 3
 3
-3
-3
-3
-3
-3
+3T:/me/dgl.emf
+3C:/Users/dgl/source/repos/
+3C:/Users/dgl/source/
+3C:/Users/dgl/
+3C:/Users/dgl/Tools/me/
 3C:/Users/dgl/Tools/me/dgl.emf
 4
 4
@@ -103,67 +103,69 @@
 4
 4
 4
-4
-4
-4
-4
-4
+4search
+4shell
 4
 4insert
 4menu
 4main
+4re[place
+4query
+4dire
 4grep
-enfs1CACEDAIBBAEBBFCEBCECFbuff
-enfs1CACEDAIBBAEBBFCEBCECFkill
-GLOBAL-BIND-KEY "GIT" "A-G"
+enfs1CACEDAIBBAEBCCCDCDDAAbuff
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+5
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "esc f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-bind
-enfs1CACEDAIBBAEBBFCEBCECFkill
-;global-bind-key "display-main-menu" "f10"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "esc f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "A-f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "A-f"
 
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "esc f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "esc f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-buffer" "A-b"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "find-file" "esc f"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-w"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+global-bind-key "undo" "A-u"
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-s"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+set-title
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+define-macro ripgrep
+    !force-shell-command "cd " $cwd " && rg " @i0
+!emacro
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-S-s"
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+define-macro ripgrep
+    !force-shell-command "cd " $cwd " && rg " @i0
+!emacro
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+define-macro ripgrep
+    !force-shell-command "cd " $cwd " && rg " @i0
+!emacro
+enfs1CACEDAIBBAEBCCCDCDDAAkill
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-b"
+;split-window-horizontally
+enfs1CACEDAIBBAEBCCCDCDDAAkill
+;split-window-horizontally
 
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "A-f"
-
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-unbind-key "C-x g"
-
-enfs1CACEDAIBBAEBBFCEBCECFkill
-global-bind-key "git" "C-x g"
-
-enfs1CACEDAIBBAEBBFCEBCECFwin
-0121268
-10011056810000*scratch*
-0010612126810000*scratch*
-enfs1CACEDAIBBAEBBFCEBCECFend
+enfs1CACEDAIBBAEBCCCDCDDAAwin
+0111948
+100111948274000*scratch*
+enfs1CACEDAIBBAEBCCCDCDDAAend
 
