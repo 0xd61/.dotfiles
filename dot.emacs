@@ -249,14 +249,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes nil))
+ '(custom-enabled-themes nil)
+ '(package-selected-packages '(org-roam)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 110 :width normal :family "InputMono"))))
+ '(default ((t (:background "#012326" :foreground "#D2B48C" :height 110 :family 'dgl-font))))
  '(cursor ((t (:background "#65D6AD"))))
  '(font-lock-builtin-face ((t (:foreground "#D2B48C"))))
  '(font-lock-comment-face ((t (:foreground "#31B72C"))))
