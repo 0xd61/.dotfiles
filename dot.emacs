@@ -75,6 +75,11 @@
 (global-hl-line-mode 1)
 (global-font-lock-mode 1)
 
+; Startup windowing
+(setq next-line-add-newlines nil)
+(setq-default truncate-lines t)
+(setq truncate-partial-width-windows nil)
+
 ;;
 ;; MACROS
 ;;
@@ -103,6 +108,120 @@
     (dgl-find-corresponding-file)
     (other-window -1))
 
+(defun dgl-grep ()
+  "Run grep recursively from the directory of the current buffer or the default directory"
+    (interactive)
+    (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
+    (let ((command (read-from-minibuffer "Run grep: "
+	       (cons (concat "rg -iS.  " dir) 10))))
+    (grep command))))
+
+(defun dgl-find-file ()
+  "Find file"
+  (interactive)
+  (let* ((command (read-from-minibuffer "Run fd: "
+				       (cons "fd -iS  " 9)))
+	(files (shell-command-to-string  command)))
+    (find-file
+     (ido-completing-read
+      "Find file: "
+      (delete "" (split-string files "\n"))))))
+
+(defun dgl-maximize-frame ()
+    "Maximize the current frame"
+     (interactive)
+     (when dgl-win32 (w32-send-sys-command 61488)))
+
+
+(setq auto-mode-alist
+    (append '(
+        ("\\workspace.dsl$" . javascript-mode)
+        ("\\.teak$"     . c++-mode)
+        ("\\.cpp$"      . c++-mode)
+        ("\\.hin$"      . c++-mode)
+        ("\\.cin$"      . c++-mode)
+        ("\\.inl$"      . c++-mode)
+        ("\\.rdc$"      . c++-mode)
+        ("\\.h$"        . c++-mode)
+        ("\\.c$"        . c++-mode)
+        ("\\.cc$"       . c++-mode)
+        ("\\.c8$"       . c++-mode)
+        ("\\.txt$"      . indented-text-mode)
+        ("\\.emacs$"    . emacs-lisp-mode)
+        ("\\.gen$"      . gen-mode)
+        ("\\.ms$"       . fundamental-mode)
+        ("\\.m$"        . objc-mode)
+        ("\\.mm$"       . objc-mode)
+        ("\\.go$"       . go-mode)
+        ("\\.bb$"       . bb-mode)
+        ("\\.inc$"      . bb-mode)
+        ("\\.bbappend$" . bb-mode)
+        ("\\.bbclass$"  . bb-mode)
+        ("\\.conf$"     . bb-mode)
+        ("\\.md$"       . markdown-mode)
+        ("\\.js$"       . javascript-mode)
+        ("\\.json$"     . javascript-mode)
+ ) auto-mode-alist))
+
+;;
+;; HOOKS
+;;
+
+(defun dgl-c-hook ()
+    ; 4-space tabs
+    (setq tab-width 4 indent-tabs-mode nil)
+
+    ; No hungry backspace
+    (c-toggle-auto-hungry-state -1);
+
+    ; Additional style stuff
+    (c-set-offset 'member-init-intro '++)
+
+    ; Newline indents, semi-colon doesn't
+    (define-key c++-mode-map "\C-m" 'newline-and-indent)
+    (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
+
+    ; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
+    (setq dabbrev-case-replace t)
+    (setq dabbrev-case-fold-search t)
+    (setq dabbrev-upcase-means-case-search t)
+
+    ; Abbrevation expansion
+    (abbrev-mode 1)
+
+    ; Keybinds
+    (define-key c++-mode-map (kbd "TAB") 'dabbrev-expand)
+    (define-key c++-mode-map (kbd "S-TAB") 'indent-for-tab-command)
+    (define-key c++-mode-map (kbd "C-TAB") 'indent-region)
+)
+
+(defun load-project-settings ()
+  (interactive)
+  (setq find-project-from-directory default-directory)
+  (cd find-project-from-directory)
+  (find-project-directory-recursive dgl-project-file 5)
+  (if (file-exists-p dgl-project-file)
+      (load-file dgl-project-file))
+  (cd find-project-from-directory)
+  )
+
+(defun window-post-load-stuff ()
+  (interactive)
+  (menu-bar-mode -1)
+  (dgl-maximize-frame)
+)
+
+(defun post-load-stuff ()
+  (interactive)
+  (split-window-horizontally)
+  (load-project-settings)
+)
+
+
+(add-hook 'window-setup-hook 'window-post-load-stuff t)
+(add-hook 'after-init-hook 'post-load-stuff t)
+(add-hook 'c-mode-common-hook 'dgl-c-hook)
+
 ;;
 ;; Keybindings
 ;;
@@ -111,73 +230,59 @@
 (keymap-global-set "M-b" 'ido-switch-buffer)
 (keymap-global-set "M-S-b" 'ido-switch-buffer-other-window)
 (keymap-global-set "M-w" 'other-window)
+(keymap-global-set "M-s" 'save-buffer)
+(keymap-global-set "M-u" 'undo)
+(keymap-global-set "M-j" 'imenu)
+(keymap-global-set "M-h" 'dgl-find-file)
+(keymap-global-set "M-g" 'dgl-grep)
 
 ;;
 ;; Highlight
-;; 
+;;
+
+
+(set-foreground-color "#D2B48C")
+(set-background-color "#012326")
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes nil))
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(default ((t (:height 120 :family "Menlo"))))
- '(font-lock-comment-face ((t (:foreground "#3f7f5f")))))
-(set-face-attribute 'default nil :family "Menlo" :height 120)
-(set-face-attribute 'font-lock-comment-face nil :foreground "#3f7f5f")
-(set-face-attribute 'font-lock-string-face nil :foreground "#4f004f")
-(set-face-attribute 'font-lock-constant-face nil :foreground "#4f004f")
-(set-face-attribute 'font-lock-keyword-face nil :foreground "#00003f")
-(set-face-attribute 'font-lock-builtin-face nil :foreground "#00003f")
-(set-face-attribute 'font-lock-type-face nil :foreground "#000000")
-(set-face-attribute 'font-lock-function-name-face nil
-                    :foreground "#000000" :weight 'bold)
-(set-face-attribute 'font-lock-variable-name-face nil
-                    :foreground "#000000" :weight 'bold)
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:height 110 :width normal :family "InputMono"))))
+ '(cursor ((t (:background "#65D6AD"))))
+ '(font-lock-builtin-face ((t (:foreground "#D2B48C"))))
+ '(font-lock-comment-face ((t (:foreground "#31B72C"))))
+ '(font-lock-constant-face ((t (:foreground "#65D6AD"))))
+ '(font-lock-doc-face ((t (:foreground "#E8E6E1"))))
+ '(font-lock-function-name-face ((t (:foreground "#D2B48C"))))
+ '(font-lock-keyword-face ((t (:foreground "#E8E6E1"))))
+ '(font-lock-preprocessor-face ((t (:foreground "#625D52"))))
+ '(font-lock-string-face ((t (:foreground "#2CB1BC"))))
+ '(font-lock-type-face ((t (:foreground "#D2B48C"))))
+ '(font-lock-variable-name-face ((t (:foreground "#D2B48C"))))
+ '(fringe ((t (:background "#01282d"))))
+ '(highlight ((t (:foreground "#625D52"))))
+ '(hl-line ((t (:background "#013137"))))
+ '(mode-line ((t (:background "#D2B48C" :foreground "#012326"))))
+ '(mode-line-inactive ((t (:inherit default :background "#013137"))))
+ '(region ((t (:background "#24335E"))))
+ '(vertical-border ((t (:foreground "#625D52")))))
 
-
-;(set-face-background 'hl-line "#013137")
-;
-;;(add-to-list 'default-frame-alist '(font . dgl-font))
-;(set-face-attribute 'font-lock-builtin-face nil :foreground "#D6B58D")
-;(set-face-attribute 'font-lock-comment-face nil :foreground "#31B72C")
-;(set-face-attribute 'font-lock-constant-face nil :foreground "#65D6AD")
-;(set-face-attribute 'font-lock-doc-face nil :foreground "#E8E6E1")
-;(set-face-attribute 'font-lock-function-name-face nil :foreground "#D6B58D")
-;(set-face-attribute 'font-lock-keyword-face nil :foreground "#E8E6E1")
-;(set-face-attribute 'font-lock-string-face nil :foreground "#2CB1BC")
-;(set-face-attribute 'font-lock-type-face nil :foreground "#D6B58D")
-;(set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
-;(set-face-attribute 'font-lock-preprocessor-face nil :foreground "#625D52")
-;(set-face-attribute 'region nil :background "#24335E")
-;(set-face-attribute 'highlight nil :background "#01282d")
-;;(set-face-attribute 'mode-line nil :background "#93876c")
-;;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
-;(set-face-attribute 'fringe nil :background "#01282d")
-;(set-face-attribute 'vertical-border nil :foreground "#625D52")
-;(set-face-attribute 'cursor nil :background "#65D6AD")
-
-;(global-set-key (read-kbd-macro "\eb")  'ido-switch-buffer)
-;(global-set-key (read-kbd-macro "\eB")  'ido-switch-buffer-other-window)
-;
 ;(defun dgl-ediff-setup-windows (buffer-A buffer-B buffer-C control-buffer)
 ;  (ediff-setup-windows-plain buffer-A buffer-B buffer-C control-buffer)
 ;)
 ;(setq ediff-window-setup-function 'dgl-ediff-setup-windows)
 ;(setq ediff-split-window-function 'split-window-horizontally)
 ;
-;; Turn off the bell on Mac OS X
-;(defun nil-bell ())
-;(setq ring-bell-function 'nil-bell)
-;
-;; Setup my compilation mode
+; Setup my compilation mode
 ;(defun dgl-big-fun-compilation-hook ()
 ;  (make-local-variable 'truncate-lines)
 ;  (setq truncate-lines nil)
@@ -321,14 +426,14 @@
 ;  (c-add-style "BigFun" dgl-big-fun-c-style t)
 ;
 ;  ; 4-space tabs
-;  (setq tab-width 4
-;	indent-tabs-mode nil)
-;
+;  (setq tab-width 4 indent-tabs-mode nil)
+;  ; No hungry backspace
+;  (c-toggle-auto-hungry-state -1);
+
 ;  ; Additional style stuff
 ;  (c-set-offset 'member-init-intro '++)
 ;
-;  ; No hungry backspace
-;  (c-toggle-auto-hungry-state -1)
+
 ;
 ;  ; Newline indents, semi-colon doesn't
 ;  (define-key c++-mode-map "\C-m" 'newline-and-indent)
@@ -903,15 +1008,5 @@
 ; ;; Your init file should contain only one such instance.
 ; ;; If there is more than one, they won't work right.
 ; )
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+
