@@ -42,6 +42,7 @@
   (setq package-user-dir "t:/emacs/packages")
   (setq hledger-jfile "w:/vault/finance/journal.ledger")
   (setq todotxt-file "w:/vault/todo.txt")
+  (setq org-roam-directory "w:/vault/org/roam")
 )
 
 (when dgl-linux
@@ -52,13 +53,25 @@
     (normal-top-level-add-subdirs-to-load-path))
   (setq package-user-dir "~/.emacs.d/packages")
   ;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
-  )
+  (setq org-roam-directory "~/vault/org/roam")
+)
 
 ; Load plugins
 ; Upstream Packages
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
+
+(use-package org-roam
+  :ensure t
+  :bind (("C-c o b" . org-roam-buffer-toggle)
+         ("C-c o f" . org-roam-node-find)
+         ("C-c o i" . org-roam-node-insert))
+  :config
+  (org-roam-setup)
+)
+(use-package go-mode :ensure t)
+
 
 ; Local Packages/Plugins
 (autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
@@ -83,30 +96,6 @@
 ;;
 ;; MACROS
 ;;
-  (defun dgl-find-corresponding-file ()
-    "Find the file that corresponds to this one."
-    (interactive)
-    (setq CorrespondingFileName nil)
-    (setq BaseFileName (file-name-sans-extension buffer-file-name))
-    (if (string-match "\\.c" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".h")))
-    (if (string-match "\\.h" buffer-file-name)
-       (if (file-exists-p (concat BaseFileName ".c")) (setq CorrespondingFileName (concat BaseFileName ".c"))
-	   (setq CorrespondingFileName (concat BaseFileName ".cpp"))))
-    (if (string-match "\\.hin" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".cin")))
-    (if (string-match "\\.cin" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".hin")))
-    (if (string-match "\\.cpp" buffer-file-name)
-       (setq CorrespondingFileName (concat BaseFileName ".h")))
-    (if CorrespondingFileName (find-file CorrespondingFileName)
-       (error "Unable to find a corresponding file")))
-  (defun dgl-find-corresponding-file-other-window ()
-    "Find the file that corresponds to this one."
-    (interactive)
-    (find-file-other-window buffer-file-name)
-    (dgl-find-corresponding-file)
-    (other-window -1))
 
 (defun dgl-grep ()
   "Run grep recursively from the directory of the current buffer or the default directory"
@@ -194,6 +183,14 @@
     (define-key c++-mode-map (kbd "S-TAB") 'indent-for-tab-command)
     (define-key c++-mode-map (kbd "C-TAB") 'indent-region)
 )
+
+(defun find-project-directory-recursive (project-file depth)
+  "Recursively search for the file."
+  (interactive)
+  (if (file-exists-p project-file) t
+    (cd "../")
+    (if (>= depth 0) t
+      (find-project-directory-recursive project-file (- depth 1)))))
 
 (defun load-project-settings ()
   (interactive)
