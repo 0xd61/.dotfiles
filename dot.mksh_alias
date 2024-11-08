@@ -2,13 +2,14 @@
 \\builtin alias sudo="doas"
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
 \\builtin alias lite="lite ./ &"
-\\builtin alias em="emacs . &"
+\\builtin alias em="emacsclient ."
 \\builtin alias nv="nvim ."
 \\builtin alias cls="\\builtin print -n \\ec"
 \\builtin alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""
 \\builtin alias screenfetch="sleep 5; xwd -root -silent | convert xwd:- -depth 8"
 \\builtin alias streamlink="streamlink -p mpv"
 \\builtin alias "hledger_bud"="hledger balance Ausgaben -M --budget -b $(date +%Y/%m/01)"
+\\builtin alias "ttime"="ttime -f ~/vault/time.txt"
 
 if grep microsoft /proc/version > /dev/null; then
     \\builtin export VISUAL="lite"

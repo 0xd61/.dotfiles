@@ -617,7 +617,7 @@ else
 fi
 
 # history
-\\builtin export HISTSIZE=8192
+\\builtin export HISTSIZE=100000
 \\builtin export HISTFILE=~/.mksh_hist
 
 function clip {
@@ -658,5 +658,7 @@ for p in ~/.local/bin ~/bin; do
 	[[ $PATHSEP$PATH$PATHSEP = *"$PATHSEP$p$PATHSEP"* ]] || \
 	    PATH=$p$PATHSEP$PATH
 done
+
+systemctl --user import-environment 2>/dev/null
 
 \: place customisations above this line

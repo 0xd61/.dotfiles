@@ -2,6 +2,5 @@
 
 # st-265color error fix
 \\builtin export TERM=xterm-256color
-\\builtin export EDITOR=vim
-
+\\builtin export EDITOR=emacsclient
 \\builtin export GPG_TTY=$(tty)
