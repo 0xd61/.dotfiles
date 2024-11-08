@@ -77,6 +77,7 @@
 ;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
 ;;(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
 (autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
+(autoload 'fd-grep-dired "fd-dired" "dired-mode interface for rg"  t)
 
 ;; Remember last edited files
 (recentf-mode 1)
