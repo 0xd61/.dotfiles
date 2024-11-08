@@ -74,8 +74,9 @@
 
 
 ; Local Packages/Plugins
-(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
-(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
+;;(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+(autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
 
 ;; Remember last edited files
 (recentf-mode 1)
@@ -223,15 +224,16 @@
 ;; Keybindings
 ;;
 (keymap-global-set "M-f" 'find-file)
-(keymap-global-set "M-S-f" 'find-file-other-window)
+(keymap-global-set "M-F" 'find-file-other-window)
 (keymap-global-set "M-b" 'ido-switch-buffer)
-(keymap-global-set "M-S-b" 'ido-switch-buffer-other-window)
+(keymap-global-set "M-B" 'ido-switch-buffer-other-window)
 (keymap-global-set "M-w" 'other-window)
 (keymap-global-set "M-s" 'save-buffer)
 (keymap-global-set "M-u" 'undo)
 (keymap-global-set "M-j" 'imenu)
 (keymap-global-set "M-h" 'dgl-find-file)
 (keymap-global-set "M-g" 'dgl-grep)
+(keymap-global-set "C-q" 'copy-region-as-kill)
 
 ;;
 ;; Highlight
