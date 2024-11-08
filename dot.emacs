@@ -14,8 +14,8 @@
 (setq dgl-initials "dgl")
 
 ; Determine the underlying operating system
-(setq dgl-linux (featurep 'x))
-(setq dgl-win32 (not dgl-linux))
+(setq dgl-win32 (or (eq system-type 'windows-nt) (eq system-type 'ms-dos)))
+(setq dgl-linux (not dgl-win32))
 
 (setq dgl-project-file "./.project.el")
 
