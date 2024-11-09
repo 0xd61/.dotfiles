@@ -75,6 +75,8 @@
      (if (executable-find "gls")
          `(,(concat "| xargs -0 " "gls -ld --quoting-style=literal | uniq") . "-ld")
        (warn "macOS system default 'ls' command does not support option --quoting-style=literal.\n Please install with: brew install coreutils")))
+    ('windows-nt
+     `(,(concat "| xargs -0 coreutils ls -ld --quoting-style=literal | coreutils uniq") . "-ld"))     
     (_
      `(,(concat "| xargs -0 " insert-directory-program " -ld --quoting-style=literal | uniq") . "-ld")))
   "A pair of options to produce and parse an `ls -l'-type list from `fd'.
