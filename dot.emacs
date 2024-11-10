@@ -17,7 +17,7 @@
 (setq dgl-win32 (or (eq system-type 'windows-nt) (eq system-type 'ms-dos)))
 (setq dgl-linux (not dgl-win32))
 
-(setq dgl-project-file "./.project.el")
+(setq dgl-project-file ".project.el")
 
 
 (setq compilation-directory-locked nil)
@@ -94,39 +94,83 @@
 (global-hl-line-mode 1)
 (global-font-lock-mode 1)
 
-					; Startup windowing
+;; Startup windowing
 (setq next-line-add-newlines nil)
 (setq-default truncate-lines t)
 (setq truncate-partial-width-windows nil)
 
+;; Minimize garbage collection during startup
+(setq gc-cons-threshold most-positive-fixnum)
+
+;; Lower threshold back to 8 MiB (default is 800kB)
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (setq gc-cons-threshold (expt 2 23))))
+
 ;;
 ;; MACROS
 ;;
-
-(defun dgl-grep ()
-  "Run grep recursively from the directory of the current buffer or the default directory"
-  (interactive)
-  (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
-    (let ((command (read-from-minibuffer "Run grep: "
-					 (cons (concat "rg -iS.  " dir) 10))))
-      (grep command))))
-
-(defun dgl-find-file ()
-  "Find file"
-  (interactive)
-  (let* ((command (read-from-minibuffer "Run fd: "
-					(cons "fd -iS  " 9)))
-	 (files (shell-command-to-string  command)))
-    (find-file
-     (ido-completing-read
-      "Find file: "
-      (delete "" (split-string files "\n"))))))
 
 (defun dgl-maximize-frame ()
   "Maximize the current frame"
   (interactive)
   (when dgl-win32 (w32-send-sys-command 61488)))
 
+(defun find-project-directory-recursive (project-file depth)
+  "Recursively search for the file."
+  (interactive)
+  (if (file-exists-p project-file) t
+    (when (>= depth 0)
+      (cd "../")
+      (find-project-directory-recursive project-file (- depth 1))))
+  )
+
+(defun load-project-settings ()
+  (interactive)
+  (setq find-project-from-directory default-directory)
+  (cd find-project-from-directory)
+  (find-project-directory-recursive dgl-project-file 5)
+  (when (file-exists-p dgl-project-file)
+    (load-file dgl-project-file)
+    (setq project-directory default-directory))
+  (cd find-project-from-directory)
+  )
+
+;; Compilation
+(setq compilation-context-lines 0)
+(setq compilation-error-regexp-alist
+      (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
+	    compilation-error-regexp-alist))
+
+(defun lock-compilation-directory ()
+  "The compilation process should NOT hunt for a makefile"
+  (interactive)
+  (setq last-compilation-directory default-directory)
+  (setq compilation-directory-locked t)
+  (message "Compilation directory is locked."))
+
+(defun unlock-compilation-directory ()
+  "The compilation process SHOULD hunt for a makefile"
+  (interactive)
+  (setq last-compilation-directory nil)
+  (setq compilation-directory-locked nil)
+  (message "Compilation directory is roaming."))
+
+(defun compile-from-project-directory ()
+  (interactive)
+  (setq current-directory default-directory)
+  (if compilation-directory-locked
+      (cd last-compilation-directory)
+    (cd project-directory))
+  (lock-compilation-directory)
+    (compile dgl-makescript))
+
+(defun make-without-asking ()
+  "Make the current build."
+  (interactive)
+  (switch-to-buffer-other-window "*compilation*")
+  (compile-from-project-directory)
+  (other-window 1))
 
 (setq auto-mode-alist
       (append '(
@@ -190,24 +234,6 @@
   (define-key c++-mode-map (kbd "C-TAB") 'indent-region)
   )
 
-(defun find-project-directory-recursive (project-file depth)
-  "Recursively search for the file."
-  (interactive)
-  (if (file-exists-p project-file) t
-    (cd "../")
-    (if (>= depth 0) t
-      (find-project-directory-recursive project-file (- depth 1)))))
-
-(defun load-project-settings ()
-  (interactive)
-  (setq find-project-from-directory default-directory)
-  (cd find-project-from-directory)
-  (find-project-directory-recursive dgl-project-file 5)
-  (if (file-exists-p dgl-project-file)
-      (load-file dgl-project-file))
-  (cd find-project-from-directory)
-  )
-
 (defun window-post-load-stuff ()
   (interactive)
   (menu-bar-mode -1)
@@ -221,9 +247,17 @@
   )
 
 
+;; Fix colors in compilation window
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+
 (add-hook 'window-setup-hook 'window-post-load-stuff t)
 (add-hook 'after-init-hook 'post-load-stuff t)
 (add-hook 'c-mode-common-hook 'dgl-c-hook)
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
 ;;
 ;; Keybindings
@@ -240,6 +274,7 @@
 (keymap-global-set "M-g" 'dgl-grep)
 (keymap-global-set "C-q" 'copy-region-as-kill)
 (keymap-global-set "C-w" 'kill-region)
+(keymap-global-set  "M-m" 'make-without-asking)
 
 ;;
 ;; Highlight
