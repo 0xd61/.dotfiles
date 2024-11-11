@@ -2,7 +2,7 @@
 \\builtin alias sudo="doas"
 \\builtin alias steam="LIBGL_DEBUG=verbose steam"
 \\builtin alias lite="lite ./ &"
-\\builtin alias em="emacsclient ."
+\\builtin alias em="emacsclient -nw ."
 \\builtin alias nv="nvim ."
 \\builtin alias cls="\\builtin print -n \\ec"
 \\builtin alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""

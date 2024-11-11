@@ -659,6 +659,7 @@ for p in ~/.local/bin ~/bin; do
 	    PATH=$p$PATHSEP$PATH
 done
 
+# Necessary for emacs in terminal and emacs daemon
 systemctl --user import-environment 2>/dev/null
 
 \: place customisations above this line
