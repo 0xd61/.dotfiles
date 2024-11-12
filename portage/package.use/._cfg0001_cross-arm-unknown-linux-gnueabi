@@ -1,0 +1,7 @@
+cross-arm-unknown-linux-gnueabi/binutils -multilib
+cross-arm-unknown-linux-gnueabi/linux-headers -selinux -multilib
+cross-arm-unknown-linux-gnueabi/glibc -selinux -libraries -multilib
+cross-arm-unknown-linux-gnueabi/gcc -selinux -boundschecking -d -gcj -gtk -libffi -mudflap -objc -objc++ -objc-gc -sanitize -multilib
+# required by dev-debug/apitrace-9.0-r4::gentoo
+# required by dev-debug/apitrace (argument)
+=media-libs/mesa-24.0.4 gles1

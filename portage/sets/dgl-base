@@ -1,8 +1,10 @@
+app-admin/eclean-kernel
 app-admin/doas
 app-admin/pass
 app-containers/docker-cli
 dev-util/ctags
 app-editors/emacs
+app-emacs/emacs-daemon
 app-editors/neovim
 app-eselect/eselect-repository
 app-misc/tmux
@@ -20,7 +22,6 @@ sys-process/lsof
 app-portage/gentoolkit
 media-gfx/flameshot
 sys-block/zram-init
-net-vpn/protonvpn-cli
 sys-fs/ntfs3g
 app-misc/jq
 media-libs/libsdl2
@@ -29,8 +30,11 @@ media-video/mpv
 app-office/ledger
 app-text/obsidian
 sys-apps/usbutils
-sys-kernel/genkernel
 sys-apps/ripgrep
 media-libs/glfw # needed for whitebox
 x11-drivers/xf86-video-amdgpu
 www-client/firefox-bin
+net-misc/ntp
+media-gfx/renderdoc
+net-analyzer/nmap
+sys-kernel/gentoo-sources

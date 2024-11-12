@@ -1,4 +1,4 @@
-*/* -acl -apache2 -accessibility -bluetooth -ldap -libnotify -nls -qt3support -udisks clang lm_sensors X threads grub emacs alsa pipewire curl dbus sse sse2 zlib savedconfig brotli jit -test-rust -video_cards_intel -video_cards_nouveau -video_cards_v4l -video_cards_vesa
+*/* -acl -apache2 -accessibility -bluetooth -ldap -libnotify -nls -qt3support -udisks clang lm_sensors X gui threads grub alsa pipewire curl dbus sse sse2 zlib savedconfig brotli jit -test-rust -video_cards_intel -video_cards_nouveau -video_cards_v4l -video_cards_vesa
 # required by app-admin/pass-1.7.4-r2::gentoo
 # required by @dgl-base (argument)
 >=media-gfx/qrencode-4.1.1 png
@@ -134,3 +134,6 @@
 # required by @selected
 # required by @world (argument)
 >=x11-libs/xcb-util-keysyms-0.4.1 abi_x86_32
+# required by sys-kernel/gentoo-kernel-6.6.13::gentoo[initramfs]
+# required by virtual/dist-kernel-6.6.13::gentoo
+>=sys-kernel/installkernel-18-r1 dracut

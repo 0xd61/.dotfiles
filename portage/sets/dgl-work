@@ -10,6 +10,7 @@ net-misc/teamviewer
 net-misc/zerotier
 net-misc/zerotier-systemd-manager
 net-print/cups
+net-print/cups-filters
 net-print/brlaser
 net-vpn/openvpn
 sys-apps/lm-sensors
@@ -37,3 +38,10 @@ app-admin/terraform
 sys-cluster/kubectl
 www-client/google-chrome
 app-office/libreoffice-bin
+net-im/teams-for-linux
+x11-libs/libnotify
+net-fs/nfs-utils
+net-misc/sshpass
+dev-embedded/u-boot-tools
+dev-util/shellcheck-bin
+net-analyzer/nmap

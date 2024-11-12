@@ -2,8 +2,10 @@
 sys-kernel/gentoo-sources symlink
 
 # Docker
-app-emulation/docker apparmor
-app-emulation/runc apparmor
+# move app-emulation/docker app-containers/docker
+app-containers/docker apparmor
+# move app-emulation/runc app-containers/runc
+app-containers/runc apparmor
 app-emulation/libvirt apparmor virt-network
 
 # App alternatives
@@ -13,7 +15,7 @@ app-alternatives/gzip -reference pigz
 net-vpn/openvpn iproute2
 
 # Emacs
-app-editors/emacs jit gtk xft gui -X
+app-editors/emacs jit gtk xft gui
 app-emacs/emacs-common gui
 
 # LVM

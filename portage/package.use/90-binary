@@ -1,0 +1,4 @@
+dev-qt/qtwebengine bindist opengl pulseaudio qml screencast vulkan
+dev-qt/qtdeclarative opengl vulkan
+net-libs/webkit-gtk keyring lcms pdf spell wayland
+sys-devel/llvm -abi_x86_32 xml

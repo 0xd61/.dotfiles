@@ -1,0 +1,7 @@
+cross-arm-unknown-linux-gnueabi/binutils -multilib
+cross-arm-unknown-linux-gnueabi/linux-headers -selinux -multilib
+cross-arm-unknown-linux-gnueabi/glibc -selinux -libraries -multilib
+cross-arm-unknown-linux-gnueabi/gcc -selinux -boundschecking -d -gcj -gtk -libffi -mudflap -objc -objc++ -objc-gc -sanitize -multilib
+# required by media-gfx/sane-backends-1.2.1::gentoo[sane_backends_escl]
+# required by media-gfx/sane-backends (argument)
+=app-text/poppler-24.02.0 cairo

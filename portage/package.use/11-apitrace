@@ -1,0 +1,4 @@
+dev-debug/apitrace qt5
+# required by dev-debug/apitrace-9.0-r4::gentoo
+# required by dev-debug/apitrace (argument)
+=media-libs/mesa-24.0.4 gles1

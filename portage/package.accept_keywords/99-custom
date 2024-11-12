@@ -2,8 +2,13 @@ net-misc/teamviewer ~amd64
 net-misc/zerotier ~amd64
 www-client/google-chrome ~amd64
 sys-kernel/zen-sources ~amd64
-sys-devel/gcc ~amd64
 net-vpn/protonvpn-cli ~amd64
 app-text/obsidian ~amd64
 app-containers/devcontainer ~amd64
 games-emulation/vbam ~amd64
+dev-vcs/git-filter-repo ~amd64
+dev-util/plan9port ~amd64
+dev-debug/apitrace ~amd64
+app-text/master-pdf-editor ~amd64
+net-im/teams-for-linux ~amd64
+dev-util/flatpak-builder ~amd64
