@@ -75,11 +75,15 @@
   (org-roam-setup)
   )
 (use-package go-mode :ensure t)
+(use-package dumb-jump :ensure t)
+(use-package multiple-cursors :ensure t)
 
+;; enable IDO mode
+(ido-mode t)
 
 					; Local Packages/Plugins
 ;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
-;;(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
 (autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
 (autoload 'fd-grep-dired "fd-dired" "dired-mode interface for rg"  t)
 
@@ -101,11 +105,6 @@
 
 ;; Minimize garbage collection during startup
 (setq gc-cons-threshold most-positive-fixnum)
-
-;; Lower threshold back to 8 MiB (default is 800kB)
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (setq gc-cons-threshold (expt 2 23))))
 
 ;;
 ;; MACROS
@@ -253,11 +252,15 @@
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 
-
+;; Lower threshold back to 8 MiB (default is 800kB)
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (setq gc-cons-threshold (expt 2 23))))
 (add-hook 'window-setup-hook 'window-post-load-stuff t)
 (add-hook 'after-init-hook 'post-load-stuff t)
 (add-hook 'c-mode-common-hook 'dgl-c-hook)
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
 ;;
 ;; Keybindings
@@ -274,7 +277,10 @@
 (keymap-global-set "M-g" 'dgl-grep)
 (keymap-global-set "C-q" 'copy-region-as-kill)
 (keymap-global-set "C-w" 'kill-region)
-(keymap-global-set  "M-m" 'make-without-asking)
+(keymap-global-set "M->" 'mc/mark-next-like-this)
+(keymap-global-set "M-<" 'mc/mark-previous-like-this)
+(keymap-global-set "M-m" 'make-without-asking)
+
 
 ;;
 ;; Highlight
@@ -290,7 +296,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes nil)
- '(package-selected-packages '(org-roam)))
+ '(package-selected-packages '(dumb-jump org-roam)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
