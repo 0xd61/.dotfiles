@@ -1,4 +1,4 @@
-[3]  # Version number. Do not delete
+[6]  # Version number. Do not delete
 
 # Based on Casey Muratori's emacs theme used on Handmade Hero series
 
@@ -45,7 +45,7 @@ code_type:                              B8860BFF
 code_function:                          CDAA7DFF
 code_punctuation:                       CDAA7DFF
 code_operation:                         CDAA7DFF
-code_string:                            6B8E23FF
+code_string_literal:                    6B8E23FF
 code_value:                             6B8E23FF
 code_highlight:                         D89B75FF # unused
 code_error:                             FF0000FF # todo
@@ -66,3 +66,28 @@ build_panel_scrollbar:                  CDAA7D19
 build_panel_scrollbar_hover:            CDAA7D4C
 build_panel_scrollbar_background:       CDAA7D11
 build_panel_title_bar:                  121212FF
+
+# Added after migration to version [6]
+code_invalid:                           FF0000FF
+code_multiline_string:                  6B8E23FF
+code_raw_string:                        6B8E23FF
+code_char_literal:                      6B8E23FF
+code_identifier:                        CDAA7DFF
+code_note:                              CDAA7DFF
+code_number:                            6B8E23FF
+code_multiline_comment:                 7F7F7FFF
+code_modifier:                          B8860BFF
+code_attribute:                         B8860BFF
+code_enum_variant:                      CDAA7DFF
+code_macro:                             CDAA7DFF
+code_builtin_variable:                  6B8E23FF
+code_builtin_function:                  CDAA7DFF
+code_builtin_exception:                 CDAA7DFF
+code_directive:                         B8860BFF
+code_directive_modifier:                B8860BFF
+code_header:                            B8860BFF
+code_header2:                           CDAA7DFF
+code_header3:                           CDAA7DFF
+code_header4:                           CDAA7DFF
+code_header5:                           CDAA7DFF
+code_header6:                           CDAA7DFF

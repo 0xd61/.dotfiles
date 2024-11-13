@@ -8,7 +8,8 @@ W:/dui
 # C:/projects/my-project
 # C:/jai
 [ignore]
-lib/external
+external**
+build**
 .git
 
 
@@ -30,7 +31,7 @@ auto_jump_to_error:     true
 [Build Linux]   # <- command name. Can be arbitrary
 build_command:          bash -c "gcc ./first.c -o first && ./first"  # should be an executable or a script
 #run_command:            ./first
-error_regex:            ^(?P<file>.*):(?P<line>\d+):(?P<col>\d+): (?P<type>error|warning|note): (?P<msg>.*) (\[(?P<msg1>.*)\])?$
+error_regex:            ^(?P<file>.*):(?P<line>\d+):(?P<col>\d+): (?P<type>error|warning|note): (?P<msg>.*)$
 
 [Build Windows]   # <- command name. Can be arbitrary
 build_command:          cmd /c "cl first.c && del first.obj && first.exe release"  # should be an executable or a script

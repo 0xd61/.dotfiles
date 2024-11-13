@@ -1,4 +1,4 @@
-[3]  # Version number. Do not delete
+[6]  # Version number. Do not delete
 
 [colors]
 
@@ -42,7 +42,7 @@ code_type:                              D65D0EFF
 code_function:                          FB4934FF
 code_punctuation:                       928374FF
 code_operation:                         D79221FF
-code_string:                            A9B665FF
+code_string_literal:                    A9B665FF
 code_value:                             D3869BFF
 code_highlight:                         458588FF
 code_error:                             FF0000FF
@@ -63,3 +63,28 @@ build_panel_scrollbar:                  33CCCC19
 build_panel_scrollbar_hover:            33CCCC4C
 build_panel_scrollbar_background:       10191F4C
 build_panel_title_bar:                  282828FF
+
+# Added after migration to version [6]
+code_invalid:                           FF0000FF
+code_multiline_string:                  A9B665FF
+code_raw_string:                        A9B665FF
+code_char_literal:                      A9B665FF
+code_identifier:                        D4BE98FF
+code_note:                              D79221FF
+code_number:                            D3869BFF
+code_multiline_comment:                 7C6f64FF
+code_modifier:                          D79921FF
+code_attribute:                         D79921FF
+code_enum_variant:                      D4BE98FF
+code_macro:                             D79221FF
+code_builtin_variable:                  D3869BFF
+code_builtin_function:                  D79221FF
+code_builtin_exception:                 D79221FF
+code_directive:                         D79921FF
+code_directive_modifier:                D79921FF
+code_header:                            D79921FF
+code_header2:                           D79221FF
+code_header3:                           D79221FF
+code_header4:                           D79221FF
+code_header5:                           D79221FF
+code_header6:                           D79221FF

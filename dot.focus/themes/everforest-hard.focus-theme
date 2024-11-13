@@ -1,4 +1,4 @@
-[3]  # Version number. Do not delete
+[6]  # Version number. Do not delete
 
 # Based on the https://github.com/sainnhe/everforest Hard colors
 [colors]
@@ -42,7 +42,7 @@ code_type:                              E69875FF
 code_function:                          A7C080FF
 code_punctuation:                       7A8478FF
 code_operation:                         7A8478FF
-code_string:                            83C092FF
+code_string_literal:                    83C092FF
 code_value:                             DBBC7FFF
 code_highlight:                         D699B6FF
 code_error:                             E67E80FF
@@ -62,3 +62,28 @@ build_panel_scrollbar:                  33CCCC19
 build_panel_scrollbar_hover:            33CCCC4C
 build_panel_scrollbar_background:       2626244C
 build_panel_title_bar:                  272E33FF
+
+# Added after migration to version [6]
+code_invalid:                           E67E80FF
+code_multiline_string:                  83C092FF
+code_raw_string:                        83C092FF
+code_char_literal:                      83C092FF
+code_identifier:                        D3C6AAFF
+code_note:                              7A8478FF
+code_number:                            DBBC7FFF
+code_multiline_comment:                 7A8478FF
+code_modifier:                          E67E80FF
+code_attribute:                         E67E80FF
+code_enum_variant:                      D3C6AAFF
+code_macro:                             7A8478FF
+code_builtin_variable:                  DBBC7FFF
+code_builtin_function:                  7A8478FF
+code_builtin_exception:                 7A8478FF
+code_directive:                         E67E80FF
+code_directive_modifier:                E67E80FF
+code_header:                            E67E80FF
+code_header2:                           7A8478FF
+code_header3:                           7A8478FF
+code_header4:                           7A8478FF
+code_header5:                           7A8478FF
+code_header6:                           7A8478FF

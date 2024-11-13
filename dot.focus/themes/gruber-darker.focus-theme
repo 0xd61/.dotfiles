@@ -1,4 +1,4 @@
-[3]  # Version number. Do not delete
+[6]  # Version number. Do not delete
 
 # Based on the gruber darker theme by Jason Blevins
 # https://github.com/rexim/gruber-darker-theme
@@ -43,7 +43,7 @@ code_type:                              95A99fFF
 code_function:                          E4E4EFFF
 code_punctuation:                       E4E4EFFF
 code_operation:                         E4E4EFFF
-code_string:                            73C936FF
+code_string_literal:                    73C936FF
 code_value:                             E4E4EFFF
 code_highlight:                         D89B75FF
 code_error:                             FF0000FF
@@ -64,3 +64,28 @@ build_panel_scrollbar:                  33CCCC19
 build_panel_scrollbar_hover:            33CCCC4C
 build_panel_scrollbar_background:       2626244C
 build_panel_title_bar:                  141416FF
+
+# Added after migration to version [6]
+code_invalid:                           FF0000FF
+code_multiline_string:                  73C936FF
+code_raw_string:                        73C936FF
+code_char_literal:                      73C936FF
+code_identifier:                        E4E4EFFF
+code_note:                              E4E4EFFF
+code_number:                            E4E4EFFF
+code_multiline_comment:                 CC8C3CFF
+code_modifier:                          FFDD33FF
+code_attribute:                         FFDD33FF
+code_enum_variant:                      E4E4EFFF
+code_macro:                             E4E4EFFF
+code_builtin_variable:                  E4E4EFFF
+code_builtin_function:                  E4E4EFFF
+code_builtin_exception:                 E4E4EFFF
+code_directive:                         FFDD33FF
+code_directive_modifier:                FFDD33FF
+code_header:                            FFDD33FF
+code_header2:                           E4E4EFFF
+code_header3:                           E4E4EFFF
+code_header4:                           E4E4EFFF
+code_header5:                           E4E4EFFF
+code_header6:                           E4E4EFFF

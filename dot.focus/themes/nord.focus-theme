@@ -1,4 +1,4 @@
-[3]  # Version number. Do not delete
+[6]  # Version number. Do not delete
 
 [colors]
 background0:                      2E3440FF
@@ -41,7 +41,7 @@ code_type:                        8FBCBBFF
 code_function:                    88C0D0FF
 code_punctuation:                 81A1C1FF
 code_operation:                   81A1C1FF
-code_string:                      A3BE8CFF
+code_string_literal:                    A3BE8CFF
 code_value:                       B48EADFF
 code_highlight:                   5E81ACFF
 code_error:                       BF616AFF
@@ -62,3 +62,28 @@ build_panel_scrollbar:            292D38AF
 build_panel_scrollbar_hover:      292D38FF
 build_panel_scrollbar_background: 1D212990
 build_panel_title_bar:            434C5EFF
+
+# Added after migration to version [6]
+code_invalid:                           BF616AFF
+code_multiline_string:                  A3BE8CFF
+code_raw_string:                        A3BE8CFF
+code_char_literal:                      A3BE8CFF
+code_identifier:                        ECEFF4FF
+code_note:                              81A1C1FF
+code_number:                            B48EADFF
+code_multiline_comment:                 EBCB8BAF
+code_modifier:                          81A1C1FF
+code_attribute:                         81A1C1FF
+code_enum_variant:                      ECEFF4FF
+code_macro:                             81A1C1FF
+code_builtin_variable:                  B48EADFF
+code_builtin_function:                  81A1C1FF
+code_builtin_exception:                 81A1C1FF
+code_directive:                         81A1C1FF
+code_directive_modifier:                81A1C1FF
+code_header:                            81A1C1FF
+code_header2:                           81A1C1FF
+code_header3:                           81A1C1FF
+code_header4:                           81A1C1FF
+code_header5:                           81A1C1FF
+code_header6:                           81A1C1FF
