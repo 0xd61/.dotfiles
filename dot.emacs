@@ -207,10 +207,11 @@
 
 (defun dgl-c-hook ()
   ;; 4-space tabs
-  (setq tab-width 4 indent-tabs-mode nil)
+  (setq tab-width 4 indent-tabs-mode t)
+  (setq c-basic-offset 4)
 
   ;; No hungry backspace
-  (c-toggle-auto-hungry-state -1);
+  (c-toggle-auto-hungry-state -1)
 
   ;; Additional style stuff
   (c-set-offset 'member-init-intro '++)
