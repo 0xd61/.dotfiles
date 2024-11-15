@@ -1032,7 +1032,7 @@
 	       ("Jonas Bernoulli" . "emacs.git-modes@jonas.bernoulli.dev"))
 	      (:commit . "f99010bbeb8b6d8a0819fac0195a2ef0159d08f0"))])
  (gnosis .
-	 [(0 4 6)
+	 [(0 4 8)
 	  ((emacs
 	    (27 2))
 	   (emacsql
@@ -1047,7 +1047,7 @@
 	   (:maintainer "Thanos Apollo" . "public@thanosapollo.org")
 	   (:authors
 	    ("Thanos Apollo" . "public@thanosapollo.org"))
-	   (:commit . "f4050f4f27e1ac0eab25168b0849017afd04aa31"))])
+	   (:commit . "b30a06fc16c18b6de7d5a21facf2b5fd8d90b613"))])
  (gnu-apl-mode .
 	       [(1 5 1)
 		nil "Emacs mode for GNU APL" tar
@@ -2015,7 +2015,7 @@
 	       ("David Christiansen" . "david@davidchristiansen.dk"))
 	      (:commit . "1edda80e2e32b72e77f4f16ae5b83c312c68ee95"))])
  (racket-mode .
-	      [(1 0 20241103 192733)
+	      [(1 0 20241112 143851)
 	       ((emacs
 		 (25 1)))
 	       "Racket editing, REPL, and more" tar
@@ -2262,14 +2262,14 @@
 		     ("John Olsson" . "john@cryon.se"))
 		    (:commit . "2d5acd143a153e16372d59000e57d76291ab81dd"))])
  (subed .
-	[(1 2 17)
+	[(1 2 18)
 	 ((emacs
 	   (25 1)))
 	 "A major mode for editing subtitles" tar
 	 ((:url . "https://github.com/sachac/subed")
 	  (:keywords "convenience" "files" "hypermedia" "multimedia")
 	  (:maintainer "Sacha Chua" . "sacha@sachachua.com")
-	  (:commit . "87222b0f5622308af6dd04fd09db6c12eddba082"))])
+	  (:commit . "98c431e8789789273ca476091f15e53247f86a03"))])
  (sweeprolog .
 	     [(0 27 6)
 	      ((emacs
@@ -2452,13 +2452,13 @@
 		    (:keywords "typescript" "languages")
 		    (:commit . "2a58631230fe2d176352af262a0efdecc21f90ac"))])
  (ujelly-theme .
-	       [(1 2 9)
+	       [(1 3 6)
 		nil "Ujelly theme for GNU Emacs 24 (deftheme)" tar
 		((:url . "http://github.com/marktran/color-theme-ujelly")
 		 (:maintainer "Mark Tran" . "mark.tran@gmail.com")
 		 (:authors
 		  ("Mark Tran" . "mark.tran@gmail.com"))
-		 (:commit . "2a35e63545132e24becff21a3daa9325126d8504"))])
+		 (:commit . "7345ab821739aafa2ec079a71fa7de350a869f0e"))])
  (undo-fu .
 	  [(0 5)
 	   ((emacs
@@ -2612,19 +2612,19 @@
 		   (:keywords "writing" "weasel-words" "grammar")
 		   (:commit . "d54eadeedb8bf3aa0e0a584c0a7373c69644f4b8"))])
  (ws-butler .
-	    [(0 6)
+	    [(0 7)
 	     nil "Unobtrusively remove trailing whitespace." tar
 	     ((:url . "https://github.com/lewang/ws-butler")
-	      (:commit . "323b651dd70ee40a25accc940b8f80c3a3185205"))])
+	      (:commit . "d3927f6131f215e9cd3e1f747be5a91e5be8ca9a"))])
  (xah-fly-keys .
-	       [(26 6 20241021131107)
+	       [(26 7 20241109085947)
 		((emacs
 		  (27)))
 		"ergonomic modal keybinding minor mode." tar
 		((:url . "http://xahlee.info/emacs/misc/xah-fly-keys.html")
 		 (:keywords "convenience" "vi" "vim" "ergoemacs" "keybinding")
 		 (:maintainer "Xah Lee" . "xah@xahlee.org")
-		 (:commit . "3fb8453d4b4144e5105dd3e65c852be2e6770da8"))])
+		 (:commit . "be3260765c6891dcbdffbcdb85359288e87ddb3b"))])
  (xkcd .
        [(1 1)
 	((json
