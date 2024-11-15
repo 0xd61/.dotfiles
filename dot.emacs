@@ -80,7 +80,7 @@
 
 ;; enable IDO mode
 (ido-mode t)
-
+(setq ido-enable-flex-matching t)
 					; Local Packages/Plugins
 ;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
@@ -105,6 +105,11 @@
 
 ;; Minimize garbage collection during startup
 (setq gc-cons-threshold most-positive-fixnum)
+
+;; Make Emacs repeat the C-u C-SPC command (`set-mark-command') by
+;; following it up with another C-SPC.  It is faster to type
+;; C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
+(setq set-mark-command-repeat-pop t)
 
 ;;
 ;; MACROS
