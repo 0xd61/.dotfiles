@@ -19,14 +19,16 @@
 
 (setq dgl-project-file ".project.el")
 
-
 (setq compilation-directory-locked nil)
 (scroll-bar-mode -1)
 (setq shift-select-mode nil)
 (setq enable-local-variables nil)
 (setq column-number-mode t)
 (setq dgl-font "DejaVu Sans Mono-12")
+(setq dgl-variable-font "Inter-12")
 (setq backup-directory-alist `(("." . "./.em_backup")))
+
+(setq ispell-program-name "hunspell")
 
 (setq default-buffer-file-coding-system 'utf-8-unix)
 
@@ -37,7 +39,8 @@
 
 (when dgl-win32
   (setq dgl-makescript "build.teak")
-  (setq dgl-font "Consolas-12")
+  (setq dgl-font "Input Mono")
+  (setq dgl-variable-font "Inter-12")
   (setq backup-directory-alist `(("." . "t:/emacs/backup")))
   ;;(add-to-list 'load-path "t:/emacs/plugins")
   (let ((default-directory  "t:/emacs/plugins"))
@@ -45,19 +48,22 @@
   (setq package-user-dir "t:/emacs/packages")
   (setq hledger-jfile "w:/vault/finance/journal.ledger")
   (setq todotxt-file "w:/vault/todo.txt")
-  (setq org-roam-directory "w:/vault/org/roam")
+  (setq dgl-org-directory "w:/vault/org")
+  (setq dgl-org-roam-directory (concat dgl-org-directory "/roam"))
   )
 
 (when dgl-linux
   (setq dgl-makescript "./build.teak")
-  (setq dgl-font "Input Mono Narrow-12")
+  (setq dgl-font "InputMono")
+  (setq dgl-variable-font "Inter-12")
   (setq backup-directory-alist `(("." . "~/.emacs.d/backup")))
   ;;(add-to-list 'load-path "~/.emacs.d/plugins")
   (let ((default-directory  "~/.emacs.d/plugins"))
     (normal-top-level-add-subdirs-to-load-path))
   (setq package-user-dir "~/.emacs.d/packages")
   ;;(setenv "PATH" (concat (getenv "PATH") ":/home/dgl/.local/bin"))
-  (setq org-roam-directory "~/vault/org/roam")
+  (setq dgl-org-directory "~/vault/org")
+  (setq dgl-org-roam-directory (concat dgl-org-directory "/roam"))
   )
 
 ;; Load plugins
@@ -68,10 +74,37 @@
 
 (use-package org-roam
   :ensure t
+  :defer t
   :bind (("C-c o b" . org-roam-buffer-toggle)
          ("C-c o f" . org-roam-node-find)
          ("C-c o i" . org-roam-node-insert))
+  :custom
+  (org-roam-directory dgl-org-roam-directory)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "\n%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("w" "work log" plain
+      "\n* Log for\n- Company: - Company: \n- Ticket: \n- Goal: \n\n* $?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work:")
+      :unnarrowed t)
+     ("p" "project" plain
+      "\n* Goals\n\n%?\n\n* Tasks\n** TODO Add initial tasks\n\n* Ideas"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:")
+      :unnarrowed t)
+     ("n" "notes" plain
+      "\n* Source\n- URL: \n- Author: \n- Title: \n- Year: \n\n* Summary\n$?\n\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("m" "meeting" plain
+      "\n* [[id:9b83da73-2238-4254-86a5-47559b13014a][samuu]] log for\n- Company: \n- With: \n- Topic: \n- Date: %T\n\n* Preparations\n** $?\n\n* Notes\n**\n\n* ToDos\n** TODO\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work: :meeting:")
+      :unnarrowed t)
+     ))
   :config
+  (run-with-idle-timer 8 nil 'org-roam-db-sync)
+  (run-with-idle-timer 9 nil 'org-roam-db-autosync-mode)
   (org-roam-setup)
   )
 
@@ -103,10 +136,11 @@
           ("M-G e" . consult-compile-error)
   ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
           ("M-G g" . consult-goto-line)             ;; orig. goto-line
-  ;;        ("M-G M-g" . consult-goto-line)           ;; orig. goto-line
+          ("M-G l" . consult-goto-line)           ;; orig. goto-line
   ;;        ("M-G o" . consult-outline)               ;; Alternative: consult-org-heading
           ("M-G m" . consult-mark)
-          ("M-G k" . consult-global-mark)
+          ("M-G M" . consult-global-mark)
+          ("M-G b" . consult-bookmark)
           ("M-G i" . consult-imenu)
           ("M-G I" . consult-imenu-multi)
           ;; M-S bindings in `search-map'
@@ -129,7 +163,8 @@
           ;; Minibuffer history
           ;; :map minibuffer-local-map
           ;; ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-          ;; ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+          ;; ("M-r" . consult-history)                ;; orig. previous-matching-history-element
+)
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -227,9 +262,14 @@
   (xref-show-definitions-function #'consult-xref))
 (use-package multiple-cursors :ensure t)
 
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 ;; enable IDO mode
-;(ido-mode t)
-;(setq ido-enable-flex-matching t)
+;;(ido-mode t)
+;;(setq ido-enable-flex-matching t)
 					; Local Packages/Plugins
 ;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
 (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
@@ -259,6 +299,50 @@
 ;; following it up with another C-SPC.  It is faster to type
 ;; C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
 (setq set-mark-command-repeat-pop t)
+
+
+;; Spellcheck (currently hunspell)
+;; "en_US" is key to lookup in `ispell-local-dictionary-alist'.
+;; Please note it will be passed as default value to hunspell CLI `-d` option
+;; if you don't manually setup `-d` in `ispell-local-dictionary-alist`
+(setq ispell-dictionary "en_US")
+
+
+(setq ispell-dictionary-alist
+      '(("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "de_DE") nil utf-8)
+        ("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+	))
+
+;; new variable `ispell-hunspell-dictionary-alist' is defined in Emacs
+;; If it's nil, Emacs tries to automatically set up the dictionaries.
+(if (boundp 'ispell-hunspell-dictionary-alist) t
+  (setq ispell-hunspell-dictionary-alist ispell-dictionary-alist))
+
+
+;; Org mode
+;; Activate the org-timer module :
+;; (add-to-list 'org-modules 'org-timer)
+;; Set a default value for the timer, for example :
+(setq org-timer-default-timer 25)
+(setq org-agenda-files (list dgl-org-directory))
+(setq org-log-done 'time)
+;; Follow the links
+(setq org-return-follows-link  t)
+;; Associate all org files with org mode
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+;; Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
+(setq org-hide-emphasis-markers t)
+
+(font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+;; Make the indentation look nicer
+(add-hook 'org-mode-hook 'org-indent-mode)
+;; Wrap the lines in org mode so that things are easier to read
+(add-hook 'org-mode-hook 'visual-line-mode)
+;; Use variable font
+(add-hook 'org-mode-hook 'variable-pitch-mode)
 
 ;;
 ;; MACROS
@@ -455,15 +539,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes nil)
- '(package-selected-packages '(consult dumb-jump org-roam)))
+ '(keyboard-coding-system 'utf-8)
+ '(org-bullets-bullet-list '("◉" "○" "●" "✿"))
+ '(package-selected-packages '(consult dumb-jump org-roam))
+ '(selection-coding-system 'utf-8))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background "#012326" :foreground "#D2B48C" :height 110 :family 'dgl-font))))
+ '(default ((t (:background "#012326" :foreground "#D2B48C" :weight regular :height 110 :width condensed :family "InputMono"))))
  '(cursor ((t (:background "#65D6AD"))))
+ '(fixed-pitch ((t (:inherit default :width condensed :family "InputMono"))))
+ '(fixed-pitch-serif ((t (:inherit fixed-pitch))))
  '(font-lock-builtin-face ((t (:foreground "#D2B48C"))))
  '(font-lock-comment-face ((t (:foreground "#31B72C"))))
  '(font-lock-constant-face ((t (:foreground "#65D6AD"))))
@@ -479,7 +568,26 @@
  '(hl-line ((t (:background "#013137"))))
  '(mode-line ((t (:background "#D2B48C" :foreground "#012326"))))
  '(mode-line-inactive ((t (:inherit default :background "#013137"))))
+ '(org-block ((t (:inherit fixed-pitch :family "InputMono"))))
+ '(org-code ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-title ((t (:inherit variable-pitch :underline nil :slant normal :weight bold :height 1.2 :width normal :foundry "outline" :family "Inter"))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-level-1 ((t (:inherit org-document-title :height 1.0))))
+ '(org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+ '(org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+ '(org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+ '(org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+ '(org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+ '(org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+ '(org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+ '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value ((t (:inherit fixed-pitch))))
+ '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
  '(region ((t (:background "#24335E"))))
+ '(variable-pitch ((t (:height 110 :family "Inter"))))
  '(vertical-border ((t (:foreground "#625D52")))))
 
 					;(defun dgl-ediff-setup-windows (buffer-A buffer-B buffer-C control-buffer)
