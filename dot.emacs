@@ -86,7 +86,7 @@
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
      ("w" "work log" plain
-      "\n* Log for\n- Company: - Company: \n- Ticket: \n- Goal: \n\n* $?"
+      "\n* Log for\n- Company: - Company: \n- Ticket: \n- Goal: \n\n* %?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work:")
       :unnarrowed t)
      ("p" "project" plain
@@ -94,11 +94,11 @@
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:")
       :unnarrowed t)
      ("n" "notes" plain
-      "\n* Source\n- URL: \n- Author: \n- Title: \n- Year: \n\n* Summary\n$?\n\n"
+      "\n* Source\n- URL: \n- Author: \n- Title: \n- Year: \n\n* Summary\n%?\n\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
       :unnarrowed t)
      ("m" "meeting" plain
-      "\n* [[id:9b83da73-2238-4254-86a5-47559b13014a][samuu]] log for\n- Company: \n- With: \n- Topic: \n- Date: %T\n\n* Preparations\n** $?\n\n* Notes\n**\n\n* ToDos\n** TODO\n"
+      "\n* [[id:9b83da73-2238-4254-86a5-47559b13014a][samuu]] log for\n- Company: \n- With: \n- Topic: \n- Date: %T\n\n* Preparations\n** %?\n\n* Notes\n**\n\n* ToDos\n** TODO\n"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work: :meeting:")
       :unnarrowed t)
      ))
