@@ -83,6 +83,8 @@ tags
 
 result
 
+*.db
+
 /dot.fonts/Input_Fonts/
 /dot.fonts/ChangeLog.txt
 /dot.emacs.d/eln-cache/
