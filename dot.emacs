@@ -218,6 +218,10 @@
 
 (use-package vertico
   :ensure t
+  :bind (:map vertico-map
+   ("RET" . vertico-directory-enter)
+   ("DEL" . vertico-directory-delete-char)
+   ("M-DEL" . vertico-directory-delete-word))
   ;; :custom
   ;; (vertico-scroll-margin 0) ;; Different scroll margin
   ;; (vertico-count 20) ;; Show more candidates
@@ -226,6 +230,7 @@
   :init
   (vertico-mode))
 (vertico-buffer-mode)
+
 ;; A few more useful configurations...
 (use-package emacs
   :custom
@@ -250,7 +255,8 @@
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
 ;; Consult/Vertico End
 
 (use-package go-mode :ensure t)
@@ -325,6 +331,11 @@
 ;; Set a default value for the timer, for example :
 (setq org-timer-default-timer 25)
 (setq org-agenda-files (list dgl-org-directory))
+(setq org-refile-targets
+     '(
+	(org-agenda-files :maxlevel . 5)
+	))
+(setq org-archive-location (concat dgl-org-directory "/archive.org::datetree/* Finished Tasks"))
 (setq org-log-done 'time)
 ;; Follow the links
 (setq org-return-follows-link  t)
@@ -549,7 +560,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background "#012326" :foreground "#D2B48C" :weight regular :height 110 :width condensed :family "InputMono"))))
+ '(default ((t (:background "#012326" :foreground "#D2B48C" :height 110 :family "InputMono"))))
  '(cursor ((t (:background "#65D6AD"))))
  '(fixed-pitch ((t (:inherit default :width condensed :family "InputMono"))))
  '(fixed-pitch-serif ((t (:inherit fixed-pitch))))
