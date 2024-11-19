@@ -10,15 +10,11 @@
 (blink-cursor-mode 0)              ; disable blinking cursor
 
 (setq frame-inhibit-implied-resize t)
-(setq inhibit-compacting-font-c
-(setq gc-cons-threshold most-positive-fixnum)
+(setq inhibit-compacting-font-caches t)
 
-(setq undo-limit 20000000)
-(setq undo-strong-limit 40000000)
+(setq gc-cons-threshold most-positive-fixnum)
 
 (defvar file-name-handler-alist-original file-name-handler-alist)
 (setq file-name-handler-alist nil)
 
 (setq site-run-file nil)
-
-(setq gc-cons-threshold 100000000)

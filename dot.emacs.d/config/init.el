@@ -1,4 +1,5 @@
-(setq gc-cons-threshold most-positive-fixnum)
+(setq undo-limit 20000000)
+(setq undo-strong-limit 40000000)
 
 (defvar better-gc-cons-threshold (* 128 1024 1024) ; 128mb
   "The default value to use for `gc-cons-threshold'.
@@ -29,6 +30,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
             (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
             (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
 
-(setq user-full-name       "Daniel Glinka"
-      user-real-login-name "Daniel Glinka"
-      user-login-name      "dgl"
+(print "foo")
+  (setq user-full-name       "Daniel Glinka"
+        user-real-login-name "Daniel Glinka"
+        user-login-name      "dgl"

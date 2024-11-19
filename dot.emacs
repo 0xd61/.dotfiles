@@ -306,6 +306,7 @@
 ;; C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
 (setq set-mark-command-repeat-pop t)
 
+(setq wdired-allow-to-change-permissions t)
 
 ;; Spellcheck (currently hunspell)
 ;; "en_US" is key to lookup in `ispell-local-dictionary-alist'.
@@ -330,7 +331,7 @@
 ;; (add-to-list 'org-modules 'org-timer)
 ;; Set a default value for the timer, for example :
 (setq org-timer-default-timer 25)
-(setq org-agenda-files (list dgl-org-directory))
+(setq org-agenda-files (list dgl-org-directory dgl-org-roam-directory))
 (setq org-refile-targets
      '(
 	(org-agenda-files :maxlevel . 5)
@@ -550,10 +551,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes nil)
- '(keyboard-coding-system 'utf-8)
+ '(keyboard-coding-system 'utf-8-unix)
  '(org-bullets-bullet-list '("◉" "○" "●" "✿"))
  '(package-selected-packages '(consult dumb-jump org-roam))
- '(selection-coding-system 'utf-8))
+ '(selection-coding-system 'utf-8-unix))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
