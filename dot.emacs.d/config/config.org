@@ -23,6 +23,146 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 <<foo>>
 #+end_src
 
+** Platform
+#+name: platform_windows
+#+begin_src emacs-lisp
+  when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+#+end_src
+
+#+name: platform_linux
+#+begin_src emacs-lisp
+  when (eq system-type 'gnu/linux)
+#+end_src
+** Colors
+#+name: main_foreground
+#+begin_src emacs-lisp
+"#D2B48C"
+#+end_src
+
+#+name: alt_foreground
+#+begin_src emacs-lisp
+"#625D52"
+#+end_src
+
+#+name: main_background
+#+begin_src emacs-lisp
+"#012326"
+#+end_src
+
+#+name: alt_background
+#+begin_src emacs-lisp
+"#013137"
+#+end_src
+
+#+name: fringe
+#+begin_src emacs-lisp
+"#01282D"
+#+end_src
+
+#+name: comment
+#+begin_src emacs-lisp
+"#31B72C"
+#+end_src
+
+#+name: constant
+#+begin_src emacs-lisp
+"#65D6AD"
+#+end_src
+
+#+name: keyword
+#+begin_src emacs-lisp
+"#E8E6E1"
+#+end_src
+
+#+name: string
+#+begin_src emacs-lisp
+"#2CB1BC"
+#+end_src
+
+#+name: select
+#+begin_src emacs-lisp
+"#2CB1BC"
+#+end_src
+** Keybinds
+*** CC-Mode
+#+name: cc-mode-keys
+#+begin_src emacs-lisp
+ :bind (
+   :map c++-mode-map
+   ("TAB" . 'dabbrev-expand)
+   ("S-TAB" . 'indent-for-tab-command)
+   ("C-TAB" . 'indent-region)
+   )
+#+end_src
+
+*** Consult
+#+name: consult-keys
+#+begin_src emacs-lisp
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ;;        ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;;        ;; C-x bindings in `ctl-x-map'
+         ;;        ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ;;        ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ;;        ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ;;        ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ;;        ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+         ;;        ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ;;        ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-# l" . consult-register-load)
+         ("M-# s" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("M-# #" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-G bindings in `goto-map'
+         ("M-G e" . consult-compile-error)
+         ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-G g" . consult-goto-line)             ;; orig. goto-line
+         ("M-G l" . consult-goto-line)           ;; orig. goto-line
+         ;;        ("M-G o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-G m" . consult-mark)
+         ("M-G M" . consult-global-mark)
+         ("M-G b" . consult-bookmark)
+         ("M-G i" . consult-imenu)
+         ("M-G I" . consult-imenu-multi)
+         ;; M-S bindings in `search-map'
+         ("M-S d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-S c" . consult-locate)
+         ("M-S g" . consult-grep)
+         ("M-S G" . consult-git-grep)
+         ("M-S r" . consult-ripgrep)
+         ("M-S l" . consult-line)
+         ("M-S L" . consult-line-multi)
+         ("M-S k" . consult-keep-lines)
+         ("M-S u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-S e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-S e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-S l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-S L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         ;; :map minibuffer-local-map
+         ;; ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ;; ("M-r" . consult-history)                ;; orig. previous-matching-history-element
+         )
+#+end_src
+
+*** Vertico
+#+name: vertico-keys
+#+begin_src emacs-lisp
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+
+#+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -43,9 +183,14 @@ The early init file is the file loaded before anything else in Emacs. This is wh
   (set-fringe-mode 10)               ; give some breathing room
   (menu-bar-mode -1)                 ; disable menubar
   (blink-cursor-mode 0)              ; disable blinking cursor
-
+  
   (setq frame-inhibit-implied-resize t)
   (setq inhibit-compacting-font-caches t)
+
+(setq shift-select-mode nil)
+(setq enable-local-variables nil)
+(setq column-number-mode t)
+
 #+end_src
 
 *** Defer garbage collection
@@ -157,15 +302,61 @@ We want emacs to take new window space from all other windows.
   (setq window-combination-resize t)
 #+end_src
 
+** Project Setup
+We want to have per project config files which will be loaded separately. This should be independent of normal emacs VCS or EDE projects because we want to have the ability to load additional project files from everything.
+
+#+begin_src emacs-lisp
+  (setq dgl/project-file ".project.el")
+  (setq dgl/project-directory ".") ;; setting default. Will get overwritten by load-project-settings
+
+  (defun find-project-directory-recursive (project-file depth)
+    "Recursively search for the file."
+    (interactive)
+    (if (file-exists-p project-file) t
+      (when (>= depth 0)
+        (cd "../")
+        (find-project-directory-recursive project-file (- depth 1))))
+    )
+
+  (defun load-project-settings ()
+    (interactive)
+    (setq find-project-from-directory default-directory)
+    (cd find-project-from-directory)
+    (find-project-directory-recursive dgl/project-file 5)
+    (when (file-exists-p dgl/project-file)
+      (load-file dgl/project-file)
+      (setq dgl/project-directory default-directory))
+    (cd find-project-from-directory)
+    )
+#+end_src
+
 ** Personal Information
 Not sure which packages need this information but some probably will need it.
 
 #+begin_src emacs-lisp
   (setq user-full-name       "Daniel Glinka"
         user-real-login-name "Daniel Glinka"
-        user-login-name      "dgl"
+        user-login-name      "dgl")
 #+end_src
+** History
+Having a command history is nice.
 
+#+begin_src emacs-lisp
+;; Remember last edited files
+(recentf-mode 1)
+;; Save what you enter into minibuffer prompts
+(setq history-length 25)
+(savehist-mode 1)
+;; Remember and restore the last cursor location of opened files
+(save-place-mode 1)
+#+end_src
+** Files/Dired
+
+In dired mode we want to be able to change permissions by editing the buffer
+
+#+begin_src emacs-lisp
+  (setq wdired-allow-to-change-permissions t)
+#+end_src
 * Visuals
 The first visual setting in this section will activate the visible bell. What it does is I get a visual feedback each time I do something Emacs doesn't agree with, like trying to go up a line when I'm already at the top of the buffer.
 #+begin_src emacs-lisp
@@ -182,7 +373,22 @@ When text is ellipsed, I want the ellipsis marker to be a single character of th
 (with-eval-after-load 'mule-util
  (setq truncate-string-ellipsis "…"))
 #+end_src
-*** Fonts
+** UTF-8 encoding
+By default we want utf-8 for everything
+#+begin_src emacs-lisp
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (set-language-environment "UTF-8")
+  (set-default-coding-systems 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+
+  ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+  (when (display-graphic-p)
+    (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+#+end_src
+** Fonts
 I don't like the default font I usually have on my machines, I really don't. I prefer [[Cascadia Code][Input Mono]].
 #+begin_src emacs-lisp
   (defvar dgl/default-font-size 110
@@ -191,16 +397,24 @@ I don't like the default font I usually have on my machines, I really don't. I p
   (defvar dgl/default-font-name "InputMono"
     "Default font.")
 
+  (defvar dgl/variable-font-name "Inter"
+    "Default variable font.")
+
   (defun my/set-font ()
     (when (find-font (font-spec :name dgl/default-font-name))
       (set-face-attribute 'default nil
                           :font dgl/default-font-name
+                          :height dgl/default-font-size))
+
+    (when (find-font (font-spec :name dgl/variable-font-name))
+      (set-face-attribute 'variable-pitch nil
+                          :font dgl/variable-font-name
                           :height dgl/default-font-size)))
 
   (my/set-font)
   (add-hook 'server-after-make-frame-hook #'my/set-font)
 #+end_src
-*** Frame Title
+** Frame Title
 This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config.html#window-title][TEC]]'s configuration. See their comment on the matter.
 #+begin_src emacs-lisp
 (setq frame-title-format
@@ -211,9 +425,368 @@ This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config
            (unless (string= "-" project-name)
              (format (if (buffer-modified-p) " ? %s" "  ?  %s - Emacs") project-name))))))
 #+end_src
+** Colors
+#+begin_src emacs-lisp
+  (defun my/set-colors ()
+    (set-foreground-color <<main_foreground>>)
+    (set-background-color <<main_background>>)
+
+    (set-face-foreground 'default <<main_foreground>>)
+    (set-face-background 'default <<main_background>>)
+    (set-face-background 'cursor <<constant>>)
+    (set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-comment-face <<comment>>)
+    (set-face-foreground 'font-lock-constant-face <<constant>>)
+    (set-face-foreground 'font-lock-doc-face <<keyword>>)
+    (set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-keyword-face <<keyword>>)
+    (set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
+    (set-face-foreground 'font-lock-string-face <<string>>)
+    (set-face-foreground 'font-lock-type-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
+    (set-face-background 'fringe <<fringe>>)
+    (set-face-foreground 'highlight <<constant>>)
+    ;;(set-face-background 'hl-line <<alt_background>>)
+    (set-face-foreground 'mode-line <<main_background>>)
+    (set-face-background 'mode-line <<main_foreground>>)
+
+    (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
+
+    (set-face-background 'region <<select>>)
+    (set-face-foreground 'verical-border <<alt_foreground>>)
+    )
+  (my/set-colors)
+  (add-hook 'server-after-make-frame-hook #'my/set-colors)
+#+end_src
 * Packages
+For installing Emacs packages, I use MELPA, the Milkypostman’s Emacs Lisp Package Archive.
+
+#+begin_src emacs-lisp
+  (require 'package)
+  (setq load-prefer-newer t)
+
+  (<<platform_windows>>
+   (setq package-user-dir "t:/emacs/packages"))
+  (<<platform_linux>>
+   (setq package-user-dir "~/.emacs.d/packages"))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+  (package-initialize)
+#+end_src
+
+We use the async package to support faster downloads.
+
+#+begin_src emacs-lisp
+      (use-package async
+        :ensure t
+        :config (setq async-bytecomp-package-mode 1))
+#+end_src
+*** User Plugins
+We want to provide our plugins.
+
+#+begin_src emacs-lisp
+  (<<platform_windows>>
+   (let ((default-directory  "t:/emacs/plugins"))
+     (normal-top-level-add-subdirs-to-load-path)))
+  (<<platform_linux>>
+   (let ((default-directory  "~/.emacs.d/plugins"))
+     (normal-top-level-add-subdirs-to-load-path)))
+#+end_src
 * Completion
-* Keybindings
+For better completion and keybinds we use the Consult/Vertico stack.
+
+** Consult
+This is mostly the default config from [[https://github.com/minad/consult][here]].
+#+begin_src emacs-lisp
+  (use-package consult
+    :ensure t
+    <<consult-keys>>
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+
+    ;; The :init configuration is always executed (Not lazy)
+    :init
+
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+
+    ;; Configure other variables and modes in the :config section,
+    ;; after lazily loading the package.
+    :config
+
+    ;; Optionally configure preview. The default value
+    ;; is 'any, such that any key triggers the preview.
+    ;; (setq consult-preview-key 'any)
+    ;; (setq consult-preview-key "M-.")
+    ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+    ;; For some commands and buffer sources it is useful to configure the
+    ;; :preview-key on a per-command basis using the `consult-customize' macro.
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key "M-."
+     :preview-key '(:debounce 0.4 any))
+
+    ;; Optionally configure the narrowing key.
+    ;; Both < and C-+ work reasonably well.
+    (setq consult-narrow-key "<") ;; "C-+"
+
+    ;; Optionally make narrowing help available in the minibuffer.
+    ;; You may want to use `embark-prefix-help-command' or which-key instead.
+    ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+    )
+#+end_src
+** Vertico
+This is mostly the default config from [[https://github.com/minad/vertico][here]].
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    <<vertico-keys>>
+    ;; :custom
+    ;; (vertico-scroll-margin 0) ;; Different scroll margin
+    ;; (vertico-count 20) ;; Show more candidates
+    ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
+    ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    :init
+    (vertico-mode))
+  (vertico-buffer-mode)
+
+  ;; A few more useful configurations...
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+    (defun crm-indicator (args)
+      (cons (format "[CRM%s] %s"
+                    (replace-regexp-in-string
+                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                     crm-separator)
+                    (car args))
+            (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
+#+end_src
+** Misc
+*** Marks
+Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up with another C-SPC. It is faster to type C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
+
+#+begin_src emacs-lisp
+(setq set-mark-command-repeat-pop t)
+#+end_src
 * Programming
+** C
+
+#+begin_src emacs-lisp
+  (use-package cc-mode
+    :defer t
+    <<cc-mode-keys>>
+    :config
+    ;; 4-space tabs
+    (setq tab-width 4 indent-tabs-mode t)
+    (setq c-basic-offset 4)
+
+    ;; No hungry backspace
+    (c-toggle-auto-hungry-state -1)
+
+    ;; Additional style stuff
+    (c-set-offset 'member-init-intro '++)
+
+    ;; Newline indents, semi-colon doesn't
+    ;; (define-key c++-mode-map "\C-m" 'newline-and-indent)
+    (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
+
+    ;; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
+    (setq dabbrev-case-replace t)
+    (setq dabbrev-case-fold-search t)
+    (setq dabbrev-upcase-means-case-search t)
+
+    ;; Abbrevation expansion
+    (abbrev-mode 1)
+    )
+#+end_src
+** Go
+#+begin_src emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :mode ("\\.go$" . go-mode)
+    )
+#+end_src
+** Markdown
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode ("\\.md$" . markdown-mode))
+#+end_src
+** Spellcheck
+For spellcheck we are using hunspell. Make sure it is installed on the system and the dictionaries de_DE and en_US are installed.
+
+The default dict is set to en_US.
+#+begin_src emacs-lisp
+  (setq ispell-program-name "hunspell")
+  (setq ispell-dictionary "en_US")
+
+  (setq ispell-dictionary-alist
+        '(("de_DE" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "de_DE") nil utf-8)
+          ("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+          ))
+
+  ;; new variable `ispell-hunspell-dictionary-alist' is defined in Emacs
+  ;; If it's nil, Emacs tries to automatically set up the dictionaries.
+  (if (boundp 'ispell-hunspell-dictionary-alist) t
+    (setq ispell-hunspell-dictionary-alist ispell-dictionary-alist))
+#+end_src
+
+** Syntax Highlight
+#+begin_src emacs-lisp
+  (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+
+  (setq auto-mode-alist
+        (append '(
+                  ("\\workspace.dsl$" . javascript-mode)
+                  ("\\.teak$"     . c++-mode)
+                  ("\\.cpp$"      . c++-mode)
+                  ("\\.hin$"      . c++-mode)
+                  ("\\.cin$"      . c++-mode)
+                  ("\\.inl$"      . c++-mode)
+                  ("\\.rdc$"      . c++-mode)
+                  ("\\.h$"        . c++-mode)
+                  ("\\.c$"        . c++-mode)
+                  ("\\.cc$"       . c++-mode)
+                  ("\\.c8$"       . c++-mode)
+                  ("\\.txt$"      . indented-text-mode)
+                  ("\\.emacs$"    . emacs-lisp-mode)
+                  ("\\.gen$"      . gen-mode)
+                  ("\\.ms$"       . fundamental-mode)
+                  ("\\.m$"        . objc-mode)
+                  ("\\.mm$"       . objc-mode)
+                  ("\\.bb$"       . bb-mode)
+                  ("\\.inc$"      . bb-mode)
+                  ("\\.bbappend$" . bb-mode)
+                  ("\\.bbclass$"  . bb-mode)
+                  ("\\.conf$"     . bb-mode)
+                  ("\\.js$"       . javascript-mode)
+                  ("\\.json$"     . javascript-mode)
+                  ) auto-mode-alist))
+
+#+end_src
+** Compilation
+With our own project files mentioned in [[Project Setup]] we want a simple way of running a compilation command.
+Usually there is only some build script that needs to be executed.
+
+#+begin_src emacs-lisp
+  (<<platform_windows>>
+   (setq dgl/makescript "build.teak"))
+  (<<platform_linux>>
+   (setq dgl/makescript "./build.teak"))
+
+  (setq compilation-directory-locked nil)
+  (setq compilation-context-lines 0)
+  ;;  (setq compilation-error-regexp-alist
+  ;;        (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
+  ;;              compilation-error-regexp-alist))
+
+  (defun lock-compilation-directory ()
+    "The compilation process should NOT hunt for a makefile"
+    (interactive)
+    (setq last-compilation-directory default-directory)
+    (setq compilation-directory-locked t)
+    (message "Compilation directory is locked."))
+
+  (defun unlock-compilation-directory ()
+    "The compilation process SHOULD hunt for a makefile"
+    (interactive)
+    (setq last-compilation-directory nil)
+    (setq compilation-directory-locked nil)
+    (message "Compilation directory is roaming."))
+
+  (defun compile-from-project-directory ()
+    (interactive)
+    (setq current-directory default-directory)
+    (if compilation-directory-locked
+        (cd last-compilation-directory)
+      ((load-project-settings)
+       (cd dgl/project-directory)))
+    (lock-compilation-directory)
+    (compile dgl/makescript))
+
+  (defun make-without-asking ()
+    "Make the current build."
+    (interactive)
+    (switch-to-buffer-other-window "*compilation*")
+    (compile-from-project-directory)
+    (other-window 1))
+#+end_src
+
+The compilation window had some color issues.
+#+begin_src emacs-lisp
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+#+end_src
+
 * Org
+** Org Roam
+
 * Custom Functions
+** Maximize frame on windows
+We always want to maximize emacs on windows.
+
+#+begin_src emacs-lisp
+  (defun dgl-maximize-frame ()
+    "Maximize the current frame"
+    (interactive)
+    (<<platform_windows>>
+     (w32-send-sys-command 61488)))
+#+end_src
+** Window Post Load
+Things we want to do after loading the window
+#+begin_src emacs-lisp
+  (defun window-post-load-stuff ()
+    (interactive)
+    (dgl-maximize-frame))
+
+  (add-hook 'window-setup-hook 'window-post-load-stuff t)
+#+end_src
+** Post Load
+Things we want to do after init
+
+#+begin_src emacs-lisp
+  (defun post-load-stuff ()
+    (interactive)
+    (split-window-right)
+    (load-project-settings))
+
+  (add-hook 'after-init-hook 'post-load-stuff t)
+#+end_src
+
