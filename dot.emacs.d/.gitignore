@@ -1,5 +1,6 @@
 bookmarks
 .tmp
+.mc-lists.el
 eln-cache
 org-persist
 packages
