@@ -43,6 +43,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq window-combination-resize t)
 
+(when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+ (setq dgl/linux nil)
+ (setq dgl/win32 t))
+(when (eq system-type 'gnu/linux)
+ (setq dgl/win32 nil)
+ (setq dgl/linux t))
+
 (setq dgl/project-file ".project.el")
 (setq dgl/project-directory ".") ;; setting default. Will get overwritten by load-project-settings
 
@@ -177,7 +184,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   (set-face-attribute 'mode-line-inactive nil :foreground "#D2B48C" :background "#013137")
 
-  (set-face-background 'region "#2CB1BC")
+  (set-face-background 'region "#24335E")
   (set-face-foreground 'vertical-border "#625D52")
   )
 (my/set-colors)
@@ -480,8 +487,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq current-directory default-directory)
   (if compilation-directory-locked
       (cd last-compilation-directory)
-    ((load-project-settings)
-     (cd dgl/project-directory)))
+    (progn
+      (load-project-settings)
+      (cd dgl/project-directory)))
   (lock-compilation-directory)
   (compile dgl/makescript))
 

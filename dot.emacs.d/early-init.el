@@ -8,7 +8,7 @@
   (set-fringe-mode 10)               ; give some breathing room
   (menu-bar-mode -1)                 ; disable menubar
   (blink-cursor-mode 0)              ; disable blinking cursor
-  
+
   (setq frame-inhibit-implied-resize t)
   (setq inhibit-compacting-font-caches t)
 

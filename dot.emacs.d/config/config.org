@@ -81,7 +81,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 
 #+name: select
 #+begin_src emacs-lisp
-"#2CB1BC"
+"#24335E"
 #+end_src
 ** Keybinds
 *** CC-Mode
@@ -208,7 +208,7 @@ The early init file is the file loaded before anything else in Emacs. This is wh
   (set-fringe-mode 10)               ; give some breathing room
   (menu-bar-mode -1)                 ; disable menubar
   (blink-cursor-mode 0)              ; disable blinking cursor
-  
+
   (setq frame-inhibit-implied-resize t)
   (setq inhibit-compacting-font-caches t)
 
@@ -331,6 +331,13 @@ We want emacs to take new window space from all other windows.
 We want to have per project config files which will be loaded separately. This should be independent of normal emacs VCS or EDE projects because we want to have the ability to load additional project files from everything.
 
 #+begin_src emacs-lisp
+  (<<platform_windows>>
+   (setq dgl/linux nil)
+   (setq dgl/win32 t))
+  (<<platform_linux>>
+   (setq dgl/win32 nil)
+   (setq dgl/linux t))
+
   (setq dgl/project-file ".project.el")
   (setq dgl/project-directory ".") ;; setting default. Will get overwritten by load-project-settings
 
@@ -784,8 +791,9 @@ Usually there is only some build script that needs to be executed.
     (setq current-directory default-directory)
     (if compilation-directory-locked
         (cd last-compilation-directory)
-      ((load-project-settings)
-       (cd dgl/project-directory)))
+      (progn
+        (load-project-settings)
+        (cd dgl/project-directory)))
     (lock-compilation-directory)
     (compile dgl/makescript))
 
@@ -860,7 +868,7 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 ** Custom Faces
 #+begin_src emacs-lisp
- 
+
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
@@ -1118,7 +1126,7 @@ Things we want to do after init
   (defun dgl-big-fun-c-hook ()
                                           ; Set my style for the current buffer
     (c-add-style "BigFun" dgl-big-fun-c-style t)
-  
+
                                           ; 4-space tabs
     (setq tab-width 4 indent-tabs-mode nil)
                                           ; No hungry backspace
@@ -1126,20 +1134,20 @@ Things we want to do after init
 
                                           ; Additional style stuff
     (c-set-offset 'member-init-intro '++)
-  
-  
+
+
                                           ; Newline indents, semi-colon doesn't
     (define-key c++-mode-map "\C-m" 'newline-and-indent)
     (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
-  
+
                                           ; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
     (setq dabbrev-case-replace t)
     (setq dabbrev-case-fold-search t)
     (setq dabbrev-upcase-means-case-search t)
-  
+
                                           ; Abbrevation expansion
     (abbrev-mode 1)
-  
+
     (defun dgl-header-format ()
       "Format the given file as a header file."
       (interactive)
@@ -1163,7 +1171,7 @@ Things we want to do after init
       (pop-mark)
       (insert "_H\n")
       )
-  
+
     (defun dgl-source-format ()
       "Format the given file as a source file."
       (interactive)
@@ -1176,14 +1184,14 @@ Things we want to do after init
       ;;     (insert "   $Notice: (C) Copyright 2015 by Molly Rocket, Inc. All Rights Reserved. $\n")
       ;;     (insert "   ======================================================================== */\n")
       )
-  
+
     (cond ((file-exists-p buffer-file-name) t)
           ((string-match "[.]hin" buffer-file-name) (dgl-source-format))
           ((string-match "[.]cin" buffer-file-name) (dgl-source-format))
           ((string-match "[.]h" buffer-file-name) (dgl-header-format))
           ((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
           ((string-match "[.]c" buffer-file-name) (dgl-source-format)))
-  
+
     (defun dgl-find-corresponding-file ()
       "Find the file that corresponds to this one."
       (interactive)
@@ -1210,38 +1218,38 @@ Things we want to do after init
       (other-window -1))
     (define-key c++-mode-map [f12] 'dgl-find-corresponding-file)
     (define-key c++-mode-map [M-f12] 'dgl-find-corresponding-file-other-window)
-  
+
                                           ; Alternate bindings for F-keyless setups (ie MacOS X terminal)
     (define-key c++-mode-map "\ec" 'dgl-find-corresponding-file)
     (define-key c++-mode-map "\eC" 'dgl-find-corresponding-file-other-window)
-  
+
     (define-key c++-mode-map "\es" 'dgl-save-buffer)
                                           ; Save buffer without converting tabs to spaces
     (define-key c++-mode-map "\eS" 'save-buffer)
-  
+
     (define-key c++-mode-map "\t" 'dabbrev-expand)
     (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
     (define-key c++-mode-map "\C-y" 'indent-for-tab-command)
     (define-key c++-mode-map [C-tab] 'indent-region)
     (define-key c++-mode-map "	" 'indent-region)
-  
+
     (define-key c++-mode-map "\ej" 'imenu)
-  
+
     (define-key c++-mode-map "\e." 'c-fill-paragraph)
-  
+
     (define-key c++-mode-map "\e/" 'c-mark-function)
-  
+
                                           ;(define-key c++-mode-map "\e " 'set-mark-command)
     (define-key c++-mode-map "\eq" 'append-as-kill)
     (define-key c++-mode-map "\ea" 'yank)
     (define-key c++-mode-map "\ez" 'kill-region)
-  
+
                                           ; devenv.com error parsing
     (add-to-list 'compilation-error-regexp-alist 'dgl-devenv)
     (add-to-list 'compilation-error-regexp-alist-alist '(dgl-devenv
                                                          "*\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
                                                          2 3 nil (4)))
-  
+
                                           ; Turn on line numbers
                                           ;(linum-mode)
     )
@@ -1271,10 +1279,10 @@ Things we want to do after init
                                           ; 4-space tabs
     (setq tab-width 4
           indent-tabs-mode nil)
-  
+
                                           ; Newline indents, semi-colon doesn't
     (define-key text-mode-map "\C-m" 'newline-and-indent)
-  
+
                                           ; Prevent overriding of alt-s
     (define-key text-mode-map "\es" 'dgl-save-buffer)
                                           ; Save buffer without converting tabs to spaces
@@ -1699,7 +1707,7 @@ Things we want to do after init
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
-   ) 
+   )
 
 
 
