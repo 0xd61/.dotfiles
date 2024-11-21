@@ -1,0 +1,24 @@
+Windows Registry Editor Version 5.00
+;; Be sure to set the correct path to Emacs on your system
+[HKEY_CURRENT_USER\Software\Classes\*\shell]
+
+;; Open file in existing frame
+[HKEY_CURRENT_USER\Software\Classes\*\shell\emacs]
+@="&Emacs: Edit"
+"icon"="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\emacsclientw.exe"
+[HKEY_CURRENT_USER\Software\Classes\*\shell\emacs\command]
+@="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\runemacs.exe -q -l t:\\emacs\\.emacs \"%1\""
+
+;; Dired for directory
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\emacs]
+@="&Emacs: Open"
+"icon"="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\emacsclientw.exe"
+[HKEY_CURRENT_USER\Software\Classes\Directory\shell\emacs\command]
+@="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\runemacs.exe -q -l t:\\emacs\\.emacs \"%V\""
+
+;; Dired for background directory
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\emacs]
+@="&Emacs: Open"
+"icon"="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\emacsclientw.exe"
+[HKEY_CURRENT_USER\Software\Classes\Directory\Background\shell\emacs\command]
+@="c:\\Program Files\\Emacs\\emacs-28.2\\bin\\runemacs.exe -q -l t:\\emacs\\.emacs \"%V\""
