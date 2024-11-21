@@ -163,6 +163,31 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
               ("M-DEL" . vertico-directory-delete-word))
 
 #+end_src
+*** Emacs
+#+name: emacs-keys
+#+begin_src emacs-lisp
+  :bind (
+         ;;("M-f" . 'find-file)
+         ("M-f" . 'consult-fd)
+         ;;("M-F" . 'find-file-other-window)
+         ("M-F" . 'consult-locate)
+         ;;("M-b" . 'ido-switch-buffer)
+         ("M-b" . 'consult-buffer)
+         ;;("M-B" . 'ido-switch-buffer-other-window)
+         ("M-B" . 'consult-buffer-other-window)
+         ("M-g" . 'consult-ripgrep)
+
+         ("M-w" . 'other-window)
+         ("M-s" . 'save-buffer)
+         ("M-u" . 'undo)
+         ;;("M-j" . 'imenu)
+         ("C-q" . 'copy-region-as-kill)
+         ("C-w" . 'kill-region)
+         ("M->" . 'mc/mark-next-like-this)
+         ("M-<" . 'mc/mark-previous-like-this)
+         ("M-m" . 'make-without-asking)
+         )
+#+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -357,6 +382,12 @@ In dired mode we want to be able to change permissions by editing the buffer
 #+begin_src emacs-lisp
   (setq wdired-allow-to-change-permissions t)
 #+end_src
+** General Keybinds
+#+begin_src emacs-lisp
+  (use-package emacs
+    <<emacs-keys>>)
+#+end_src
+
 * Visuals
 The first visual setting in this section will activate the visible bell. What it does is I get a visual feedback each time I do something Emacs doesn't agree with, like trying to go up a line when I'm already at the top of the buffer.
 #+begin_src emacs-lisp
@@ -404,7 +435,14 @@ I don't like the default font I usually have on my machines, I really don't. I p
     (when (find-font (font-spec :name dgl/default-font-name))
       (set-face-attribute 'default nil
                           :font dgl/default-font-name
-                          :height dgl/default-font-size))
+                          :height dgl/default-font-size)
+      (set-face-attribute 'fixed-pitch nil
+                          :font dgl/default-font-name
+                          :height dgl/default-font-size)
+      (set-face-attribute 'fixed-pitch-serif nil
+                          :font dgl/default-font-name
+                          :height dgl/default-font-size)
+      )
 
     (when (find-font (font-spec :name dgl/variable-font-name))
       (set-face-attribute 'variable-pitch nil
@@ -453,7 +491,7 @@ This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config
     (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
 
     (set-face-background 'region <<select>>)
-    (set-face-foreground 'verical-border <<alt_foreground>>)
+    (set-face-foreground 'vertical-border <<alt_foreground>>)
     )
   (my/set-colors)
   (add-hook 'server-after-make-frame-hook #'my/set-colors)
@@ -594,12 +632,26 @@ This is mostly the default config from [[https://github.com/minad/vertico][here]
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
     (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
 #+end_src
+** Dumb Jump
+#+begin_src emacs-lisp
+  (use-package dumb-jump
+  :ensure t
+  :custom
+  (dumb-jump-prefer-searcher 'rg)
+  ;; (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (xref-show-definitions-function #'consult-xref))
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+#+end_src
 ** Misc
 *** Marks
 Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up with another C-SPC. It is faster to type C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
 
 #+begin_src emacs-lisp
 (setq set-mark-command-repeat-pop t)
+#+end_src
+*** Multi Cursor
+#+begin_src emacs-lisp
+  (use-package multiple-cursors :ensure t)
 #+end_src
 * Programming
 ** C
@@ -756,7 +808,108 @@ The compilation window had some color issues.
 #+end_src
 
 * Org
+We have two org directories because we will use org-roam and Orgzly Revived on Android. Orgzly does not support the org-roam structure. Therefore we moved it to a subdirectory.
+
+#+begin_src emacs-lisp
+  (<<platform_windows>>
+   (setq dgl/org-directory "w:/vault/org")
+   (setq dgl/org-roam-directory (concat dgl/org-directory "/roam")))
+  (<<platform_linux>>
+   (setq dgl/org-directory "~/vault/org")
+   (setq dgl/org-roam-directory (concat dgl/org-directory "/roam")))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package org
+    :defer t
+    :mode ("\\.org$" . org-mode)
+    :custom-face
+    (org-block ((t (:inherit fixed-pitch))))
+    (org-code ((t (:inherit (shadow fixed-pitch)))))
+    (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+    (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
+    (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+    (org-level-1 ((t (:inherit org-document-title :height 1.0))))
+    (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+    (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+    (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+    (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+    (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+    (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+    (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+    (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+    (org-property-value ((t (:inherit fixed-pitch))))
+    (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+    (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+    (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+    :config
+    (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+    (setq org-refile-targets
+          '(
+            (org-agenda-files :maxlevel . 5)
+            ))
+    (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+    (setq org-log-done 'time)
+    (setq org-return-follows-link  t)
+    ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook 'variable-pitch-mode)
+    )
+#+end_src
+
+** Custom Faces
+#+begin_src emacs-lisp
+ 
+#+end_src
+** Org Bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets
+  :ensure t
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●"))
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+#+end_src
 ** Org Roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :defer t
+    :bind (("C-c o b" . org-roam-buffer-toggle)
+           ("C-c o f" . org-roam-node-find)
+           ("C-c o i" . org-roam-node-insert))
+    :custom
+    (org-roam-directory dgl/org-roam-directory)
+    (org-roam-capture-templates
+     '(("d" "default" plain
+        "\n%?"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)
+       ("w" "work log" plain
+        "\n* Log for\n- Company: - Company: \n- Ticket: \n- Goal: \n\n* %?"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work:")
+        :unnarrowed t)
+       ("p" "project" plain
+        "\n* Goals\n\n%?\n\n* Tasks\n** TODO Add initial tasks\n\n* Ideas"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:")
+        :unnarrowed t)
+       ("n" "notes" plain
+        "\n* Source\n- URL: \n- Author: \n- Title: \n- Year: \n\n* Summary\n%?\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)
+       ("m" "meeting" plain
+        "\n* [[id:9b83da73-2238-4254-86a5-47559b13014a][samuu]] log for\n- Company: \n- With: \n- Topic: \n- Date: %T\n\n* Preparations\n** %?\n\n* Notes\n**\n\n* ToDos\n** TODO\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work: :meeting:")
+        :unnarrowed t)
+       ))
+    :config
+    (run-with-idle-timer 8 nil 'org-roam-db-sync)
+    (run-with-idle-timer 9 nil 'org-roam-db-autosync-mode)
+    (org-roam-setup)
+    )
+#+end_src
 
 * Custom Functions
 ** Maximize frame on windows
