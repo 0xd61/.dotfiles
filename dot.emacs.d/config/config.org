@@ -120,16 +120,16 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ;; M-G bindings in `goto-map'
-         ("M-G e" . consult-compile-error)
+         ("M-J e" . consult-compile-error)
          ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-G g" . consult-goto-line)             ;; orig. goto-line
-         ("M-G l" . consult-goto-line)           ;; orig. goto-line
+         ("M-J g" . consult-goto-line)             ;; orig. goto-line
+         ("M-J l" . consult-goto-line)           ;; orig. goto-line
          ;;        ("M-G o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-G m" . consult-mark)
-         ("M-G M" . consult-global-mark)
-         ("M-G b" . consult-bookmark)
-         ("M-G i" . consult-imenu)
-         ("M-G I" . consult-imenu-multi)
+         ("M-J m" . consult-mark)
+         ("M-J M" . consult-global-mark)
+         ("M-J b" . consult-bookmark)
+         ("M-J i" . consult-imenu)
+         ("M-J I" . consult-imenu-multi)
          ;; M-S bindings in `search-map'
          ("M-S d" . consult-find)                  ;; Alternative: consult-fd
          ("M-S c" . consult-locate)
@@ -186,6 +186,14 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
          ("M->" . 'mc/mark-next-like-this)
          ("M-<" . 'mc/mark-previous-like-this)
          ("M-m" . 'make-without-asking)
+         )
+#+end_src
+
+*** Magit
+#+name: magit-keys
+#+begin_src emacs-lisp
+  :bind (
+         ("M-G s" . 'magit-status)
          )
 #+end_src
 * Basic Configuration
@@ -814,7 +822,13 @@ The compilation window had some color issues.
 
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 #+end_src
-
+** Magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    <<magit-keys>>
+    )
+#+end_src
 * Org
 We have two org directories because we will use org-roam and Orgzly Revived on Android. Orgzly does not support the org-roam structure. Therefore we moved it to a subdirectory.
 

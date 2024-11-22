@@ -236,16 +236,16 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
          ;; M-G bindings in `goto-map'
-         ("M-G e" . consult-compile-error)
+         ("M-J e" . consult-compile-error)
          ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-G g" . consult-goto-line)             ;; orig. goto-line
-         ("M-G l" . consult-goto-line)           ;; orig. goto-line
+         ("M-J g" . consult-goto-line)             ;; orig. goto-line
+         ("M-J l" . consult-goto-line)           ;; orig. goto-line
          ;;        ("M-G o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-G m" . consult-mark)
-         ("M-G M" . consult-global-mark)
-         ("M-G b" . consult-bookmark)
-         ("M-G i" . consult-imenu)
-         ("M-G I" . consult-imenu-multi)
+         ("M-J m" . consult-mark)
+         ("M-J M" . consult-global-mark)
+         ("M-J b" . consult-bookmark)
+         ("M-J i" . consult-imenu)
+         ("M-J I" . consult-imenu-multi)
          ;; M-S bindings in `search-map'
          ("M-S d" . consult-find)                  ;; Alternative: consult-fd
          ("M-S c" . consult-locate)
@@ -506,6 +506,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
     (ansi-color-apply-on-region (point-min) (point-max))))
 
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
+(use-package magit
+  :ensure t
+  :bind (
+         ("M-G s" . 'magit-status)
+         )
+  )
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/org-directory "w:/vault/org")
