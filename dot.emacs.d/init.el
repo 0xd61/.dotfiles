@@ -94,7 +94,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   
   :bind 
   ("M-f" . 'find-file)
-  ("M-F" . 'find-file-other)
+  ("M-F" . 'find-file-other-window)
   ("M-b" . 'consult-buffer)
   ("M-B" . 'consult-buffer-other-window)
   ("M-g" . 'consult-ripgrep)

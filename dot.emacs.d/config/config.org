@@ -174,7 +174,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 
   :bind 
   ("M-f" . 'find-file)
-  ("M-F" . 'find-file-other)
+  ("M-F" . 'find-file-other-window)
   ("M-b" . 'consult-buffer)
   ("M-B" . 'consult-buffer-other-window)
   ("M-g" . 'consult-ripgrep)
