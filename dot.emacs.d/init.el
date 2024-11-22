@@ -88,27 +88,26 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (setq wdired-allow-to-change-permissions t)
 
 (use-package emacs
-  :bind (
-         ;;("M-f" . 'find-file)
-         ("M-f" . 'consult-fd)
-         ;;("M-F" . 'find-file-other-window)
-         ("M-F" . 'consult-locate)
-         ;;("M-b" . 'ido-switch-buffer)
-         ("M-b" . 'consult-buffer)
-         ;;("M-B" . 'ido-switch-buffer-other-window)
-         ("M-B" . 'consult-buffer-other-window)
-         ("M-g" . 'consult-ripgrep)
+  :bind-keymap 
+  ("M-J" . goto-map)
+  ("M-S" . search-map)
   
-         ("M-w" . 'other-window)
-         ("M-s" . 'save-buffer)
-         ("M-u" . 'undo)
-         ;;("M-j" . 'imenu)
-         ("C-q" . 'copy-region-as-kill)
-         ("C-w" . 'kill-region)
-         ("M->" . 'mc/mark-next-like-this)
-         ("M-<" . 'mc/mark-previous-like-this)
-         ("M-m" . 'make-without-asking)
-         ))
+  :bind 
+  ("M-f" . 'find-file)
+  ("M-F" . 'find-file-other)
+  ("M-b" . 'consult-buffer)
+  ("M-B" . 'consult-buffer-other-window)
+  ("M-g" . 'consult-ripgrep)
+  
+  ("M-w" . 'other-window)
+  ("M-s" . 'save-buffer)
+  ("M-u" . 'undo)
+  ("M-j" . 'consult-imenu)
+  ("C-q" . 'copy-region-as-kill)
+  ("C-w" . 'kill-region)
+  ("M->" . 'mc/mark-next-like-this)
+  ("M-<" . 'mc/mark-previous-like-this)
+  ("M-m" . 'make-without-asking))
 
 (setq visible-bell t)
 
@@ -215,58 +214,60 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package consult
   :ensure t
   :bind (;; C-c bindings in `mode-specific-map'
-         ("C-c M-x" . consult-mode-command)
-         ;;        ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c m" . consult-man)
-         ("C-c i" . consult-info)
+         :map mode-specific-map
+         ("M-x" . consult-mode-command)
+         ("h" . consult-history)
+         ("k" . consult-kmacro)
+         ("m" . consult-man)
+         ("i" . consult-info)
          ([remap Info-search] . consult-info)
-         ;;        ;; C-x bindings in `ctl-x-map'
-         ;;        ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-         ;;        ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
-         ;;        ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
-         ;;        ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-         ;;        ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
-         ;;        ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ;;        ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; C-x bindings in `ctl-x-map'
+         :map ctl-x-map
+         ("M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         :map global-map
          ;; Custom M-# bindings for fast register access
          ("M-# l" . consult-register-load)
          ("M-# s" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
          ("M-# #" . consult-register)
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-G bindings in `goto-map'
-         ("M-J e" . consult-compile-error)
+         ;; M-J bindings in `goto-map'
+         :map goto-map
+         ("e" . consult-compile-error)
          ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("M-J g" . consult-goto-line)             ;; orig. goto-line
-         ("M-J l" . consult-goto-line)           ;; orig. goto-line
-         ;;        ("M-G o" . consult-outline)               ;; Alternative: consult-org-heading
-         ("M-J m" . consult-mark)
-         ("M-J M" . consult-global-mark)
-         ("M-J b" . consult-bookmark)
-         ("M-J i" . consult-imenu)
-         ("M-J I" . consult-imenu-multi)
+         ("g" . consult-goto-line)             ;; orig. goto-line
+         ("l" . consult-goto-line)           ;; orig. goto-line
+         ("o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("m" . consult-mark)
+         ("M" . consult-global-mark)
+         ("b" . consult-bookmark)
+         ("i" . consult-imenu)
+         ("I" . consult-imenu-multi)
          ;; M-S bindings in `search-map'
-         ("M-S d" . consult-find)                  ;; Alternative: consult-fd
-         ("M-S c" . consult-locate)
-         ("M-S g" . consult-grep)
-         ("M-S G" . consult-git-grep)
-         ("M-S r" . consult-ripgrep)
-         ("M-S l" . consult-line)
-         ("M-S L" . consult-line-multi)
-         ("M-S k" . consult-keep-lines)
-         ("M-S u" . consult-focus-lines)
+         :map search-map
+         ("d" . consult-find)                  ;; Alternative: consult-fd
+         ("c" . consult-locate)
+         ("f" . consult-fd)
+         ("g" . consult-grep)
+         ("G" . consult-git-grep)
+         ("r" . consult-ripgrep)
+         ("l" . consult-line)
+         ("L" . consult-line-multi)
+         ("k" . consult-keep-lines)
+         ("u" . consult-focus-lines)
          ;; Isearch integration
-         ("M-S e" . consult-isearch-history)
+         ("i" . consult-isearch-history)
          :map isearch-mode-map
-         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("M-S e" . consult-isearch-history)       ;; orig. isearch-edit-string
-         ("M-S l" . consult-line)                  ;; needed by consult-line to detect isearch
-         ("M-S L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ("i" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("L" . consult-line-multi)            ;; needed by consult-line to detect isearch
          ;; Minibuffer history
-         ;; :map minibuffer-local-map
-         ;; ("M-s" . consult-history)                 ;; orig. next-matching-history-element
-         ;; ("M-r" . consult-history)                ;; orig. previous-matching-history-element
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history)                ;; orig. previous-matching-history-element
+         :map consult-narrow-map
+         ("?" . consult-narrow-help)
          )
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -509,9 +510,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package magit
   :ensure t
-  :bind (
-         ("M-G s" . 'magit-status)
-         )
+  :bind 
+  ("M-G s" . 'magit-status)
+  
   )
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
@@ -524,6 +525,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package org
   :defer t
   :mode ("\\.org$" . org-mode)
+  :bind-keymap 
+  ("M-D" . org-mode-map)
   :custom-face
   (org-block ((t (:inherit fixed-pitch))))
   (org-code ((t (:inherit (shadow fixed-pitch)))))
@@ -561,18 +564,21 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 
 (use-package org-bullets
-:ensure t
-:custom
-(org-bullets-bullet-list '("◉" "○" "●"))
-:config
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  :ensure t
+  :defer t
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●"))
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (use-package org-roam
   :ensure t
   :defer t
-  :bind (("C-c o b" . org-roam-buffer-toggle)
+  :bind (
+         ("C-c o b" . org-roam-buffer-toggle)
          ("C-c o f" . org-roam-node-find)
-         ("C-c o i" . org-roam-node-insert))
+         ("C-c o i" . org-roam-node-insert)
+         )
   :custom
   (org-roam-directory dgl/org-roam-directory)
   (org-roam-capture-templates
