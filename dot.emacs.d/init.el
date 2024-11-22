@@ -321,11 +321,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package vertico
   :ensure t
-  :bind (:map vertico-map
-              ("RET" . vertico-directory-enter)
-              ("DEL" . vertico-directory-delete-char)
-              ("M-DEL" . vertico-directory-delete-word))
-  
   ;; :custom
   ;; (vertico-scroll-margin 0) ;; Different scroll margin
   ;; (vertico-count 20) ;; Show more candidates
@@ -333,7 +328,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :init
   (vertico-mode))
-(vertico-buffer-mode)
+;;(vertico-buffer-mode)
+(vertico-flat-mode)
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -361,6 +357,18 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
+
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package dumb-jump
 :ensure t
