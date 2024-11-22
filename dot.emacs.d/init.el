@@ -569,11 +569,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (add-hook 'org-mode-hook 'variable-pitch-mode)
   )
 
-
-
 (use-package org-bullets
   :ensure t
-  :defer t
+  :after org
   :custom
   (org-bullets-bullet-list '("◉" "○" "●"))
   :config

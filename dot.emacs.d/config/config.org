@@ -908,16 +908,11 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
     (add-hook 'org-mode-hook 'variable-pitch-mode)
     )
 #+end_src
-
-** Custom Faces
-#+begin_src emacs-lisp
-
-#+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
   (use-package org-bullets
     :ensure t
-    :defer t
+    :after org
     :custom
     (org-bullets-bullet-list '("◉" "○" "●"))
     :config
