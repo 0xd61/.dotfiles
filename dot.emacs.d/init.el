@@ -563,6 +563,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
   (setq org-log-done 'time)
   (setq org-return-follows-link  t)
+  (setq org-todo-keywords
+    '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED")))
   ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'visual-line-mode)
