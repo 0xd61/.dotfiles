@@ -141,10 +141,10 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
          ("k" . consult-keep-lines)
          ("u" . consult-focus-lines)
          ;; Isearch integration
-         ("i" . consult-isearch-history)
-         :map isearch-mode-map
-         ("i" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ;; ("i" . consult-isearch-history)
+         ;; :map isearch-mode-map
+         ;; ("i" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ;; ("e" . consult-isearch-history)       ;; orig. isearch-edit-string
          ("l" . consult-line)                  ;; needed by consult-line to detect isearch
          ("L" . consult-line-multi)            ;; needed by consult-line to detect isearch
          ;; Minibuffer history
@@ -157,6 +157,12 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+end_src
 
 *** Vertico
+#+name: vertico-directory-keys
+#+begin_src emacs-lisp
+  :bind (:map vertico-multiform-map
+              ("M-TAB" . vertico-multiform-buffer))
+#+end_src
+
 #+name: vertico-directory-keys
 #+begin_src emacs-lisp
   :bind (:map vertico-map
@@ -627,6 +633,7 @@ This is mostly the default config from [[https://github.com/minad/vertico][here]
 #+begin_src emacs-lisp
   (use-package vertico
     :ensure t
+    <<vertico-keys>>
     ;; :custom
     ;; (vertico-scroll-margin 0) ;; Different scroll margin
     ;; (vertico-count 20) ;; Show more candidates
@@ -634,7 +641,7 @@ This is mostly the default config from [[https://github.com/minad/vertico][here]
     ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
     :init
     (vertico-mode))
-  ;;(vertico-buffer-mode)
+  (vertico-multiform-mode)
   (vertico-flat-mode)
 
   ;; A few more useful configurations...

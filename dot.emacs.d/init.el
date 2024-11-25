@@ -256,10 +256,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
          ("k" . consult-keep-lines)
          ("u" . consult-focus-lines)
          ;; Isearch integration
-         ("i" . consult-isearch-history)
-         :map isearch-mode-map
-         ("i" . consult-isearch-history)         ;; orig. isearch-edit-string
-         ("e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ;; ("i" . consult-isearch-history)
+         ;; :map isearch-mode-map
+         ;; ("i" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ;; ("e" . consult-isearch-history)       ;; orig. isearch-edit-string
          ("l" . consult-line)                  ;; needed by consult-line to detect isearch
          ("L" . consult-line-multi)            ;; needed by consult-line to detect isearch
          ;; Minibuffer history
@@ -321,6 +321,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package vertico
   :ensure t
+  
   ;; :custom
   ;; (vertico-scroll-margin 0) ;; Different scroll margin
   ;; (vertico-count 20) ;; Show more candidates
@@ -328,7 +329,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ;; (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
   :init
   (vertico-mode))
-;;(vertico-buffer-mode)
+(vertico-multiform-mode)
 (vertico-flat-mode)
 
 ;; A few more useful configurations...
@@ -362,11 +363,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :after vertico
   :ensure nil
   ;; More convenient directory navigation commands
-  :bind (:map vertico-map
-              ("RET" . vertico-directory-enter)
-              ("DEL" . vertico-directory-delete-char)
-              ("M-DEL" . vertico-directory-delete-word))
-  
+  :bind (:map vertico-multiform-map
+              ("M-TAB" . vertico-multiform-buffer))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
