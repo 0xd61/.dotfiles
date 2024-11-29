@@ -87,12 +87,15 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 *** CC-Mode
 #+name: cc-mode-keys
 #+begin_src emacs-lisp
- :bind (
-   :map c++-mode-map
-   ("TAB" . 'dabbrev-expand)
-   ("S-TAB" . 'indent-for-tab-command)
-   ("C-TAB" . 'indent-region)
-   )
+  :bind (
+    :map c++-mode-map
+    ("TAB" . 'dabbrev-expand)
+    ("<tab>" . 'dabbrev-expand)
+    ("S-TAB" . 'indent-for-tab-command)
+    ("S-<tab>" . 'indent-for-tab-command)
+    ("C-TAB" . 'indent-region)
+    ("C-<tab>" . 'indent-region)
+    )
 #+end_src
 
 *** Consult
@@ -160,7 +163,8 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: vertico-directory-keys
 #+begin_src emacs-lisp
   :bind (:map vertico-multiform-map
-              ("M-TAB" . vertico-multiform-buffer))
+              ("S-TAB" . vertico-multiform-buffer)
+              ("S-<tab>" . vertico-multiform-buffer))
 #+end_src
 
 #+name: vertico-directory-keys

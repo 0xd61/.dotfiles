@@ -364,7 +364,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :ensure nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-multiform-map
-              ("M-TAB" . vertico-multiform-buffer))
+              ("S-TAB" . vertico-multiform-buffer)
+              ("S-<tab>" . vertico-multiform-buffer))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
@@ -385,8 +386,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :bind (
     :map c++-mode-map
     ("TAB" . 'dabbrev-expand)
+    ("<tab>" . 'dabbrev-expand)
     ("S-TAB" . 'indent-for-tab-command)
+    ("S-<tab>" . 'indent-for-tab-command)
     ("C-TAB" . 'indent-region)
+    ("C-<tab>" . 'indent-region)
     )
   :config
   ;; 4-space tabs
