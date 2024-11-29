@@ -386,11 +386,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :bind (
     :map c++-mode-map
     ("TAB" . 'dabbrev-expand)
-    ("<tab>" . 'dabbrev-expand)
-    ("S-TAB" . 'indent-for-tab-command)
-    ("S-<tab>" . 'indent-for-tab-command)
-    ("C-TAB" . 'indent-region)
-    ("C-<tab>" . 'indent-region)
     )
   :config
   ;; 4-space tabs
@@ -401,8 +396,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (c-toggle-auto-hungry-state -1)
 
   ;; Additional style stuff
-  (c-set-offset 'member-init-intro '++)
-
+  (setq c-offsets-alist '(
+                          (member-init-intro . ++)
+                          (case-label . +)
+                          ))
   ;; Newline indents, semi-colon doesn't
   ;; (define-key c++-mode-map "\C-m" 'newline-and-indent)
   (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
@@ -414,6 +411,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   ;; Abbrevation expansion
   (abbrev-mode 1)
+
   )
 
 (use-package go-mode
@@ -634,6 +632,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (defun post-load-stuff ()
   (interactive)
   (split-window-right)
+  (switch-to-buffer-other-window "*scratch*")
+  (windmove-left)
   (load-project-settings))
 
-(add-hook 'after-init-hook 'post-load-stuff t)
+(post-load-stuff)
+(add-hook 'server-after-make-frame-hook 'post-load-stuff t)
