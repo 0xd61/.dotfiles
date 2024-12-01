@@ -736,13 +736,13 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
     ;; Abbrevation expansion
     (abbrev-mode 1)
 
-    (defun set-tabs-mode ()
+    (defun dgl/set-tabs-mode ()
       "Enable tabs mode"
       (interactive)
       (setq indent-tabs-mode t)
       (message "Tabs enabled."))
 
-    (defun unset-tabs-mode ()
+    (defun dgl/unset-tabs-mode ()
       "Enable tabs mode"
       (interactive)
       (setq indent-tabs-mode nil)

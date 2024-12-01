@@ -414,13 +414,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ;; Abbrevation expansion
   (abbrev-mode 1)
 
-  (defun set-tabs-mode ()
+  (defun dgl/set-tabs-mode ()
     "Enable tabs mode"
     (interactive)
     (setq indent-tabs-mode t)
     (message "Tabs enabled."))
 
-  (defun unset-tabs-mode ()
+  (defun dgl/unset-tabs-mode ()
     "Enable tabs mode"
     (interactive)
     (setq indent-tabs-mode nil)
