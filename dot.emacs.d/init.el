@@ -386,10 +386,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :bind (
     :map c++-mode-map
     ("TAB" . 'dabbrev-expand)
+    ("C-c TAB" . 'indent-line-or-region)
     )
   :config
   ;; 4-space tabs
-  (setq tab-width 4 indent-tabs-mode t)
+  (setq tab-width 4)
+  (setq-default indent-tabs-mode nil)
   (setq c-basic-offset 4)
 
   ;; No hungry backspace
@@ -411,6 +413,25 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   ;; Abbrevation expansion
   (abbrev-mode 1)
+
+  (defun set-tabs-mode ()
+    "Enable tabs mode"
+    (interactive)
+    (setq indent-tabs-mode t)
+    (message "Tabs enabled."))
+
+  (defun unset-tabs-mode ()
+    "Enable tabs mode"
+    (interactive)
+    (setq indent-tabs-mode nil)
+    (message "Tabs disabled."))
+
+
+  ;; if indent-tabs-mode is off, untabify before saving
+  (add-hook 'write-file-hooks 
+            (lambda () (if (not indent-tabs-mode)
+                           (untabify (point-min) (point-max)))
+              nil ))
 
   )
 
