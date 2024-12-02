@@ -386,7 +386,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :bind (
     :map c++-mode-map
     ("TAB" . 'dabbrev-expand)
-    ("C-c TAB" . 'indent-line-or-region)
+    ("C-c TAB" . 'indent-region)
     )
   :config
   ;; 4-space tabs

@@ -90,7 +90,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
   :bind (
     :map c++-mode-map
     ("TAB" . 'dabbrev-expand)
-    ("C-c TAB" . 'indent-line-or-region)
+    ("C-c TAB" . 'indent-region)
     )
 #+end_src
 
