@@ -711,9 +711,9 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
     :defer t
     <<cc-mode-keys>>
     :config
+
     ;; 4-space tabs
     (setq tab-width 4)
-    (setq-default indent-tabs-mode nil)
     (setq c-basic-offset 4)
 
     ;; No hungry backspace
@@ -735,19 +735,6 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
 
     ;; Abbrevation expansion
     (abbrev-mode 1)
-
-    (defun dgl/set-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode t)
-      (message "Tabs enabled."))
-
-    (defun dgl/unset-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode nil)
-      (message "Tabs disabled."))
-
 
     ;; if indent-tabs-mode is off, untabify before saving
     (add-hook 'write-file-hooks 
@@ -822,6 +809,16 @@ The default dict is set to en_US.
                   ) auto-mode-alist))
 
 #+end_src
+** Tabs vs Spaces
+Here we define which modes should use tabs and which should use spaces.
+
+#+begin_src emacs-lisp
+  (add-hook 'c++-mode-hook        'dgl/unset-tabs-mode)
+  (add-hook 'prog-mode-hook       'dgl/set-tabs-mode)
+  (add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
+  (add-hook 'org-mode-hook        'dgl/set-tabs-mode)
+#+end_src
+
 ** Compilation
 With our own project files mentioned in [[Project Setup]] we want a simple way of running a compilation command.
 Usually there is only some build script that needs to be executed.
@@ -1022,7 +1019,22 @@ Things we want to do after init
   (post-load-stuff)
   (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
 #+end_src
+** Set and unset tabs mode
+#+begin_src emacs-lisp
+  
+    (defun dgl/set-tabs-mode ()
+      "Enable tabs mode"
+      (interactive)
+      (setq indent-tabs-mode t)
+      (message "Tabs enabled."))
 
+    (defun dgl/unset-tabs-mode ()
+      "Enable tabs mode"
+      (interactive)
+      (setq indent-tabs-mode nil)
+      (message "Tabs disabled."))
+
+#+end_src
 ** Unused Configs
 #+begin_src emacs-lisp :tangle no
   (setq x-select-enable-clipboard t)

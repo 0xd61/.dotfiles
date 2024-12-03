@@ -389,9 +389,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
     ("C-c TAB" . 'indent-region)
     )
   :config
+
   ;; 4-space tabs
   (setq tab-width 4)
-  (setq-default indent-tabs-mode nil)
   (setq c-basic-offset 4)
 
   ;; No hungry backspace
@@ -413,19 +413,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   ;; Abbrevation expansion
   (abbrev-mode 1)
-
-  (defun dgl/set-tabs-mode ()
-    "Enable tabs mode"
-    (interactive)
-    (setq indent-tabs-mode t)
-    (message "Tabs enabled."))
-
-  (defun dgl/unset-tabs-mode ()
-    "Enable tabs mode"
-    (interactive)
-    (setq indent-tabs-mode nil)
-    (message "Tabs disabled."))
-
 
   ;; if indent-tabs-mode is off, untabify before saving
   (add-hook 'write-file-hooks 
@@ -486,6 +473,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
                 ("\\.js$"       . javascript-mode)
                 ("\\.json$"     . javascript-mode)
                 ) auto-mode-alist))
+
+(add-hook 'c++-mode-hook        'dgl/unset-tabs-mode)
+(add-hook 'prog-mode-hook       'dgl/set-tabs-mode)
+(add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
+(add-hook 'org-mode-hook        'dgl/set-tabs-mode)
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/makescript "build.teak"))
@@ -659,3 +651,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (post-load-stuff)
 (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
+
+(defun dgl/set-tabs-mode ()
+  "Enable tabs mode"
+  (interactive)
+  (setq indent-tabs-mode t)
+  (message "Tabs enabled."))
+
+(defun dgl/unset-tabs-mode ()
+  "Enable tabs mode"
+  (interactive)
+  (setq indent-tabs-mode nil)
+  (message "Tabs disabled."))
