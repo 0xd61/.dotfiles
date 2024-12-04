@@ -778,7 +778,7 @@ The default dict is set to en_US.
 
 ** Syntax Highlight
 #+begin_src emacs-lisp
-  (autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+  (autoload 'bb-mode            "bb-mode"         "Bitbake mode"                                         t)
 
   (setq auto-mode-alist
         (append '(
@@ -930,7 +930,7 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
     (setq org-log-done 'time)
     (setq org-return-follows-link  t)
     (setq org-todo-keywords
-      '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED")))
+      '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
     ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
     (add-hook 'org-mode-hook 'org-indent-mode)
     (add-hook 'org-mode-hook 'visual-line-mode)
@@ -1039,7 +1039,7 @@ Things we want to do after init
 #+begin_src emacs-lisp :tangle no
   (setq x-select-enable-clipboard t)
 
-  ;;(autoload 'ebuild-mode		"ebuild-mode"         "Gentoo ebuild mode"						 t)
+  ;;(autoload 'ebuild-mode              "ebuild-mode"         "Gentoo ebuild mode"                                               t)
   (autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
   (autoload 'fd-grep-dired "fd-dired" "dired-mode interface for rg"  t)
 
@@ -1315,7 +1315,7 @@ Things we want to do after init
     (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
     (define-key c++-mode-map "\C-y" 'indent-for-tab-command)
     (define-key c++-mode-map [C-tab] 'indent-region)
-    (define-key c++-mode-map "	" 'indent-region)
+    (define-key c++-mode-map "        " 'indent-region)
 
     (define-key c++-mode-map "\ej" 'imenu)
 
@@ -1578,7 +1578,7 @@ s    "Perform a replace-string in the current region."
   ;; Smooth scroll
   (setq scroll-step 3)
 
-  ;; Clock					;(display-time)
+  ;; Clock                                      ;(display-time)
 
   ;; Modal Keymap
   (defmacro save-column (&rest body)
@@ -1722,7 +1722,7 @@ s    "Perform a replace-string in the current region."
   (define-key global-map [backtab] 'indent-for-tab-command)
   (define-key global-map "\C-y" 'indent-for-tab-command)
   (define-key global-map [C-tab] 'indent-region)
-  (define-key global-map "	" 'indent-region)
+  (define-key global-map "    " 'indent-region)
 
   (defun dgl-never-split-a-window (window)
     "Never, ever split a window. Why would anyone EVER want you to do that??"

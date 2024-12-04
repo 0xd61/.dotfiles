@@ -444,7 +444,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (if (boundp 'ispell-hunspell-dictionary-alist) t
   (setq ispell-hunspell-dictionary-alist ispell-dictionary-alist))
 
-(autoload 'bb-mode		"bb-mode"         "Bitbake mode"					 t)
+(autoload 'bb-mode            "bb-mode"         "Bitbake mode"                                         t)
 
 (setq auto-mode-alist
       (append '(
@@ -577,7 +577,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq org-log-done 'time)
   (setq org-return-follows-link  t)
   (setq org-todo-keywords
-    '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED")))
+    '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
   ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
   (add-hook 'org-mode-hook 'org-indent-mode)
   (add-hook 'org-mode-hook 'visual-line-mode)
