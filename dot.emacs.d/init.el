@@ -113,6 +113,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq x-stretch-cursor t)
 
+(setq-default tab-width 4)
+
 (with-eval-after-load 'mule-util
  (setq truncate-string-ellipsis "…"))
 

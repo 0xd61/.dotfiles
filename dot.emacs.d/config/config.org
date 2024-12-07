@@ -1,4 +1,5 @@
 
+
 #+title: Emacs - Configuration
 #+property: header-args:emacs-lisp  :mkdirp yes :lexical t :exports code
 #+property: header-args:emacs-lisp+ :tangle ../init.el
@@ -435,6 +436,11 @@ The first visual setting in this section will activate the visible bell. What it
 It is nicer to see a cursor cover the actual space of a character.
 #+begin_src emacs-lisp
 (setq x-stretch-cursor t)
+#+end_src
+
+We also want to show tabs as 4 spaces. Otherwise it takes too much space.
+#+begin_src emacs-lisp
+  (setq-default tab-width 4)
 #+end_src
 
 When text is ellipsed, I want the ellipsis marker to be a single character of three dots. Let's make it so:
