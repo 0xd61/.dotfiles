@@ -1,5 +1,5 @@
 \\builtin export SHELL=$MKSH MANWIDTH=80 LESSHISTFILE=-
 
 # st-265color error fix
-\\builtin export EDITOR=emacsclient
+\\builtin export EDITOR="emacsclient -nw"
 \\builtin export GPG_TTY=$(tty)

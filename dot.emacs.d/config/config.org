@@ -757,6 +757,17 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
     :mode ("\\.go$" . go-mode)
     )
 #+end_src
+
+** YAML
+#+begin_src emacs-lisp
+  (use-package yaml-mode
+    :ensure t
+    :mode (
+	   ("\\.yml$" . yaml-mode)
+	   ("\\.yaml$" . yaml-mode)
+	   )
+    )
+#+end_src
 ** Markdown
 #+begin_src emacs-lisp
   (use-package markdown-mode
@@ -812,6 +823,7 @@ The default dict is set to en_US.
                   ("\\.conf$"     . bb-mode)
                   ("\\.js$"       . javascript-mode)
                   ("\\.json$"     . javascript-mode)
+  
                   ) auto-mode-alist))
 
 #+end_src

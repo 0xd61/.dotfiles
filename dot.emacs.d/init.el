@@ -429,6 +429,14 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :mode ("\\.go$" . go-mode)
   )
 
+(use-package yaml-mode
+  :ensure t
+  :mode (
+	 ("\\.yml$" . yaml-mode)
+	 ("\\.yaml$" . yaml-mode)
+	 )
+  )
+
 (use-package markdown-mode
   :ensure t
   :mode ("\\.md$" . markdown-mode))
@@ -474,6 +482,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
                 ("\\.conf$"     . bb-mode)
                 ("\\.js$"       . javascript-mode)
                 ("\\.json$"     . javascript-mode)
+
                 ) auto-mode-alist))
 
 (add-hook 'c++-mode-hook        'dgl/unset-tabs-mode)
