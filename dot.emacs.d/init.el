@@ -549,51 +549,53 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/org-directory "w:/vault/org")
+ (setq dgl/org-denote-directory (concat dgl/org-directory "/roam"))
  (setq dgl/org-roam-directory (concat dgl/org-directory "/roam")))
 (when (eq system-type 'gnu/linux)
  (setq dgl/org-directory "~/vault/org")
+ (setq dgl/org-denote-directory (concat dgl/org-directory "/roam"))
  (setq dgl/org-roam-directory (concat dgl/org-directory "/roam")))
 
 (use-package org
-  :defer t
-  :mode ("\\.org$" . org-mode)
-  :bind-keymap 
-  ("M-D" . org-mode-map)
-  :custom-face
-  (org-block ((t (:inherit fixed-pitch))))
-  (org-code ((t (:inherit (shadow fixed-pitch)))))
-  (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-  (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
-  (org-indent ((t (:inherit (org-hide fixed-pitch)))))
-  (org-level-1 ((t (:inherit org-document-title :height 1.0))))
-  (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
-  (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
-  (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
-  (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
-  (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
-  (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
-  (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
-  (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  (org-property-value ((t (:inherit fixed-pitch))))
-  (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-  (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-  (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-  :config
-  (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
-  (setq org-refile-targets
-        '(
-          (org-agenda-files :maxlevel . 5)
-          ))
-  (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
-  (setq org-log-done 'time)
-  (setq org-return-follows-link  t)
-  (setq org-todo-keywords
-    '((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
-  ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
-  (add-hook 'org-mode-hook 'org-indent-mode)
-  (add-hook 'org-mode-hook 'visual-line-mode)
-  (add-hook 'org-mode-hook 'variable-pitch-mode)
-  )
+      :defer t
+      :mode ("\\.org$" . org-mode)
+      :bind-keymap 
+      ("M-N" . org-mode-map)
+      :custom-face
+      (org-block ((t (:inherit fixed-pitch))))
+      (org-code ((t (:inherit (shadow fixed-pitch)))))
+      (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+      (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
+      (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+      (org-level-1 ((t (:inherit org-document-title :height 1.0))))
+      (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+      (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+      (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+      (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+      (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+      (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+      (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+      (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+      (org-property-value ((t (:inherit fixed-pitch))))
+      (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+      (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+      (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+      :config
+      (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+      (setq org-refile-targets
+		'(
+		      (org-agenda-files :maxlevel . 5)
+		      ))
+      (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+      (setq org-log-done 'time)
+      (setq org-return-follows-link  t)
+      (setq org-todo-keywords
+	'((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
+      ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
+      (add-hook 'org-mode-hook 'org-indent-mode)
+      (add-hook 'org-mode-hook 'visual-line-mode)
+      (add-hook 'org-mode-hook 'variable-pitch-mode)
+      )
 
 (use-package org-bullets
   :ensure t
@@ -640,6 +642,52 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (run-with-idle-timer 9 nil 'org-roam-db-autosync-mode)
   (org-roam-setup)
   )
+
+(use-package denote
+      :ensure t
+      :bind (
+      	       :map org-mode-map
+      	       ("d d" . denote)
+      	       ("d i" . denote-add-links)
+      	       ("d l" . denote-link)
+      	       ("d b" . denote-backlinks)
+      	       )
+      ;; ("C-c n c" . denote-region)
+      ;; ("C-c n N" . denote-type)
+      ;; ("C-c n d" . denote-date)
+      ;;  ("C-c n z" . denote-signature)
+      ;;  ("C-c n s" . denote-subdirectory)
+      ;;  ("C-c n t" . denote-template)
+      ;;  
+      ;;  
+      ;;  
+      ;;  ("C-c n f f" . denote-find-link)
+      ;;  ("C-c n f b" . denote-find-backlink)
+      ;;  ("C-c n r" . denote-rename-file)
+      ;;  ("C-c n R" . denote-rename-file-using-front-matter))
+      ;; (:map dired-mode-map
+      ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
+      ;;  ("C-c C-d C-r" . denote-dired-rename-files)
+      ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+      ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
+      ;;  )
+      :after org
+      :custom
+      (denote-directory dgl/org-denote-directory)
+      ;;(denote-save-buffers nil)
+      (denote-known-keywords '("work" "project" "web"))
+      (denote-infer-keywords t)
+      (denote-sort-keywords t)
+      (denote-prompts '(title keywords))
+      ;;(denote-excluded-directories-regexp nil)
+      ;;(denote-excluded-keywords-regexp nil)
+      ;;(denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+      ;;(denote-date-prompt-use-org-read-date t)
+      ;;(denote-date-format nil)
+      (denote-backlinks-show-context t)
+      ;;(denote-rename-buffer-mode 1)
+      ;;(denote-org-capture-specifiers "%l\n%i\n%?")
+      )
 
 (defun dgl-maximize-frame ()
   "Maximize the current frame"
