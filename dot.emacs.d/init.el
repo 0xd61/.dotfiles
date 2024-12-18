@@ -612,7 +612,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       (setq org-log-done 'time)
       (setq org-return-follows-link  t)
       (setq org-todo-keywords
-	'((sequence "TODO" "POSTPONED" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
+	'((sequence "TODO" "WAIT" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
       ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
       (add-hook 'org-mode-hook 'org-indent-mode)
       (add-hook 'org-mode-hook 'visual-line-mode)
@@ -668,11 +668,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package denote
       :ensure t
       :bind (
+      	       ("C-c d" . denote)
       	       :map org-mode-map
-      	       ("d d" . denote)
-      	       ("d i" . denote-add-links)
-      	       ("d l" . denote-link)
-      	       ("d b" . denote-backlinks)
+      	       ("C-d i" . denote-add-links)
+      	       ("C-d l" . denote-link)
+      	       ("C-d b" . denote-backlinks)
       	       )
       ;; ("C-c n c" . denote-region)
       ;; ("C-c n N" . denote-type)
