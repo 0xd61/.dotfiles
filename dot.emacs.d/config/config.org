@@ -155,7 +155,15 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
          ("?" . consult-narrow-help)
          )
 #+end_src
+*** Embark
+#+name: embark-keys
+#+begin_src emacs-lisp
+  :bind (("C-M-x" . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export))
 
+#+end_src
 *** Vertico
 #+name: vertico-directory-keys
 #+begin_src emacs-lisp
@@ -172,11 +180,22 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
               ("M-DEL" . vertico-directory-delete-word))
 
 #+end_src
+*** wgrep
+#+name: wgrep-keys
+#+begin_src emacs-lisp
+  :bind ( :map grep-mode-map
+		  ("e" . wgrep-change-to-wgrep-mode)
+		  ("C-c C-c" . wgrep-finish-edit)
+		  )
+#+end_src
+
 *** Magit
 #+name: magit-keys
 #+begin_src emacs-lisp
   :bind 
   ("M-G s" . 'magit-status)
+  ("M-G b" . 'magit-blame)
+  ("M-G d" . 'magit-diff)
 
 #+end_src
 *** Org
@@ -661,6 +680,31 @@ This is mostly the default config from [[https://github.com/minad/consult][here]
     ;; You may want to use `embark-prefix-help-command' or which-key instead.
     ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
     )
+#+end_src
+
+*** Embark
+There is no nice way to ripgrep in dired. But we can use embark to get a proper grep buffer which than can be used with [[wgrep]].
+
+#+begin_src emacs-lisp
+	(use-package embark
+  :ensure t
+  <<embark-keys>>
+  )
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package embark-consult
+  :ensure t)
+#+end_src
+*** wgrep
+wgrep allows the grep buffer to be edited for an easy and fast search and replace across files.
+There is also [[https://www.emacswiki.org/emacs/DiredSearchAndReplace][dired-mode]] to do something similar. Not sure what is better.
+
+#+begin_src emacs-lisp
+  (use-package wgrep
+	:ensure t
+	<<wgrep-keys>>
+	)
 #+end_src
 ** Vertico
 This is mostly the default config from [[https://github.com/minad/vertico][here]].
