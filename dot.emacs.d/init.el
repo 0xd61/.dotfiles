@@ -449,6 +449,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :mode ("\\.go$" . go-mode)
   )
 
+(use-package lua-mode
+  :ensure t
+  :mode ("\\.lua$" . lua-mode)
+  )
+
 (use-package yaml-mode
   :ensure t
   :mode (
@@ -744,3 +749,16 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (interactive)
   (setq indent-tabs-mode nil)
   (message "Tabs disabled."))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(lua-mode yaml-mode wgrep vertico org-roam org-bullets multiple-cursors markdown-mode magit go-mode embark-consult dumb-jump denote async)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

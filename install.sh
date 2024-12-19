@@ -20,6 +20,7 @@ ln -s $BASEDIR/dot.vimrc $HOME/.vimrc
 ln -s $BASEDIR/dot.alacritty.toml $HOME/.alacritty.toml
 ln -s $BASEDIR/dot.emacs $HOME/.emacs
 ln -s $BASEDIR/dot.tmux.conf $HOME/.tmux.conf
+ln -s $BASEDIR/dot.wezterm.lua $HOME/.wezterm.lua
 [ -d "$HOME/.emacs.d" ] && unlink $HOME/.emacs.d; ln -s $BASEDIR/dot.emacs.d $HOME/.emacs.d
 ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.vim" ] && unlink $HOME/.vim; ln -s $BASEDIR/dot.vim $HOME/.vim
