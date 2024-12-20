@@ -12,3 +12,5 @@ dev-debug/apitrace ~amd64
 app-text/master-pdf-editor ~amd64
 net-im/teams-for-linux ~amd64
 dev-util/flatpak-builder ~amd64
+x11-terms/wezterm ~amd64
+dev-lang/pico8 ~amd64
