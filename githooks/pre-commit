@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+DIR=$(dirname "$0")
+HOOK_NAME=$(basename "$0")
+
+HOOK_DIR="${DIR}/${HOOK_NAME}.d"
+
+if [ -d $HOOK_DIR ]; then
+  STDIN=$(cat /dev/stdin)
+
+  echo "###### Running Hooks ######"
+  echo "You can skip hooks by running the commit command with '--no-verify'"
+  for HOOK in ${HOOK_DIR}/*; do
+    echo "$HOOK_NAME - $HOOK"
+    echo
+    echo "$STDIN" | . $HOOK "$@"
+
+    EXIT_CODE=$?
+
+    if [ $EXIT_CODE != 0 ]; then
+      exit $EXIT_CODE
+    fi
+  done
+else
+  echo "$HOOK_DIR not found"
+  exit 1
+fi
+
+exit 0
