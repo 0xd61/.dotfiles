@@ -1,5 +1,3 @@
-
-
 #+title: Emacs - Configuration
 #+property: header-args:emacs-lisp  :mkdirp yes :lexical t :exports code
 #+property: header-args:emacs-lisp+ :tangle ../init.el
@@ -192,7 +190,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 *** Magit
 #+name: magit-keys
 #+begin_src emacs-lisp
-  :bind 
+  :bind
   ("M-G s" . 'magit-status)
   ("M-G b" . 'magit-blame)
   ("M-G d" . 'magit-diff)
@@ -201,7 +199,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 *** Org
 #+name: org-keys
 #+begin_src emacs-lisp
-  :bind-keymap 
+  :bind-keymap
   ("M-N" . org-mode-map)
 #+end_src
 **** Org Roam
@@ -217,21 +215,20 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: denote-keys
 #+begin_src emacs-lisp
   :bind (
-		 ("C-c d" . denote)
-	   	 :map org-mode-map
-		 ("C-d i" . denote-add-links)
-		 ("C-d l" . denote-link)
-		 ("C-d b" . denote-backlinks)
-		 )
+   ("C-c n n" . denote)
+   ("C-c n r" . denote-rename-file)
+   ("C-c n l" . denote-link)
+   ("C-c n b" . denote-backlinks)
+   ("C-c n d" . denote-sort-dired)
   ;; ("C-c n c" . denote-region)
   ;; ("C-c n N" . denote-type)
   ;; ("C-c n d" . denote-date)
   ;;  ("C-c n z" . denote-signature)
   ;;  ("C-c n s" . denote-subdirectory)
   ;;  ("C-c n t" . denote-template)
-  ;;  
-  ;;  
-  ;;  
+  ;;
+  ;;
+  ;;
   ;;  ("C-c n f f" . denote-find-link)
   ;;  ("C-c n f b" . denote-find-backlink)
   ;;  ("C-c n r" . denote-rename-file)
@@ -241,16 +238,16 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
   ;;  ("C-c C-d C-r" . denote-dired-rename-files)
   ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
   ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-  ;;  )
+  )
 #+end_src
 *** Emacs
 #+name: emacs-keys
 #+begin_src emacs-lisp
-  :bind-keymap 
+  :bind-keymap
   ("M-J" . goto-map)
   ("M-S" . search-map)
 
-  :bind 
+  :bind
   ("M-f" . 'find-file)
   ("M-F" . 'find-file-other-window)
   ("M-b" . 'consult-buffer)
@@ -496,6 +493,12 @@ When text is ellipsed, I want the ellipsis marker to be a single character of th
 (with-eval-after-load 'mule-util
  (setq truncate-string-ellipsis "…"))
 #+end_src
+
+We want to know where we have trailing whitespace to keep things clean
+#+begin_src emacs-lisp
+  (setq show-trailing-whitespace t)
+#+end_src
+
 ** UTF-8 encoding
 By default we want utf-8 for everything
 #+begin_src emacs-lisp
@@ -558,33 +561,34 @@ This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config
 ** Colors
 #+begin_src emacs-lisp
   (defun my/set-colors ()
-    (set-foreground-color <<main_foreground>>)
-    (set-background-color <<main_background>>)
+	(set-foreground-color <<main_foreground>>)
+	(set-background-color <<main_background>>)
 
-    (set-face-foreground 'default <<main_foreground>>)
-    (set-face-background 'default <<main_background>>)
-    (set-face-background 'cursor <<constant>>)
-    (set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
-    (set-face-foreground 'font-lock-comment-face <<comment>>)
-    (set-face-foreground 'font-lock-constant-face <<constant>>)
-    (set-face-foreground 'font-lock-doc-face <<keyword>>)
-    (set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
-    (set-face-foreground 'font-lock-keyword-face <<keyword>>)
-    (set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
-    (set-face-foreground 'font-lock-string-face <<string>>)
-    (set-face-foreground 'font-lock-type-face <<main_foreground>>)
-    (set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
-    (set-face-background 'fringe <<fringe>>)
-    (set-face-foreground 'highlight <<constant>>)
-    ;;(set-face-background 'hl-line <<alt_background>>)
-    (set-face-foreground 'mode-line <<main_background>>)
-    (set-face-background 'mode-line <<main_foreground>>)
+	(set-face-foreground 'default <<main_foreground>>)
+	(set-face-background 'default <<main_background>>)
+	(set-face-background 'cursor <<constant>>)
+	(set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
+	(set-face-foreground 'font-lock-comment-face <<comment>>)
+	(set-face-foreground 'font-lock-constant-face <<constant>>)
+	(set-face-foreground 'font-lock-doc-face <<keyword>>)
+	(set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
+	(set-face-foreground 'font-lock-keyword-face <<keyword>>)
+	(set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
+	(set-face-foreground 'font-lock-string-face <<string>>)
+	(set-face-foreground 'font-lock-type-face <<main_foreground>>)
+	(set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
+	(set-face-background 'fringe <<fringe>>)
+	(set-face-foreground 'highlight <<constant>>)
+	;;(set-face-background 'hl-line <<alt_background>>)
+	(set-face-foreground 'mode-line <<main_background>>)
+	(set-face-background 'mode-line <<main_foreground>>)
 
-    (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
+	(set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
 
-    (set-face-background 'region <<select>>)
-    (set-face-foreground 'vertical-border <<alt_foreground>>)
-    )
+	(set-face-background 'region <<select>>)
+	(set-face-foreground 'vertical-border <<alt_foreground>>)
+	(set-face-background 'trailing-whitespace <<alt_background>>)
+	)
   (my/set-colors)
   (add-hook 'server-after-make-frame-hook #'my/set-colors)
 #+end_src
@@ -816,7 +820,7 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
     (abbrev-mode 1)
 
     ;; if indent-tabs-mode is off, untabify before saving
-    (add-hook 'write-file-hooks 
+    (add-hook 'write-file-hooks
               (lambda () (if (not indent-tabs-mode)
                              (untabify (point-min) (point-max)))
                 nil ))
@@ -905,7 +909,7 @@ The default dict is set to en_US.
                   ("\\.conf$"     . bb-mode)
                   ("\\.js$"       . javascript-mode)
                   ("\\.json$"     . javascript-mode)
-  
+
                   ) auto-mode-alist))
 
 #+end_src
@@ -917,6 +921,11 @@ Here we define which modes should use tabs and which should use spaces.
   (add-hook 'prog-mode-hook       'dgl/set-tabs-mode)
   (add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
   (add-hook 'org-mode-hook        'dgl/set-tabs-mode)
+#+end_src
+
+We also want to remove any trailing whitespace to keep things clean
+#+begin_src emacs-lisp
+  (add-hook 'write-file-hooks 'delete-trailing-whitespace)
 #+end_src
 
 ** Compilation
@@ -1094,21 +1103,20 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
   (use-package denote
 	:ensure t
 	<<denote-keys>>
-	:after org
 	:custom
 	(denote-directory dgl/org-denote-directory)
 	;;(denote-save-buffers nil)
-	(denote-known-keywords '("work" "project" "web"))
+	(denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
 	(denote-infer-keywords t)
 	(denote-sort-keywords t)
 	(denote-prompts '(title keywords))
-	;;(denote-excluded-directories-regexp nil)
-	;;(denote-excluded-keywords-regexp nil)
-	;;(denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-	;;(denote-date-prompt-use-org-read-date t)
+	(denote-excluded-directories-regexp nil)
+	(denote-excluded-keywords-regexp nil)
+	(denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+	(denote-date-prompt-use-org-read-date t)
 	;;(denote-date-format nil)
 	(denote-backlinks-show-context t)
-	;;(denote-rename-buffer-mode 1)
+	(denote-rename-buffer-mode 1)
 	;;(denote-org-capture-specifiers "%l\n%i\n%?")
 	)
 #+end_src
@@ -1148,7 +1156,7 @@ Things we want to do after init
 #+end_src
 ** Set and unset tabs mode
 #+begin_src emacs-lisp
-  
+
     (defun dgl/set-tabs-mode ()
       "Enable tabs mode"
       (interactive)

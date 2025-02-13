@@ -88,11 +88,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (setq wdired-allow-to-change-permissions t)
 
 (use-package emacs
-  :bind-keymap 
+  :bind-keymap
   ("M-J" . goto-map)
   ("M-S" . search-map)
   
-  :bind 
+  :bind
   ("M-f" . 'find-file)
   ("M-F" . 'find-file-other-window)
   ("M-b" . 'consult-buffer)
@@ -117,6 +117,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (with-eval-after-load 'mule-util
  (setq truncate-string-ellipsis "…"))
+
+(setq show-trailing-whitespace t)
 
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -161,33 +163,34 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'server-after-make-frame-hook #'my/set-font)
 
 (defun my/set-colors ()
-  (set-foreground-color "#D2B48C")
-  (set-background-color "#012326")
+      (set-foreground-color "#D2B48C")
+      (set-background-color "#012326")
 
-  (set-face-foreground 'default "#D2B48C")
-  (set-face-background 'default "#012326")
-  (set-face-background 'cursor "#65D6AD")
-  (set-face-foreground 'font-lock-builtin-face "#D2B48C")
-  (set-face-foreground 'font-lock-comment-face "#31B72C")
-  (set-face-foreground 'font-lock-constant-face "#65D6AD")
-  (set-face-foreground 'font-lock-doc-face "#E8E6E1")
-  (set-face-foreground 'font-lock-function-name-face "#D2B48C")
-  (set-face-foreground 'font-lock-keyword-face "#E8E6E1")
-  (set-face-foreground 'font-lock-preprocessor-face "#625D52")
-  (set-face-foreground 'font-lock-string-face "#2CB1BC")
-  (set-face-foreground 'font-lock-type-face "#D2B48C")
-  (set-face-foreground 'font-lock-variable-name-face "#D2B48C")
-  (set-face-background 'fringe "#01282D")
-  (set-face-foreground 'highlight "#65D6AD")
-  ;;(set-face-background 'hl-line "#013137")
-  (set-face-foreground 'mode-line "#012326")
-  (set-face-background 'mode-line "#D2B48C")
+      (set-face-foreground 'default "#D2B48C")
+      (set-face-background 'default "#012326")
+      (set-face-background 'cursor "#65D6AD")
+      (set-face-foreground 'font-lock-builtin-face "#D2B48C")
+      (set-face-foreground 'font-lock-comment-face "#31B72C")
+      (set-face-foreground 'font-lock-constant-face "#65D6AD")
+      (set-face-foreground 'font-lock-doc-face "#E8E6E1")
+      (set-face-foreground 'font-lock-function-name-face "#D2B48C")
+      (set-face-foreground 'font-lock-keyword-face "#E8E6E1")
+      (set-face-foreground 'font-lock-preprocessor-face "#625D52")
+      (set-face-foreground 'font-lock-string-face "#2CB1BC")
+      (set-face-foreground 'font-lock-type-face "#D2B48C")
+      (set-face-foreground 'font-lock-variable-name-face "#D2B48C")
+      (set-face-background 'fringe "#01282D")
+      (set-face-foreground 'highlight "#65D6AD")
+      ;;(set-face-background 'hl-line "#013137")
+      (set-face-foreground 'mode-line "#012326")
+      (set-face-background 'mode-line "#D2B48C")
 
-  (set-face-attribute 'mode-line-inactive nil :foreground "#D2B48C" :background "#013137")
+      (set-face-attribute 'mode-line-inactive nil :foreground "#D2B48C" :background "#013137")
 
-  (set-face-background 'region "#24335E")
-  (set-face-foreground 'vertical-border "#625D52")
-  )
+      (set-face-background 'region "#24335E")
+      (set-face-foreground 'vertical-border "#625D52")
+      (set-face-background 'trailing-whitespace "#013137")
+      )
 (my/set-colors)
 (add-hook 'server-after-make-frame-hook #'my/set-colors)
 
@@ -437,7 +440,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (abbrev-mode 1)
 
   ;; if indent-tabs-mode is off, untabify before saving
-  (add-hook 'write-file-hooks 
+  (add-hook 'write-file-hooks
             (lambda () (if (not indent-tabs-mode)
                            (untabify (point-min) (point-max)))
               nil ))
@@ -515,6 +518,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
 (add-hook 'org-mode-hook        'dgl/set-tabs-mode)
 
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
+
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/makescript "build.teak"))
 (when (eq system-type 'gnu/linux)
@@ -567,7 +572,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package magit
   :ensure t
-  :bind 
+  :bind
   ("M-G s" . 'magit-status)
   ("M-G b" . 'magit-blame)
   ("M-G d" . 'magit-diff)
@@ -586,7 +591,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package org
       :defer t
       :mode ("\\.org$" . org-mode)
-      :bind-keymap 
+      :bind-keymap
       ("M-N" . org-mode-map)
       :custom-face
       (org-block ((t (:inherit fixed-pitch))))
@@ -673,21 +678,20 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package denote
       :ensure t
       :bind (
-      	       ("C-c d" . denote)
-      	       :map org-mode-map
-      	       ("C-d i" . denote-add-links)
-      	       ("C-d l" . denote-link)
-      	       ("C-d b" . denote-backlinks)
-      	       )
+       ("C-c n n" . denote)
+       ("C-c n r" . denote-rename-file)
+       ("C-c n l" . denote-link)
+       ("C-c n b" . denote-backlinks)
+       ("C-c n d" . denote-sort-dired)
       ;; ("C-c n c" . denote-region)
       ;; ("C-c n N" . denote-type)
       ;; ("C-c n d" . denote-date)
       ;;  ("C-c n z" . denote-signature)
       ;;  ("C-c n s" . denote-subdirectory)
       ;;  ("C-c n t" . denote-template)
-      ;;  
-      ;;  
-      ;;  
+      ;;
+      ;;
+      ;;
       ;;  ("C-c n f f" . denote-find-link)
       ;;  ("C-c n f b" . denote-find-backlink)
       ;;  ("C-c n r" . denote-rename-file)
@@ -697,22 +701,21 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       ;;  ("C-c C-d C-r" . denote-dired-rename-files)
       ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
       ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-      ;;  )
-      :after org
+      )
       :custom
       (denote-directory dgl/org-denote-directory)
       ;;(denote-save-buffers nil)
-      (denote-known-keywords '("work" "project" "web"))
+      (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
       (denote-infer-keywords t)
       (denote-sort-keywords t)
       (denote-prompts '(title keywords))
-      ;;(denote-excluded-directories-regexp nil)
-      ;;(denote-excluded-keywords-regexp nil)
-      ;;(denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-      ;;(denote-date-prompt-use-org-read-date t)
+      (denote-excluded-directories-regexp nil)
+      (denote-excluded-keywords-regexp nil)
+      (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+      (denote-date-prompt-use-org-read-date t)
       ;;(denote-date-format nil)
       (denote-backlinks-show-context t)
-      ;;(denote-rename-buffer-mode 1)
+      (denote-rename-buffer-mode 1)
       ;;(denote-org-capture-specifiers "%l\n%i\n%?")
       )
 
@@ -749,16 +752,3 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (interactive)
   (setq indent-tabs-mode nil)
   (message "Tabs disabled."))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(lua-mode yaml-mode wgrep vertico org-roam org-bullets multiple-cursors markdown-mode magit go-mode embark-consult dumb-jump denote async)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
