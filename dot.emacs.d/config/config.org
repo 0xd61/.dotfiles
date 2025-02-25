@@ -1,3 +1,4 @@
+
 #+title: Emacs - Configuration
 #+property: header-args:emacs-lisp  :mkdirp yes :lexical t :exports code
 #+property: header-args:emacs-lisp+ :tangle ../init.el
@@ -472,6 +473,12 @@ In dired mode we want to be able to change permissions by editing the buffer
     <<emacs-keys>>)
 #+end_src
 
+** Path adjustments
+We need to add git to the path on windows to be able to use xargs for xref, which is needed for some packages to work properly
+
+#+begin_src emacs-lisp
+   (setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin"))
+#+end_src
 * Visuals
 The first visual setting in this section will activate the visible bell. What it does is I get a visual feedback each time I do something Emacs doesn't agree with, like trying to go up a line when I'm already at the top of the buffer.
 #+begin_src emacs-lisp
@@ -1118,6 +1125,14 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 	(denote-backlinks-show-context t)
 	(denote-rename-buffer-mode 1)
 	;;(denote-org-capture-specifiers "%l\n%i\n%?")
+	)
+#+end_src
+
+It is useful to have some kind of list of the denote files. For this we use denote-menu.
+
+#+begin_src emacs-lisp
+  (use-package denote-menu
+	:ensure t
 	)
 #+end_src
 * Custom Functions

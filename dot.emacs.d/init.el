@@ -109,6 +109,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("M-<" . 'mc/mark-previous-like-this)
   ("M-m" . 'make-without-asking))
 
+(setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin"))
+
 (setq visible-bell t)
 
 (setq x-stretch-cursor t)
@@ -717,6 +719,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       (denote-backlinks-show-context t)
       (denote-rename-buffer-mode 1)
       ;;(denote-org-capture-specifiers "%l\n%i\n%?")
+      )
+
+(use-package denote-menu
+      :ensure t
       )
 
 (defun dgl-maximize-frame ()
