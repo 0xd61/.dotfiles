@@ -2,3 +2,4 @@ dev-python/pip
 app-admin/chrpath
 dev-util/diffstat
 net-libs/rpcsvc-proto
+sys-libs/ncurses-compat

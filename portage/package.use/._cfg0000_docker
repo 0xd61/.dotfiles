@@ -1,4 +1,0 @@
-app-containers/docker overlay -device-mapper
-# required by app-editors/vis-0.9::gentoo[lua,lua_single_target_lua5-4]
-# required by app-editors/vis (argument)
->=dev-lua/lpeg-1.1.0 lua_targets_lua5-4

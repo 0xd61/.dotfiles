@@ -64,3 +64,8 @@ media-libs/freetype static-libs
 # required by media-gfx/sane-backends-1.2.1::gentoo[sane_backends_escl]
 # required by media-gfx/sane-backends (argument)
 >=app-text/poppler-24.02.0 cairo
+
+# required by sys-auth/polkit-125-r1::gentoo[systemd]
+# required by x11-misc/colord-1.4.7-r1::gentoo
+# required by x11-misc/colord (argument)
+>=sys-apps/systemd-256.7 policykit

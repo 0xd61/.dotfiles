@@ -1,1 +1,2 @@
 app-dicts/myspell-en l10n_en-US
+app-office/libreoffice -clang qt5 qt6 vulkan

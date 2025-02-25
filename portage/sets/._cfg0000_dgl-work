@@ -28,6 +28,7 @@ x11-apps/xsetroot
 x11-misc/dmenu
 x11-terms/alacritty
 x11-wm/dwm
+# move sys-devel/clang llvm-core/clang
 llvm-core/clang
 virtual/wine
 net-libs/nodejs
@@ -37,7 +38,7 @@ app-editors/vscode
 app-admin/terraform
 sys-cluster/kubectl
 www-client/google-chrome
-app-office/libreoffice
+app-office/libreoffice-bin
 net-im/teams-for-linux
 x11-libs/libnotify
 net-fs/nfs-utils

@@ -350,16 +350,16 @@ cross-arm-unknown-linux-gnueabi/gcc -selinux -boundschecking -d -gcj -gtk -libff
 # required by @selected
 # required by @world (argument)
 >=app-arch/zstd-1.5.5 abi_x86_32
-# required by media-libs/mesa-23.1.8::gentoo[llvm,-opencl]
-# required by media-libs/gst-plugins-base-1.20.6::gentoo[opengl,-gles2]
-# required by media-libs/gst-plugins-good-1.20.6::gentoo
-# required by media-plugins/gst-plugins-meta-1.20.6::gentoo
-# required by app-emulation/wine-vanilla-8.0.2::gentoo[gstreamer]
+# required by media-libs/mesa-24.3.3::gentoo[llvm,llvm_slot_19]
+# required by media-libs/gst-plugins-base-1.24.11::gentoo[-opengl,gles2]
+# required by media-libs/gst-plugins-good-1.24.11::gentoo
+# required by media-plugins/gst-plugins-meta-1.24.11::gentoo
+# required by app-emulation/wine-vanilla-9.0::gentoo[gstreamer]
 # required by virtual/wine-0-r10::gentoo
 # required by @dgl-work
 # required by @selected
 # required by @world (argument)
->=sys-devel/llvm-16.0.6 abi_x86_32
+>=llvm-core/llvm-19.1.4 abi_x86_32
 # required by sys-devel/llvm-16.0.6::gentoo[libffi]
 # required by media-libs/mesa-23.1.8::gentoo[llvm,-opencl]
 # required by media-libs/gst-plugins-base-1.20.6::gentoo[opengl,-gles2]

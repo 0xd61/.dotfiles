@@ -1,7 +1,0 @@
-cross-arm-unknown-linux-gnueabi/binutils -multilib
-cross-arm-unknown-linux-gnueabi/linux-headers -selinux -multilib
-cross-arm-unknown-linux-gnueabi/glibc -selinux -libraries -multilib
-cross-arm-unknown-linux-gnueabi/gcc -selinux -boundschecking -d -gcj -gtk -libffi -mudflap -objc -objc++ -objc-gc -sanitize -multilib
-# required by games-emulation/vbam-2.1.7::gentoo[wxwidgets]
-# required by games-emulation/vbam (argument)
->=x11-libs/wxGTK-3.2.2.1-r3 opengl
