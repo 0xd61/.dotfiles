@@ -109,7 +109,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("M-<" . 'mc/mark-previous-like-this)
   ("M-m" . 'make-without-asking))
 
-(setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin"))
+(when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
+(setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
 
 (setq visible-bell t)
 
@@ -581,6 +582,25 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   
   )
 
+(defvar highlight-codetags-keywords
+      '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
+	("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
+
+(define-minor-mode highlight-codetags-local-mode
+      "Highlight codetags like TODO, FIXME, @performance..."
+      :global nil
+      (if highlight-codetags-local-mode
+	      (font-lock-add-keywords nil highlight-codetags-keywords)
+	(font-lock-remove-keywords nil highlight-codetags-keywords))
+
+      ;; Fontify the current buffer
+      (when (bound-and-true-p font-lock-mode)
+	(if (fboundp 'font-lock-flush)
+		(font-lock-flush)
+	      (with-no-warnings (font-lock-fontify-buffer)))))
+
+(add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
+
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/org-directory "w:/vault/org")
  (setq dgl/org-denote-directory (concat dgl/org-directory "/roam"))
@@ -593,8 +613,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package org
       :defer t
       :mode ("\\.org$" . org-mode)
-      :bind-keymap
-      ("M-N" . org-mode-map)
+            :bind-keymap
+            ("M-N" . org-mode-map)
+            :bind( :map org-mode-map
+      		 ("M-a" . org-agenda)
+      		 ("M-x" . org-archive-subtree)
+      		 ("M-c" . org-capture)
+      )
       :custom-face
       (org-block ((t (:inherit fixed-pitch))))
       (org-code ((t (:inherit (shadow fixed-pitch)))))
@@ -615,16 +640,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
       (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
       :config
-      (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
-      (setq org-refile-targets
-		'(
-		      (org-agenda-files :maxlevel . 5)
-		      ))
-      (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
-      (setq org-log-done 'time)
       (setq org-return-follows-link  t)
-      (setq org-todo-keywords
-	'((sequence "TODO" "WAIT" "NEXT" "|" "DONE" "DELEGATED" "CANCELLED")))
       ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
       (add-hook 'org-mode-hook 'org-indent-mode)
       (add-hook 'org-mode-hook 'visual-line-mode)
@@ -724,6 +740,56 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package denote-menu
       :ensure t
       )
+
+(use-package org
+      :config
+      (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+      (setq org-refile-targets
+		'(
+		      (org-agenda-files :maxlevel . 5)
+		      ))
+      (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+      (setq org-log-done 'time)
+      (setq org-todo-keywords
+		'((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
+      (setq org-return-follows-link t)
+      (setq org-agenda-custom-commands '(
+									     ("t" "TODOs" todo "TODO" nil)
+									     ("w" "Waiting Tasks" todo "WAIT" nil)
+									     ("n" "Next Tasks" todo "NEXT" nil)
+									     ("s" "Someday" todo "TODO"  ((org-agenda-files
+														     (list (concat dgl/org-directory "/someday.org")))))
+									     ("d" "Agenda + Next Actions" ((agenda) (todo" NEXT")))))
+      (setq org-agenda-sorting-strategy
+	'((agenda habit-down time-up priority-down category-keep)
+	      (todo priority-down todo-state-up category-keep)
+	      (tags priority-down todo-state-up category-keep)
+	      (search category-keep)))
+
+      (setq org-capture-templates
+	`(
+	      ("i" "Inbox" entry
+	       (file, (concat dgl/org-directory "/inbox.org"))
+	       "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
+
+	      ("n" "Next action" entry
+	       (file, (concat dgl/org-directory "/gtd.org"))
+	       "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+
+	      ("w" "Waiting" entry
+	       (file, (concat dgl/org-directory "/gtd.org"))
+	       "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+
+	      ("s" "Someday" entry
+	       (file, (concat dgl/org-directory "/someday.org"))
+	       "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
+	      ))
+      )
+
+(defun dgl/gtd ()
+  (interactive)
+  (find-file (concat dgl/org-directory "/gtd.org"))
+)
 
 (defun dgl-maximize-frame ()
   "Maximize the current frame"
