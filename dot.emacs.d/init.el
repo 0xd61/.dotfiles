@@ -619,6 +619,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       		 ("M-a" . org-agenda)
       		 ("M-X" . org-archive-subtree)
       		 ("M-c" . org-capture)
+      		 ("M-p" . org-priority)
+      		 ("M-r" . org-refile)
+      		 ("M-S" . org-schedule)
       )
       :custom-face
       (org-block ((t (:inherit fixed-pitch))))
@@ -716,12 +719,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 		'((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
       (setq org-return-follows-link t)
       (setq org-agenda-custom-commands '(
-									     ("t" "TODOs" todo "TODO" nil)
-									     ("w" "Waiting Tasks" todo "WAIT" nil)
-									     ("n" "Next Tasks" todo "NEXT" nil)
-									     ("s" "Someday" todo "TODO"  ((org-agenda-files
-														     (list (concat dgl/org-directory "/someday.org")))))
-									     ("d" "Agenda + Next Actions" ((agenda) (todo" NEXT")))))
+									 ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
+									 ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
+									 ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
+									 ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
+									 ))
       (setq org-agenda-sorting-strategy
 	'((agenda habit-down time-up priority-down category-keep)
 	      (todo priority-down todo-state-up category-keep)
