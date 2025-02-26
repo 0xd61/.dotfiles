@@ -617,7 +617,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
             ("M-N" . org-mode-map)
             :bind( :map org-mode-map
       		 ("M-a" . org-agenda)
-      		 ("M-x" . org-archive-subtree)
+      		 ("M-X" . org-archive-subtree)
       		 ("M-c" . org-capture)
       )
       :custom-face
@@ -654,44 +654,6 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (org-bullets-bullet-list '("◉" "○" "●"))
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-(use-package org-roam
-  :ensure t
-  :defer t
-  :bind (
-         ("C-c o b" . org-roam-buffer-toggle)
-         ("C-c o f" . org-roam-node-find)
-         ("C-c o i" . org-roam-node-insert)
-         )
-  :custom
-  (org-roam-directory dgl/org-roam-directory)
-  (org-roam-capture-templates
-   '(("d" "default" plain
-      "\n%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("w" "work log" plain
-      "\n* Log for\n- Company: - Company: \n- Ticket: \n- Goal: \n\n* %?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work:")
-      :unnarrowed t)
-     ("p" "project" plain
-      "\n* Goals\n\n%?\n\n* Tasks\n** TODO Add initial tasks\n\n* Ideas"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :project:")
-      :unnarrowed t)
-     ("n" "notes" plain
-      "\n* Source\n- URL: \n- Author: \n- Title: \n- Year: \n\n* Summary\n%?\n\n"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-      :unnarrowed t)
-     ("m" "meeting" plain
-      "\n* [[id:9b83da73-2238-4254-86a5-47559b13014a][samuu]] log for\n- Company: \n- With: \n- Topic: \n- Date: %T\n\n* Preparations\n** %?\n\n* Notes\n**\n\n* ToDos\n** TODO\n"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :work: :meeting:")
-      :unnarrowed t)
-     ))
-  :config
-  (run-with-idle-timer 8 nil 'org-roam-db-sync)
-  (run-with-idle-timer 9 nil 'org-roam-db-autosync-mode)
-  (org-roam-setup)
-  )
 
 (use-package denote
       :ensure t

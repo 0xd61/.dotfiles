@@ -204,12 +204,12 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 	("M-N" . org-mode-map)
 	:bind( :map org-mode-map
 		   ("M-a" . org-agenda)
-		   ("M-x" . org-archive-subtree)
+		   ("M-X" . org-archive-subtree)
 		   ("M-c" . org-capture)
   )
 #+end_src
 **** Org Roam
-#+name: org-roam-keys
+#+name: org-roam-keys :tabgle no
 #+begin_src emacs-lisp
   :bind (
          ("C-c o b" . org-roam-buffer-toggle)
@@ -1089,7 +1089,7 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 #+end_src
 ** Org Roam
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-roam
     :ensure t
     :defer t
