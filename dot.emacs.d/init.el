@@ -720,6 +720,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       (setq org-return-follows-link t)
       (setq org-agenda-custom-commands '(
 									 ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
+									 ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
 									 ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
 									 ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
 									 ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
