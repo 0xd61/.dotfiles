@@ -1223,7 +1223,20 @@ We setup org-mode to be able to follow the GTD system.
 
 ** Pinentry
 Pinentry does not really work, especially in combination with magit. I don't want to use the normal graphical app because it will fail when using a ssh connection.
-Recently I found this [[https://vxlabs.com/2021/03/21/gnupg-pinentry-via-the-emacs-minibuffer/][blogpost]].
+Recently I found this [[https://github.com/magit/magit/issues/4076][issue]].
+
+NOTE: it is important to update the gnupg configs:
+
+#+name ~/.gnupg/gpg.conf
+#+begin_src linux no-export
+  pinentry-mode loopback
+#+end_src
+
+#+name ~/.gnupg/gpg-agent.conf
+#+begin_src linux no-export
+  pinentry-program /usr/bin/pinentry-tty
+  allow-loopback-pinentry
+#+end_src
 
 #+begin_src emacs-lisp
   (use-package emacs
