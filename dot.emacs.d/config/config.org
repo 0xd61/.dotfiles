@@ -437,7 +437,7 @@ We want to have per project config files which will be loaded separately. This s
         (find-project-directory-recursive project-file (- depth 1))))
     )
 
-  (defun load-project-settings ()
+  (defun dgl/load-project-settings ()
     (interactive)
     (setq find-project-from-directory default-directory)
     (cd find-project-from-directory)
@@ -980,7 +980,7 @@ Usually there is only some build script that needs to be executed.
     (if compilation-directory-locked
         (cd last-compilation-directory)
       (progn
-        (load-project-settings)
+        (dgl/load-project-settings)
         (cd dgl/project-directory)))
     (lock-compilation-directory)
     (compile dgl/makescript))
@@ -1273,7 +1273,7 @@ Things we want to do after init
     (split-window-right)
     (switch-to-buffer-other-window "*scratch*")
     (windmove-left)
-    (load-project-settings))
+    (dgl/load-project-settings))
 
   (post-load-stuff)
   (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
@@ -2012,7 +2012,7 @@ s    "Perform a replace-string in the current region."
   (set-face-attribute 'vertical-border nil :foreground "#625D52")
   (set-face-attribute 'cursor nil :background "#65D6AD")
 
-  (defun load-project-settings ()
+  (defun dgl/load-project-settings ()
     (interactive)
     (setq find-project-from-directory default-directory)
     (cd find-project-from-directory)
@@ -2030,7 +2030,7 @@ s    "Perform a replace-string in the current region."
                                           ;(set-cursor-color "#65D6AD")
     (set-foreground-color "tan")
     (set-background-color "#012326")
-    (load-project-settings)
+    (dgl/load-project-settings)
     )
 
   ;;(defun daemon-post-load-stuff ()

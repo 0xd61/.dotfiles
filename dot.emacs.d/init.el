@@ -62,7 +62,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       (find-project-directory-recursive project-file (- depth 1))))
   )
 
-(defun load-project-settings ()
+(defun dgl/load-project-settings ()
   (interactive)
   (setq find-project-from-directory default-directory)
   (cd find-project-from-directory)
@@ -554,7 +554,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (if compilation-directory-locked
       (cd last-compilation-directory)
     (progn
-      (load-project-settings)
+      (dgl/load-project-settings)
       (cd dgl/project-directory)))
   (lock-compilation-directory)
   (compile dgl/makescript))
@@ -781,7 +781,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (split-window-right)
   (switch-to-buffer-other-window "*scratch*")
   (windmove-left)
-  (load-project-settings))
+  (dgl/load-project-settings))
 
 (post-load-stuff)
 (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
