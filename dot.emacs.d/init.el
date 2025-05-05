@@ -603,6 +603,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
 
+(use-package emacs
+  :bind-keymap
+  ("M-P" . project-prefix-map)
+  :config
+  (setq project-mode-line t)
+)
+
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/org-directory "w:/vault/org")
  (setq dgl/org-denote-directory (concat dgl/org-directory "/roam"))

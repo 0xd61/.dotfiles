@@ -15,7 +15,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 ** Example
 #+name: foo
 #+begin_src emacs-lisp
-(print "foo")
+  (print "foo")
 #+end_src
 
 #+name: foobar
@@ -250,7 +250,7 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
   ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
   )
 #+end_src
-*** Emacs
+**** Emacs
 #+name: emacs-keys
 #+begin_src emacs-lisp
   :bind-keymap
@@ -273,6 +273,12 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
   ("M->" . 'mc/mark-next-like-this)
   ("M-<" . 'mc/mark-previous-like-this)
   ("M-m" . 'make-without-asking)
+#+end_src
+**** Projects
+#+name: project-keys
+#+begin_src emacs-lisp
+	:bind-keymap
+	("M-P" . project-prefix-map)
 #+end_src
 
 * Basic Configuration
@@ -1035,7 +1041,18 @@ TODO: The highlight of @keyword does not work yet. Somehow the @ is not interpre
 
   (add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
 #+end_src
+** Projects
+I want to be able to quickly swich between projects in the same emacs session. For now I was just using different console tabs and opened a emacs session in each tab. But it would be nice to be able to do this from one emacs session.
 
+Showing the current project in the modeline
+
+#+begin_src emacs-lisp
+   (use-package emacs
+    <<project-keys>>
+    :config
+    (setq project-mode-line t)
+  )
+#+end_src
 * Org
 We have two org directories because we will use org-roam and Orgzly Revived on Android. Orgzly does not support the org-roam structure. Therefore we moved it to a subdirectory.
 
