@@ -771,6 +771,78 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq epa-pinentry-mode 'loopback)
 )
 
+(when (eq system-type 'gnu/linux)
+ (require 'exwm)
+ ;; Set the initial workspace number.
+ (setq exwm-workspace-number 4)
+ ;; Make class name the buffer name.
+ (add-hook 'exwm-update-class-hook
+		   (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+;; These keys should always pass through to Emacs
+(setq exwm-input-prefix-keys
+  '(?\C-x
+    ?\C-u
+    ?\C-h
+	?\C-q     ;; Prevent from accidently closing firefox
+	?\M-J b
+	?\M-b     ;; Buffer list
+	?\M-P p   ;; Project selection
+    ?\M-x
+	?\M-w     ;; other window
+    ?\M-`
+    ?\M-&
+    ?\M-:
+    ?\C-\ ))  ;; Ctrl+Space
+
+ ;; Global keybindings.
+ (setq exwm-input-global-keys
+       `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
+         ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+		 ([?\s-b]   . exwm-workspace-switch-to-buffer)
+		 ([?\s-q]   . exwm-input-send-next-key)
+         ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+						(interactive (list (read-shell-command "$ ")))
+						(start-process-shell-command cmd nil cmd)))
+         ;; s-N: Switch to certain workspace.
+         ,@(mapcar (lambda (i)
+                     `(,(kbd (format "s-%d" i)) .
+                       (lambda ()
+                         (interactive)
+                         (exwm-workspace-switch-create , (- i 1)))))
+                   (number-sequence 1 9))))
+ ;; Enable EXWM
+ (exwm-enable)
+ )
+
+(when (eq system-type 'gnu/linux)
+ (defvar efs/polybar-process nil
+   "Holds the process of the running Polybar instance, if any")
+
+ (defun efs/kill-panel ()
+   (interactive)
+   (when efs/polybar-process
+     (ignore-errors
+       (kill-process efs/polybar-process)))
+   (setq efs/polybar-process nil))
+
+ (defun efs/start-panel ()
+   (interactive)
+   (efs/kill-panel)
+   (setq efs/polybar-process (start-process-shell-command "polybar" nil "polybar")))
+
+ (defun efs/send-polybar-hook (module-name hook-index)
+   (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
+
+ (defun efs/send-polybar-exwm-workspace ()
+   (efs/send-polybar-hook "exwm-workspace" 1))
+
+ ;; Update panel indicator when workspace changes
+ (add-hook 'exwm-workspace-switch-hook #'efs/send-polybar-exwm-workspace)
+
+ ;; Run on startup
+ (add-hook 'exwm-init-hook #'efs/start-panel)
+ )
+
 (defun dgl-maximize-frame ()
   "Maximize the current frame"
   (interactive)
