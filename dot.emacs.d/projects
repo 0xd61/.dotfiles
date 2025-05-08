@@ -1,0 +1,13 @@
+;;; -*- lisp-data -*-
+(("/home/dgl/Projects/degit/dui/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/intercom-linux/")
+ ("/home/dgl/Projects/degit/playground/") ("/home/dgl/.dotfiles/")
+ ("/home/dgl/.dotfiles/gentoo-custom/")
+ ("/home/dgl/Projects/gitlab/avantys/lorch/s4-backend/")
+ ("/home/dgl/Projects/gitlab/avantys/lorch/build_system/meta-lorch-mapro/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/ethtool/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/embeddedsw/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/dsp-cortex-r5-1/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/dsp-cortex-r5-0/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/carbon/")
+ ("/home/dgl/Projects/gitlab/avantys/riedel/audio-server/"))

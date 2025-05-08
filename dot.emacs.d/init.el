@@ -107,7 +107,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("C-w" . 'kill-region)
   ("M->" . 'mc/mark-next-like-this)
   ("M-<" . 'mc/mark-previous-like-this)
-  ("M-m" . 'make-without-asking))
+  ("M-m" . 'make-without-asking)
+  
+  ("TAB" . 'dabbrev-expand)
+  ("C-c TAB" . 'indent-region)
+  ("C-x C-b" . 'ibuffer))
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
 (setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
@@ -622,17 +626,18 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package org
 	:defer t
 	:mode ("\\.org$" . org-mode)
-		:bind-keymap
-		("M-N" . org-mode-map)
-		:bind( :map org-mode-map
-			   ("M-A" . org-agenda)
-			   ("M-X" . org-archive-subtree)
-			   ("M-c" . org-capture)
-			   ("M-p" . org-priority)
-			   ("M-r" . org-refile)
-			   ("M-S" . org-schedule)
-			   ("M-D" . org-deadline)
-	)
+	:bind-keymap
+	("M-N" . org-mode-map)
+	:bind( :map org-mode-map
+		   ("M-A" . org-agenda)
+		   ("M-X" . org-archive-subtree)
+		   ("M-c" . org-capture)
+		   ("M-p" . org-priority)
+		   ("M-r" . org-refile)
+		   ("M-S" . org-schedule)
+		   ("M-D" . org-deadline)
+		   ("C-c TAB" . 'indent-region)
+		   )
 	:custom-face
 	(org-block ((t (:inherit fixed-pitch))))
 	(org-code ((t (:inherit (shadow fixed-pitch)))))
@@ -671,30 +676,29 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package denote
 	:ensure t
 	:bind (
-	 ("C-c n n" . denote)
-	 ("C-c n r" . denote-rename-file)
-	 ("C-c n l" . denote-link)
-	 ("C-c n b" . denote-backlinks)
-	 ("C-c n d" . denote-sort-dired)
-	;; ("C-c n c" . denote-region)
-	;; ("C-c n N" . denote-type)
-	;; ("C-c n d" . denote-date)
-	;;  ("C-c n z" . denote-signature)
-	;;  ("C-c n s" . denote-subdirectory)
-	;;  ("C-c n t" . denote-template)
-	;;
-	;;
-	;;
-	;;  ("C-c n f f" . denote-find-link)
-	;;  ("C-c n f b" . denote-find-backlink)
-	;;  ("C-c n r" . denote-rename-file)
-	;;  ("C-c n R" . denote-rename-file-using-front-matter))
-	;; (:map dired-mode-map
-	;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
-	;;  ("C-c C-d C-r" . denote-dired-rename-files)
-	;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
-	;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-	)
+		   ("C-c n n" . denote)
+		   ("C-c n r" . denote-rename-file)
+		   ("C-c n l" . denote-link)
+		   ("C-c n b" . denote-backlinks)
+		   ;; ("C-c n c" . denote-region)
+		   ;; ("C-c n N" . denote-type)
+		   ;; ("C-c n d" . denote-date)
+		   ;;  ("C-c n z" . denote-signature)
+		   ;;  ("C-c n s" . denote-subdirectory)
+		   ;;  ("C-c n t" . denote-template)
+		   ;;
+		   ;;
+		   ;;
+		   ;;  ("C-c n f f" . denote-find-link)
+		   ;;  ("C-c n f b" . denote-find-backlink)
+		   ;;  ("C-c n r" . denote-rename-file)
+		   ;;  ("C-c n R" . denote-rename-file-using-front-matter))
+		   ;; (:map dired-mode-map
+		   ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
+		   ;;  ("C-c C-d C-r" . denote-dired-rename-files)
+		   ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+		   ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
+		   )
 	:custom
 	(denote-directory dgl/org-denote-directory)
 	;;(denote-save-buffers nil)
@@ -714,6 +718,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package denote-menu
 	:ensure t
+	:bind (
+		   ("C-c n d" . list-denotes)
+		   :map denote-menu-mode-map
+		   ("c" . denote-menu-clear-filters)
+		   ("f" . denote-menu-filter)
+		   ("k" . denote-menu-filter-by-keyword)
+		   ("o"  . denote-menu-filter-out-keyword)
+		   ("e" . denote-menu-export-to-dired)
+		   )
 	)
 
 (use-package org
@@ -778,38 +791,38 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
  ;; Make class name the buffer name.
  (add-hook 'exwm-update-class-hook
 		   (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
-;; These keys should always pass through to Emacs
-(setq exwm-input-prefix-keys
-  '(?\C-x
-    ?\C-u
-    ?\C-h
-	?\C-q     ;; Prevent from accidently closing firefox
-	?\M-J b
-	?\M-b     ;; Buffer list
-	?\M-P p   ;; Project selection
-    ?\M-x
-	?\M-w     ;; other window
-    ?\M-`
-    ?\M-&
-    ?\M-:
-    ?\C-\ ))  ;; Ctrl+Space
+ ;; These keys should always pass through to Emacs
+ (setq exwm-input-prefix-keys
+	   '(?\C-x
+		 ?\C-u
+		 ?\C-h
+		 ?\C-q     ;; Prevent from accidently closing firefox
+		 ?\M-J b
+		 ?\M-b     ;; Buffer list
+		 ?\M-P p   ;; Project selection
+		 ?\M-x
+		 ?\M-w     ;; other window
+		 ?\M-`
+		 ?\M-&
+		 ?\M-:
+		 ?\C-\ ))  ;; Ctrl+Space
 
  ;; Global keybindings.
  (setq exwm-input-global-keys
        `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-         ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+		 ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
 		 ([?\s-b]   . exwm-workspace-switch-to-buffer)
 		 ([?\s-q]   . exwm-input-send-next-key)
-         ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-						(interactive (list (read-shell-command "$ ")))
-						(start-process-shell-command cmd nil cmd)))
-         ;; s-N: Switch to certain workspace.
-         ,@(mapcar (lambda (i)
-                     `(,(kbd (format "s-%d" i)) .
-                       (lambda ()
-                         (interactive)
-                         (exwm-workspace-switch-create , (- i 1)))))
-                   (number-sequence 1 9))))
+		 ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+  						(interactive (list (read-shell-command "$ ")))
+  						(start-process-shell-command cmd nil cmd)))
+		 ;; s-N: Switch to certain workspace.
+		 ,@(mapcar (lambda (i)
+					 `(,(kbd (format "s-%d" i)) .
+					   (lambda ()
+						 (interactive)
+						 (exwm-workspace-switch-create , (- i 1)))))
+				   (number-sequence 1 9))))
  ;; Enable EXWM
  (exwm-enable)
  )
