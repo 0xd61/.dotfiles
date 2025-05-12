@@ -1279,6 +1279,21 @@ NOTE: it is important to update the gnupg configs:
     (setq epa-pinentry-mode 'loopback)
   )
 #+end_src
+** TRAMP
+We usually use bash when working on remote machines.
+
+#+begin_src emacs-lisp
+  (use-package tramp
+    :config
+    (connection-local-set-profile-variables
+     'remote-direct-async-process
+     '((tramp-direct-async-process . t)))
+
+    (connection-local-set-profiles
+     '(:application tramp :protocol "ssh")
+     'remote-direct-async-process)
+    )
+#+end_src
 * OS
 ** EXWM
 

@@ -784,6 +784,17 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq epa-pinentry-mode 'loopback)
 )
 
+(use-package tramp
+  :config
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "ssh")
+   'remote-direct-async-process)
+  )
+
 (when (eq system-type 'gnu/linux)
  (require 'exwm)
  ;; Set the initial workspace number.
