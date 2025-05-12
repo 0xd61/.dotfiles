@@ -1284,6 +1284,7 @@ We usually use bash when working on remote machines.
 
 #+begin_src emacs-lisp
   (use-package tramp
+    :defer t
     :config
     (connection-local-set-profile-variables
      'remote-direct-async-process
@@ -1294,6 +1295,27 @@ We usually use bash when working on remote machines.
      'remote-direct-async-process)
     )
 #+end_src
+
+*** Eshell
+We usually use a remote shell when connecting to other systems.
+
+#+begin_src emacs-lisp
+  (use-package eshell
+    :defer t
+    :config
+    (add-to-list 'eshell-modules-list 'eshell-tramp)
+    )
+#+end_src
+
+** EWW
+Lookup with eww first, then use =eww-browse-with-external-browser= if we need to browse in a normal browser
+#+begin_src emacs-lisp
+  (setq browse-url-browser-function 'eww-browse-url)
+  (add-hook 'eww-after-render-hook 'eww-readable)
+#+end_src
+
+display eww in side window with a large height
+
 * OS
 ** EXWM
 

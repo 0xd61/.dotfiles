@@ -785,6 +785,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 )
 
 (use-package tramp
+  :defer t
   :config
   (connection-local-set-profile-variables
    'remote-direct-async-process
@@ -794,6 +795,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
    '(:application tramp :protocol "ssh")
    'remote-direct-async-process)
   )
+
+(use-package eshell
+  :defer t
+  :config
+  (add-to-list 'eshell-modules-list 'eshell-tramp)
+  )
+
+(setq browse-url-browser-function 'eww-browse-url)
+(add-hook 'eww-after-render-hook 'eww-readable)
 
 (when (eq system-type 'gnu/linux)
  (require 'exwm)
