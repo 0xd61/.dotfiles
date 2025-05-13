@@ -41,6 +41,46 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq auto-save-default t)
 
+(use-package files
+  ;;:hook
+  ;;(before-save . delete-trailing-whitespace)
+  :config
+  (setq dgl/auto-save-dir (concat user-emacs-directory "autosaves"))
+
+  ;; Ensure the directory exists
+  (unless (file-exists-p dgl/auto-save-dir)
+	(make-directory dgl/auto-save-dir t))
+
+  ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
+  (defun rename-file-and-buffer (new-name)
+    "Renames both current buffer and file it's visiting to NEW-NAME."
+    (interactive "sNew name: ")
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not filename)
+          (message "Buffer '%s' is not visiting a file." name)
+        (if (get-buffer new-name)
+            (message "A buffer named '%s' already exists." new-name)
+          (progn
+            (rename-file filename new-name 1)
+            (rename-buffer new-name)
+            (set-visited-file-name new-name)
+            (set-buffer-modified-p nil))))))
+  :custom
+  (require-final-newline t "Automatically add newline at end of file")
+  (backup-by-copying t)
+  (kill-buffer-delete-auto-save-files t)
+  (backup-directory-alist `((".*" . ,(expand-file-name
+                                      (concat user-emacs-directory "backups"))))
+                          "Keep backups in their own directory")
+
+  (auto-save-file-name-transforms `((".*" ,(concat user-emacs-directory "autosaves/") t)))
+
+  (delete-old-versions t)
+  (kept-new-versions 3)
+  (kept-old-versions 1)
+  (version-control nil))
+
 (setq window-combination-resize t)
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
