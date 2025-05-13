@@ -254,6 +254,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package async
   :ensure t
+  :init (dired-async-mode 1)
   :config (setq async-bytecomp-package-mode 1))
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
@@ -826,6 +827,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package tramp
   :defer t
+  :custom
+  ;; We use ssh controlmaster in our ssh config and in the putty session
+  (tramp-use-connection-share nil)
   :config
   (connection-local-set-profile-variables
    'remote-direct-async-process
@@ -834,12 +838,50 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (connection-local-set-profiles
    '(:application tramp :protocol "ssh")
    'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "sshx")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "plink")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "plinkx")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scp")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "scpx")
+   'remote-direct-async-process)
+
+  (connection-local-set-profiles
+   '(:application tramp :protocol "rsync")
+   'remote-direct-async-process)
+
+  (setq tramp-default-method "ssh")
+  (setq remote-file-name-inhibit-locks t)
+  (setq remote-file-name-inhibit-cache 180)
+  (setq tramp-completion-reread-directory-timeout 180)
+  (setq tramp-directory-cache-expire (* 60 60 24))
+  (setq tramp-auto-save-directory nil)
+  (setq vc-ignore-dir-regexp (format "%s\\|%s"
+									 vc-ignore-dir-regexp
+									 tramp-file-name-regexp))
+  (setq tramp-ssh-controlmaster-options nil)
+  (setq tramp-connection-timeout 10)
+  (setq tramp-verbose 1)
   )
 
 (use-package eshell
   :defer t
   :config
   (add-to-list 'eshell-modules-list 'eshell-tramp)
+  (add-to-list 'eshell-modules-list 'eshell-smart)
   )
 
 (setq browse-url-browser-function 'eww-browse-url)
@@ -849,41 +891,48 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
  (require 'exwm)
  ;; Set the initial workspace number.
  (setq exwm-workspace-number 4)
+
+ ;; Automatically move EXWM buffer to current workspace when selected
+ (setq exwm-layout-show-all-buffers t)
+
+ ;; Display all EXWM buffers in every workspace buffer list
+ (setq exwm-workspace-show-all-buffers t)
+
  ;; Make class name the buffer name.
  (add-hook 'exwm-update-class-hook
-		   (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+  		   (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
  ;; These keys should always pass through to Emacs
  (setq exwm-input-prefix-keys
-	   '(?\C-x
-		 ?\C-u
-		 ?\C-h
-		 ?\C-q     ;; Prevent from accidently closing firefox
-		 ?\M-J b
-		 ?\M-b     ;; Buffer list
-		 ?\M-P p   ;; Project selection
-		 ?\M-x
-		 ?\M-w     ;; other window
-		 ?\M-`
-		 ?\M-&
-		 ?\M-:
-		 ?\C-\ ))  ;; Ctrl+Space
+  	   '(?\C-x
+  		 ?\C-u
+  		 ?\C-h
+  		 ?\C-q     ;; Prevent from accidently closing firefox
+  		 ?\M-J b
+  		 ?\M-b     ;; Buffer list
+  		 ?\M-P p   ;; Project selection
+  		 ?\M-x
+  		 ?\M-w     ;; other window
+  		 ?\M-`
+  		 ?\M-&
+  		 ?\M-:
+  		 ?\C-\ ))  ;; Ctrl+Space
 
  ;; Global keybindings.
  (setq exwm-input-global-keys
        `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-		 ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-		 ([?\s-b]   . exwm-workspace-switch-to-buffer)
-		 ([?\s-q]   . exwm-input-send-next-key)
-		 ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-  						(interactive (list (read-shell-command "$ ")))
-  						(start-process-shell-command cmd nil cmd)))
-		 ;; s-N: Switch to certain workspace.
-		 ,@(mapcar (lambda (i)
-					 `(,(kbd (format "s-%d" i)) .
-					   (lambda ()
-						 (interactive)
-						 (exwm-workspace-switch-create , (- i 1)))))
-				   (number-sequence 1 9))))
+  		 ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+  		 ([?\s-b]   . exwm-workspace-switch-to-buffer)
+  		 ([?\s-q]   . exwm-input-send-next-key)
+  		 ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+    					(interactive (list (read-shell-command "$ ")))
+    					(start-process-shell-command cmd nil cmd)))
+  		 ;; s-N: Switch to certain workspace.
+  		 ,@(mapcar (lambda (i)
+  					 `(,(kbd (format "s-%d" i)) .
+  					   (lambda ()
+  						 (interactive)
+  						 (exwm-workspace-switch-create , (- i 1)))))
+  				   (number-sequence 1 9))))
  ;; Enable EXWM
  (exwm-enable)
  )
