@@ -1406,7 +1406,14 @@ We usually use a remote shell when connecting to other systems.
 *** VTerm
 Eshell is not the best when needing a full terminal. However vterm only works on linux
 
-TODO integrating vterm
+#+begin_src emacs-lisp
+  (use-package vterm
+    :defer t
+    :ensure t
+    :custom
+    (vterm-always-compile-module t)
+    )
+#+end_src
 ** EWW
 Lookup with eww first, then use =eww-browse-with-external-browser= if we need to browse in a normal browser
 #+begin_src emacs-lisp

@@ -892,6 +892,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (add-to-list 'eshell-modules-list 'eshell-smart)
   )
 
+(use-package vterm
+  :defer t
+  :ensure t
+  :custom
+  (vterm-always-compile-module t)
+  )
+
 (setq browse-url-browser-function 'eww-browse-url)
 (add-hook 'eww-after-render-hook 'eww-readable)
 
