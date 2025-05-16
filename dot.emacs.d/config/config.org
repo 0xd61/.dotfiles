@@ -912,6 +912,17 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
 
     )
 #+end_src
+** Device-Tree
+#+begin_src emacs-lisp
+  (use-package dts-mode
+    :ensure t
+    :mode (
+  		 ("\\.dts$" . dts-mode)
+  		 ("\\.dtsi$" . dts-mode)
+  		 ("\\.dtso$" . dts-mode)
+  		 ))
+#+end_src
+
 ** Go
 #+begin_src emacs-lisp
   (use-package go-mode

@@ -495,6 +495,14 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   )
 
+(use-package dts-mode
+  :ensure t
+  :mode (
+		 ("\\.dts$" . dts-mode)
+		 ("\\.dtsi$" . dts-mode)
+		 ("\\.dtso$" . dts-mode)
+		 ))
+
 (use-package go-mode
   :ensure t
   :mode ("\\.go$" . go-mode)
