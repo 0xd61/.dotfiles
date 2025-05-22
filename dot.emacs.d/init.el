@@ -628,10 +628,14 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package magit
   :ensure t
-  :bind
-  ("M-G s" . 'magit-status)
-  ("M-G b" . 'magit-blame)
-  ("M-G d" . 'magit-diff)
+  :bind (
+  	   ("M-G s" . 'magit-status)
+  	   ("M-G b" . 'magit-blame)
+  	   ("M-G d" . 'magit-diff)
+  	   :map magit-mode-map
+  	   ("C-q" . 'magit-copy-buffer-revision)
+  	   ("M-w" . 'other-window)
+  	   )
   
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)

@@ -191,10 +191,14 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 *** Magit
 #+name: magit-keys
 #+begin_src emacs-lisp
-  :bind
-  ("M-G s" . 'magit-status)
-  ("M-G b" . 'magit-blame)
-  ("M-G d" . 'magit-diff)
+  :bind (
+  	   ("M-G s" . 'magit-status)
+  	   ("M-G b" . 'magit-blame)
+  	   ("M-G d" . 'magit-diff)
+  	   :map magit-mode-map
+  	   ("C-q" . 'magit-copy-buffer-revision)
+  	   ("M-w" . 'other-window)
+  	   )
 
 #+end_src
 *** Org
