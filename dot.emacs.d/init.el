@@ -907,54 +907,56 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'eww-after-render-hook 'eww-readable)
 
 (when (eq system-type 'gnu/linux)
- (require 'exwm)
- ;; Set the initial workspace number.
- (setq exwm-workspace-number 4)
+ (use-package exwm
+   :ensure t
+   :config
+   ;; Set the initial workspace number.
+   (setq exwm-workspace-number 4)
 
- ;; Automatically move EXWM buffer to current workspace when selected
- (setq exwm-layout-show-all-buffers t)
+   ;; Automatically move EXWM buffer to current workspace when selected
+   (setq exwm-layout-show-all-buffers t)
 
- ;; Display all EXWM buffers in every workspace buffer list
- (setq exwm-workspace-show-all-buffers t)
+   ;; Display all EXWM buffers in every workspace buffer list
+   (setq exwm-workspace-show-all-buffers t)
 
- ;; Make class name the buffer name.
- (add-hook 'exwm-update-class-hook
-  		   (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
- ;; These keys should always pass through to Emacs
- (setq exwm-input-prefix-keys
-  	   '(?\C-x
-  		 ?\C-u
-  		 ?\C-h
-  		 ?\C-q     ;; Prevent from accidently closing firefox
-  		 ?\M-J b
-  		 ?\M-b     ;; Buffer list
-  		 ?\M-P p   ;; Project selection
-  		 ?\M-x
-  		 ?\M-w     ;; other window
-  		 ?\M-`
-  		 ?\M-&
-  		 ?\M-:
-  		 ?\C-\ ))  ;; Ctrl+Space
+   ;; Make class name the buffer name.
+   (add-hook 'exwm-update-class-hook
+    		 (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+   ;; These keys should always pass through to Emacs
+   (setq exwm-input-prefix-keys
+    	 '(?\C-x
+    	   ?\C-u
+    	   ?\C-h
+    	   ?\C-q     ;; Prevent from accidently closing firefox
+    	   ?\M-J b
+    	   ?\M-b     ;; Buffer list
+    	   ?\M-P p   ;; Project selection
+    	   ?\M-x
+    	   ?\M-w     ;; other window
+    	   ?\M-`
+    	   ?\M-&
+    	   ?\M-:
+    	   ?\C-\ ))  ;; Ctrl+Space
 
- ;; Global keybindings.
- (setq exwm-input-global-keys
-       `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-  		 ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-  		 ([?\s-b]   . exwm-workspace-switch-to-buffer)
-  		 ([?\s-q]   . exwm-input-send-next-key)
-  		 ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-    					(interactive (list (read-shell-command "$ ")))
-    					(start-process-shell-command cmd nil cmd)))
-  		 ;; s-N: Switch to certain workspace.
-  		 ,@(mapcar (lambda (i)
-  					 `(,(kbd (format "s-%d" i)) .
-  					   (lambda ()
-  						 (interactive)
-  						 (exwm-workspace-switch-create , (- i 1)))))
-  				   (number-sequence 1 9))))
- ;; Enable EXWM
- (exwm-enable)
- )
+   ;; Global keybindings.
+   (setq exwm-input-global-keys
+         `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
+    	   ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+    	   ([?\s-b]   . exwm-workspace-switch-to-buffer)
+    	   ([?\s-q]   . exwm-input-send-next-key)
+    	   ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+      					  (interactive (list (read-shell-command "$ ")))
+      					  (start-process-shell-command cmd nil cmd)))
+    	   ;; s-N: Switch to certain workspace.
+    	   ,@(mapcar (lambda (i)
+    				   `(,(kbd (format "s-%d" i)) .
+    					 (lambda ()
+    					   (interactive)
+    					   (exwm-workspace-switch-create , (- i 1)))))
+    				 (number-sequence 1 9))))
+   ;; Enable EXWM
+   (exwm-enable)
+   ))
 
 (when (eq system-type 'gnu/linux)
  (defvar efs/polybar-process nil
