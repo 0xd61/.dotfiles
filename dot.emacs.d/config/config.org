@@ -302,6 +302,14 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 	:bind-keymap
 	("M-P" . project-prefix-map)
 #+end_src
+*** Vterm
+#+name: vterm-keys
+#+begin_src emacs-lisp
+  :bind (
+  	   :map vterm-mode-map
+  	   ("C-c C-k" . vterm-copy-mode)
+  	   )
+#+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -1414,6 +1422,7 @@ Eshell is not the best when needing a full terminal. However vterm only works on
   (use-package vterm
     :defer t
     :ensure t
+    <<vterm-keys>>
     :custom
     (vterm-always-compile-module t)
     )

@@ -899,6 +899,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package vterm
   :defer t
   :ensure t
+  :bind (
+  	   :map vterm-mode-map
+  	   ("C-c C-k" . vterm-copy-mode)
+  	   )
   :custom
   (vterm-always-compile-module t)
   )
