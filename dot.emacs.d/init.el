@@ -569,12 +569,34 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
                 ) auto-mode-alist))
 
-(add-hook 'c++-mode-hook        'dgl/unset-tabs-mode)
-(add-hook 'prog-mode-hook       'dgl/set-tabs-mode)
-(add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
-(add-hook 'org-mode-hook        'dgl/set-tabs-mode)
-
 (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+
+(defun dgl/set-tabs-mode ()
+  "Enable tabs mode"
+  (interactive)
+  (setq indent-tabs-mode t)
+  (message "Tabs enabled."))
+
+(defun dgl/unset-tabs-mode ()
+  "Enable tabs mode"
+  (interactive)
+  (setq indent-tabs-mode nil)
+  (message "Tabs disabled."))
+
+(defun dgl/tabs-mode-indicator ()
+  "Return 'TAB' if indent-tabs-mode is enabled, otherwise return 'SPC'."
+  (if indent-tabs-mode " [TAB]" " [SPC]"))
+
+(setq-default mode-line-format
+            (append mode-line-format
+                    '((:eval (dgl/tabs-mode-indicator)))))
+
+(setq-default indent-tabs-mode nil)
+(use-package dtrt-indent
+  :ensure t
+  :config
+  (dtrt-indent-global-mode)
+  )
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/makescript "build.teak"))
@@ -1012,15 +1034,3 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (post-load-stuff)
 (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
-
-(defun dgl/set-tabs-mode ()
-  "Enable tabs mode"
-  (interactive)
-  (setq indent-tabs-mode t)
-  (message "Tabs enabled."))
-
-(defun dgl/unset-tabs-mode ()
-  "Enable tabs mode"
-  (interactive)
-  (setq indent-tabs-mode nil)
-  (message "Tabs disabled."))

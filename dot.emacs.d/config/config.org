@@ -1023,7 +1023,7 @@ The default dict is set to en_US.
 ** Tabs vs Spaces
 Here we define which modes should use tabs and which should use spaces.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (add-hook 'c++-mode-hook        'dgl/unset-tabs-mode)
   (add-hook 'prog-mode-hook       'dgl/set-tabs-mode)
   (add-hook 'emacs-lisp-mode-hook 'dgl/set-tabs-mode)
@@ -1033,6 +1033,44 @@ Here we define which modes should use tabs and which should use spaces.
 We also want to remove any trailing whitespace to keep things clean
 #+begin_src emacs-lisp
   (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+#+end_src
+
+*** Set and unset tabs mode
+#+begin_src emacs-lisp
+
+    (defun dgl/set-tabs-mode ()
+      "Enable tabs mode"
+      (interactive)
+      (setq indent-tabs-mode t)
+      (message "Tabs enabled."))
+
+    (defun dgl/unset-tabs-mode ()
+      "Enable tabs mode"
+      (interactive)
+      (setq indent-tabs-mode nil)
+      (message "Tabs disabled."))
+
+#+end_src
+
+The current mode should also be visible in the modeline
+
+#+begin_src emacs-lisp
+  (defun dgl/tabs-mode-indicator ()
+    "Return 'TAB' if indent-tabs-mode is enabled, otherwise return 'SPC'."
+    (if indent-tabs-mode " [TAB]" " [SPC]"))
+
+  (setq-default mode-line-format
+              (append mode-line-format
+                      '((:eval (dgl/tabs-mode-indicator)))))
+#+end_src
+*** Automatic detection
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+  (use-package dtrt-indent
+    :ensure t
+    :config
+    (dtrt-indent-global-mode)
+    )
 #+end_src
 
 ** Compilation
@@ -1331,12 +1369,12 @@ Recently I found this [[https://github.com/magit/magit/issues/4076][issue]].
 NOTE: it is important to update the gnupg configs:
 
 #+name ~/.gnupg/gpg.conf
-#+begin_src linux no-export
+#+begin_src linux :tangle no
   pinentry-mode loopback
 #+end_src
 
 #+name ~/.gnupg/gpg-agent.conf
-#+begin_src linux no-export
+#+begin_src linux :tangle no
   pinentry-program /usr/bin/pinentry-tty
   allow-loopback-pinentry
 #+end_src
@@ -1560,22 +1598,7 @@ Things we want to do after init
   (post-load-stuff)
   (add-hook 'server-after-make-frame-hook 'post-load-stuff t)
 #+end_src
-** Set and unset tabs mode
-#+begin_src emacs-lisp
 
-    (defun dgl/set-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode t)
-      (message "Tabs enabled."))
-
-    (defun dgl/unset-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode nil)
-      (message "Tabs disabled."))
-
-#+end_src
 ** Unused Configs
 #+begin_src emacs-lisp :tangle no
     (setq x-select-enable-clipboard t)
