@@ -183,22 +183,22 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: wgrep-keys
 #+begin_src emacs-lisp
   :bind ( :map grep-mode-map
-		  ("e" . wgrep-change-to-wgrep-mode)
-		  ("C-c C-c" . wgrep-finish-edit)
-		  )
+                  ("e" . wgrep-change-to-wgrep-mode)
+                  ("C-c C-c" . wgrep-finish-edit)
+                  )
 #+end_src
 
 *** Magit
 #+name: magit-keys
 #+begin_src emacs-lisp
   :bind (
-  	   ("M-G s" . 'magit-status)
-  	   ("M-G b" . 'magit-blame)
-  	   ("M-G d" . 'magit-diff)
-  	   :map magit-mode-map
-  	   ("C-q" . 'magit-copy-buffer-revision)
-  	   ("M-w" . 'other-window)
-  	   )
+           ("M-G s" . 'magit-status)
+           ("M-G b" . 'magit-blame)
+           ("M-G d" . 'magit-diff)
+           :map magit-mode-map
+           ("C-q" . 'magit-copy-buffer-revision)
+           ("M-w" . 'other-window)
+           )
 
 #+end_src
 *** Org
@@ -207,15 +207,15 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
   :bind-keymap
   ("M-N" . org-mode-map)
   :bind( :map org-mode-map
-  	   ("M-A" . org-agenda)
-  	   ("M-X" . org-archive-subtree)
-  	   ("M-c" . org-capture)
-  	   ("M-p" . org-priority)
-  	   ("M-r" . org-refile)
-  	   ("M-S" . org-schedule)
-  	   ("M-D" . org-deadline)
-  	   ("C-c TAB" . 'indent-region)
-  	   )
+           ("M-A" . org-agenda)
+           ("M-X" . org-archive-subtree)
+           ("M-c" . org-capture)
+           ("M-p" . org-priority)
+           ("M-r" . org-refile)
+           ("M-S" . org-schedule)
+           ("M-D" . org-deadline)
+           ("C-c TAB" . 'indent-region)
+           )
 #+end_src
 **** Org Roam
 #+name: org-roam-keys :tabgle no
@@ -230,42 +230,42 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: denote-keys
 #+begin_src emacs-lisp
   :bind (
-  	   ("C-c n n" . denote)
-  	   ("C-c n r" . denote-rename-file)
-  	   ("C-c n l" . denote-link)
-  	   ("C-c n b" . denote-backlinks)
-  	   ;; ("C-c n c" . denote-region)
-  	   ;; ("C-c n N" . denote-type)
-  	   ;; ("C-c n d" . denote-date)
-  	   ;;  ("C-c n z" . denote-signature)
-  	   ;;  ("C-c n s" . denote-subdirectory)
-  	   ;;  ("C-c n t" . denote-template)
-  	   ;;
-  	   ;;
-  	   ;;
-  	   ;;  ("C-c n f f" . denote-find-link)
-  	   ;;  ("C-c n f b" . denote-find-backlink)
-  	   ;;  ("C-c n r" . denote-rename-file)
-  	   ;;  ("C-c n R" . denote-rename-file-using-front-matter))
-  	   ;; (:map dired-mode-map
-  	   ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
-  	   ;;  ("C-c C-d C-r" . denote-dired-rename-files)
-  	   ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
-  	   ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-  	   )
+           ("C-c n n" . denote)
+           ("C-c n r" . denote-rename-file)
+           ("C-c n l" . denote-link)
+           ("C-c n b" . denote-backlinks)
+           ;; ("C-c n c" . denote-region)
+           ;; ("C-c n N" . denote-type)
+           ;; ("C-c n d" . denote-date)
+           ;;  ("C-c n z" . denote-signature)
+           ;;  ("C-c n s" . denote-subdirectory)
+           ;;  ("C-c n t" . denote-template)
+           ;;
+           ;;
+           ;;
+           ;;  ("C-c n f f" . denote-find-link)
+           ;;  ("C-c n f b" . denote-find-backlink)
+           ;;  ("C-c n r" . denote-rename-file)
+           ;;  ("C-c n R" . denote-rename-file-using-front-matter))
+           ;; (:map dired-mode-map
+           ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
+           ;;  ("C-c C-d C-r" . denote-dired-rename-files)
+           ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+           ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
+           )
 #+end_src
 
 #+name: denote-menu-keys
 #+begin_src emacs-lisp
   :bind (
-  	   ("C-c n d" . list-denotes)
-  	   :map denote-menu-mode-map
-  	   ("c" . denote-menu-clear-filters)
-  	   ("f" . denote-menu-filter)
-  	   ("k" . denote-menu-filter-by-keyword)
-  	   ("o"  . denote-menu-filter-out-keyword)
-  	   ("e" . denote-menu-export-to-dired)
-  	   )
+           ("C-c n d" . list-denotes)
+           :map denote-menu-mode-map
+           ("c" . denote-menu-clear-filters)
+           ("f" . denote-menu-filter)
+           ("k" . denote-menu-filter-by-keyword)
+           ("o"  . denote-menu-filter-out-keyword)
+           ("e" . denote-menu-export-to-dired)
+           )
 #+end_src
 *** Emacs
 #+name: emacs-keys
@@ -299,16 +299,16 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 *** Projects
 #+name: project-keys
 #+begin_src emacs-lisp
-	:bind-keymap
-	("M-P" . project-prefix-map)
+        :bind-keymap
+        ("M-P" . project-prefix-map)
 #+end_src
 *** Vterm
 #+name: vterm-keys
 #+begin_src emacs-lisp
   :bind (
-  	   :map vterm-mode-map
-  	   ("C-c C-k" . vterm-copy-mode)
-  	   )
+         :map vterm-mode-map
+         ("C-c C-k" . vterm-copy-mode)
+         )
 #+end_src
 * Basic Configuration
 ** Early Init
@@ -454,7 +454,7 @@ However we don't want to clutter the file tree. Therefore we put all files into 
 
     ;; Ensure the directory exists
     (unless (file-exists-p dgl/auto-save-dir)
-  	(make-directory dgl/auto-save-dir t))
+        (make-directory dgl/auto-save-dir t))
 
     ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
     (defun rename-file-and-buffer (new-name)
@@ -657,34 +657,34 @@ This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config
 ** Colors
 #+begin_src emacs-lisp
   (defun my/set-colors ()
-	(set-foreground-color <<main_foreground>>)
-	(set-background-color <<main_background>>)
+        (set-foreground-color <<main_foreground>>)
+        (set-background-color <<main_background>>)
 
-	(set-face-foreground 'default <<main_foreground>>)
-	(set-face-background 'default <<main_background>>)
-	(set-face-background 'cursor <<constant>>)
-	(set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
-	(set-face-foreground 'font-lock-comment-face <<comment>>)
-	(set-face-foreground 'font-lock-constant-face <<constant>>)
-	(set-face-foreground 'font-lock-doc-face <<keyword>>)
-	(set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
-	(set-face-foreground 'font-lock-keyword-face <<keyword>>)
-	(set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
-	(set-face-foreground 'font-lock-string-face <<string>>)
-	(set-face-foreground 'font-lock-type-face <<main_foreground>>)
-	(set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
-	(set-face-background 'fringe <<fringe>>)
-	(set-face-foreground 'highlight <<constant>>)
-	;;(set-face-background 'hl-line <<alt_background>>)
-	(set-face-foreground 'mode-line <<main_background>>)
-	(set-face-background 'mode-line <<main_foreground>>)
+        (set-face-foreground 'default <<main_foreground>>)
+        (set-face-background 'default <<main_background>>)
+        (set-face-background 'cursor <<constant>>)
+        (set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
+        (set-face-foreground 'font-lock-comment-face <<comment>>)
+        (set-face-foreground 'font-lock-constant-face <<constant>>)
+        (set-face-foreground 'font-lock-doc-face <<keyword>>)
+        (set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
+        (set-face-foreground 'font-lock-keyword-face <<keyword>>)
+        (set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
+        (set-face-foreground 'font-lock-string-face <<string>>)
+        (set-face-foreground 'font-lock-type-face <<main_foreground>>)
+        (set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
+        (set-face-background 'fringe <<fringe>>)
+        (set-face-foreground 'highlight <<constant>>)
+        ;;(set-face-background 'hl-line <<alt_background>>)
+        (set-face-foreground 'mode-line <<main_background>>)
+        (set-face-background 'mode-line <<main_foreground>>)
 
-	(set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
+        (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
 
-	(set-face-background 'region <<select>>)
-	(set-face-foreground 'vertical-border <<alt_foreground>>)
-	(set-face-background 'trailing-whitespace <<alt_background>>)
-	)
+        (set-face-background 'region <<select>>)
+        (set-face-foreground 'vertical-border <<alt_foreground>>)
+        (set-face-background 'trailing-whitespace <<alt_background>>)
+        )
   (my/set-colors)
   (add-hook 'server-after-make-frame-hook #'my/set-colors)
 #+end_src
@@ -787,7 +787,7 @@ This is mostly the default config from [[https://github.com/minad/consult][here]
 There is no nice way to ripgrep in dired. But we can use embark to get a proper grep buffer which than can be used with [[wgrep]].
 
 #+begin_src emacs-lisp
-	(use-package embark
+        (use-package embark
   :ensure t
   <<embark-keys>>
   )
@@ -803,9 +803,9 @@ There is also [[https://www.emacswiki.org/emacs/DiredSearchAndReplace][dired-mod
 
 #+begin_src emacs-lisp
   (use-package wgrep
-	:ensure t
-	<<wgrep-keys>>
-	)
+        :ensure t
+        <<wgrep-keys>>
+        )
 #+end_src
 ** Vertico
 This is mostly the default config from [[https://github.com/minad/vertico][here]].
@@ -929,10 +929,10 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
   (use-package dts-mode
     :ensure t
     :mode (
-  		 ("\\.dts$" . dts-mode)
-  		 ("\\.dtsi$" . dts-mode)
-  		 ("\\.dtso$" . dts-mode)
-  		 ))
+                 ("\\.dts$" . dts-mode)
+                 ("\\.dtsi$" . dts-mode)
+                 ("\\.dtso$" . dts-mode)
+                 ))
 #+end_src
 
 ** Go
@@ -956,9 +956,9 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
   (use-package yaml-mode
     :ensure t
     :mode (
-	   ("\\.yml$" . yaml-mode)
-	   ("\\.yaml$" . yaml-mode)
-	   )
+           ("\\.yml$" . yaml-mode)
+           ("\\.yaml$" . yaml-mode)
+           )
     )
 #+end_src
 ** Markdown
@@ -1145,22 +1145,22 @@ I want to highlight keywords in code like TODO, NOTE or @performance etc and fou
 
 TODO: The highlight of @keyword does not work yet. Somehow the @ is not interpreted correctly. But I have not found the error yet.
 #+begin_src emacs-lisp
-	(defvar highlight-codetags-keywords
-	'(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
-	  ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
+        (defvar highlight-codetags-keywords
+        '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
+          ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
 
   (define-minor-mode highlight-codetags-local-mode
-	"Highlight codetags like TODO, FIXME, @performance..."
-	:global nil
-	(if highlight-codetags-local-mode
-		(font-lock-add-keywords nil highlight-codetags-keywords)
-	  (font-lock-remove-keywords nil highlight-codetags-keywords))
+        "Highlight codetags like TODO, FIXME, @performance..."
+        :global nil
+        (if highlight-codetags-local-mode
+                (font-lock-add-keywords nil highlight-codetags-keywords)
+          (font-lock-remove-keywords nil highlight-codetags-keywords))
 
-	;; Fontify the current buffer
-	(when (bound-and-true-p font-lock-mode)
-	  (if (fboundp 'font-lock-flush)
-		  (font-lock-flush)
-		(with-no-warnings (font-lock-fontify-buffer)))))
+        ;; Fontify the current buffer
+        (when (bound-and-true-p font-lock-mode)
+          (if (fboundp 'font-lock-flush)
+                  (font-lock-flush)
+                (with-no-warnings (font-lock-fontify-buffer)))))
 
   (add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
 #+end_src
@@ -1193,35 +1193,35 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 #+begin_src emacs-lisp
   (use-package org
-	:defer t
-	:mode ("\\.org$" . org-mode)
-	<<org-keys>>
-	:custom-face
-	(org-block ((t (:inherit fixed-pitch))))
-	(org-code ((t (:inherit (shadow fixed-pitch)))))
-	(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-	(org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
-	(org-indent ((t (:inherit (org-hide fixed-pitch)))))
-	(org-level-1 ((t (:inherit org-document-title :height 1.0))))
-	(org-level-2 ((t (:inherit org-level-1 :height 0.9))))
-	(org-level-3 ((t (:inherit org-level-2 :height 0.9))))
-	(org-level-4 ((t (:inherit org-level-3 :height 0.9))))
-	(org-level-5 ((t (:inherit org-level-4 :height 0.9))))
-	(org-level-6 ((t (:inherit org-level-5 :height 0.9))))
-	(org-level-7 ((t (:inherit org-level-6 :height 0.9))))
-	(org-level-8 ((t (:inherit org-level-7 :height 0.9))))
-	(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-	(org-property-value ((t (:inherit fixed-pitch))))
-	(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-	(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-	(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-	:config
-	(setq org-return-follows-link  t)
-	;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
-	(add-hook 'org-mode-hook 'org-indent-mode)
-	(add-hook 'org-mode-hook 'visual-line-mode)
-	(add-hook 'org-mode-hook 'variable-pitch-mode)
-	)
+        :defer t
+        :mode ("\\.org$" . org-mode)
+        <<org-keys>>
+        :custom-face
+        (org-block ((t (:inherit fixed-pitch))))
+        (org-code ((t (:inherit (shadow fixed-pitch)))))
+        (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+        (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
+        (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+        (org-level-1 ((t (:inherit org-document-title :height 1.0))))
+        (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+        (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+        (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+        (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+        (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+        (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+        (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+        (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+        (org-property-value ((t (:inherit fixed-pitch))))
+        (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+        (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+        (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+        :config
+        (setq org-return-follows-link  t)
+        ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
+        (add-hook 'org-mode-hook 'org-indent-mode)
+        (add-hook 'org-mode-hook 'visual-line-mode)
+        (add-hook 'org-mode-hook 'variable-pitch-mode)
+        )
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
@@ -1275,33 +1275,33 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 #+begin_src emacs-lisp
   (use-package denote
-	:ensure t
-	<<denote-keys>>
-	:custom
-	(denote-directory dgl/org-denote-directory)
-	;;(denote-save-buffers nil)
-	(denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
-	(denote-infer-keywords t)
-	(denote-sort-keywords t)
-	(denote-prompts '(title keywords))
-	(denote-excluded-directories-regexp nil)
-	(denote-excluded-keywords-regexp nil)
-	(denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-	(denote-date-prompt-use-org-read-date t)
-	;;(denote-date-format nil)
-	(denote-backlinks-show-context t)
-	(denote-rename-buffer-mode 1)
-	;;(denote-org-capture-specifiers "%l\n%i\n%?")
-	)
+        :ensure t
+        <<denote-keys>>
+        :custom
+        (denote-directory dgl/org-denote-directory)
+        ;;(denote-save-buffers nil)
+        (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
+        (denote-infer-keywords t)
+        (denote-sort-keywords t)
+        (denote-prompts '(title keywords))
+        (denote-excluded-directories-regexp nil)
+        (denote-excluded-keywords-regexp nil)
+        (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+        (denote-date-prompt-use-org-read-date t)
+        ;;(denote-date-format nil)
+        (denote-backlinks-show-context t)
+        (denote-rename-buffer-mode 1)
+        ;;(denote-org-capture-specifiers "%l\n%i\n%?")
+        )
 #+end_src
 
 It is useful to have some kind of list of the denote files. For this we use denote-menu.
 
 #+begin_src emacs-lisp
   (use-package denote-menu
-  	:ensure t
-  	<<denote-menu-keys>>
-  	)
+        :ensure t
+        <<denote-menu-keys>>
+        )
 #+end_src
 
 ** GTD
@@ -1309,49 +1309,49 @@ We setup org-mode to be able to follow the GTD system.
 
 #+begin_src emacs-lisp
   (use-package org
-	:config
-	(setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
-	(setq org-refile-targets
-		  '(
-			(org-agenda-files :maxlevel . 5)
-			))
-	(setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
-	(setq org-log-done 'time)
-	(setq org-todo-keywords
-		  '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
-	(setq org-return-follows-link t)
-	(setq org-agenda-custom-commands '(
-									   ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
-									   ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
-									   ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
-									   ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
-									   ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
-									   ))
-	(setq org-agenda-sorting-strategy
-	  '((agenda habit-down time-up priority-down category-keep)
-		(todo priority-down todo-state-up category-keep)
-		(tags priority-down todo-state-up category-keep)
-		(search category-keep)))
+        :config
+        (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+        (setq org-refile-targets
+                  '(
+                        (org-agenda-files :maxlevel . 5)
+                        ))
+        (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+        (setq org-log-done 'time)
+        (setq org-todo-keywords
+                  '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
+        (setq org-return-follows-link t)
+        (setq org-agenda-custom-commands '(
+                                                                           ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
+                                                                           ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
+                                                                           ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
+                                                                           ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
+                                                                           ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
+                                                                           ))
+        (setq org-agenda-sorting-strategy
+          '((agenda habit-down time-up priority-down category-keep)
+                (todo priority-down todo-state-up category-keep)
+                (tags priority-down todo-state-up category-keep)
+                (search category-keep)))
 
-	(setq org-capture-templates
-	  `(
-		("i" "Inbox" entry
-		 (file, (concat dgl/org-directory "/inbox.org"))
-		 "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
+        (setq org-capture-templates
+          `(
+                ("i" "Inbox" entry
+                 (file, (concat dgl/org-directory "/inbox.org"))
+                 "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
 
-		("n" "Next action" entry
-		 (file, (concat dgl/org-directory "/gtd.org"))
-		 "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+                ("n" "Next action" entry
+                 (file, (concat dgl/org-directory "/gtd.org"))
+                 "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-		("w" "Waiting" entry
-		 (file, (concat dgl/org-directory "/gtd.org"))
-		 "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+                ("w" "Waiting" entry
+                 (file, (concat dgl/org-directory "/gtd.org"))
+                 "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-		("s" "Someday" entry
-		 (file, (concat dgl/org-directory "/someday.org"))
-		 "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
-		))
-	)
+                ("s" "Someday" entry
+                 (file, (concat dgl/org-directory "/someday.org"))
+                 "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
+                ))
+        )
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1434,8 +1434,8 @@ We usually use bash when working on remote machines.
     (setq tramp-directory-cache-expire (* 60 60 24))
     (setq tramp-auto-save-directory nil)
     (setq vc-ignore-dir-regexp (format "%s\\|%s"
-  									 vc-ignore-dir-regexp
-  									 tramp-file-name-regexp))
+                                                                         vc-ignore-dir-regexp
+                                                                         tramp-file-name-regexp))
     (setq tramp-ssh-controlmaster-options nil)
     (setq tramp-connection-timeout 10)
     (setq tramp-verbose 1)
@@ -1463,6 +1463,8 @@ Eshell is not the best when needing a full terminal. However vterm only works on
     <<vterm-keys>>
     :custom
     (vterm-always-compile-module t)
+    (vterm-max-scrollback 10000)
+    (vterm-buffer-name-string "vterm %s")
     )
 #+end_src
 ** EWW
@@ -1495,39 +1497,39 @@ Most of the config is taken and adjusted from [[https://github.com/daviwil/emacs
 
      ;; Make class name the buffer name.
      (add-hook 'exwm-update-class-hook
-      		 (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+                 (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
      ;; These keys should always pass through to Emacs
      (setq exwm-input-prefix-keys
-      	 '(?\C-x
-      	   ?\C-u
-      	   ?\C-h
-      	   ?\C-q     ;; Prevent from accidently closing firefox
-      	   ?\M-J b
-      	   ?\M-b     ;; Buffer list
-      	   ?\M-P p   ;; Project selection
-      	   ?\M-x
-      	   ?\M-w     ;; other window
-      	   ?\M-`
-      	   ?\M-&
-      	   ?\M-:
-      	   ?\C-\ ))  ;; Ctrl+Space
+         '(?\C-x
+           ?\C-u
+           ?\C-h
+           ?\C-q     ;; Prevent from accidently closing firefox
+           ?\M-J b
+           ?\M-b     ;; Buffer list
+           ?\M-P p   ;; Project selection
+           ?\M-x
+           ?\M-w     ;; other window
+           ?\M-`
+           ?\M-&
+           ?\M-:
+           ?\C-\ ))  ;; Ctrl+Space
 
      ;; Global keybindings.
      (setq exwm-input-global-keys
            `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-      	   ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-      	   ([?\s-b]   . exwm-workspace-switch-to-buffer)
-      	   ([?\s-q]   . exwm-input-send-next-key)
-      	   ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-        					  (interactive (list (read-shell-command "$ ")))
-        					  (start-process-shell-command cmd nil cmd)))
-      	   ;; s-N: Switch to certain workspace.
-      	   ,@(mapcar (lambda (i)
-      				   `(,(kbd (format "s-%d" i)) .
-      					 (lambda ()
-      					   (interactive)
-      					   (exwm-workspace-switch-create , (- i 1)))))
-      				 (number-sequence 1 9))))
+           ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+           ([?\s-b]   . exwm-workspace-switch-to-buffer)
+           ([?\s-q]   . exwm-input-send-next-key)
+           ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+                                                  (interactive (list (read-shell-command "$ ")))
+                                                  (start-process-shell-command cmd nil cmd)))
+           ;; s-N: Switch to certain workspace.
+           ,@(mapcar (lambda (i)
+                                   `(,(kbd (format "s-%d" i)) .
+                                         (lambda ()
+                                           (interactive)
+                                           (exwm-workspace-switch-create , (- i 1)))))
+                                 (number-sequence 1 9))))
      ;; Enable EXWM
      (exwm-enable)
      ))
