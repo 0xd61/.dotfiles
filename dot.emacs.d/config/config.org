@@ -190,14 +190,14 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 
 *** Magit
 #+name: magit-keys
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
   :bind (
            ("M-G s" . 'magit-status)
            ("M-G b" . 'magit-blame)
            ("M-G d" . 'magit-diff)
            :map magit-mode-map
            ("C-q" . 'magit-copy-buffer-revision)
-           ("M-w" . 'other-window)
+           <<emacs-keys-essential>>
            )
 
 #+end_src
@@ -268,20 +268,27 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
            )
 #+end_src
 *** Emacs
-#+name: emacs-keys
+Keys we always want to enforce in different modes aswell. *Be careful with those. They might override other functionalities*.
+
+#+name: emacs-keys-essential
 #+begin_src emacs-lisp
+  ("M-f" . 'find-file)
+  ("M-F" . 'find-file-other-window)
+  ("M-b" . 'consult-buffer)
+  ("M-B" . 'consult-buffer-other-window)
+  ("M-w" . 'other-window)
+#+end_src
+
+#+name: emacs-keys
+#+begin_src emacs-lisp :noweb yes
   :bind-keymap
   ("M-J" . goto-map)
   ("M-S" . search-map)
 
   :bind
-  ("M-f" . 'find-file)
-  ("M-F" . 'find-file-other-window)
-  ("M-b" . 'consult-buffer)
-  ("M-B" . 'consult-buffer-other-window)
+  <<emacs-keys-essential>>
   ("M-g" . 'consult-ripgrep)
 
-  ("M-w" . 'other-window)
   ("M-s" . 'save-buffer)
   ("M-u" . 'undo)
   ("M-j" . 'consult-imenu)
@@ -304,10 +311,11 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+end_src
 *** Vterm
 #+name: vterm-keys
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :noweb yes
   :bind (
          :map vterm-mode-map
          ("C-c C-k" . vterm-copy-mode)
+         <<emacs-keys-essential>>
          )
 #+end_src
 * Basic Configuration

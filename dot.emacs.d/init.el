@@ -137,9 +137,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("M-F" . 'find-file-other-window)
   ("M-b" . 'consult-buffer)
   ("M-B" . 'consult-buffer-other-window)
+  ("M-w" . 'other-window)
   ("M-g" . 'consult-ripgrep)
   
-  ("M-w" . 'other-window)
   ("M-s" . 'save-buffer)
   ("M-u" . 'undo)
   ("M-j" . 'consult-imenu)
@@ -656,6 +656,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
            ("M-G d" . 'magit-diff)
            :map magit-mode-map
            ("C-q" . 'magit-copy-buffer-revision)
+           ("M-f" . 'find-file)
+           ("M-F" . 'find-file-other-window)
+           ("M-b" . 'consult-buffer)
+           ("M-B" . 'consult-buffer-other-window)
            ("M-w" . 'other-window)
            )
   
@@ -924,6 +928,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :bind (
          :map vterm-mode-map
          ("C-c C-k" . vterm-copy-mode)
+         ("M-f" . 'find-file)
+         ("M-F" . 'find-file-other-window)
+         ("M-b" . 'consult-buffer)
+         ("M-B" . 'consult-buffer-other-window)
+         ("M-w" . 'other-window)
          )
   :custom
   (vterm-always-compile-module t)
