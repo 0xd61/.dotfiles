@@ -4,6 +4,6 @@ Section: base
 Priority: optional
 Architecture: all
 Depends: mksh, doas, emacs, git, build-essential, flameshot, fd-find, ripgrep, htop, ghostty, polybar, ntfs-3g, zram-tools, lvm2, firefox-esr
-Maintainer: Daniel Glinka <dgl@deigt.co>
+Maintainer: Daniel Glinka <dgl@degit.co>
 Description: A meta-package that installs a base set of the tools I usually need.
  This package is a meta-package that installs a collection of tools I usually need on my systems.
