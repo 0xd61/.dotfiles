@@ -86,6 +86,7 @@ result
 *.db
 
 /dot.fonts/Input_Fonts/
+/dot.fonts/Input-Font/
 /dot.fonts/ChangeLog.txt
 /dot.emacs.d/eln-cache/
 /dot.emacs.d/history
