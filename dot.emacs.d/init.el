@@ -83,6 +83,22 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq window-combination-resize t)
 
+(setq split-height-threshold 120
+      split-width-threshold 160)
+
+(defun dgl/split-window-sensibly (&optional window)
+    "replacement `split-window-sensibly' function which prefers vertical splits"
+    (interactive)
+    (let ((window (or window (selected-window))))
+        (or (and (window-splittable-p window t)
+                 (with-selected-window window
+                     (split-window-right)))
+            (and (window-splittable-p window)
+                 (with-selected-window window
+                     (split-window-below))))))
+
+(setq split-window-preferred-function #'dgl/split-window-sensibly)
+
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/linux nil)
  (setq dgl/win32 t))

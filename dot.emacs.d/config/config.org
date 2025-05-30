@@ -501,6 +501,25 @@ We want emacs to take new window space from all other windows.
   (setq window-combination-resize t)
 #+end_src
 
+We also want to use a more sensible way for splitting windows
+#+begin_src emacs-lisp
+(setq split-height-threshold 120
+      split-width-threshold 160)
+
+(defun dgl/split-window-sensibly (&optional window)
+    "replacement `split-window-sensibly' function which prefers vertical splits"
+    (interactive)
+    (let ((window (or window (selected-window))))
+        (or (and (window-splittable-p window t)
+                 (with-selected-window window
+                     (split-window-right)))
+            (and (window-splittable-p window)
+                 (with-selected-window window
+                     (split-window-below))))))
+
+(setq split-window-preferred-function #'dgl/split-window-sensibly)
+#+end_src
+
 ** Project Setup
 We want to have per project config files which will be loaded separately. This should be independent of normal emacs VCS or EDE projects because we want to have the ability to load additional project files from everything.
 
