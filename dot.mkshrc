@@ -638,15 +638,16 @@ function clip {
 	fi
 }
 
+export SHELL=$MKSH MANWIDTH=80 LESSHISTFILE=-
 
 # load alias file
-if [[ -f $HOME/.mksh_alias ]]; then
-    \\builtin source $HOME/.mksh_alias
+if [[ -f $HOME/.dgl_alias ]]; then
+    \\builtin source $HOME/.dgl_alias
 fi
 
 # load env file
-if [[ -f $HOME/.mksh_env ]]; then
-    source $HOME/.mksh_env
+if [[ -f $HOME/.dgl_env ]]; then
+    \\builtin source $HOME/.dgl_env
 fi
 
 # some defaults follow — you are supposed to adjust these to your

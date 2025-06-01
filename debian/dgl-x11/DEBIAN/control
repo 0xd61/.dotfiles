@@ -1,9 +1,0 @@
-Package: dgl-x11
-Version: 1.0
-Section: base
-Priority: optional
-Architecture: all
-Depends: xserver-xorg-video-all, xserver-xorg-core, xinit, firmware-amd-graphics, ibgl1-mesa-dri, libglx-mesa0, mesa-vulkan-drivers, x11-xserver-utils
-Maintainer: Daniel Glinka <dgl@degit.co>
-Description: A meta-package that installs a base set of the tools I usually need.
- This package is a meta-package that installs a collection of tools I usually need on my systems

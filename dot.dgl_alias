@@ -1,0 +1,16 @@
+alias r="ranger"
+alias sudo="doas"
+alias steam="LIBGL_DEBUG=verbose steam"
+alias lite="lite ./ &"
+alias em="emacsclient -nw ."
+alias nv="nvim ."
+alias esudo="sudo env \"PATH=/usr/sbin:/sbin:$PATH\""
+alias screenfetch="sleep 5; xwd -root -silent | convert xwd:- -depth 8"
+alias streamlink="streamlink -p mpv"
+alias "hledger_bud"="hledger balance Ausgaben -M --budget -b $(date +%Y/%m/01)"
+alias "ttime"="ttime -f ~/vault/time.txt"
+
+if grep microsoft /proc/version > /dev/null; then
+    export VISUAL="lite"
+    alias git="/mnt/c/Program\ Files/Git/bin/git.exe"
+fi

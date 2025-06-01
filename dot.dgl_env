@@ -1,0 +1,3 @@
+# st-265color error fix
+export EDITOR="emacsclient -nw"
+export GPG_TTY=$(tty)
