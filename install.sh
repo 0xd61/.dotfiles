@@ -22,5 +22,3 @@ ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 ln -s $BASEDIR/dot.xprofile $HOME/.xprofile
 ln -s $BASEDIR/dot.xinitrc $HOME/.xinitrc
 [ -d "$HOME/.config/mpv" ] && unlink $HOME/.config/mpv; ln -s $BASEDIR/mpv $HOME/.config/mpv
-
-cd - > /dev/null
