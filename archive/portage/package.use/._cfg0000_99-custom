@@ -2,8 +2,10 @@
 sys-kernel/gentoo-sources symlink
 
 # Docker
-app-emulation/docker apparmor
-app-emulation/runc apparmor
+# move app-emulation/docker app-containers/docker
+app-containers/docker apparmor
+# move app-emulation/runc app-containers/runc
+app-containers/runc apparmor
 app-emulation/libvirt apparmor virt-network
 
 # App alternatives
@@ -13,7 +15,7 @@ app-alternatives/gzip -reference pigz
 net-vpn/openvpn iproute2
 
 # Emacs
-app-editors/emacs jit xft gui -X athena Xaw3d -gtk -motif dynamic-loading
+app-editors/emacs jit gtk xft gui -X
 app-emacs/emacs-common gui
 
 # LVM
@@ -45,6 +47,12 @@ games-emulation/vbam wxwidgets sdl
 # required by net-print/hplip-plugin-3.23.5::gentoo
 # required by net-print/hplip-plugin (argument)
 >=net-dns/avahi-0.8-r7 python
+
+# QT
+dev-qt/qtcore icu
+dev-qt/qtgui vulkan
+dev-qt/qtmultimedia gstreamer pulseaudio widgets qml
+dev-qt/qtprintsupport cups
 
 # Plan9Port
 dev-util/plan9port X freefonts aqua

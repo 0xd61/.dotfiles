@@ -1,0 +1,4 @@
+cross-armv7a-unknown-linux-gnueabihf/binutils -multilib
+cross-armv7a-unknown-linux-gnueabihf/linux-headers -selinux -multilib
+cross-armv7a-unknown-linux-gnueabihf/glibc static-libs -selinux -libraries -multilib
+cross-armv7a-unknown-linux-gnueabihf/gcc -selinux -d -objc -objc++ -objc-gc -vtv -sanitize -multilib

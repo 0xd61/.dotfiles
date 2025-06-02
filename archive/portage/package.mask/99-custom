@@ -2,4 +2,4 @@
 >x11-misc/dmenu-5.3
 dev-lang/rust # use the binary version
 #>dev-qt/qtwebengine-5.15.10_p20230623
-#dev-qt/*
+>dev-qt/base-6.8.1

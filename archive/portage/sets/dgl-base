@@ -38,3 +38,6 @@ net-misc/ntp
 media-gfx/renderdoc
 net-analyzer/nmap
 sys-kernel/gentoo-sources
+x11-misc/picom
+x11-misc/polybar
+x11-terms/ghostty

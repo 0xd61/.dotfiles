@@ -37,7 +37,7 @@ app-editors/vscode
 app-admin/terraform
 sys-cluster/kubectl
 www-client/google-chrome
-app-office/libreoffice
+app-office/libreoffice-bin
 net-im/teams-for-linux
 x11-libs/libnotify
 net-fs/nfs-utils

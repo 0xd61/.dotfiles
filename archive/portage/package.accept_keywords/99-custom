@@ -14,3 +14,8 @@ net-im/teams-for-linux ~amd64
 dev-util/flatpak-builder ~amd64
 x11-terms/wezterm ~amd64
 dev-lang/pico8 ~amd64
+x11-terms/ghostty ~amd64
+x11-terms/ghostty-terminfo ~amd64
+dev-lang/zig ~amd64
+app-eselect/eselect-zig ~amd64
+dev-lang/zig-bin ~amd64

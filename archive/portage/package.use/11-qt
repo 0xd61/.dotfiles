@@ -1,0 +1,24 @@
+dev-qt/qtbase -brotli -icu nls
+dev-qt/qtcore icu
+dev-qt/qtgui vulkan
+dev-qt/qtmultimedia gstreamer pulseaudio widgets qml
+dev-qt/qtprintsupport cups
+dev-qt/qtwebengine bindist opengl pulseaudio qml screencast vulkan
+dev-qt/qtdeclarative opengl vulkan
+
+>=sys-libs/readline-8.2_p13-r1 abi_x86_32
+# required by media-libs/mesa-24.3.4-r1::gentoo
+# required by x11-libs/gtk+-3.24.48::gentoo[wayland]
+# required by dev-qt/qtbase-6.8.2-r2::gentoo[gtk,gui,widgets]
+# required by dev-qt/qtwayland-6.8.2-r1::gentoo
+# required by dev-qt/qtbase-6.8.2-r2::gentoo
+# required by dev-qt/qtsvg-6.8.2::gentoo
+# required by @selected
+# required by @world (argument)
+>=dev-util/spirv-tools-1.4.309.0 abi_x86_32
+# required by dev-qt/qtbase-6.8.2-r2::gentoo[gtk,gui,widgets]
+# required by dev-qt/qtwayland-6.8.2-r1::gentoo
+# required by dev-qt/qtbase-6.8.2-r2::gentoo
+# required by dev-qt/qtsvg-6.8.2::gentoo
+# required by @selected
+# required by @world (argument)

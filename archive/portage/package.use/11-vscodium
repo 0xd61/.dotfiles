@@ -6,3 +6,10 @@
 # required by @selected
 # required by @world (argument)
 >=app-crypt/gcr-3.41.1-r2:0 gtk
+
+# required by media-libs/mesa-24.3.4-r1::gentoo[wayland]
+# required by app-editors/vscode-1.99.2::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=dev-libs/wayland-1.23.1 abi_x86_32

@@ -1,0 +1,17 @@
+# required by sys-libs/pam-1.7.0_p20241230-r3::gentoo[-berkdb]
+# required by net-misc/openssh-9.9_p2-r3::gentoo
+# required by virtual/openssh-0::gentoo
+# required by net-misc/sshpass-1.10::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=sys-libs/gdbm-1.24 abi_x86_32
+# required by sys-libs/gdbm-1.24::gentoo[readline]
+# required by sys-libs/pam-1.7.0_p20241230-r3::gentoo[-berkdb]
+# required by net-misc/openssh-9.9_p2-r3::gentoo
+# required by virtual/openssh-0::gentoo
+# required by net-misc/sshpass-1.10::gentoo
+# required by @dgl-work
+# required by @selected
+# required by @world (argument)
+>=sys-libs/readline-8.2_p13-r1 abi_x86_32
