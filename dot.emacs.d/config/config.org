@@ -318,6 +318,15 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
          <<emacs-keys-essential>>
          )
 #+end_src
+*** Eat
+#+name: eat-keys
+#+begin_src emacs-lisp :noweb yes
+  :bind (
+         :map eat-semi-char-mode-map
+          ("C-c C-k" . eat-emacs-mode)
+          <<emacs-keys-essential>>
+         )
+#+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -1493,6 +1502,19 @@ Eshell is not the best when needing a full terminal. However vterm only works on
     (vterm-max-scrollback 10000)
     (vterm-buffer-name-string "vterm %s")
     )
+#+end_src
+*** Eat
+Eat is fully written in lisp and better then term. Therefore it will also work on windows.
+
+#+begin_src emacs-lisp
+  (use-package eat
+  :defer t
+  :ensure t
+  <<eat-keys>>
+  :hook (eshell-mode . eat-eshell-mode)
+  :config
+  (setq eat-term-scrollback-size 1048576)
+  )
 #+end_src
 ** EWW
 Lookup with eww first, then use =eww-browse-with-external-browser= if we need to browse in a normal browser

@@ -956,6 +956,23 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (vterm-buffer-name-string "vterm %s")
   )
 
+(use-package eat
+:defer t
+:ensure t
+:bind (
+       :map eat-semi-char-mode-map
+        ("C-c C-k" . eat-emacs-mode)
+        ("M-f" . 'find-file)
+        ("M-F" . 'find-file-other-window)
+        ("M-b" . 'consult-buffer)
+        ("M-B" . 'consult-buffer-other-window)
+        ("M-w" . 'other-window)
+       )
+:hook (eshell-mode . eat-eshell-mode)
+:config
+(setq eat-term-scrollback-size 1048576)
+)
+
 (setq browse-url-browser-function 'eww-browse-url)
 (add-hook 'eww-after-render-hook 'eww-readable)
 
