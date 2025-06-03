@@ -1506,7 +1506,7 @@ Eshell is not the best when needing a full terminal. However vterm only works on
 *** Eat
 Eat is fully written in lisp and better then term. Therefore it will also work on windows.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package eat
   :defer t
   :ensure t
@@ -1516,6 +1516,23 @@ Eat is fully written in lisp and better then term. Therefore it will also work o
   (setq eat-term-scrollback-size 1048576)
   )
 #+end_src
+
+Eat is apparently not properly working on windows but there is a patch. Therefore we patched the source manually.
+
+#+begin_src emacs-lisp
+  (use-package eat
+  :defer t
+  :ensure nil
+  <<eat-keys>>
+  :hook (eshell-mode . eat-eshell-mode)
+  :config
+  (setq eat-term-scrollback-size 1048576)
+  )
+
+  (autoload 'eat            "eat"         "Eat Terminal"                 t)
+  (setq eat-term-scrollback-size 1048576)
+#+end_src
+
 ** EWW
 Lookup with eww first, then use =eww-browse-with-external-browser= if we need to browse in a normal browser
 #+begin_src emacs-lisp

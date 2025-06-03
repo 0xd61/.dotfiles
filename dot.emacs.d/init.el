@@ -958,7 +958,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package eat
 :defer t
-:ensure t
+:ensure nil
 :bind (
        :map eat-semi-char-mode-map
         ("C-c C-k" . eat-emacs-mode)
@@ -972,6 +972,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 :config
 (setq eat-term-scrollback-size 1048576)
 )
+
+(autoload 'eat            "eat"         "Eat Terminal"                 t)
+(setq eat-term-scrollback-size 1048576)
 
 (setq browse-url-browser-function 'eww-browse-url)
 (add-hook 'eww-after-render-hook 'eww-readable)
