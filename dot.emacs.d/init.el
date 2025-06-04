@@ -145,8 +145,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package emacs
   :bind-keymap
-  ("M-J" . goto-map)
-  ("M-S" . search-map)
+  ("C-x j" . goto-map)
+  ("C-x s" . search-map)
   
   :bind
   ("M-f" . 'find-file)
@@ -291,8 +291,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
          ("i" . consult-info)
          ([remap Info-search] . consult-info)
          ;; C-x bindings in `ctl-x-map'
-         :map ctl-x-map
-         ("M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ;;:map ctl-x-map
+         ;;("M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          :map global-map
          ;; Custom M-# bindings for fast register access
          ("M-# l" . consult-register-load)
@@ -300,11 +300,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
          ("M-# #" . consult-register)
          ;; Other custom bindings
          ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-         ;; M-J bindings in `goto-map'
+         ;; C-x j bindings in `goto-map'
          :map goto-map
          ("e" . consult-compile-error)
          ;;        ("M-G f" . consult-flymake)               ;; Alternative: consult-flycheck
-         ("g" . consult-goto-line)             ;; orig. goto-line
+         ("g" . consult-ripgrep)             ;; orig. ripgrep
          ("l" . consult-goto-line)           ;; orig. goto-line
          ("o" . consult-outline)               ;; Alternative: consult-org-heading
          ("m" . consult-mark)
@@ -312,7 +312,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
          ("b" . consult-bookmark)
          ("i" . consult-imenu)
          ("I" . consult-imenu-multi)
-         ;; M-S bindings in `search-map'
+         ;; C-x s bindings in `search-map'
          :map search-map
          ("d" . consult-find)                  ;; Alternative: consult-fd
          ("c" . consult-locate)
@@ -667,9 +667,9 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package magit
   :ensure t
   :bind (
-           ("M-G s" . 'magit-status)
-           ("M-G b" . 'magit-blame)
-           ("M-G d" . 'magit-diff)
+           ("C-x g s" . 'magit-status)
+           ("C-x g b" . 'magit-blame)
+           ("C-x g d" . 'magit-diff)
            :map magit-mode-map
            ("C-q" . 'magit-copy-buffer-revision)
            ("M-f" . 'find-file)
@@ -704,7 +704,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (use-package emacs
   :bind-keymap
-  ("M-P" . project-prefix-map)
+  ("C-x p" . project-prefix-map)
   :config
   (setq project-mode-line t)
 )
@@ -721,16 +721,14 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package org
       :defer t
       :mode ("\\.org$" . org-mode)
-      :bind-keymap
-      ("M-N" . org-mode-map)
-      :bind( :map org-mode-map
-               ("M-A" . org-agenda)
-               ("M-X" . org-archive-subtree)
-               ("M-c" . org-capture)
-               ("M-p" . org-priority)
-               ("M-r" . org-refile)
-               ("M-S" . org-schedule)
-               ("M-D" . org-deadline)
+      :bind(
+               ("C-c a" . org-agenda)
+               ("C-c x" . org-archive-subtree)
+               ;;("C-c c" . org-capture)
+               ;;("M-p" . org-priority)
+               ;;("M-r" . org-refile)
+               ;;("M-s" . org-schedule)
+               ;;("M-d" . org-deadline)
                ("C-c TAB" . 'indent-region)
                )
       :custom-face
@@ -794,6 +792,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
                ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
                ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
                )
+      :hook (dired-mode . denote-dired-mode)
       :custom
       (denote-directory dgl/org-denote-directory)
       ;;(denote-save-buffers nil)
@@ -978,6 +977,46 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq browse-url-browser-function 'eww-browse-url)
 (add-hook 'eww-after-render-hook 'eww-readable)
+
+(use-package top-mode
+  :ensure nil  ;; No need to install a package for a custom minor mode
+  :defer t
+  :init
+  (define-minor-mode top-mode
+    "A modal minor mode that enables simple modal editing for easier command execution."
+    :lighter " [TOP]"
+    :keymap (let ((map (make-sparse-keymap)))
+              map))
+
+  (defun top-mode-execute-extended-command (&optional arg)
+    (interactive)
+    (top-mode)
+    (execute-extended-command)
+    )
+
+  (defun top-mode-key-translations ()
+    "Set up key translations for my-modal-mode."
+    (when top-mode
+      (define-key key-translation-map (kbd "c") (kbd "C-c"))
+      (define-key key-translation-map (kbd "x") (kbd "C-x"))
+      (define-key top-mode-map (kbd "RET") 'top-mode-execute-extended-command)
+      (define-key top-mode-map (kbd "S-RET") 'consult-mode-command)
+      ))
+
+  (add-hook 'top-mode-hook #'top-mode-key-translations)
+
+  ;; Enable translations when mode is active
+  :bind (:map top-mode-map
+              ("SPC SPC" . top-mode)
+              ("i" . previous-line)
+              ("k" . next-line)
+              ("j" . backward-char)
+              ("l" . forward-char)
+              ("u" . backward-word)
+              ("o" . forward-word)
+              ("h" . backward-paragraph)
+              (";" . forward-paragraph)
+              ))
 
 (when (eq system-type 'gnu/linux)
  (use-package exwm
