@@ -49,7 +49,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
   ;; Ensure the directory exists
   (unless (file-exists-p dgl/auto-save-dir)
-      (make-directory dgl/auto-save-dir t))
+    (make-directory dgl/auto-save-dir t))
 
   ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
   (defun rename-file-and-buffer (new-name)
@@ -87,15 +87,15 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
       split-width-threshold 160)
 
 (defun dgl/split-window-sensibly (&optional window)
-    "replacement `split-window-sensibly' function which prefers vertical splits"
-    (interactive)
-    (let ((window (or window (selected-window))))
-        (or (and (window-splittable-p window t)
-                 (with-selected-window window
-                     (split-window-right)))
-            (and (window-splittable-p window)
-                 (with-selected-window window
-                     (split-window-below))))))
+  "replacement `split-window-sensibly' function which prefers vertical splits"
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (or (and (window-splittable-p window t)
+             (with-selected-window window
+               (split-window-right)))
+        (and (window-splittable-p window)
+             (with-selected-window window
+               (split-window-below))))))
 
 (setq split-window-preferred-function #'dgl/split-window-sensibly)
 
@@ -166,11 +166,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("M-m" . 'make-without-asking)
   
   ("TAB" . 'dabbrev-expand)
-  ("C-c TAB" . 'indent-region)
-  ("C-x C-b" . 'ibuffer))
+  ("C-x C-b" . 'ibuffer)
+  
+  ("C-x RET" . 'top-mode))
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
-(setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
+ (setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
 
 (setq visible-bell t)
 
@@ -179,7 +180,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (setq-default tab-width 4)
 
 (with-eval-after-load 'mule-util
- (setq truncate-string-ellipsis "…"))
+  (setq truncate-string-ellipsis "…"))
 
 (setq show-trailing-whitespace t)
 
@@ -226,34 +227,34 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'server-after-make-frame-hook #'my/set-font)
 
 (defun my/set-colors ()
-      (set-foreground-color "#D2B48C")
-      (set-background-color "#012326")
+  (set-foreground-color "#D2B48C")
+  (set-background-color "#012326")
 
-      (set-face-foreground 'default "#D2B48C")
-      (set-face-background 'default "#012326")
-      (set-face-background 'cursor "#65D6AD")
-      (set-face-foreground 'font-lock-builtin-face "#D2B48C")
-      (set-face-foreground 'font-lock-comment-face "#31B72C")
-      (set-face-foreground 'font-lock-constant-face "#65D6AD")
-      (set-face-foreground 'font-lock-doc-face "#E8E6E1")
-      (set-face-foreground 'font-lock-function-name-face "#D2B48C")
-      (set-face-foreground 'font-lock-keyword-face "#E8E6E1")
-      (set-face-foreground 'font-lock-preprocessor-face "#625D52")
-      (set-face-foreground 'font-lock-string-face "#2CB1BC")
-      (set-face-foreground 'font-lock-type-face "#D2B48C")
-      (set-face-foreground 'font-lock-variable-name-face "#D2B48C")
-      (set-face-background 'fringe "#01282D")
-      (set-face-foreground 'highlight "#65D6AD")
-      ;;(set-face-background 'hl-line "#013137")
-      (set-face-foreground 'mode-line "#012326")
-      (set-face-background 'mode-line "#D2B48C")
+  (set-face-foreground 'default "#D2B48C")
+  (set-face-background 'default "#012326")
+  (set-face-background 'cursor "#65D6AD")
+  (set-face-foreground 'font-lock-builtin-face "#D2B48C")
+  (set-face-foreground 'font-lock-comment-face "#31B72C")
+  (set-face-foreground 'font-lock-constant-face "#65D6AD")
+  (set-face-foreground 'font-lock-doc-face "#E8E6E1")
+  (set-face-foreground 'font-lock-function-name-face "#D2B48C")
+  (set-face-foreground 'font-lock-keyword-face "#E8E6E1")
+  (set-face-foreground 'font-lock-preprocessor-face "#625D52")
+  (set-face-foreground 'font-lock-string-face "#2CB1BC")
+  (set-face-foreground 'font-lock-type-face "#D2B48C")
+  (set-face-foreground 'font-lock-variable-name-face "#D2B48C")
+  (set-face-background 'fringe "#01282D")
+  (set-face-foreground 'highlight "#65D6AD")
+  ;;(set-face-background 'hl-line "#013137")
+  (set-face-foreground 'mode-line "#012326")
+  (set-face-background 'mode-line "#D2B48C")
 
-      (set-face-attribute 'mode-line-inactive nil :foreground "#D2B48C" :background "#013137")
+  (set-face-attribute 'mode-line-inactive nil :foreground "#D2B48C" :background "#013137")
 
-      (set-face-background 'region "#24335E")
-      (set-face-foreground 'vertical-border "#625D52")
-      (set-face-background 'trailing-whitespace "#013137")
-      )
+  (set-face-background 'region "#24335E")
+  (set-face-foreground 'vertical-border "#625D52")
+  (set-face-background 'trailing-whitespace "#013137")
+  )
 (my/set-colors)
 (add-hook 'server-after-make-frame-hook #'my/set-colors)
 
@@ -389,24 +390,24 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   )
 
 (use-package embark
-:ensure t
-:bind (("C-M-x" . embark-act)
-       :map minibuffer-local-map
-       ("C-c C-c" . embark-collect)
-       ("C-c C-e" . embark-export))
-
-)
+  :ensure t
+  :bind (("C-M-x" . embark-act)
+         :map minibuffer-local-map
+         ("C-c C-c" . embark-collect)
+         ("C-c C-e" . embark-export))
+  
+  )
 
 (use-package embark-consult
-:ensure t)
+  :ensure t)
 
 (use-package wgrep
-      :ensure t
-      :bind ( :map grep-mode-map
-                      ("e" . wgrep-change-to-wgrep-mode)
-                      ("C-c C-c" . wgrep-finish-edit)
-                      )
-      )
+  :ensure t
+  :bind ( :map grep-mode-map
+                  ("e" . wgrep-change-to-wgrep-mode)
+                  ("C-c C-c" . wgrep-finish-edit)
+                  )
+  )
 
 (use-package vertico
   :ensure t
@@ -459,11 +460,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package dumb-jump
-:ensure t
-:custom
-(dumb-jump-prefer-searcher 'rg)
-;; (xref-show-definitions-function #'xref-show-definitions-completing-read)
-(xref-show-definitions-function #'consult-xref))
+  :ensure t
+  :custom
+  (dumb-jump-prefer-searcher 'rg)
+  ;; (xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (xref-show-definitions-function #'consult-xref))
 (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
 (setq set-mark-command-repeat-pop t)
@@ -514,10 +515,10 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package dts-mode
   :ensure t
   :mode (
-               ("\\.dts$" . dts-mode)
-               ("\\.dtsi$" . dts-mode)
-               ("\\.dtso$" . dts-mode)
-               ))
+         ("\\.dts$" . dts-mode)
+         ("\\.dtsi$" . dts-mode)
+         ("\\.dtso$" . dts-mode)
+         ))
 
 (use-package go-mode
   :ensure t
@@ -604,8 +605,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (if indent-tabs-mode " [TAB]" " [SPC]"))
 
 (setq-default mode-line-format
-            (append mode-line-format
-                    '((:eval (dgl/tabs-mode-indicator)))))
+              (append mode-line-format
+                      '((:eval (dgl/tabs-mode-indicator)))))
 
 (setq-default indent-tabs-mode nil)
 (use-package dtrt-indent
@@ -684,21 +685,21 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   )
 
 (defvar highlight-codetags-keywords
-      '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
-        ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
+  '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
+    ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
 
 (define-minor-mode highlight-codetags-local-mode
-      "Highlight codetags like TODO, FIXME, @performance..."
-      :global nil
-      (if highlight-codetags-local-mode
-              (font-lock-add-keywords nil highlight-codetags-keywords)
-        (font-lock-remove-keywords nil highlight-codetags-keywords))
+  "Highlight codetags like TODO, FIXME, @performance..."
+  :global nil
+  (if highlight-codetags-local-mode
+      (font-lock-add-keywords nil highlight-codetags-keywords)
+    (font-lock-remove-keywords nil highlight-codetags-keywords))
 
-      ;; Fontify the current buffer
-      (when (bound-and-true-p font-lock-mode)
-        (if (fboundp 'font-lock-flush)
-                (font-lock-flush)
-              (with-no-warnings (font-lock-fontify-buffer)))))
+  ;; Fontify the current buffer
+  (when (bound-and-true-p font-lock-mode)
+    (if (fboundp 'font-lock-flush)
+        (font-lock-flush)
+      (with-no-warnings (font-lock-fontify-buffer)))))
 
 (add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
 
@@ -707,7 +708,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   ("C-x p" . project-prefix-map)
   :config
   (setq project-mode-line t)
-)
+  )
 
 (when (or (eq system-type 'windows-nt) (eq system-type 'ms-dos))
  (setq dgl/org-directory "w:/vault/org")
@@ -719,44 +720,43 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
  (setq dgl/org-roam-directory (concat dgl/org-directory "/roam")))
 
 (use-package org
-      :defer t
-      :mode ("\\.org$" . org-mode)
-      :bind(
-               ("C-c a" . org-agenda)
-               ("C-c x" . org-archive-subtree)
-               ;;("C-c c" . org-capture)
-               ;;("M-p" . org-priority)
-               ;;("M-r" . org-refile)
-               ;;("M-s" . org-schedule)
-               ;;("M-d" . org-deadline)
-               ("C-c TAB" . 'indent-region)
-               )
-      :custom-face
-      (org-block ((t (:inherit fixed-pitch))))
-      (org-code ((t (:inherit (shadow fixed-pitch)))))
-      (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-      (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
-      (org-indent ((t (:inherit (org-hide fixed-pitch)))))
-      (org-level-1 ((t (:inherit org-document-title :height 1.0))))
-      (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
-      (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
-      (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
-      (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
-      (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
-      (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
-      (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
-      (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-      (org-property-value ((t (:inherit fixed-pitch))))
-      (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-      (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-      (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-      :config
-      (setq org-return-follows-link  t)
-      ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
-      (add-hook 'org-mode-hook 'org-indent-mode)
-      (add-hook 'org-mode-hook 'visual-line-mode)
-      (add-hook 'org-mode-hook 'variable-pitch-mode)
-      )
+  :defer t
+  :mode ("\\.org$" . org-mode)
+  :bind(
+        ("C-c a" . org-agenda)
+        ;;("C-c x" . org-archive-subtree)
+        ("C-c c" . org-capture)
+        ;;("M-p" . org-priority)
+        ;;("M-r" . org-refile)
+        ;;("M-s" . org-schedule)
+        ;;("M-d" . org-deadline)
+        )
+  :custom-face
+  (org-block ((t (:inherit fixed-pitch))))
+  (org-code ((t (:inherit (shadow fixed-pitch)))))
+  (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+  (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
+  (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+  (org-level-1 ((t (:inherit org-document-title :height 1.0))))
+  (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+  (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+  (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+  (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+  (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+  (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+  (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+  (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+  (org-property-value ((t (:inherit fixed-pitch))))
+  (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+  (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+  (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+  :config
+  (setq org-return-follows-link  t)
+  ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+  )
 
 (use-package org-bullets
   :ensure t
@@ -767,116 +767,116 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 (use-package denote
-      :ensure t
-      :bind (
-               ("C-c n n" . denote)
-               ("C-c n r" . denote-rename-file)
-               ("C-c n l" . denote-link)
-               ("C-c n b" . denote-backlinks)
-               ;; ("C-c n c" . denote-region)
-               ;; ("C-c n N" . denote-type)
-               ;; ("C-c n d" . denote-date)
-               ;;  ("C-c n z" . denote-signature)
-               ;;  ("C-c n s" . denote-subdirectory)
-               ;;  ("C-c n t" . denote-template)
-               ;;
-               ;;
-               ;;
-               ;;  ("C-c n f f" . denote-find-link)
-               ;;  ("C-c n f b" . denote-find-backlink)
-               ;;  ("C-c n r" . denote-rename-file)
-               ;;  ("C-c n R" . denote-rename-file-using-front-matter))
-               ;; (:map dired-mode-map
-               ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
-               ;;  ("C-c C-d C-r" . denote-dired-rename-files)
-               ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
-               ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-               )
-      :hook (dired-mode . denote-dired-mode)
-      :custom
-      (denote-directory dgl/org-denote-directory)
-      ;;(denote-save-buffers nil)
-      (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
-      (denote-infer-keywords t)
-      (denote-sort-keywords t)
-      (denote-prompts '(title keywords))
-      (denote-excluded-directories-regexp nil)
-      (denote-excluded-keywords-regexp nil)
-      (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-      (denote-date-prompt-use-org-read-date t)
-      ;;(denote-date-format nil)
-      (denote-backlinks-show-context t)
-      (denote-rename-buffer-mode 1)
-      ;;(denote-org-capture-specifiers "%l\n%i\n%?")
-      )
+  :ensure t
+  :bind (
+         ("C-c n n" . denote)
+         ("C-c n r" . denote-rename-file)
+         ("C-c n l" . denote-link)
+         ("C-c n b" . denote-backlinks)
+         ;; ("C-c n c" . denote-region)
+         ;; ("C-c n N" . denote-type)
+         ;; ("C-c n d" . denote-date)
+         ;;  ("C-c n z" . denote-signature)
+         ;;  ("C-c n s" . denote-subdirectory)
+         ;;  ("C-c n t" . denote-template)
+         ;;
+         ;;
+         ;;
+         ;;  ("C-c n f f" . denote-find-link)
+         ;;  ("C-c n f b" . denote-find-backlink)
+         ;;  ("C-c n r" . denote-rename-file)
+         ;;  ("C-c n R" . denote-rename-file-using-front-matter))
+         ;; (:map dired-mode-map
+         ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
+         ;;  ("C-c C-d C-r" . denote-dired-rename-files)
+         ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+         ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
+         )
+  :hook (dired-mode . denote-dired-mode)
+  :custom
+  (denote-directory dgl/org-denote-directory)
+  ;;(denote-save-buffers nil)
+  (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
+  (denote-infer-keywords t)
+  (denote-sort-keywords t)
+  (denote-prompts '(title keywords))
+  (denote-excluded-directories-regexp nil)
+  (denote-excluded-keywords-regexp nil)
+  (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+  (denote-date-prompt-use-org-read-date t)
+  ;;(denote-date-format nil)
+  (denote-backlinks-show-context t)
+  (denote-rename-buffer-mode 1)
+  ;;(denote-org-capture-specifiers "%l\n%i\n%?")
+  )
 
 (use-package denote-menu
-      :ensure t
-      :bind (
-               ("C-c n d" . list-denotes)
-               :map denote-menu-mode-map
-               ("c" . denote-menu-clear-filters)
-               ("f" . denote-menu-filter)
-               ("k" . denote-menu-filter-by-keyword)
-               ("o"  . denote-menu-filter-out-keyword)
-               ("e" . denote-menu-export-to-dired)
-               )
-      )
+  :ensure t
+  :bind (
+         ("C-c n d" . list-denotes)
+         :map denote-menu-mode-map
+         ("c" . denote-menu-clear-filters)
+         ("f" . denote-menu-filter)
+         ("k" . denote-menu-filter-by-keyword)
+         ("o"  . denote-menu-filter-out-keyword)
+         ("e" . denote-menu-export-to-dired)
+         )
+  )
 
 (use-package org
-      :config
-      (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
-      (setq org-refile-targets
-                '(
-                      (org-agenda-files :maxlevel . 5)
-                      ))
-      (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
-      (setq org-log-done 'time)
-      (setq org-todo-keywords
-                '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
-      (setq org-return-follows-link t)
-      (setq org-agenda-custom-commands '(
-                                                                         ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
-                                                                         ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
-                                                                         ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
-                                                                         ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
-                                                                         ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
-                                                                         ))
-      (setq org-agenda-sorting-strategy
+  :config
+  (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+  (setq org-refile-targets
+        '(
+          (org-agenda-files :maxlevel . 5)
+          ))
+  (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+  (setq org-log-done 'time)
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
+  (setq org-return-follows-link t)
+  (setq org-agenda-custom-commands '(
+                                     ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
+                                     ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
+                                     ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
+                                     ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
+                                     ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
+                                     ))
+  (setq org-agenda-sorting-strategy
         '((agenda habit-down time-up priority-down category-keep)
-              (todo priority-down todo-state-up category-keep)
-              (tags priority-down todo-state-up category-keep)
-              (search category-keep)))
+          (todo priority-down todo-state-up category-keep)
+          (tags priority-down todo-state-up category-keep)
+          (search category-keep)))
 
-      (setq org-capture-templates
+  (setq org-capture-templates
         `(
-              ("i" "Inbox" entry
-               (file, (concat dgl/org-directory "/inbox.org"))
-               "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
+          ("i" "Inbox" entry
+           (file, (concat dgl/org-directory "/inbox.org"))
+           "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
 
-              ("n" "Next action" entry
-               (file, (concat dgl/org-directory "/gtd.org"))
-               "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+          ("n" "Next action" entry
+           (file, (concat dgl/org-directory "/gtd.org"))
+           "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-              ("w" "Waiting" entry
-               (file, (concat dgl/org-directory "/gtd.org"))
-               "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+          ("w" "Waiting" entry
+           (file, (concat dgl/org-directory "/gtd.org"))
+           "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-              ("s" "Someday" entry
-               (file, (concat dgl/org-directory "/someday.org"))
-               "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
-              ))
-      )
+          ("s" "Someday" entry
+           (file, (concat dgl/org-directory "/someday.org"))
+           "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
+          ))
+  )
 
 (defun dgl/gtd ()
   (interactive)
   (find-file (concat dgl/org-directory "/gtd.org"))
-)
+  )
 
 (use-package emacs
   :config
   (setq epa-pinentry-mode 'loopback)
-)
+  )
 
 (use-package tramp
   :defer t
@@ -923,8 +923,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq tramp-directory-cache-expire (* 60 60 24))
   (setq tramp-auto-save-directory nil)
   (setq vc-ignore-dir-regexp (format "%s\\|%s"
-                                                                       vc-ignore-dir-regexp
-                                                                       tramp-file-name-regexp))
+                                     vc-ignore-dir-regexp
+                                     tramp-file-name-regexp))
   (setq tramp-ssh-controlmaster-options nil)
   (setq tramp-connection-timeout 10)
   (setq tramp-verbose 1)
@@ -956,21 +956,21 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   )
 
 (use-package eat
-:defer t
-:ensure nil
-:bind (
-       :map eat-semi-char-mode-map
-        ("C-c C-k" . eat-emacs-mode)
-        ("M-f" . 'find-file)
-        ("M-F" . 'find-file-other-window)
-        ("M-b" . 'consult-buffer)
-        ("M-B" . 'consult-buffer-other-window)
-        ("M-w" . 'other-window)
-       )
-:hook (eshell-mode . eat-eshell-mode)
-:config
-(setq eat-term-scrollback-size 1048576)
-)
+  :defer t
+  :ensure nil
+  :bind (
+         :map eat-semi-char-mode-map
+          ("C-c C-k" . eat-emacs-mode)
+          ("M-f" . 'find-file)
+          ("M-F" . 'find-file-other-window)
+          ("M-b" . 'consult-buffer)
+          ("M-B" . 'consult-buffer-other-window)
+          ("M-w" . 'other-window)
+         )
+  :hook (eshell-mode . eat-eshell-mode)
+  :config
+  (setq eat-term-scrollback-size 1048576)
+  )
 
 (autoload 'eat            "eat"         "Eat Terminal"                 t)
 (setq eat-term-scrollback-size 1048576)
@@ -981,33 +981,24 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (use-package top-mode
   :ensure nil  ;; No need to install a package for a custom minor mode
   :defer t
-  :init
-  (define-minor-mode top-mode
-    "A modal minor mode that enables simple modal editing for easier command execution."
-    :lighter " [TOP]"
-    :keymap (let ((map (make-sparse-keymap)))
-              map))
+  :config
+  ;; Modal keybindings
+  (define-key top-mode-map (kbd "x") ctl-x-map)
+  (define-key top-mode-map (kbd "c") mode-specific-map)
 
-  (defun top-mode-execute-extended-command (&optional arg)
-    (interactive)
-    (top-mode)
-    (execute-extended-command)
-    )
+  (dolist (top-mode-disable-cmds '(revert-buffer
+                                   find-file
+                                   save-buffer))
+    (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
 
-  (defun top-mode-key-translations ()
-    "Set up key translations for my-modal-mode."
-    (when top-mode
-      (define-key key-translation-map (kbd "c") (kbd "C-c"))
-      (define-key key-translation-map (kbd "x") (kbd "C-x"))
-      (define-key top-mode-map (kbd "RET") 'top-mode-execute-extended-command)
-      (define-key top-mode-map (kbd "S-RET") 'consult-mode-command)
-      ))
+  (dolist (top-mode-exit-cmds '(org-agenda
+                                list-denotes))
+    (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
 
-  (add-hook 'top-mode-hook #'top-mode-key-translations)
-
-  ;; Enable translations when mode is active
   :bind (:map top-mode-map
-              ("SPC SPC" . top-mode)
+              ("a" . execute-extended-command)
+              ("M-a" . consult-mode-command)
+              ("RET" . top-mode)
               ("i" . previous-line)
               ("k" . next-line)
               ("j" . backward-char)
@@ -1016,6 +1007,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
               ("o" . forward-word)
               ("h" . backward-paragraph)
               (";" . forward-paragraph)
+              ("n a" . org-agenda)
+              ("n c" . org-capture)
+              ("n d" . list-denotes)
+              ("C-c c" . copy-region-as-kill)
+              ("C-c x" . kill-region)
+              ("C-c v" . consult-yank-pop)
+              ("TAB" . consult-buffer)
               ))
 
 (when (eq system-type 'gnu/linux)
@@ -1033,39 +1031,39 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
    ;; Make class name the buffer name.
    (add-hook 'exwm-update-class-hook
-               (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+             (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
    ;; These keys should always pass through to Emacs
    (setq exwm-input-prefix-keys
-       '(?\C-x
-         ?\C-u
-         ?\C-h
-         ?\C-q     ;; Prevent from accidently closing firefox
-         ?\M-J b
-         ?\M-b     ;; Buffer list
-         ?\M-P p   ;; Project selection
-         ?\M-x
-         ?\M-w     ;; other window
-         ?\M-`
-         ?\M-&
-         ?\M-:
-         ?\C-\ ))  ;; Ctrl+Space
+         '(?\C-x
+           ?\C-u
+           ?\C-h
+           ?\C-q     ;; Prevent from accidently closing firefox
+           ?\M-J b
+           ?\M-b     ;; Buffer list
+           ?\M-P p   ;; Project selection
+           ?\M-x
+           ?\M-w     ;; other window
+           ?\M-`
+           ?\M-&
+           ?\M-:
+           ?\C-\ ))  ;; Ctrl+Space
 
    ;; Global keybindings.
    (setq exwm-input-global-keys
          `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-         ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-         ([?\s-b]   . exwm-workspace-switch-to-buffer)
-         ([?\s-q]   . exwm-input-send-next-key)
-         ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-                                                (interactive (list (read-shell-command "$ ")))
-                                                (start-process-shell-command cmd nil cmd)))
-         ;; s-N: Switch to certain workspace.
-         ,@(mapcar (lambda (i)
-                                 `(,(kbd (format "s-%d" i)) .
-                                       (lambda ()
-                                         (interactive)
-                                         (exwm-workspace-switch-create , (- i 1)))))
-                               (number-sequence 1 9))))
+           ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+           ([?\s-b]   . exwm-workspace-switch-to-buffer)
+           ([?\s-q]   . exwm-input-send-next-key)
+           ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+                          (interactive (list (read-shell-command "$ ")))
+                          (start-process-shell-command cmd nil cmd)))
+           ;; s-N: Switch to certain workspace.
+           ,@(mapcar (lambda (i)
+                       `(,(kbd (format "s-%d" i)) .
+                         (lambda ()
+                           (interactive)
+                           (exwm-workspace-switch-create , (- i 1)))))
+                     (number-sequence 1 9))))
    ;; Enable EXWM
    (exwm-enable)
    ))

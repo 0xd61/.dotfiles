@@ -120,10 +120,6 @@ Disable `top-mode` if command is in `top-mode-auto-exit-commands`."
 (advice-add 'call-interactively :around #'top-mode--around-maybe-disable)
 (advice-add 'call-interactively :before #'top-mode--maybe-exit)
 
-;; Modal keybindings
-(define-key top-mode-map (kbd "x") ctl-x-map)
-(define-key top-mode-map (kbd "c") mode-specific-map)
-
 ;;;###autoload
 (define-minor-mode top-mode
   "A simple custom modal mode. `x` replaces `C-x` and `c` replaces `C-c`. Everything else
@@ -133,13 +129,11 @@ can be defined in the top-mode-map."
   :lighter " T"
 
   (if top-mode
-      ;; Enable
       (let ((entry (assoc 'top-mode emulation-mode-map-alists)))
         (unless entry
           (add-to-list 'emulation-mode-map-alists
                        `((top-mode . ,top-mode-map))))
         (top-mode--set-visual-indicator))
-    ;; Disable
     (setq emulation-mode-map-alists
           (cl-remove-if (lambda (entry)
                        (eq (car entry) 'top-mode))

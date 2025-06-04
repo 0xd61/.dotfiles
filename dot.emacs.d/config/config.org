@@ -205,16 +205,15 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: org-keys
 #+begin_src emacs-lisp
   :bind(
-           ("C-c a" . org-agenda)
-           ("C-c x" . org-archive-subtree)
-           ;;("C-c c" . org-capture)
-           ;;("M-p" . org-priority)
-           ;;("M-r" . org-refile)
-           ;;("M-s" . org-schedule)
-           ;;("M-d" . org-deadline)
-           ("C-c TAB" . 'indent-region)
-           )
-#+end_src
+        ("C-c a" . org-agenda)
+        ;;("C-c x" . org-archive-subtree)
+        ("C-c c" . org-capture)
+        ;;("M-p" . org-priority)
+        ;;("M-r" . org-refile)
+        ;;("M-s" . org-schedule)
+        ;;("M-d" . org-deadline)
+        )
+        #+end_src
 **** Org Roam
 #+name: org-roam-keys :tabgle no
 #+begin_src emacs-lisp
@@ -228,53 +227,53 @@ This section is used to create reusable codeblocks by using the [[https://orgmod
 #+name: denote-keys
 #+begin_src emacs-lisp
   :bind (
-           ("C-c n n" . denote)
-           ("C-c n r" . denote-rename-file)
-           ("C-c n l" . denote-link)
-           ("C-c n b" . denote-backlinks)
-           ;; ("C-c n c" . denote-region)
-           ;; ("C-c n N" . denote-type)
-           ;; ("C-c n d" . denote-date)
-           ;;  ("C-c n z" . denote-signature)
-           ;;  ("C-c n s" . denote-subdirectory)
-           ;;  ("C-c n t" . denote-template)
-           ;;
-           ;;
-           ;;
-           ;;  ("C-c n f f" . denote-find-link)
-           ;;  ("C-c n f b" . denote-find-backlink)
-           ;;  ("C-c n r" . denote-rename-file)
-           ;;  ("C-c n R" . denote-rename-file-using-front-matter))
-           ;; (:map dired-mode-map
-           ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
-           ;;  ("C-c C-d C-r" . denote-dired-rename-files)
-           ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
-           ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
-           )
+         ("C-c n n" . denote)
+         ("C-c n r" . denote-rename-file)
+         ("C-c n l" . denote-link)
+         ("C-c n b" . denote-backlinks)
+         ;; ("C-c n c" . denote-region)
+         ;; ("C-c n N" . denote-type)
+         ;; ("C-c n d" . denote-date)
+         ;;  ("C-c n z" . denote-signature)
+         ;;  ("C-c n s" . denote-subdirectory)
+         ;;  ("C-c n t" . denote-template)
+         ;;
+         ;;
+         ;;
+         ;;  ("C-c n f f" . denote-find-link)
+         ;;  ("C-c n f b" . denote-find-backlink)
+         ;;  ("C-c n r" . denote-rename-file)
+         ;;  ("C-c n R" . denote-rename-file-using-front-matter))
+         ;; (:map dired-mode-map
+         ;;  ("C-c C-d C-i" . denote-dired-link-marked-notes)
+         ;;  ("C-c C-d C-r" . denote-dired-rename-files)
+         ;;  ("C-c C-d C-k" . denote-dired-rename-marked-files-with-keywords)
+         ;;  ("C-c C-d C-R" . denote-dired-rename-marked-files-using-front-matter)
+         )
 #+end_src
 
 #+name: denote-menu-keys
 #+begin_src emacs-lisp
   :bind (
-           ("C-c n d" . list-denotes)
-           :map denote-menu-mode-map
-           ("c" . denote-menu-clear-filters)
-           ("f" . denote-menu-filter)
-           ("k" . denote-menu-filter-by-keyword)
-           ("o"  . denote-menu-filter-out-keyword)
-           ("e" . denote-menu-export-to-dired)
-           )
+         ("C-c n d" . list-denotes)
+         :map denote-menu-mode-map
+         ("c" . denote-menu-clear-filters)
+         ("f" . denote-menu-filter)
+         ("k" . denote-menu-filter-by-keyword)
+         ("o"  . denote-menu-filter-out-keyword)
+         ("e" . denote-menu-export-to-dired)
+         )
 #+end_src
 *** Emacs
 Keys we always want to enforce in different modes aswell. *Be careful with those. They might override other functionalities*.
 
 #+name: emacs-keys-essential
 #+begin_src emacs-lisp
-    ("M-f" . 'find-file)
-    ("M-F" . 'find-file-other-window)
-    ("M-b" . 'consult-buffer)
-    ("M-B" . 'consult-buffer-other-window)
-    ("M-w" . 'other-window)
+  ("M-f" . 'find-file)
+  ("M-F" . 'find-file-other-window)
+  ("M-b" . 'consult-buffer)
+  ("M-B" . 'consult-buffer-other-window)
+  ("M-w" . 'other-window)
 #+end_src
 
 #+name: emacs-keys
@@ -297,7 +296,6 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
   ("M-m" . 'make-without-asking)
 
   ("TAB" . 'dabbrev-expand)
-  ("C-c TAB" . 'indent-region)
   ("C-x C-b" . 'ibuffer)
 
   ("C-x RET" . 'top-mode)
@@ -327,6 +325,31 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
           <<emacs-keys-essential>>
          )
 #+end_src
+*** Top-Mode
+#+name: top-mode-keys
+#+begin_src emacs-lisp
+  :bind (:map top-mode-map
+              ("a" . execute-extended-command)
+              ("M-a" . consult-mode-command)
+              ("RET" . top-mode)
+              ("i" . previous-line)
+              ("k" . next-line)
+              ("j" . backward-char)
+              ("l" . forward-char)
+              ("u" . backward-word)
+              ("o" . forward-word)
+              ("h" . backward-paragraph)
+              (";" . forward-paragraph)
+              ("n a" . org-agenda)
+              ("n c" . org-capture)
+              ("n d" . list-denotes)
+              ("C-c c" . copy-region-as-kill)
+              ("C-c x" . kill-region)
+              ("C-c v" . consult-yank-pop)
+              ("TAB" . consult-buffer)
+              ))
+
+              #+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -351,9 +374,9 @@ The early init file is the file loaded before anything else in Emacs. This is wh
   (setq frame-inhibit-implied-resize t)
   (setq inhibit-compacting-font-caches t)
 
-(setq shift-select-mode nil)
-(setq enable-local-variables nil)
-(setq column-number-mode t)
+  (setq shift-select-mode nil)
+  (setq enable-local-variables nil)
+  (setq column-number-mode t)
 
 #+end_src
 
@@ -394,38 +417,38 @@ A large =gc-cons-threshold= may cause freezing and stuttering during long-term i
 If you experience freezing, decrease this amount, if you experience stuttering, increase this amount.
 
 #+begin_src emacs-lisp
-(defvar better-gc-cons-threshold (* 128 1024 1024) ; 128mb
-  "The default value to use for `gc-cons-threshold'.
+  (defvar better-gc-cons-threshold (* 128 1024 1024) ; 128mb
+    "The default value to use for `gc-cons-threshold'.
 
-If you experience freezing, decrease this.  If you experience stuttering, increase this.")
+  If you experience freezing, decrease this.  If you experience stuttering, increase this.")
 
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq gc-cons-threshold better-gc-cons-threshold)
-            (setq file-name-handler-alist file-name-handler-alist-original)
-            (makunbound 'file-name-handler-alist-original)))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold better-gc-cons-threshold)
+              (setq file-name-handler-alist file-name-handler-alist-original)
+              (makunbound 'file-name-handler-alist-original)))
 #+end_src
 
 Garbage Collect when Emacs is out of focus and avoid garbage collection when using minibuffer.
 
 #+begin_src emacs-lisp
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (if (boundp 'after-focus-change-function)
-                (add-function :after after-focus-change-function
-                              (lambda ()
-                                (unless (frame-focus-state)
-                                  (garbage-collect))))
-              (add-hook 'after-focus-change-function 'garbage-collect))
-            (defun gc-minibuffer-setup-hook ()
-              (setq gc-cons-threshold (* better-gc-cons-threshold 2)))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (if (boundp 'after-focus-change-function)
+                  (add-function :after after-focus-change-function
+                                (lambda ()
+                                  (unless (frame-focus-state)
+                                    (garbage-collect))))
+                (add-hook 'after-focus-change-function 'garbage-collect))
+              (defun gc-minibuffer-setup-hook ()
+                (setq gc-cons-threshold (* better-gc-cons-threshold 2)))
 
-            (defun gc-minibuffer-exit-hook ()
-              (garbage-collect)
-              (setq gc-cons-threshold better-gc-cons-threshold))
+              (defun gc-minibuffer-exit-hook ()
+                (garbage-collect)
+                (setq gc-cons-threshold better-gc-cons-threshold))
 
-            (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
+              (add-hook 'minibuffer-setup-hook #'gc-minibuffer-setup-hook)
+              (add-hook 'minibuffer-exit-hook #'gc-minibuffer-exit-hook)))
 #+end_src
 
 ** Stay Clean, Emacs!
@@ -448,7 +471,7 @@ This will make Emacs ask us for either hitting the ~y~ key for yes, or the ~n~ k
 It is also very impolite to keep a certain version of a file in its buffer when said file has changed on disk. Let's change this
 behaviour:
 #+begin_src emacs-lisp
-(global-auto-revert-mode 1)
+  (global-auto-revert-mode 1)
 #+end_src
 
 Much more polite! Note that if the buffer is modified and its changes haven't been saved, it will not automatically revert the buffer and your unsaved changes won't be lost. Very polite!
@@ -471,7 +494,7 @@ However we don't want to clutter the file tree. Therefore we put all files into 
 
     ;; Ensure the directory exists
     (unless (file-exists-p dgl/auto-save-dir)
-        (make-directory dgl/auto-save-dir t))
+      (make-directory dgl/auto-save-dir t))
 
     ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
     (defun rename-file-and-buffer (new-name)
@@ -512,21 +535,21 @@ We want emacs to take new window space from all other windows.
 
 We also want to use a more sensible way for splitting windows
 #+begin_src emacs-lisp
-(setq split-height-threshold 120
-      split-width-threshold 160)
+  (setq split-height-threshold 120
+        split-width-threshold 160)
 
-(defun dgl/split-window-sensibly (&optional window)
+  (defun dgl/split-window-sensibly (&optional window)
     "replacement `split-window-sensibly' function which prefers vertical splits"
     (interactive)
     (let ((window (or window (selected-window))))
-        (or (and (window-splittable-p window t)
-                 (with-selected-window window
-                     (split-window-right)))
-            (and (window-splittable-p window)
-                 (with-selected-window window
-                     (split-window-below))))))
+      (or (and (window-splittable-p window t)
+               (with-selected-window window
+                 (split-window-right)))
+          (and (window-splittable-p window)
+               (with-selected-window window
+                 (split-window-below))))))
 
-(setq split-window-preferred-function #'dgl/split-window-sensibly)
+  (setq split-window-preferred-function #'dgl/split-window-sensibly)
 #+end_src
 
 ** Project Setup
@@ -576,13 +599,13 @@ Not sure which packages need this information but some probably will need it.
 Having a command history is nice.
 
 #+begin_src emacs-lisp
-;; Remember last edited files
-(recentf-mode 1)
-;; Save what you enter into minibuffer prompts
-(setq history-length 25)
-(savehist-mode 1)
-;; Remember and restore the last cursor location of opened files
-(save-place-mode 1)
+  ;; Remember last edited files
+  (recentf-mode 1)
+  ;; Save what you enter into minibuffer prompts
+  (setq history-length 25)
+  (savehist-mode 1)
+  ;; Remember and restore the last cursor location of opened files
+  (save-place-mode 1)
 #+end_src
 ** Files/Dired
 
@@ -602,17 +625,17 @@ We need to add git to the path on windows to be able to use xargs for xref, whic
 
 #+begin_src emacs-lisp
   (<<platform_windows>>
-  (setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
+   (setenv "PATH" (concat (getenv "PATH") ";" "C:\\Program Files\\Git\\usr\\bin")))
 #+end_src
 * Visuals
 The first visual setting in this section will activate the visible bell. What it does is I get a visual feedback each time I do something Emacs doesn't agree with, like trying to go up a line when I'm already at the top of the buffer.
 #+begin_src emacs-lisp
-(setq visible-bell t)
+  (setq visible-bell t)
 #+end_src
 
 It is nicer to see a cursor cover the actual space of a character.
 #+begin_src emacs-lisp
-(setq x-stretch-cursor t)
+  (setq x-stretch-cursor t)
 #+end_src
 
 We also want to show tabs as 4 spaces. Otherwise it takes too much space.
@@ -622,8 +645,8 @@ We also want to show tabs as 4 spaces. Otherwise it takes too much space.
 
 When text is ellipsed, I want the ellipsis marker to be a single character of three dots. Let's make it so:
 #+begin_src emacs-lisp
-(with-eval-after-load 'mule-util
- (setq truncate-string-ellipsis "…"))
+  (with-eval-after-load 'mule-util
+    (setq truncate-string-ellipsis "…"))
 #+end_src
 
 We want to know where we have trailing whitespace to keep things clean
@@ -682,45 +705,45 @@ I don't like the default font I usually have on my machines, I really don't. I p
 ** Frame Title
 This is straight-up copied from [[https://tecosaur.github.io/emacs-config/config.html#window-title][TEC]]'s configuration. See their comment on the matter.
 #+begin_src emacs-lisp :tangle no
-(setq frame-title-format
-      '(""
-        "%b"
-        (:eval
-         (let ((project-name (projectile-project-name)))
-           (unless (string= "-" project-name)
-             (format (if (buffer-modified-p) " ? %s" "  ?  %s - Emacs") project-name))))))
+  (setq frame-title-format
+        '(""
+          "%b"
+          (:eval
+           (let ((project-name (projectile-project-name)))
+             (unless (string= "-" project-name)
+               (format (if (buffer-modified-p) " ? %s" "  ?  %s - Emacs") project-name))))))
 #+end_src
 ** Colors
 #+begin_src emacs-lisp
   (defun my/set-colors ()
-        (set-foreground-color <<main_foreground>>)
-        (set-background-color <<main_background>>)
+    (set-foreground-color <<main_foreground>>)
+    (set-background-color <<main_background>>)
 
-        (set-face-foreground 'default <<main_foreground>>)
-        (set-face-background 'default <<main_background>>)
-        (set-face-background 'cursor <<constant>>)
-        (set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
-        (set-face-foreground 'font-lock-comment-face <<comment>>)
-        (set-face-foreground 'font-lock-constant-face <<constant>>)
-        (set-face-foreground 'font-lock-doc-face <<keyword>>)
-        (set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
-        (set-face-foreground 'font-lock-keyword-face <<keyword>>)
-        (set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
-        (set-face-foreground 'font-lock-string-face <<string>>)
-        (set-face-foreground 'font-lock-type-face <<main_foreground>>)
-        (set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
-        (set-face-background 'fringe <<fringe>>)
-        (set-face-foreground 'highlight <<constant>>)
-        ;;(set-face-background 'hl-line <<alt_background>>)
-        (set-face-foreground 'mode-line <<main_background>>)
-        (set-face-background 'mode-line <<main_foreground>>)
+    (set-face-foreground 'default <<main_foreground>>)
+    (set-face-background 'default <<main_background>>)
+    (set-face-background 'cursor <<constant>>)
+    (set-face-foreground 'font-lock-builtin-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-comment-face <<comment>>)
+    (set-face-foreground 'font-lock-constant-face <<constant>>)
+    (set-face-foreground 'font-lock-doc-face <<keyword>>)
+    (set-face-foreground 'font-lock-function-name-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-keyword-face <<keyword>>)
+    (set-face-foreground 'font-lock-preprocessor-face <<alt_foreground>>)
+    (set-face-foreground 'font-lock-string-face <<string>>)
+    (set-face-foreground 'font-lock-type-face <<main_foreground>>)
+    (set-face-foreground 'font-lock-variable-name-face <<main_foreground>>)
+    (set-face-background 'fringe <<fringe>>)
+    (set-face-foreground 'highlight <<constant>>)
+    ;;(set-face-background 'hl-line <<alt_background>>)
+    (set-face-foreground 'mode-line <<main_background>>)
+    (set-face-background 'mode-line <<main_foreground>>)
 
-        (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
+    (set-face-attribute 'mode-line-inactive nil :foreground <<main_foreground>> :background <<alt_background>>)
 
-        (set-face-background 'region <<select>>)
-        (set-face-foreground 'vertical-border <<alt_foreground>>)
-        (set-face-background 'trailing-whitespace <<alt_background>>)
-        )
+    (set-face-background 'region <<select>>)
+    (set-face-foreground 'vertical-border <<alt_foreground>>)
+    (set-face-background 'trailing-whitespace <<alt_background>>)
+    )
   (my/set-colors)
   (add-hook 'server-after-make-frame-hook #'my/set-colors)
 #+end_src
@@ -823,15 +846,15 @@ This is mostly the default config from [[https://github.com/minad/consult][here]
 There is no nice way to ripgrep in dired. But we can use embark to get a proper grep buffer which than can be used with [[wgrep]].
 
 #+begin_src emacs-lisp
-        (use-package embark
-  :ensure t
-  <<embark-keys>>
-  )
+  (use-package embark
+    :ensure t
+    <<embark-keys>>
+    )
 #+end_src
 
 #+begin_src emacs-lisp
   (use-package embark-consult
-  :ensure t)
+    :ensure t)
 #+end_src
 *** wgrep
 wgrep allows the grep buffer to be edited for an easy and fast search and replace across files.
@@ -839,9 +862,9 @@ There is also [[https://www.emacswiki.org/emacs/DiredSearchAndReplace][dired-mod
 
 #+begin_src emacs-lisp
   (use-package wgrep
-        :ensure t
-        <<wgrep-keys>>
-        )
+    :ensure t
+    <<wgrep-keys>>
+    )
 #+end_src
 ** Vertico
 This is mostly the default config from [[https://github.com/minad/vertico][here]].
@@ -901,11 +924,11 @@ This is mostly the default config from [[https://github.com/minad/vertico][here]
 ** Dumb Jump
 #+begin_src emacs-lisp
   (use-package dumb-jump
-  :ensure t
-  :custom
-  (dumb-jump-prefer-searcher 'rg)
-  ;; (xref-show-definitions-function #'xref-show-definitions-completing-read)
-  (xref-show-definitions-function #'consult-xref))
+    :ensure t
+    :custom
+    (dumb-jump-prefer-searcher 'rg)
+    ;; (xref-show-definitions-function #'xref-show-definitions-completing-read)
+    (xref-show-definitions-function #'consult-xref))
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 #+end_src
 ** Misc
@@ -913,7 +936,7 @@ This is mostly the default config from [[https://github.com/minad/vertico][here]
 Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up with another C-SPC. It is faster to type C-u C-SPC, C-SPC, C-SPC, than C-u C-SPC, C-u C-SPC, C-u C-SPC...
 
 #+begin_src emacs-lisp
-(setq set-mark-command-repeat-pop t)
+  (setq set-mark-command-repeat-pop t)
 #+end_src
 *** Multi Cursor
 #+begin_src emacs-lisp
@@ -965,10 +988,10 @@ Make Emacs repeat the C-u C-SPC command (`set-mark-command') by following it up 
   (use-package dts-mode
     :ensure t
     :mode (
-                 ("\\.dts$" . dts-mode)
-                 ("\\.dtsi$" . dts-mode)
-                 ("\\.dtso$" . dts-mode)
-                 ))
+           ("\\.dts$" . dts-mode)
+           ("\\.dtsi$" . dts-mode)
+           ("\\.dtso$" . dts-mode)
+           ))
 #+end_src
 
 ** Go
@@ -1074,17 +1097,17 @@ We also want to remove any trailing whitespace to keep things clean
 *** Set and unset tabs mode
 #+begin_src emacs-lisp
 
-    (defun dgl/set-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode t)
-      (message "Tabs enabled."))
+  (defun dgl/set-tabs-mode ()
+    "Enable tabs mode"
+    (interactive)
+    (setq indent-tabs-mode t)
+    (message "Tabs enabled."))
 
-    (defun dgl/unset-tabs-mode ()
-      "Enable tabs mode"
-      (interactive)
-      (setq indent-tabs-mode nil)
-      (message "Tabs disabled."))
+  (defun dgl/unset-tabs-mode ()
+    "Enable tabs mode"
+    (interactive)
+    (setq indent-tabs-mode nil)
+    (message "Tabs disabled."))
 
 #+end_src
 
@@ -1096,8 +1119,8 @@ The current mode should also be visible in the modeline
     (if indent-tabs-mode " [TAB]" " [SPC]"))
 
   (setq-default mode-line-format
-              (append mode-line-format
-                      '((:eval (dgl/tabs-mode-indicator)))))
+                (append mode-line-format
+                        '((:eval (dgl/tabs-mode-indicator)))))
 #+end_src
 *** Automatic detection
 #+begin_src emacs-lisp
@@ -1181,22 +1204,22 @@ I want to highlight keywords in code like TODO, NOTE or @performance etc and fou
 
 TODO: The highlight of @keyword does not work yet. Somehow the @ is not interpreted correctly. But I have not found the error yet.
 #+begin_src emacs-lisp
-        (defvar highlight-codetags-keywords
-        '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
-          ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
+  (defvar highlight-codetags-keywords
+    '(("\\<\\(TODO\\|FIXME\\|BUG\\)\\>" 1 font-lock-warning-face prepend)
+      ("\\<\\(NOTE\\|HACK\\|@[[:alnum:]]+\\)\\>" 1 font-lock-doc-face prepend)))
 
   (define-minor-mode highlight-codetags-local-mode
-        "Highlight codetags like TODO, FIXME, @performance..."
-        :global nil
-        (if highlight-codetags-local-mode
-                (font-lock-add-keywords nil highlight-codetags-keywords)
-          (font-lock-remove-keywords nil highlight-codetags-keywords))
+    "Highlight codetags like TODO, FIXME, @performance..."
+    :global nil
+    (if highlight-codetags-local-mode
+        (font-lock-add-keywords nil highlight-codetags-keywords)
+      (font-lock-remove-keywords nil highlight-codetags-keywords))
 
-        ;; Fontify the current buffer
-        (when (bound-and-true-p font-lock-mode)
-          (if (fboundp 'font-lock-flush)
-                  (font-lock-flush)
-                (with-no-warnings (font-lock-fontify-buffer)))))
+    ;; Fontify the current buffer
+    (when (bound-and-true-p font-lock-mode)
+      (if (fboundp 'font-lock-flush)
+          (font-lock-flush)
+        (with-no-warnings (font-lock-fontify-buffer)))))
 
   (add-hook 'prog-mode-hook #'highlight-codetags-local-mode)
 #+end_src
@@ -1206,11 +1229,11 @@ I want to be able to quickly swich between projects in the same emacs session. F
 Showing the current project in the modeline
 
 #+begin_src emacs-lisp
-   (use-package emacs
+  (use-package emacs
     <<project-keys>>
     :config
     (setq project-mode-line t)
-  )
+    )
 #+end_src
 * Org
 We have two org directories because we will use org-roam and Orgzly Revived on Android. Orgzly does not support the org-roam structure. Therefore we moved it to a subdirectory.
@@ -1229,35 +1252,35 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 #+begin_src emacs-lisp
   (use-package org
-        :defer t
-        :mode ("\\.org$" . org-mode)
-        <<org-keys>>
-        :custom-face
-        (org-block ((t (:inherit fixed-pitch))))
-        (org-code ((t (:inherit (shadow fixed-pitch)))))
-        (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
-        (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
-        (org-indent ((t (:inherit (org-hide fixed-pitch)))))
-        (org-level-1 ((t (:inherit org-document-title :height 1.0))))
-        (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
-        (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
-        (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
-        (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
-        (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
-        (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
-        (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
-        (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-        (org-property-value ((t (:inherit fixed-pitch))))
-        (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
-        (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
-        (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
-        :config
-        (setq org-return-follows-link  t)
-        ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
-        (add-hook 'org-mode-hook 'org-indent-mode)
-        (add-hook 'org-mode-hook 'visual-line-mode)
-        (add-hook 'org-mode-hook 'variable-pitch-mode)
-        )
+    :defer t
+    :mode ("\\.org$" . org-mode)
+    <<org-keys>>
+    :custom-face
+    (org-block ((t (:inherit fixed-pitch))))
+    (org-code ((t (:inherit (shadow fixed-pitch)))))
+    (org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+    (org-document-title ((t (:inherit variable-pitch :weight bold :height 1.2))))
+    (org-indent ((t (:inherit (org-hide fixed-pitch)))))
+    (org-level-1 ((t (:inherit org-document-title :height 1.0))))
+    (org-level-2 ((t (:inherit org-level-1 :height 0.9))))
+    (org-level-3 ((t (:inherit org-level-2 :height 0.9))))
+    (org-level-4 ((t (:inherit org-level-3 :height 0.9))))
+    (org-level-5 ((t (:inherit org-level-4 :height 0.9))))
+    (org-level-6 ((t (:inherit org-level-5 :height 0.9))))
+    (org-level-7 ((t (:inherit org-level-6 :height 0.9))))
+    (org-level-8 ((t (:inherit org-level-7 :height 0.9))))
+    (org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+    (org-property-value ((t (:inherit fixed-pitch))))
+    (org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+    (org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+    (org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+    :config
+    (setq org-return-follows-link  t)
+    ;;(setq org-hide-emphasis-markers t) ;; Hide markers for e.g. *BOLD-TEXT*
+    (add-hook 'org-mode-hook 'org-indent-mode)
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook 'variable-pitch-mode)
+    )
 #+end_src
 ** Org Bullets
 #+begin_src emacs-lisp
@@ -1311,34 +1334,34 @@ We have two org directories because we will use org-roam and Orgzly Revived on A
 
 #+begin_src emacs-lisp
   (use-package denote
-        :ensure t
-        <<denote-keys>>
-        :hook (dired-mode . denote-dired-mode)
-        :custom
-        (denote-directory dgl/org-denote-directory)
-        ;;(denote-save-buffers nil)
-        (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
-        (denote-infer-keywords t)
-        (denote-sort-keywords t)
-        (denote-prompts '(title keywords))
-        (denote-excluded-directories-regexp nil)
-        (denote-excluded-keywords-regexp nil)
-        (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
-        (denote-date-prompt-use-org-read-date t)
-        ;;(denote-date-format nil)
-        (denote-backlinks-show-context t)
-        (denote-rename-buffer-mode 1)
-        ;;(denote-org-capture-specifiers "%l\n%i\n%?")
-        )
+    :ensure t
+    <<denote-keys>>
+    :hook (dired-mode . denote-dired-mode)
+    :custom
+    (denote-directory dgl/org-denote-directory)
+    ;;(denote-save-buffers nil)
+    (denote-known-keywords '("personal" "work" "project" "bookmark" "study"))
+    (denote-infer-keywords t)
+    (denote-sort-keywords t)
+    (denote-prompts '(title keywords))
+    (denote-excluded-directories-regexp nil)
+    (denote-excluded-keywords-regexp nil)
+    (denote-rename-confirmations '(rewrite-front-matter modify-file-name))
+    (denote-date-prompt-use-org-read-date t)
+    ;;(denote-date-format nil)
+    (denote-backlinks-show-context t)
+    (denote-rename-buffer-mode 1)
+    ;;(denote-org-capture-specifiers "%l\n%i\n%?")
+    )
 #+end_src
 
 It is useful to have some kind of list of the denote files. For this we use denote-menu.
 
 #+begin_src emacs-lisp
   (use-package denote-menu
-        :ensure t
-        <<denote-menu-keys>>
-        )
+    :ensure t
+    <<denote-menu-keys>>
+    )
 #+end_src
 
 ** GTD
@@ -1346,56 +1369,56 @@ We setup org-mode to be able to follow the GTD system.
 
 #+begin_src emacs-lisp
   (use-package org
-        :config
-        (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
-        (setq org-refile-targets
-                  '(
-                        (org-agenda-files :maxlevel . 5)
-                        ))
-        (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
-        (setq org-log-done 'time)
-        (setq org-todo-keywords
-                  '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
-        (setq org-return-follows-link t)
-        (setq org-agenda-custom-commands '(
-                                                                           ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
-                                                                           ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
-                                                                           ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
-                                                                           ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
-                                                                           ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
-                                                                           ))
-        (setq org-agenda-sorting-strategy
+    :config
+    (setq org-agenda-files (list dgl/org-directory dgl/org-roam-directory))
+    (setq org-refile-targets
+          '(
+            (org-agenda-files :maxlevel . 5)
+            ))
+    (setq org-archive-location (concat dgl/org-directory "/archive.org::datetree/* Finished Tasks"))
+    (setq org-log-done 'time)
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "WAIT(w)" "NEXT(n)" "|" "DONE(d)" "CANC(c)")))
+    (setq org-return-follows-link t)
+    (setq org-agenda-custom-commands '(
+                                       ("t" "TODOs" tags-todo "+TODO=\"TODO\"-PROJECT")
+                                       ("i" "Inbox TODOs" tags-todo "+INBOX-KEEP")
+                                       ("w" "Waiting Tasks" tags-todo "+TODO=\"WAIT\"-PROJECT")
+                                       ("n" "Next Tasks" tags-todo "+TODO=\"NEXT\"-PROJECT")
+                                       ("s" "Someday" tags-todo "+TODO=\"TODO\"+SOMEDAY")
+                                       ))
+    (setq org-agenda-sorting-strategy
           '((agenda habit-down time-up priority-down category-keep)
-                (todo priority-down todo-state-up category-keep)
-                (tags priority-down todo-state-up category-keep)
-                (search category-keep)))
+            (todo priority-down todo-state-up category-keep)
+            (tags priority-down todo-state-up category-keep)
+            (search category-keep)))
 
-        (setq org-capture-templates
+    (setq org-capture-templates
           `(
-                ("i" "Inbox" entry
-                 (file, (concat dgl/org-directory "/inbox.org"))
-                 "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
+            ("i" "Inbox" entry
+             (file, (concat dgl/org-directory "/inbox.org"))
+             "* TODO %^{Brief Description}\nAdded: %U\nContext: %a\n%?" :empty-lines 1 :prepend t)
 
-                ("n" "Next action" entry
-                 (file, (concat dgl/org-directory "/gtd.org"))
-                 "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+            ("n" "Next action" entry
+             (file, (concat dgl/org-directory "/gtd.org"))
+             "** NEXT [%^{Prio|#B|#A|#C}] %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-                ("w" "Waiting" entry
-                 (file, (concat dgl/org-directory "/gtd.org"))
-                 "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
+            ("w" "Waiting" entry
+             (file, (concat dgl/org-directory "/gtd.org"))
+             "** WAIT %^{Brief Description}\nAdded: %U\n%?" :empty-lines 1 :prepend t)
 
-                ("s" "Someday" entry
-                 (file, (concat dgl/org-directory "/someday.org"))
-                 "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
-                ))
-        )
+            ("s" "Someday" entry
+             (file, (concat dgl/org-directory "/someday.org"))
+             "* TODO %^{Brief Description}\nAdded: %U\n%f\n%?" :empty-lines 1 :prepend t)
+            ))
+    )
 #+end_src
 
 #+begin_src emacs-lisp
   (defun dgl/gtd ()
-   (interactive)
-   (find-file (concat dgl/org-directory "/gtd.org"))
- )
+    (interactive)
+    (find-file (concat dgl/org-directory "/gtd.org"))
+    )
 #+end_src
 * Misc
 
@@ -1420,7 +1443,7 @@ NOTE: it is important to update the gnupg configs:
   (use-package emacs
     :config
     (setq epa-pinentry-mode 'loopback)
-  )
+    )
 #+end_src
 ** Tramp
 We usually use bash when working on remote machines.
@@ -1471,8 +1494,8 @@ We usually use bash when working on remote machines.
     (setq tramp-directory-cache-expire (* 60 60 24))
     (setq tramp-auto-save-directory nil)
     (setq vc-ignore-dir-regexp (format "%s\\|%s"
-                                                                         vc-ignore-dir-regexp
-                                                                         tramp-file-name-regexp))
+                                       vc-ignore-dir-regexp
+                                       tramp-file-name-regexp))
     (setq tramp-ssh-controlmaster-options nil)
     (setq tramp-connection-timeout 10)
     (setq tramp-verbose 1)
@@ -1509,26 +1532,26 @@ Eat is fully written in lisp and better then term. Therefore it will also work o
 
 #+begin_src emacs-lisp :tangle no
   (use-package eat
-  :defer t
-  :ensure t
-  <<eat-keys>>
-  :hook (eshell-mode . eat-eshell-mode)
-  :config
-  (setq eat-term-scrollback-size 1048576)
-  )
+    :defer t
+    :ensure t
+    <<eat-keys>>
+    :hook (eshell-mode . eat-eshell-mode)
+    :config
+    (setq eat-term-scrollback-size 1048576)
+    )
 #+end_src
 
 Eat is apparently not properly working on windows but there is a patch. Therefore we patched the source manually.
 
 #+begin_src emacs-lisp
   (use-package eat
-  :defer t
-  :ensure nil
-  <<eat-keys>>
-  :hook (eshell-mode . eat-eshell-mode)
-  :config
-  (setq eat-term-scrollback-size 1048576)
-  )
+    :defer t
+    :ensure nil
+    <<eat-keys>>
+    :hook (eshell-mode . eat-eshell-mode)
+    :config
+    (setq eat-term-scrollback-size 1048576)
+    )
 
   (autoload 'eat            "eat"         "Eat Terminal"                 t)
   (setq eat-term-scrollback-size 1048576)
@@ -1550,29 +1573,20 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
     :ensure nil  ;; No need to install a package for a custom minor mode
     :defer t
     :config
+    ;; Modal keybindings
+    (define-key top-mode-map (kbd "x") ctl-x-map)
+    (define-key top-mode-map (kbd "c") mode-specific-map)
+
     (dolist (top-mode-disable-cmds '(revert-buffer
                                      find-file
                                      save-buffer))
       (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
 
-    (dolist (top-mode-exit-cmds '(org-agenda))
+    (dolist (top-mode-exit-cmds '(org-agenda
+                                  list-denotes))
       (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
 
-    :bind (:map top-mode-map
-                ("a" . execute-extended-command)
-                ("M-a" . consult-mode-command)
-                ("RET" . top-mode)
-                ("i" . previous-line)
-                ("k" . next-line)
-                ("j" . backward-char)
-                ("l" . forward-char)
-                ("u" . backward-word)
-                ("o" . forward-word)
-                ("h" . backward-paragraph)
-                (";" . forward-paragraph)
-                ("n a" . org-agenda)
-                ("n d" . denote-list)
-                ))
+    <<top-mode-keys>>
 #+end_src
 * OS
 ** EXWM
@@ -1595,39 +1609,39 @@ Most of the config is taken and adjusted from [[https://github.com/daviwil/emacs
 
      ;; Make class name the buffer name.
      (add-hook 'exwm-update-class-hook
-                 (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
+               (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
      ;; These keys should always pass through to Emacs
      (setq exwm-input-prefix-keys
-         '(?\C-x
-           ?\C-u
-           ?\C-h
-           ?\C-q     ;; Prevent from accidently closing firefox
-           ?\M-J b
-           ?\M-b     ;; Buffer list
-           ?\M-P p   ;; Project selection
-           ?\M-x
-           ?\M-w     ;; other window
-           ?\M-`
-           ?\M-&
-           ?\M-:
-           ?\C-\ ))  ;; Ctrl+Space
+           '(?\C-x
+             ?\C-u
+             ?\C-h
+             ?\C-q     ;; Prevent from accidently closing firefox
+             ?\M-J b
+             ?\M-b     ;; Buffer list
+             ?\M-P p   ;; Project selection
+             ?\M-x
+             ?\M-w     ;; other window
+             ?\M-`
+             ?\M-&
+             ?\M-:
+             ?\C-\ ))  ;; Ctrl+Space
 
      ;; Global keybindings.
      (setq exwm-input-global-keys
            `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-           ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-           ([?\s-b]   . exwm-workspace-switch-to-buffer)
-           ([?\s-q]   . exwm-input-send-next-key)
-           ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-                                                  (interactive (list (read-shell-command "$ ")))
-                                                  (start-process-shell-command cmd nil cmd)))
-           ;; s-N: Switch to certain workspace.
-           ,@(mapcar (lambda (i)
-                                   `(,(kbd (format "s-%d" i)) .
-                                         (lambda ()
-                                           (interactive)
-                                           (exwm-workspace-switch-create , (- i 1)))))
-                                 (number-sequence 1 9))))
+             ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
+             ([?\s-b]   . exwm-workspace-switch-to-buffer)
+             ([?\s-q]   . exwm-input-send-next-key)
+             ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
+                            (interactive (list (read-shell-command "$ ")))
+                            (start-process-shell-command cmd nil cmd)))
+             ;; s-N: Switch to certain workspace.
+             ,@(mapcar (lambda (i)
+                         `(,(kbd (format "s-%d" i)) .
+                           (lambda ()
+                             (interactive)
+                             (exwm-workspace-switch-create , (- i 1)))))
+                       (number-sequence 1 9))))
      ;; Enable EXWM
      (exwm-enable)
      ))
@@ -1701,761 +1715,761 @@ Things we want to do after init
 
 ** Unused Configs
 #+begin_src emacs-lisp :tangle no
-    (setq x-select-enable-clipboard t)
+  (setq x-select-enable-clipboard t)
 
-    ;;(autoload 'ebuild-mode              "ebuild-mode"         "Gentoo ebuild mode"                                               t)
-    (autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
-    (autoload 'fd-grep-dired "fd-dired" "dired-mode interface for rg"  t)
-
-
-    (global-hl-line-mode 1)
-    (global-font-lock-mode 1)
-
-    ;; Startup windowing
-    (setq next-line-add-newlines nil)
-    (setq-default truncate-lines t)
-    (setq truncate-partial-width-windows nil)
+  ;;(autoload 'ebuild-mode              "ebuild-mode"         "Gentoo ebuild mode"                                               t)
+  (autoload 'fd-dired "fd-dired" "dired-mode interface for fd"  t)
+  (autoload 'fd-grep-dired "fd-dired" "dired-mode interface for rg"  t)
 
 
-    ;; Org mode
-    ;; Follow the links
-    ;; Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
+  (global-hl-line-mode 1)
+  (global-font-lock-mode 1)
+
+  ;; Startup windowing
+  (setq next-line-add-newlines nil)
+  (setq-default truncate-lines t)
+  (setq truncate-partial-width-windows nil)
 
 
-    (font-lock-add-keywords 'org-mode
-                            '(("^ *\\([-]\\) "
-                               (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  ;; Org mode
+  ;; Follow the links
+  ;; Hide the markers so you just see bold text as BOLD-TEXT and not *BOLD-TEXT*
 
-    (defun dgl-ediff-setup-windows (buffer-A buffer-B buffer-C control-buffer)
-      (ediff-setup-windows-plain buffer-A buffer-B buffer-C control-buffer)
-      )
-    (setq ediff-window-setup-function 'dgl-ediff-setup-windows)
-    (setq ediff-split-window-function 'split-window-horizontally)
 
-    Setup my compilation mode
-    (defun dgl-big-fun-compilation-hook ()
-      (make-local-variable 'truncate-lines)
-      (setq truncate-lines nil)
-      )
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
-    (add-hook 'compilation-mode-hook 'dgl-big-fun-compilation-hook)
+  (defun dgl-ediff-setup-windows (buffer-A buffer-B buffer-C control-buffer)
+    (ediff-setup-windows-plain buffer-A buffer-B buffer-C control-buffer)
+    )
+  (setq ediff-window-setup-function 'dgl-ediff-setup-windows)
+  (setq ediff-split-window-function 'split-window-horizontally)
 
-    (defun load-todo ()
+  Setup my compilation mode
+  (defun dgl-big-fun-compilation-hook ()
+    (make-local-variable 'truncate-lines)
+    (setq truncate-lines nil)
+    )
+
+  (add-hook 'compilation-mode-hook 'dgl-big-fun-compilation-hook)
+
+  (defun load-todo ()
+    (interactive)
+    (find-file dgl-todo-file)
+    )
+  (define-key global-map "\et" 'dgl-insert-todo)
+
+  (defun insert-timeofday ()
+    (interactive "*")
+    (insert (format-time-string "---------------- %a, %d %b %y: %I:%M%p")))
+  (defun load-log ()
+    (interactive)
+    (find-file dgl-log-file)
+    (if (boundp 'longlines-mode) ()
+      (longlines-mode 1)
+      (longlines-show-hard-newlines))
+    (if (equal longlines-mode t) ()
+      (longlines-mode 1)
+      (longlines-show-hard-newlines))
+    (end-of-buffer)
+    (newline-and-indent)
+    (insert-timeofday)
+    (newline-and-indent)
+    (newline-and-indent)
+    (end-of-buffer)
+    )
+  (define-key global-map "\eT" 'dgl-insert-note)
+
+  ;; no screwing with my middle mouse buttn
+  (global-unset-key [mouse-2])
+
+  ;; Bright-red TODOs
+  (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
+  (make-face 'font-lock-fixme-face)
+  (make-face 'font-lock-study-face)
+  (make-face 'font-lock-important-face)
+  (make-face 'font-lock-note-face)
+  (mapc (lambda (mode)
+          (font-lock-add-keywords
+           mode
+           '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
+             ("\\<\\(STUDY\\)" 1 'font-lock-study-face t)
+             ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
+             ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
+        fixme-modes)
+  (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
+  (modify-face 'font-lock-study-face "Dark Green" nil nil t nil t nil nil)
+  (modify-face 'font-lock-important-face "Red" nil nil t nil t nil nil)
+  (modify-face 'font-lock-note-face "Yellow" nil nil t nil t nil nil)
+
+                                          ; Accepted file extensions and their appropriate modes
+
+  (setq auto-mode-alist
+        (append
+         '(("\\workspace.dsl$" . javascript-mode)
+           ("\\todo.txt$"  . todotxt-mode)
+           ("\\.cpp$"      . c++-mode)
+           ("\\.hin$"      . c++-mode)
+           ("\\.cin$"      . c++-mode)
+           ("\\.inl$"      . c++-mode)
+           ("\\.rdc$"      . c++-mode)
+           ("\\.h$"        . c++-mode)
+           ("\\.c$"        . c++-mode)
+           ("\\.cc$"       . c++-mode)
+           ("\\.c8$"       . c++-mode)
+           ("\\.teak$"     . c++-mode)
+           ("\\.txt$"      . indented-text-mode)
+           ("\\.emacs$"    . emacs-lisp-mode)
+           ("\\.gen$"      . gen-mode)
+           ("\\.ms$"       . fundamental-mode)
+           ("\\.m$"        . objc-mode)
+           ("\\.mm$"       . objc-mode)
+           ("\\.go$"       . go-mode)
+           ("\\.bb$"       . bb-mode)
+           ("\\.inc$"      . bb-mode)
+           ("\\.bbappend$" . bb-mode)
+           ("\\.bbclass$"  . bb-mode)
+           ("\\.conf$"     . bb-mode)
+           ("\\.md$"       . markdown-mode)
+           ("\\.js$"       . javascript-mode)
+           ("\\.json$"     . javascript-mode)
+           ("\\.ledger$"   . ledger-mode)
+           ("\\.ebuild$"   . ebuild-mode)
+           ) auto-mode-alist))
+
+  ;; C++ indentation style
+  (defconst dgl-big-fun-c-style
+    '((c-electric-pound-behavior   . nil)
+      (c-tab-always-indent         . t)
+      (c-comment-only-line-offset  . 0)
+      (c-hanging-braces-alist      . ((class-open)
+                                      (class-close)
+                                      (defun-open)
+                                      (defun-close)
+                                      (inline-open)
+                                      (inline-close)
+                                      (brace-list-open)
+                                      (brace-list-close)
+                                      (brace-list-intro)
+                                      (brace-list-entry)
+                                      (block-open)
+                                      (block-close)
+                                      (substatement-open)
+                                      (statement-case-open)
+                                      (class-open)))
+      (c-hanging-colons-alist      . ((inher-intro)
+                                      (case-label)
+                                      (label)
+                                      (access-label)
+                                      (access-key)
+                                      (member-init-intro)))
+      (c-cleanup-list              . (scope-operator
+                                      list-close-comma
+                                      defun-close-semi))
+      (c-offsets-alist             . ((arglist-close         .  c-lineup-arglist)
+                                      (label                 . -4)
+                                      (access-label          . -4)
+                                      (substatement-open     .  0)
+                                      (statement-case-intro  .  4)
+                                          ;(statement-block-intro .  c-lineup-for)
+                                      (case-label            .  4)
+                                      (block-open            .  0)
+                                      (inline-open           .  0)
+                                      (topmost-intro-cont    .  0)
+                                      (knr-argdecl-intro     . -4)
+                                      (brace-list-open       .  0)
+                                      (brace-list-intro      .  4)))
+      (c-echo-syntactic-information-p . t))
+    "Casey's Big Fun C++ Style")
+
+
+  ;; CC++ mode handling
+  (defun dgl-big-fun-c-hook ()
+                                          ; Set my style for the current buffer
+    (c-add-style "BigFun" dgl-big-fun-c-style t)
+
+                                          ; 4-space tabs
+    (setq tab-width 4 indent-tabs-mode nil)
+                                          ; No hungry backspace
+    (c-toggle-auto-hungry-state -1);
+
+                                          ; Additional style stuff
+    (c-set-offset 'member-init-intro '++)
+
+
+                                          ; Newline indents, semi-colon doesn't
+    (define-key c++-mode-map "\C-m" 'newline-and-indent)
+    (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
+
+                                          ; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
+    (setq dabbrev-case-replace t)
+    (setq dabbrev-case-fold-search t)
+    (setq dabbrev-upcase-means-case-search t)
+
+                                          ; Abbrevation expansion
+    (abbrev-mode 1)
+
+    (defun dgl-header-format ()
+      "Format the given file as a header file."
       (interactive)
-      (find-file dgl-todo-file)
-      )
-    (define-key global-map "\et" 'dgl-insert-todo)
-
-    (defun insert-timeofday ()
-      (interactive "*")
-      (insert (format-time-string "---------------- %a, %d %b %y: %I:%M%p")))
-    (defun load-log ()
-      (interactive)
-      (find-file dgl-log-file)
-      (if (boundp 'longlines-mode) ()
-        (longlines-mode 1)
-        (longlines-show-hard-newlines))
-      (if (equal longlines-mode t) ()
-        (longlines-mode 1)
-        (longlines-show-hard-newlines))
-      (end-of-buffer)
-      (newline-and-indent)
-      (insert-timeofday)
-      (newline-and-indent)
-      (newline-and-indent)
-      (end-of-buffer)
-      )
-    (define-key global-map "\eT" 'dgl-insert-note)
-
-    ;; no screwing with my middle mouse buttn
-    (global-unset-key [mouse-2])
-
-    ;; Bright-red TODOs
-    (setq fixme-modes '(c++-mode c-mode emacs-lisp-mode))
-    (make-face 'font-lock-fixme-face)
-    (make-face 'font-lock-study-face)
-    (make-face 'font-lock-important-face)
-    (make-face 'font-lock-note-face)
-    (mapc (lambda (mode)
-            (font-lock-add-keywords
-             mode
-             '(("\\<\\(TODO\\)" 1 'font-lock-fixme-face t)
-               ("\\<\\(STUDY\\)" 1 'font-lock-study-face t)
-               ("\\<\\(IMPORTANT\\)" 1 'font-lock-important-face t)
-               ("\\<\\(NOTE\\)" 1 'font-lock-note-face t))))
-          fixme-modes)
-    (modify-face 'font-lock-fixme-face "Red" nil nil t nil t nil nil)
-    (modify-face 'font-lock-study-face "Dark Green" nil nil t nil t nil nil)
-    (modify-face 'font-lock-important-face "Red" nil nil t nil t nil nil)
-    (modify-face 'font-lock-note-face "Yellow" nil nil t nil t nil nil)
-
-                                            ; Accepted file extensions and their appropriate modes
-
-    (setq auto-mode-alist
-          (append
-           '(("\\workspace.dsl$" . javascript-mode)
-             ("\\todo.txt$"  . todotxt-mode)
-             ("\\.cpp$"      . c++-mode)
-             ("\\.hin$"      . c++-mode)
-             ("\\.cin$"      . c++-mode)
-             ("\\.inl$"      . c++-mode)
-             ("\\.rdc$"      . c++-mode)
-             ("\\.h$"        . c++-mode)
-             ("\\.c$"        . c++-mode)
-             ("\\.cc$"       . c++-mode)
-             ("\\.c8$"       . c++-mode)
-             ("\\.teak$"     . c++-mode)
-             ("\\.txt$"      . indented-text-mode)
-             ("\\.emacs$"    . emacs-lisp-mode)
-             ("\\.gen$"      . gen-mode)
-             ("\\.ms$"       . fundamental-mode)
-             ("\\.m$"        . objc-mode)
-             ("\\.mm$"       . objc-mode)
-             ("\\.go$"       . go-mode)
-             ("\\.bb$"       . bb-mode)
-             ("\\.inc$"      . bb-mode)
-             ("\\.bbappend$" . bb-mode)
-             ("\\.bbclass$"  . bb-mode)
-             ("\\.conf$"     . bb-mode)
-             ("\\.md$"       . markdown-mode)
-             ("\\.js$"       . javascript-mode)
-             ("\\.json$"     . javascript-mode)
-             ("\\.ledger$"   . ledger-mode)
-             ("\\.ebuild$"   . ebuild-mode)
-             ) auto-mode-alist))
-
-    ;; C++ indentation style
-    (defconst dgl-big-fun-c-style
-      '((c-electric-pound-behavior   . nil)
-        (c-tab-always-indent         . t)
-        (c-comment-only-line-offset  . 0)
-        (c-hanging-braces-alist      . ((class-open)
-                                        (class-close)
-                                        (defun-open)
-                                        (defun-close)
-                                        (inline-open)
-                                        (inline-close)
-                                        (brace-list-open)
-                                        (brace-list-close)
-                                        (brace-list-intro)
-                                        (brace-list-entry)
-                                        (block-open)
-                                        (block-close)
-                                        (substatement-open)
-                                        (statement-case-open)
-                                        (class-open)))
-        (c-hanging-colons-alist      . ((inher-intro)
-                                        (case-label)
-                                        (label)
-                                        (access-label)
-                                        (access-key)
-                                        (member-init-intro)))
-        (c-cleanup-list              . (scope-operator
-                                        list-close-comma
-                                        defun-close-semi))
-        (c-offsets-alist             . ((arglist-close         .  c-lineup-arglist)
-                                        (label                 . -4)
-                                        (access-label          . -4)
-                                        (substatement-open     .  0)
-                                        (statement-case-intro  .  4)
-                                            ;(statement-block-intro .  c-lineup-for)
-                                        (case-label            .  4)
-                                        (block-open            .  0)
-                                        (inline-open           .  0)
-                                        (topmost-intro-cont    .  0)
-                                        (knr-argdecl-intro     . -4)
-                                        (brace-list-open       .  0)
-                                        (brace-list-intro      .  4)))
-        (c-echo-syntactic-information-p . t))
-      "Casey's Big Fun C++ Style")
-
-
-    ;; CC++ mode handling
-    (defun dgl-big-fun-c-hook ()
-                                            ; Set my style for the current buffer
-      (c-add-style "BigFun" dgl-big-fun-c-style t)
-
-                                            ; 4-space tabs
-      (setq tab-width 4 indent-tabs-mode nil)
-                                            ; No hungry backspace
-      (c-toggle-auto-hungry-state -1);
-
-                                            ; Additional style stuff
-      (c-set-offset 'member-init-intro '++)
-
-
-                                            ; Newline indents, semi-colon doesn't
-      (define-key c++-mode-map "\C-m" 'newline-and-indent)
-      (setq c-hanging-semi&comma-criteria '((lambda () 'stop)))
-
-                                            ; Handle super-tabbify (TAB completes, shift-TAB actually tabs)
-      (setq dabbrev-case-replace t)
-      (setq dabbrev-case-fold-search t)
-      (setq dabbrev-upcase-means-case-search t)
-
-                                            ; Abbrevation expansion
-      (abbrev-mode 1)
-
-      (defun dgl-header-format ()
-        "Format the given file as a header file."
-        (interactive)
-        (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-        (insert "#ifndef ")
-        (push-mark)
-        (insert BaseFileName)
-        (upcase-region (mark) (point))
-        (pop-mark)
-        (insert "_H\n")
-        (insert "#define ")
-        (push-mark)
-        (insert BaseFileName)
-        (upcase-region (mark) (point))
-        (pop-mark)
-        (insert "_H\n")
-        (insert "#endif //")
-        (push-mark)
-        (insert BaseFileName)
-        (upcase-region (mark) (point))
-        (pop-mark)
-        (insert "_H\n")
-        )
-
-      (defun dgl-source-format ()
-        "Format the given file as a source file."
-        (interactive)
-        (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
-        ;;     (insert "/* ========================================================================\n")
-        ;;     (insert "   $File: $\n")
-        ;;     (insert "   $Date: $\n")
-        ;;     (insert "   $Revision: $\n")
-        ;;     (insert "   $Creator: Casey Muratori $\n")
-        ;;     (insert "   $Notice: (C) Copyright 2015 by Molly Rocket, Inc. All Rights Reserved. $\n")
-        ;;     (insert "   ======================================================================== */\n")
-        )
-
-      (cond ((file-exists-p buffer-file-name) t)
-            ((string-match "[.]hin" buffer-file-name) (dgl-source-format))
-            ((string-match "[.]cin" buffer-file-name) (dgl-source-format))
-            ((string-match "[.]h" buffer-file-name) (dgl-header-format))
-            ((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
-            ((string-match "[.]c" buffer-file-name) (dgl-source-format)))
-
-      (defun dgl-find-corresponding-file ()
-        "Find the file that corresponds to this one."
-        (interactive)
-        (setq CorrespondingFileName nil)
-        (setq BaseFileName (file-name-sans-extension buffer-file-name))
-        (if (string-match "\\.c" buffer-file-name)
-            (setq CorrespondingFileName (concat BaseFileName ".h")))
-        (if (string-match "\\.h" buffer-file-name)
-            (if (file-exists-p (concat BaseFileName ".c")) (setq CorrespondingFileName (concat BaseFileName ".c"))
-              (setq CorrespondingFileName (concat BaseFileName ".cpp"))))
-        (if (string-match "\\.hin" buffer-file-name)
-            (setq CorrespondingFileName (concat BaseFileName ".cin")))
-        (if (string-match "\\.cin" buffer-file-name)
-            (setq CorrespondingFileName (concat BaseFileName ".hin")))
-        (if (string-match "\\.cpp" buffer-file-name)
-            (setq CorrespondingFileName (concat BaseFileName ".h")))
-        (if CorrespondingFileName (find-file CorrespondingFileName)
-          (error "Unable to find a corresponding file")))
-      (defun dgl-find-corresponding-file-other-window ()
-        "Find the file that corresponds to this one."
-        (interactive)
-        (find-file-other-window buffer-file-name)
-        (dgl-find-corresponding-file)
-        (other-window -1))
-      (define-key c++-mode-map [f12] 'dgl-find-corresponding-file)
-      (define-key c++-mode-map [M-f12] 'dgl-find-corresponding-file-other-window)
-
-                                            ; Alternate bindings for F-keyless setups (ie MacOS X terminal)
-      (define-key c++-mode-map "\ec" 'dgl-find-corresponding-file)
-      (define-key c++-mode-map "\eC" 'dgl-find-corresponding-file-other-window)
-
-      (define-key c++-mode-map "\es" 'dgl-save-buffer)
-                                            ; Save buffer without converting tabs to spaces
-      (define-key c++-mode-map "\eS" 'save-buffer)
-
-      (define-key c++-mode-map "\t" 'dabbrev-expand)
-      (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
-      (define-key c++-mode-map "\C-y" 'indent-for-tab-command)
-      (define-key c++-mode-map [C-tab] 'indent-region)
-      (define-key c++-mode-map "        " 'indent-region)
-
-      (define-key c++-mode-map "\ej" 'imenu)
-
-      (define-key c++-mode-map "\e." 'c-fill-paragraph)
-
-      (define-key c++-mode-map "\e/" 'c-mark-function)
-
-                                            ;(define-key c++-mode-map "\e " 'set-mark-command)
-      (define-key c++-mode-map "\eq" 'append-as-kill)
-      (define-key c++-mode-map "\ea" 'yank)
-      (define-key c++-mode-map "\ez" 'kill-region)
-
-                                            ; devenv.com error parsing
-      (add-to-list 'compilation-error-regexp-alist 'dgl-devenv)
-      (add-to-list 'compilation-error-regexp-alist-alist '(dgl-devenv
-                                                           "*\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
-                                                           2 3 nil (4)))
-
-                                            ; Turn on line numbers
-                                            ;(linum-mode)
+      (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+      (insert "#ifndef ")
+      (push-mark)
+      (insert BaseFileName)
+      (upcase-region (mark) (point))
+      (pop-mark)
+      (insert "_H\n")
+      (insert "#define ")
+      (push-mark)
+      (insert BaseFileName)
+      (upcase-region (mark) (point))
+      (pop-mark)
+      (insert "_H\n")
+      (insert "#endif //")
+      (push-mark)
+      (insert BaseFileName)
+      (upcase-region (mark) (point))
+      (pop-mark)
+      (insert "_H\n")
       )
 
-    (defun dgl-replace-string (FromString ToString)
-      "Replace a string without moving point."
-      (interactive "sReplace: \nsReplace: %s  With: ")
-      (save-excursion
-        (replace-string FromString ToString)
-        ))
-    (define-key global-map [f8] 'dgl-replace-string)
-
-    (add-hook 'c-mode-common-hook 'dgl-big-fun-c-hook)
-
-    (defun dgl-save-buffer ()
-      "Save the buffer after untabifying it."
+    (defun dgl-source-format ()
+      "Format the given file as a source file."
       (interactive)
-      (save-excursion
-        (save-restriction
-          (widen)
-          (untabify (point-min) (point-max))))
-      (save-buffer))
-
-
-    ;; TXT mode handling
-    (defun dgl-big-fun-text-hook ()
-                                            ; 4-space tabs
-      (setq tab-width 4
-            indent-tabs-mode nil)
-
-                                            ; Newline indents, semi-colon doesn't
-      (define-key text-mode-map "\C-m" 'newline-and-indent)
-
-                                            ; Prevent overriding of alt-s
-      (define-key text-mode-map "\es" 'dgl-save-buffer)
-                                            ; Save buffer without converting tabs to spaces
-      (define-key text-mode-map "\eS" 'save-buffer)
-      )
-    (add-hook 'text-mode-hook 'dgl-big-fun-text-hook)
-
-    ;; Window Commands
-    (defun w32-restore-frame ()
-      "Restore a minimized frame"
-      (interactive)
-      (w32-send-sys-command 61728))
-
-    (defun maximize-frame ()
-      "Maximize the current frame"
-      (interactive)
-      (when dgl-aquamacs (aquamacs-toggle-full-frame))
-      (when dgl-win32 (w32-send-sys-command 61488)))
-
-    (define-key global-map "\ep" 'quick-calc)
-    (define-key global-map "\ew" 'other-window)
-
-    ;; Navigation
-    (defun previous-blank-line ()
-      "Moves to the previous line containing nothing but whitespace."
-      (interactive)
-      (search-backward-regexp "^[ \t]*\n")
+      (setq BaseFileName (file-name-sans-extension (file-name-nondirectory buffer-file-name)))
+      ;;     (insert "/* ========================================================================\n")
+      ;;     (insert "   $File: $\n")
+      ;;     (insert "   $Date: $\n")
+      ;;     (insert "   $Revision: $\n")
+      ;;     (insert "   $Creator: Casey Muratori $\n")
+      ;;     (insert "   $Notice: (C) Copyright 2015 by Molly Rocket, Inc. All Rights Reserved. $\n")
+      ;;     (insert "   ======================================================================== */\n")
       )
 
-    (defun next-blank-line ()
-      "Moves to the next line containing nothing but whitespace."
+    (cond ((file-exists-p buffer-file-name) t)
+          ((string-match "[.]hin" buffer-file-name) (dgl-source-format))
+          ((string-match "[.]cin" buffer-file-name) (dgl-source-format))
+          ((string-match "[.]h" buffer-file-name) (dgl-header-format))
+          ((string-match "[.]cpp" buffer-file-name) (dgl-source-format))
+          ((string-match "[.]c" buffer-file-name) (dgl-source-format)))
+
+    (defun dgl-find-corresponding-file ()
+      "Find the file that corresponds to this one."
       (interactive)
-      (forward-line)
-      (search-forward-regexp "^[ \t]*\n")
-      (forward-line -1)
-      )
-
-    (define-key global-map [C-right] 'forward-word)
-    (define-key global-map [C-S-right] 'end-of-line)
-    (define-key global-map [C-left] 'backward-word)
-    (define-key global-map [C-S-left] 'beginning-of-line)
-    (define-key global-map [C-up] 'previous-blank-line)
-    (define-key global-map [C-down] 'next-blank-line)
-    (define-key global-map [home] 'beginning-of-line)
-    (define-key global-map [end] 'end-of-line)
-    (define-key global-map [pgup] 'forward-page)
-    (define-key global-map [pgdown] 'backward-page)
-    (define-key global-map [C-next] 'scroll-other-window)
-    (define-key global-map [C-prior] 'scroll-other-window-down)
-    (define-key global-map [C-+] 'text-scale-increase)
-    (define-key global-map [C-_] 'text-scale-decrese)
-
-    ;; ALT-alternatives
-    (defadvice set-mark-command (after no-bloody-t-m-m activate)
-      "Prevent consecutive marks activating bloody `transient-mark-mode'."
-      (if transient-mark-mode (setq transient-mark-mode nil)))
-
-    (defadvice mouse-set-region-1 (after no-bloody-t-m-m activate)
-      "Prevent mouse commands activating bloody `transient-mark-mode'."
-      (if transient-mark-mode (setq transient-mark-mode nil)))
-
-    (defun append-as-kill ()
-      "Performs copy-region-as-kill as an append."
+      (setq CorrespondingFileName nil)
+      (setq BaseFileName (file-name-sans-extension buffer-file-name))
+      (if (string-match "\\.c" buffer-file-name)
+          (setq CorrespondingFileName (concat BaseFileName ".h")))
+      (if (string-match "\\.h" buffer-file-name)
+          (if (file-exists-p (concat BaseFileName ".c")) (setq CorrespondingFileName (concat BaseFileName ".c"))
+            (setq CorrespondingFileName (concat BaseFileName ".cpp"))))
+      (if (string-match "\\.hin" buffer-file-name)
+          (setq CorrespondingFileName (concat BaseFileName ".cin")))
+      (if (string-match "\\.cin" buffer-file-name)
+          (setq CorrespondingFileName (concat BaseFileName ".hin")))
+      (if (string-match "\\.cpp" buffer-file-name)
+          (setq CorrespondingFileName (concat BaseFileName ".h")))
+      (if CorrespondingFileName (find-file CorrespondingFileName)
+        (error "Unable to find a corresponding file")))
+    (defun dgl-find-corresponding-file-other-window ()
+      "Find the file that corresponds to this one."
       (interactive)
-      (append-next-kill)
-      (copy-region-as-kill (mark) (point))
-      )
-    (define-key global-map "\e " 'set-mark-command)
-    (define-key global-map "\eq" 'append-as-kill)
-    (define-key global-map "\ea" 'yank)
-    (define-key global-map "\ez" 'kill-region)
-    (define-key global-map [M-up] 'previous-blank-line)
-    (define-key global-map [M-down] 'next-blank-line)
-    (define-key global-map [M-right] 'forward-word)
-    (define-key global-map [M-left] 'backward-word)
+      (find-file-other-window buffer-file-name)
+      (dgl-find-corresponding-file)
+      (other-window -1))
+    (define-key c++-mode-map [f12] 'dgl-find-corresponding-file)
+    (define-key c++-mode-map [M-f12] 'dgl-find-corresponding-file-other-window)
 
-    (define-key global-map "\e:" 'View-back-to-mark)
-    (define-key global-map "\e;" 'exchange-point-and-mark)
+                                          ; Alternate bindings for F-keyless setups (ie MacOS X terminal)
+    (define-key c++-mode-map "\ec" 'dgl-find-corresponding-file)
+    (define-key c++-mode-map "\eC" 'dgl-find-corresponding-file-other-window)
 
-    (define-key global-map [f9] 'first-error)
-    (define-key global-map [f10] 'previous-error)
-    (define-key global-map [f11] 'next-error)
+    (define-key c++-mode-map "\es" 'dgl-save-buffer)
+                                          ; Save buffer without converting tabs to spaces
+    (define-key c++-mode-map "\eS" 'save-buffer)
 
-    (define-key global-map "\en" 'next-error)
-    (define-key global-map "\eN" 'previous-error)
+    (define-key c++-mode-map "\t" 'dabbrev-expand)
+    (define-key c++-mode-map [S-tab] 'indent-for-tab-command)
+    (define-key c++-mode-map "\C-y" 'indent-for-tab-command)
+    (define-key c++-mode-map [C-tab] 'indent-region)
+    (define-key c++-mode-map "        " 'indent-region)
 
-    (define-key global-map "\eg" 'goto-line)
-    (define-key global-map "\eG" 'dgl-git-find-file)
-    (define-key global-map "\eh" 'dgl-git-grep)
-    (define-key global-map "\eH" 'dgl-grep)
-    (define-key global-map "\ej" 'imenu)
+    (define-key c++-mode-map "\ej" 'imenu)
 
-    (define-key global-map "\e," 'align-regexp)
+    (define-key c++-mode-map "\e." 'c-fill-paragraph)
 
-    ;; Editting
-    (define-key global-map "" 'copy-region-as-kill)
-    (define-key global-map "" 'yank)
-    (define-key global-map "" 'nil)
-    (define-key global-map "" 'rotate-yank-pointer)
-    (define-key global-map "\eu" 'undo)
-    (define-key global-map "\e6" 'upcase-word)
-    (define-key global-map "\e^" 'captilize-word)
-    (define-key global-map "\e." 'fill-paragraph)
+    (define-key c++-mode-map "\e/" 'c-mark-function)
 
-    (defun dgl-replace-in-region (old-word new-word)
-  s    "Perform a replace-string in the current region."
-      (interactive "sReplace: \nsReplace: %s  With: ")
-      (save-excursion (save-restriction
-                        (narrow-to-region (mark) (point))
-                        (beginning-of-buffer)
-                        (replace-string old-word new-word)
-                        ))
-      )
+                                          ;(define-key c++-mode-map "\e " 'set-mark-command)
+    (define-key c++-mode-map "\eq" 'append-as-kill)
+    (define-key c++-mode-map "\ea" 'yank)
+    (define-key c++-mode-map "\ez" 'kill-region)
 
-    (defun dgl-backward-kill-word ()
-      "Better backward-kill-word."
-      (interactive)
-      (fixup-whitespace)
-      (backward-delete-char-untabify 1))
+                                          ; devenv.com error parsing
+    (add-to-list 'compilation-error-regexp-alist 'dgl-devenv)
+    (add-to-list 'compilation-error-regexp-alist-alist '(dgl-devenv
+                                                         "*\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:see declaration\\|\\(?:warnin\\(g\\)\\|[a-z ]+\\) C[0-9]+:\\)"
+                                                         2 3 nil (4)))
 
-    (define-key global-map "\el" 'dgl-replace-in-region)
+                                          ; Turn on line numbers
+                                          ;(linum-mode)
+    )
 
-    (define-key global-map "\eo" 'query-replace)
-    (define-key global-map "\eO" 'dgl-replace-string)
+  (defun dgl-replace-string (FromString ToString)
+    "Replace a string without moving point."
+    (interactive "sReplace: \nsReplace: %s  With: ")
+    (save-excursion
+      (replace-string FromString ToString)
+      ))
+  (define-key global-map [f8] 'dgl-replace-string)
 
-    ;; \377 is alt-backspace
-    (define-key global-map "\377" 'backward-kill-word)
-    (define-key global-map [M-delete] 'kill-word)
+  (add-hook 'c-mode-common-hook 'dgl-big-fun-c-hook)
 
-    (define-key global-map "\e[" 'start-kbd-macro)
-    (define-key global-map "\e]" 'end-kbd-macro)
-    (define-key global-map "\e\\" 'call-last-kbd-macro)
+  (defun dgl-save-buffer ()
+    "Save the buffer after untabifying it."
+    (interactive)
+    (save-excursion
+      (save-restriction
+        (widen)
+        (untabify (point-min) (point-max))))
+    (save-buffer))
 
-    ;; Buffers
-    (define-key global-map "\er" 'revert-buffer)
-    (define-key global-map "\ek" 'kill-this-buffer)
-    (define-key global-map "\es" 'save-buffer)
 
-    ;; Compilation
-    (setq compilation-context-lines 0)
-    (setq compilation-error-regexp-alist
-          (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
-                compilation-error-regexp-alist))
+  ;; TXT mode handling
+  (defun dgl-big-fun-text-hook ()
+                                          ; 4-space tabs
+    (setq tab-width 4
+          indent-tabs-mode nil)
 
-    (defun find-project-directory-recursive (project-file depth)
-      "Recursively search for the file."
-      (interactive)
-      (if (file-exists-p project-file) t
-        (cd "../")
-        (if (>= depth 0) t
-          (find-project-directory-recursive project-file (- depth 1)))))
+                                          ; Newline indents, semi-colon doesn't
+    (define-key text-mode-map "\C-m" 'newline-and-indent)
 
-    (defun lock-compilation-directory ()
-      "The compilation process should NOT hunt for a makefile"
-      (interactive)
-      (setq compilation-directory-locked t)
-      (message "Compilation directory is locked."))
+                                          ; Prevent overriding of alt-s
+    (define-key text-mode-map "\es" 'dgl-save-buffer)
+                                          ; Save buffer without converting tabs to spaces
+    (define-key text-mode-map "\eS" 'save-buffer)
+    )
+  (add-hook 'text-mode-hook 'dgl-big-fun-text-hook)
 
-    (defun unlock-compilation-directory ()
-      "The compilation process SHOULD hunt for a makefile"
-      (interactive)
-      (setq compilation-directory-locked nil)
-      (message "Compilation directory is roaming."))
+  ;; Window Commands
+  (defun w32-restore-frame ()
+    "Restore a minimized frame"
+    (interactive)
+    (w32-send-sys-command 61728))
 
-    (defun find-project-directory ()
-      "Find the project directory of the make script."
-      (interactive)
-      (setq find-project-from-directory default-directory)
-      (switch-to-buffer-other-window "*compilation*")
-      (if compilation-directory-locked (cd last-compilation-directory)
-        (cd find-project-from-directory)
-        (find-project-directory-recursive dgl-makescript 5)
-        (setq last-compilation-directory default-directory)))
+  (defun maximize-frame ()
+    "Maximize the current frame"
+    (interactive)
+    (when dgl-aquamacs (aquamacs-toggle-full-frame))
+    (when dgl-win32 (w32-send-sys-command 61488)))
 
-    (defun make-without-asking ()
-      "Make the current build."
-      (interactive)
-      (if (find-project-directory) (compile dgl-makescript))
-      (other-window 1))
-    (define-key global-map "\em" 'make-without-asking)
+  (define-key global-map "\ep" 'quick-calc)
+  (define-key global-map "\ew" 'other-window)
 
-    ;; Fix colors in compilation window
-    (require 'ansi-color)
-    (defun colorize-compilation-buffer ()
-      (let ((inhibit-read-only t))
-        (ansi-color-apply-on-region (point-min) (point-max))))
-    (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+  ;; Navigation
+  (defun previous-blank-line ()
+    "Moves to the previous line containing nothing but whitespace."
+    (interactive)
+    (search-backward-regexp "^[ \t]*\n")
+    )
+
+  (defun next-blank-line ()
+    "Moves to the next line containing nothing but whitespace."
+    (interactive)
+    (forward-line)
+    (search-forward-regexp "^[ \t]*\n")
+    (forward-line -1)
+    )
+
+  (define-key global-map [C-right] 'forward-word)
+  (define-key global-map [C-S-right] 'end-of-line)
+  (define-key global-map [C-left] 'backward-word)
+  (define-key global-map [C-S-left] 'beginning-of-line)
+  (define-key global-map [C-up] 'previous-blank-line)
+  (define-key global-map [C-down] 'next-blank-line)
+  (define-key global-map [home] 'beginning-of-line)
+  (define-key global-map [end] 'end-of-line)
+  (define-key global-map [pgup] 'forward-page)
+  (define-key global-map [pgdown] 'backward-page)
+  (define-key global-map [C-next] 'scroll-other-window)
+  (define-key global-map [C-prior] 'scroll-other-window-down)
+  (define-key global-map [C-+] 'text-scale-increase)
+  (define-key global-map [C-_] 'text-scale-decrese)
+
+  ;; ALT-alternatives
+  (defadvice set-mark-command (after no-bloody-t-m-m activate)
+    "Prevent consecutive marks activating bloody `transient-mark-mode'."
+    (if transient-mark-mode (setq transient-mark-mode nil)))
+
+  (defadvice mouse-set-region-1 (after no-bloody-t-m-m activate)
+    "Prevent mouse commands activating bloody `transient-mark-mode'."
+    (if transient-mark-mode (setq transient-mark-mode nil)))
+
+  (defun append-as-kill ()
+    "Performs copy-region-as-kill as an append."
+    (interactive)
+    (append-next-kill)
+    (copy-region-as-kill (mark) (point))
+    )
+  (define-key global-map "\e " 'set-mark-command)
+  (define-key global-map "\eq" 'append-as-kill)
+  (define-key global-map "\ea" 'yank)
+  (define-key global-map "\ez" 'kill-region)
+  (define-key global-map [M-up] 'previous-blank-line)
+  (define-key global-map [M-down] 'next-blank-line)
+  (define-key global-map [M-right] 'forward-word)
+  (define-key global-map [M-left] 'backward-word)
+
+  (define-key global-map "\e:" 'View-back-to-mark)
+  (define-key global-map "\e;" 'exchange-point-and-mark)
+
+  (define-key global-map [f9] 'first-error)
+  (define-key global-map [f10] 'previous-error)
+  (define-key global-map [f11] 'next-error)
+
+  (define-key global-map "\en" 'next-error)
+  (define-key global-map "\eN" 'previous-error)
+
+  (define-key global-map "\eg" 'goto-line)
+  (define-key global-map "\eG" 'dgl-git-find-file)
+  (define-key global-map "\eh" 'dgl-git-grep)
+  (define-key global-map "\eH" 'dgl-grep)
+  (define-key global-map "\ej" 'imenu)
+
+  (define-key global-map "\e," 'align-regexp)
+
+  ;; Editting
+  (define-key global-map "" 'copy-region-as-kill)
+  (define-key global-map "" 'yank)
+  (define-key global-map "" 'nil)
+  (define-key global-map "" 'rotate-yank-pointer)
+  (define-key global-map "\eu" 'undo)
+  (define-key global-map "\e6" 'upcase-word)
+  (define-key global-map "\e^" 'captilize-word)
+  (define-key global-map "\e." 'fill-paragraph)
+
+  (defun dgl-replace-in-region (old-word new-word)
+    s    "Perform a replace-string in the current region."
+    (interactive "sReplace: \nsReplace: %s  With: ")
+    (save-excursion (save-restriction
+                      (narrow-to-region (mark) (point))
+                      (beginning-of-buffer)
+                      (replace-string old-word new-word)
+                      ))
+    )
+
+  (defun dgl-backward-kill-word ()
+    "Better backward-kill-word."
+    (interactive)
+    (fixup-whitespace)
+    (backward-delete-char-untabify 1))
+
+  (define-key global-map "\el" 'dgl-replace-in-region)
+
+  (define-key global-map "\eo" 'query-replace)
+  (define-key global-map "\eO" 'dgl-replace-string)
+
+  ;; \377 is alt-backspace
+  (define-key global-map "\377" 'backward-kill-word)
+  (define-key global-map [M-delete] 'kill-word)
+
+  (define-key global-map "\e[" 'start-kbd-macro)
+  (define-key global-map "\e]" 'end-kbd-macro)
+  (define-key global-map "\e\\" 'call-last-kbd-macro)
+
+  ;; Buffers
+  (define-key global-map "\er" 'revert-buffer)
+  (define-key global-map "\ek" 'kill-this-buffer)
+  (define-key global-map "\es" 'save-buffer)
+
+  ;; Compilation
+  (setq compilation-context-lines 0)
+  (setq compilation-error-regexp-alist
+        (cons '("^\\([0-9]+>\\)?\\(\\(?:[a-zA-Z]:\\)?[^:(\t\n]+\\)(\\([0-9]+\\)) : \\(?:fatal error\\|warnin\\(g\\)\\) C[0-9]+:" 2 3 nil (4))
+              compilation-error-regexp-alist))
+
+  (defun find-project-directory-recursive (project-file depth)
+    "Recursively search for the file."
+    (interactive)
+    (if (file-exists-p project-file) t
+      (cd "../")
+      (if (>= depth 0) t
+        (find-project-directory-recursive project-file (- depth 1)))))
+
+  (defun lock-compilation-directory ()
+    "The compilation process should NOT hunt for a makefile"
+    (interactive)
+    (setq compilation-directory-locked t)
+    (message "Compilation directory is locked."))
+
+  (defun unlock-compilation-directory ()
+    "The compilation process SHOULD hunt for a makefile"
+    (interactive)
+    (setq compilation-directory-locked nil)
+    (message "Compilation directory is roaming."))
+
+  (defun find-project-directory ()
+    "Find the project directory of the make script."
+    (interactive)
+    (setq find-project-from-directory default-directory)
+    (switch-to-buffer-other-window "*compilation*")
+    (if compilation-directory-locked (cd last-compilation-directory)
+      (cd find-project-from-directory)
+      (find-project-directory-recursive dgl-makescript 5)
+      (setq last-compilation-directory default-directory)))
+
+  (defun make-without-asking ()
+    "Make the current build."
+    (interactive)
+    (if (find-project-directory) (compile dgl-makescript))
+    (other-window 1))
+  (define-key global-map "\em" 'make-without-asking)
+
+  ;; Fix colors in compilation window
+  (require 'ansi-color)
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
     ;;; Minimize garbage collection during startup
-    (setq gc-cons-threshold most-positive-fixnum)
+  (setq gc-cons-threshold most-positive-fixnum)
 
     ;;; Lower threshold back to 8 MiB (default is 800kB)
-    (add-hook 'emacs-startup-hook
-              (lambda ()
-                (setq gc-cons-threshold (expt 2 23))))
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold (expt 2 23))))
 
-    ;; Commands
-    (set-variable 'grep-command "git --no-pager grep -irHn ")
+  ;; Commands
+  (set-variable 'grep-command "git --no-pager grep -irHn ")
+  (setq grep-use-null-device nil)
+  (when dgl-win32
+    ;; for findstr this has to be set to t
     (setq grep-use-null-device nil)
-    (when dgl-win32
-                                            ;; for findstr this has to be set to t
-      (setq grep-use-null-device nil)
-                                            ;;(set-variable 'grep-command "findstr -s -n -i -l "))
-      (set-variable 'grep-command "git --no-pager grep -irHn "))
+    ;;(set-variable 'grep-command "findstr -s -n -i -l "))
+    (set-variable 'grep-command "git --no-pager grep -irHn "))
 
-    ;; Group digits for calc
-    (setq calc-group-digit t)
+  ;; Group digits for calc
+  (setq calc-group-digit t)
 
-    ;; Smooth scroll
-    (setq scroll-step 3)
+  ;; Smooth scroll
+  (setq scroll-step 3)
 
-    ;; Clock                                      ;;(display-time)
+  ;; Clock                                      ;;(display-time)
 
-    ;; Modal Keymap
-    (defmacro save-column (&rest body)
-      `(let ((column (current-column)))
-         (unwind-protect
-             (progn ,@body)
-           (move-to-column column))))
-    (put 'save-column 'lisp-indent-function 0)
+  ;; Modal Keymap
+  (defmacro save-column (&rest body)
+    `(let ((column (current-column)))
+       (unwind-protect
+           (progn ,@body)
+         (move-to-column column))))
+  (put 'save-column 'lisp-indent-function 0)
 
-    (defun dgl-move-line-up ()
-      (interactive)
-      (save-column
-       (transpose-lines 1)
-       (forward-line -2)))
+  (defun dgl-move-line-up ()
+    (interactive)
+    (save-column
+     (transpose-lines 1)
+     (forward-line -2)))
 
-    (defun dgl-move-line-down ()
-      (interactive)
-      (save-column
-       (forward-line 1)
-       (transpose-lines 1)
-       (forward-line -1)))
+  (defun dgl-move-line-down ()
+    (interactive)
+    (save-column
+     (forward-line 1)
+     (transpose-lines 1)
+     (forward-line -1)))
 
-    (defun dgl-duplicate-line ()
-      (interactive)
-      (save-column
-       (beginning-of-line)
-       (kill-line)
-       (yank)
-       (newline)
-       (yank)))
+  (defun dgl-duplicate-line ()
+    (interactive)
+    (save-column
+     (beginning-of-line)
+     (kill-line)
+     (yank)
+     (newline)
+     (yank)))
 
-    (defun dgl-kill-line ()
-      (interactive)
-      (save-column
-       (kill-whole-line)))
+  (defun dgl-kill-line ()
+    (interactive)
+    (save-column
+     (kill-whole-line)))
 
-    (defun dgl-git-find-file ()
-      "Find file with git"
-      (interactive)
-      (let* ((command (read-from-minibuffer "Run git ls-files: "
-                                            (cons "git ls-files --recurse-submodules -c --exclude-standard **" 58)))
-             (files (shell-command-to-string  command)))
-        (find-file
-         (ido-completing-read
-          "Find in git repo: "
-          (delete "" (split-string files "\n"))))))
+  (defun dgl-git-find-file ()
+    "Find file with git"
+    (interactive)
+    (let* ((command (read-from-minibuffer "Run git ls-files: "
+                                          (cons "git ls-files --recurse-submodules -c --exclude-standard **" 58)))
+           (files (shell-command-to-string  command)))
+      (find-file
+       (ido-completing-read
+        "Find in git repo: "
+        (delete "" (split-string files "\n"))))))
 
-    (defun dgl-git-grep ()
-      "Run git-grep recursively"
-      (interactive)
-      (let ((command (read-from-minibuffer "Run git grep: "
-                                           "git --no-pager grep -irHn ")))
-        (grep command)))
+  (defun dgl-git-grep ()
+    "Run git-grep recursively"
+    (interactive)
+    (let ((command (read-from-minibuffer "Run git grep: "
+                                         "git --no-pager grep -irHn ")))
+      (grep command)))
 
-    (defun dgl-grep ()
-      "Run grep recursively from the directory of the current buffer or the default directory"
-      (interactive)
-      (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
-        (let ((command (read-from-minibuffer "Run grep: "
-                                             (cons (concat "grep -irHn  " dir) 12))))
-          (grep command))))
+  (defun dgl-grep ()
+    "Run grep recursively from the directory of the current buffer or the default directory"
+    (interactive)
+    (let ((dir (file-name-directory (or load-file-name buffer-file-name default-directory))))
+      (let ((command (read-from-minibuffer "Run grep: "
+                                           (cons (concat "grep -irHn  " dir) 12))))
+        (grep command))))
 
-    (defun dgl-insert-todo ()
-      (interactive)
-      (insert (concat "// TODO(" dgl-initials "): "))
-      (end-of-line))
+  (defun dgl-insert-todo ()
+    (interactive)
+    (insert (concat "// TODO(" dgl-initials "): "))
+    (end-of-line))
 
-    (defun dgl-insert-note ()
-      (interactive)
-      (insert (concat "// NOTE(" dgl-initials "): "))
-      (end-of-line))
+  (defun dgl-insert-note ()
+    (interactive)
+    (insert (concat "// NOTE(" dgl-initials "): "))
+    (end-of-line))
 
-    (setq ryo-modal-cursor-color "red")
-    ;; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
-    (setq ryo-modal-default-cursor-color "#65D6AD")
-    (define-key global-map [C-return] 'ryo-modal-mode)
-    (define-key global-map [M-return] 'ryo-modal-mode)
-    (ryo-modal-keys
-     ("SPC" set-mark-command)
-     ("," ryo-modal-repeat)
-     ("a" ryo-modal-mode)
-     ("i" ryo-modal-mode)
-     ("h" backward-char)
-     ("j" next-line)
-     ("k" previous-line)
-     ("l" forward-char)
-     ("<C-S-up>" dgl-move-line-up)
-     ("<C-S-down>" dgl-move-line-down)
-     ("y" yank)
-     ("d" dgl-kill-line)
-     ("f" dgl-duplicate-line)
-     ("u" undo)
-     ("c" cua-selection-mode)
-     ("b" (("b" bookmark-set)
-           ("SPC" bookmark-bmenu-list)))
-     ("g" goto-line)
-     ("G" dgl-git-find-file)
-     ("h" dgl-git-grep)
-     ("H" dgl-grep)
-     ("t" load-todo)
-     ("T" load-log)
-     )
+  (setq ryo-modal-cursor-color "red")
+  ;; needed to set the cursor color explicit. Otherwise it was black after exiting the modal mode
+  (setq ryo-modal-default-cursor-color "#65D6AD")
+  (define-key global-map [C-return] 'ryo-modal-mode)
+  (define-key global-map [M-return] 'ryo-modal-mode)
+  (ryo-modal-keys
+   ("SPC" set-mark-command)
+   ("," ryo-modal-repeat)
+   ("a" ryo-modal-mode)
+   ("i" ryo-modal-mode)
+   ("h" backward-char)
+   ("j" next-line)
+   ("k" previous-line)
+   ("l" forward-char)
+   ("<C-S-up>" dgl-move-line-up)
+   ("<C-S-down>" dgl-move-line-down)
+   ("y" yank)
+   ("d" dgl-kill-line)
+   ("f" dgl-duplicate-line)
+   ("u" undo)
+   ("c" cua-selection-mode)
+   ("b" (("b" bookmark-set)
+         ("SPC" bookmark-bmenu-list)))
+   ("g" goto-line)
+   ("G" dgl-git-find-file)
+   ("h" dgl-git-grep)
+   ("H" dgl-grep)
+   ("t" load-todo)
+   ("T" load-log)
+   )
 
-    ;; Startup windowing
-    (setq next-line-add-newlines nil)
-    (setq-default truncate-lines t)
-    (setq truncate-partial-width-windows nil)
+  ;; Startup windowing
+  (setq next-line-add-newlines nil)
+  (setq-default truncate-lines t)
+  (setq truncate-partial-width-windows nil)
 
-    (custom-set-variables
-     ;; custom-set-variables was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     '(auto-save-default nil)
-     '(auto-save-list-file-prefix nil)
-     '(auto-save-timeout 0)
-     '(auto-show-mode t t)
-     '(delete-auto-save-files nil)
-     '(delete-old-versions 'other)
-     '(imenu-auto-rescan t)
-     '(imenu-auto-rescan-maxout 500000)
-     '(kept-new-versions 5)
-     '(kept-old-versions 5)
-     '(ledger-reports
-       '(("test" "ledger balance")
-         ("bal" "%(binary) -f %(ledger-file) bal")
-         ("reg" "%(binary) -f %(ledger-file) reg")
-         ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-         ("account" "%(binary) -f %(ledger-file) reg %(account)")))
-     '(make-backup-file-name-function 'ignore)
-     '(make-backup-files nil)
-     '(mouse-wheel-follow-mouse nil)
-     '(mouse-wheel-progressive-speed nil)
-     '(mouse-wheel-scroll-amount '(15))
-     '(package-selected-packages
-       '(ledger-mode todotxt ryo-modal markdown-mode hledger-mode go-mode))
-     '(version-control nil))
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(auto-save-default nil)
+   '(auto-save-list-file-prefix nil)
+   '(auto-save-timeout 0)
+   '(auto-show-mode t t)
+   '(delete-auto-save-files nil)
+   '(delete-old-versions 'other)
+   '(imenu-auto-rescan t)
+   '(imenu-auto-rescan-maxout 500000)
+   '(kept-new-versions 5)
+   '(kept-old-versions 5)
+   '(ledger-reports
+     '(("test" "ledger balance")
+       ("bal" "%(binary) -f %(ledger-file) bal")
+       ("reg" "%(binary) -f %(ledger-file) reg")
+       ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+       ("account" "%(binary) -f %(ledger-file) reg %(account)")))
+   '(make-backup-file-name-function 'ignore)
+   '(make-backup-files nil)
+   '(mouse-wheel-follow-mouse nil)
+   '(mouse-wheel-progressive-speed nil)
+   '(mouse-wheel-scroll-amount '(15))
+   '(package-selected-packages
+     '(ledger-mode todotxt ryo-modal markdown-mode hledger-mode go-mode))
+   '(version-control nil))
 
-    (define-key global-map "\t" 'dabbrev-expand)
-    (define-key global-map [S-tab] 'indent-for-tab-command)
-    (define-key global-map [backtab] 'indent-for-tab-command)
-    (define-key global-map "\C-y" 'indent-for-tab-command)
-    (define-key global-map [C-tab] 'indent-region)
-    (define-key global-map "    " 'indent-region)
+  (define-key global-map "\t" 'dabbrev-expand)
+  (define-key global-map [S-tab] 'indent-for-tab-command)
+  (define-key global-map [backtab] 'indent-for-tab-command)
+  (define-key global-map "\C-y" 'indent-for-tab-command)
+  (define-key global-map [C-tab] 'indent-region)
+  (define-key global-map "    " 'indent-region)
 
-    (defun dgl-never-split-a-window (window)
-      "Never, ever split a window. Why would anyone EVER want you to do that??"
-      nil)
-    (setq split-window-preferred-function 'dgl-never-split-a-window)
-    (split-window-horizontally)
+  (defun dgl-never-split-a-window (window)
+    "Never, ever split a window. Why would anyone EVER want you to do that??"
+    nil)
+  (setq split-window-preferred-function 'dgl-never-split-a-window)
+  (split-window-horizontally)
 
-    (global-hl-line-mode 1)
-    (global-font-lock-mode 1)
-    (set-face-background 'hl-line "#013137")
+  (global-hl-line-mode 1)
+  (global-font-lock-mode 1)
+  (set-face-background 'hl-line "#013137")
 
-    ;;(add-to-list 'default-frame-alist '(font . dgl-font))
-    (set-face-attribute 'font-lock-builtin-face nil :foreground "#D6B58D")
-    (set-face-attribute 'font-lock-comment-face nil :foreground "#31B72C")
-    (set-face-attribute 'font-lock-constant-face nil :foreground "#65D6AD")
-    (set-face-attribute 'font-lock-doc-face nil :foreground "#E8E6E1")
-    (set-face-attribute 'font-lock-function-name-face nil :foreground "#D6B58D")
-    (set-face-attribute 'font-lock-keyword-face nil :foreground "#E8E6E1")
-    (set-face-attribute 'font-lock-string-face nil :foreground "#2CB1BC")
-    (set-face-attribute 'font-lock-type-face nil :foreground "#D6B58D")
-    (set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
-    (set-face-attribute 'font-lock-preprocessor-face nil :foreground "#625D52")
-    (set-face-attribute 'region nil :background "#24335E")
-    (set-face-attribute 'highlight nil :background "#01282d")
-    ;;(set-face-attribute 'mode-line nil :background "#93876c")
-    ;;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
-    (set-face-attribute 'fringe nil :background "#01282d")
-    (set-face-attribute 'vertical-border nil :foreground "#625D52")
-    (set-face-attribute 'cursor nil :background "#65D6AD")
+  ;;(add-to-list 'default-frame-alist '(font . dgl-font))
+  (set-face-attribute 'font-lock-builtin-face nil :foreground "#D6B58D")
+  (set-face-attribute 'font-lock-comment-face nil :foreground "#31B72C")
+  (set-face-attribute 'font-lock-constant-face nil :foreground "#65D6AD")
+  (set-face-attribute 'font-lock-doc-face nil :foreground "#E8E6E1")
+  (set-face-attribute 'font-lock-function-name-face nil :foreground "#D6B58D")
+  (set-face-attribute 'font-lock-keyword-face nil :foreground "#E8E6E1")
+  (set-face-attribute 'font-lock-string-face nil :foreground "#2CB1BC")
+  (set-face-attribute 'font-lock-type-face nil :foreground "#D6B58D")
+  (set-face-attribute 'font-lock-variable-name-face nil :foreground "#D6B58D")
+  (set-face-attribute 'font-lock-preprocessor-face nil :foreground "#625D52")
+  (set-face-attribute 'region nil :background "#24335E")
+  (set-face-attribute 'highlight nil :background "#01282d")
+  ;;(set-face-attribute 'mode-line nil :background "#93876c")
+  ;;(set-face-attribute 'mode-line-inactive nil :background "#625D52")
+  (set-face-attribute 'fringe nil :background "#01282d")
+  (set-face-attribute 'vertical-border nil :foreground "#625D52")
+  (set-face-attribute 'cursor nil :background "#65D6AD")
 
-    (defun dgl/load-project-settings ()
-      (interactive)
-      (setq find-project-from-directory default-directory)
-      (cd find-project-from-directory)
-      (find-project-directory-recursive dgl-project-file 5)
-      (if (file-exists-p dgl-project-file)
-          (load-file dgl-project-file))
-      (cd find-project-from-directory)
-      )
+  (defun dgl/load-project-settings ()
+    (interactive)
+    (setq find-project-from-directory default-directory)
+    (cd find-project-from-directory)
+    (find-project-directory-recursive dgl-project-file 5)
+    (if (file-exists-p dgl-project-file)
+        (load-file dgl-project-file))
+    (cd find-project-from-directory)
+    )
 
-    (defun post-load-stuff ()
-      (interactive)
-      (set-face-attribute 'default nil :font dgl-font)
-      (menu-bar-mode -1)
-      (maximize-frame)
-                                            ;(set-cursor-color "#65D6AD")
-      (set-foreground-color "tan")
-      (set-background-color "#012326")
-      (dgl/load-project-settings)
-      )
+  (defun post-load-stuff ()
+    (interactive)
+    (set-face-attribute 'default nil :font dgl-font)
+    (menu-bar-mode -1)
+    (maximize-frame)
+                                          ;(set-cursor-color "#65D6AD")
+    (set-foreground-color "tan")
+    (set-background-color "#012326")
+    (dgl/load-project-settings)
+    )
 
-    ;;(defun daemon-post-load-stuff ()
-    ;;  (interactive)
-    ;;  (split-window-horizontally)
-    ;;  (post-load-stuff)
-    ;;  )
+  ;;(defun daemon-post-load-stuff ()
+  ;;  (interactive)
+  ;;  (split-window-horizontally)
+  ;;  (post-load-stuff)
+  ;;  )
 
-    ;; Startup hook
+  ;; Startup hook
 
-    ;;(if (daemonp)
-    ;;    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
-    (add-hook 'window-setup-hook 'post-load-stuff t)
-    ;;)
-    (custom-set-faces
-     ;; custom-set-faces was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     )
+  ;;(if (daemonp)
+  ;;    (add-hook 'server-after-make-frame-hook 'daemon-post-load-stuff t)
+  (add-hook 'window-setup-hook 'post-load-stuff t)
+  ;;)
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
 
 
 
