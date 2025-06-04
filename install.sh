@@ -15,6 +15,7 @@ ln -s $BASEDIR/dot.dgl_alias $HOME/.dgl_alias
 ln -s $BASEDIR/dot.dgl_env $HOME/.dgl_env
 ln -s $BASEDIR/dot.emacs $HOME/.emacs
 [ -d "$HOME/.emacs.d" ] && unlink $HOME/.emacs.d; ln -s $BASEDIR/dot.emacs.d $HOME/.emacs.d
+[ -d "$HOME/.runit" ] && unlink $HOME/.runit; ln -s $BASEDIR/dot.runit $HOME/.runit
 ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.config/nvim" ] && unlink $HOME/.config/nvim; ln -s $BASEDIR/dot.nvim $HOME/.config/nvim
 [ -d "$HOME/.config/focus-editor" ] && unlink $HOME/.config/focus-editor; ln -s $BASEDIR/dot.focus $HOME/.config/focus-editor

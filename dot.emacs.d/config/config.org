@@ -299,6 +299,8 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
   ("TAB" . 'dabbrev-expand)
   ("C-c TAB" . 'indent-region)
   ("C-x C-b" . 'ibuffer)
+
+  ("C-x RET" . 'top-mode)
 #+end_src
 
 *** Projects
@@ -1547,33 +1549,19 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
   (use-package top-mode
     :ensure nil  ;; No need to install a package for a custom minor mode
     :defer t
-    :init
-    (define-minor-mode top-mode
-      "A modal minor mode that enables simple modal editing for easier command execution."
-      :lighter " [TOP]"
-      :keymap (let ((map (make-sparse-keymap)))
-                map))
+    :config
+    (dolist (top-mode-disable-cmds '(revert-buffer
+                                     find-file
+                                     save-buffer))
+      (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
 
-    (defun top-mode-execute-extended-command (&optional arg)
-      (interactive)
-      (top-mode)
-      (execute-extended-command)
-      )
+    (dolist (top-mode-exit-cmds '(org-agenda))
+      (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
 
-    (defun top-mode-key-translations ()
-      "Set up key translations for my-modal-mode."
-      (when top-mode
-        (define-key key-translation-map (kbd "c") (kbd "C-c"))
-        (define-key key-translation-map (kbd "x") (kbd "C-x"))
-        (define-key top-mode-map (kbd "RET") 'top-mode-execute-extended-command)
-        (define-key top-mode-map (kbd "S-RET") 'consult-mode-command)
-        ))
-
-    (add-hook 'top-mode-hook #'top-mode-key-translations)
-
-    ;; Enable translations when mode is active
     :bind (:map top-mode-map
-                ("SPC SPC" . top-mode)
+                ("a" . execute-extended-command)
+                ("M-a" . consult-mode-command)
+                ("RET" . top-mode)
                 ("i" . previous-line)
                 ("k" . next-line)
                 ("j" . backward-char)
@@ -1582,6 +1570,8 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
                 ("o" . forward-word)
                 ("h" . backward-paragraph)
                 (";" . forward-paragraph)
+                ("n a" . org-agenda)
+                ("n d" . denote-list)
                 ))
 #+end_src
 * OS
