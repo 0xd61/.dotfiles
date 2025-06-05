@@ -960,12 +960,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   :ensure nil
   :bind (
          :map eat-semi-char-mode-map
-          ("C-c C-k" . eat-emacs-mode)
-          ("M-f" . 'find-file)
-          ("M-F" . 'find-file-other-window)
-          ("M-b" . 'consult-buffer)
-          ("M-B" . 'consult-buffer-other-window)
-          ("M-w" . 'other-window)
+         ("C-c C-k" . eat-emacs-mode)
+         ("M-f" . 'find-file)
+         ("M-F" . 'find-file-other-window)
+         ("M-b" . 'consult-buffer)
+         ("M-B" . 'consult-buffer-other-window)
+         ("M-w" . 'other-window)
          )
   :hook (eshell-mode . eat-eshell-mode)
   :config
@@ -979,36 +979,46 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'eww-after-render-hook 'eww-readable)
 
 (use-package top-mode
-    :ensure nil  ;; No need to install a package for a custom minor mode
-    :defer t
-    :config
-(setq top-mode-modline-background "#2CB1BC")
-(setq top-mode-modline-foreground "#012326")
+  :ensure nil  ;; No need to install a package for a custom minor mode
+  :defer t
+  :config
+  (setq top-mode-modline-background "#2CB1BC")
+  (setq top-mode-modline-foreground "#012326")
 
-    ;; Modal keybindings
-    (define-key top-mode-map (kbd "x") ctl-x-map)
-    (define-key top-mode-map (kbd "c") mode-specific-map)
+  (dolist (top-mode-disable-cmds '(revert-buffer
+                                   find-file
+                                   find-file-other-window
+                                   consult-buffer
+                                   consult-buffer-other-window
+                                   consult-mode-command
+                                   ))
+    (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
 
-    :bind (:map top-mode-map
-                ("a" . execute-extended-command)
-                ("M-a" . consult-mode-command)
-                ("RET" . top-mode)
-                ("i" . previous-line)
-                ("k" . next-line)
-                ("j" . backward-char)
-                ("l" . forward-char)
-                ("u" . backward-word)
-                ("o" . forward-word)
-                ("h" . backward-paragraph)
-                (";" . forward-paragraph)
-                ("n a" . org-agenda)
-                ("n c" . org-capture)
-                ("n d" . list-denotes)
-                ("C-c c" . copy-region-as-kill)
-                ("C-c x" . kill-region)
-                ("C-c v" . consult-yank-pop)
-                ("TAB" . consult-buffer)
-                ))
+  (dolist (top-mode-exit-cmds '(org-agenda
+                                list-denotes
+                                denote))
+    (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
+
+  :bind (:map top-mode-map
+              ("a" . execute-extended-command)
+              ("M-a" . consult-mode-command)
+              ("RET" . top-mode)
+              ("i" . previous-line)
+              ("k" . next-line)
+              ("j" . backward-char)
+              ("l" . forward-char)
+              ("u" . backward-word)
+              ("o" . forward-word)
+              ("h" . backward-paragraph)
+              (";" . forward-paragraph)
+              ("n a" . org-agenda)
+              ("n c" . org-capture)
+              ("n d" . list-denotes)
+              ("C-c c" . copy-region-as-kill)
+              ("C-c x" . kill-region)
+              ("C-c v" . consult-yank-pop)
+              ("TAB" . consult-buffer)
+              ))
 
 (when (eq system-type 'gnu/linux)
  (use-package exwm

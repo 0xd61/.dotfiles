@@ -85,28 +85,38 @@
   :type '(repeat symbol)
   :group 'top-mode)
 
-(defun top-mode--around-maybe-disable (orig-fun &rest args)
+(defun top-mode--around-maybe-disable (orig-fun command &rest args)
   "Around advice for `call-interactively`.
 Disable `top-mode` if command is in `top-mode-auto-disable-commands`,
 then re-enable it after the command finishes."
   (if (and (bound-and-true-p top-mode)
-           (memq this-command top-mode-auto-disable-commands))
+           (memq command top-mode-auto-disable-commands))
       (progn
         (top-mode -1)
         (unwind-protect
-            (apply orig-fun args)
+            (apply orig-fun command args)
           (top-mode 1)))
-    (apply orig-fun args)))
+    (apply orig-fun command args)))
 
-(defun top-mode--maybe-exit (orig-fun &rest args)
+(defun top-mode--maybe-exit (command &rest args)
   "Around advice for `call-interactively`.
 Disable `top-mode` if command is in `top-mode-auto-exit-commands`."
 (when (and (bound-and-true-p top-mode)
-             (memq this-command top-mode-auto-exit-commands))
+             (memq command top-mode-auto-exit-commands))
     (top-mode -1)))
 
-(advice-add 'call-interactively :around #'top-mode--around-maybe-disable)
-(advice-add 'call-interactively :before #'top-mode--maybe-exit)
+(advice-add 'command-execute :around #'top-mode--around-maybe-disable)
+(advice-add 'command-execute :before #'top-mode--maybe-exit)
+
+(defun top-mode--enable-key-translations ()
+  "Enable translations: `c` ? `C-c`, `x` ? `C-x`."
+  (define-key key-translation-map (kbd "c") (kbd "C-c"))
+  (define-key key-translation-map (kbd "x") (kbd "C-x")))
+
+(defun top-mode--disable-key-translations ()
+  "Disable translations set by top-mode."
+  (define-key key-translation-map (kbd "c") nil)
+  (define-key key-translation-map (kbd "x") nil))
 
 ;;;###autoload
 (define-minor-mode top-mode
@@ -121,11 +131,13 @@ can be defined in the top-mode-map."
         (unless entry
           (add-to-list 'emulation-mode-map-alists
                        `((top-mode . ,top-mode-map))))
-        (top-mode--set-visual-indicator))
+        (top-mode--set-visual-indicator)
+        (top-mode--enable-key-translations))
     (setq emulation-mode-map-alists
           (cl-remove-if (lambda (entry)
                        (eq (car entry) 'top-mode))
                      emulation-mode-map-alists))
-    (top-mode--unset-visual-indicator)))
+    (top-mode--unset-visual-indicator)
+    (top-mode--disable-key-translations)))
 
 (provide 'top-mode)

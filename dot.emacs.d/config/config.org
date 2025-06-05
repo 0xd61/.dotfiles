@@ -274,7 +274,7 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
   ("M-b" . 'consult-buffer)
   ("M-B" . 'consult-buffer-other-window)
   ("M-w" . 'other-window)
-#+end_src
+  #+end_src
 
 #+name: emacs-keys
 #+begin_src emacs-lisp :noweb yes
@@ -304,8 +304,8 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
 *** Projects
 #+name: project-keys
 #+begin_src emacs-lisp
-        :bind-keymap
-        ("C-x p" . project-prefix-map)
+  :bind-keymap
+  ("C-x p" . project-prefix-map)
 #+end_src
 *** Vterm
 #+name: vterm-keys
@@ -321,8 +321,8 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
 #+begin_src emacs-lisp :noweb yes
   :bind (
          :map eat-semi-char-mode-map
-          ("C-c C-k" . eat-emacs-mode)
-          <<emacs-keys-essential>>
+         ("C-c C-k" . eat-emacs-mode)
+         <<emacs-keys-essential>>
          )
 #+end_src
 *** Top-Mode
@@ -349,7 +349,7 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
               ("TAB" . consult-buffer)
               ))
 
-              #+end_src
+#+end_src
 * Basic Configuration
 ** Early Init
 :PROPERTIES:
@@ -1576,17 +1576,18 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
     (setq top-mode-modline-background <<string>>)
     (setq top-mode-modline-foreground <<main_background>>)
 
-    ;; Modal keybindings
-    (define-key top-mode-map (kbd "x") ctl-x-map)
-    (define-key top-mode-map (kbd "c") mode-specific-map)
-
     (dolist (top-mode-disable-cmds '(revert-buffer
                                      find-file
-                                     save-buffer))
+                                     find-file-other-window
+                                     consult-buffer
+                                     consult-buffer-other-window
+                                     consult-mode-command
+                                     ))
       (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
 
     (dolist (top-mode-exit-cmds '(org-agenda
-                                  list-denotes))
+                                  list-denotes
+                                  denote))
       (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
 
     <<top-mode-keys>>
