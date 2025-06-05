@@ -45,36 +45,6 @@
   '(execute-extended-command
     find-file
     switch-to-buffer
-    describe-bindings
-    describe-buffer
-    describe-categories
-    describe-char
-    describe-character-set
-    describe-command
-    describe-coding-system
-    describe-copying
-    describe-distribution
-    describe-face
-    describe-file
-    describe-fontset
-    describe-function
-    describe-function-1
-    describe-gnu-project
-    describe-input-method
-    describe-key
-    describe-key-briefly
-    describe-keymap
-    describe-language-environment
-    describe-mode
-    describe-no-warranty
-    describe-package
-    describe-prefix-bindings
-    describe-repeat-maps
-    describe-symbol
-    describe-syntax
-    describe-text-properties
-    describe-theme
-    describe-variable
     )
   "List of command symbols that should disable `top-mode` when called."
   :type '(repeat symbol)
@@ -85,28 +55,50 @@
   :type '(repeat symbol)
   :group 'top-mode)
 
-(defun top-mode--around-maybe-disable (orig-fun command &rest args)
-  "Around advice for `call-interactively`.
-Disable `top-mode` if command is in `top-mode-auto-disable-commands`,
-then re-enable it after the command finishes."
-  (if (and (bound-and-true-p top-mode)
-           (memq command top-mode-auto-disable-commands))
-      (progn
-        (top-mode -1)
-        (unwind-protect
-            (apply orig-fun command args)
-          (top-mode 1)))
-    (apply orig-fun command args)))
+(defcustom top-mode-auto-disable-prefixes
+  '("C-h")
+  "List of key prefix strings that should disable `top-mode` when pressed."
+  :type '(repeat string)
+  :group 'top-mode)
 
-(defun top-mode--maybe-exit (command &rest args)
-  "Around advice for `call-interactively`.
-Disable `top-mode` if command is in `top-mode-auto-exit-commands`."
-(when (and (bound-and-true-p top-mode)
-             (memq command top-mode-auto-exit-commands))
-    (top-mode -1)))
+(defun top-mode--prefix-match-p ()
+  "Return t if the current key sequence matches any of the disable prefixes."
+  (let ((keys (this-command-keys-vector)))
+    (cl-some (lambda (prefix)
+               (let ((prefix-keys (vconcat (kbd prefix))))
+                 (and (<= (length prefix-keys) (length keys))
+                      (equal prefix-keys
+                             (seq-subseq keys 0 (length prefix-keys))))))
+             top-mode-auto-disable-prefixes)))
+
+(defun top-mode--around-maybe-disable (orig-fun command &rest args)
+  "Around advice for `command-execute`.
+Disable `top-mode` temporarily if the command is in `top-mode-auto-disable-commands`
+or if the key prefix matches `top-mode-auto-disable-prefixes`.
+Then re-enable after execution."
+  (cond
+   ;; Auto-exit: don't re-enable
+   ((and (bound-and-true-p top-mode)
+         (commandp command)
+         (memq command top-mode-auto-exit-commands))
+    (top-mode -1)
+    (apply orig-fun command args))
+
+   ;; Auto-disable + re-enable
+   ((and (bound-and-true-p top-mode)
+         (or (memq command top-mode-auto-disable-commands)
+             (top-mode--prefix-match-p)))
+    (top-mode -1)
+    (unwind-protect
+        (apply orig-fun command args)
+      (top-mode 1)))
+
+   ;; Normal case
+   (t
+    (apply orig-fun command args))))
+
 
 (advice-add 'command-execute :around #'top-mode--around-maybe-disable)
-(advice-add 'command-execute :before #'top-mode--maybe-exit)
 
 (defun top-mode--enable-key-translations ()
   "Enable translations: `c` ? `C-c`, `x` ? `C-x`."
@@ -117,6 +109,10 @@ Disable `top-mode` if command is in `top-mode-auto-exit-commands`."
   "Disable translations set by top-mode."
   (define-key key-translation-map (kbd "c") nil)
   (define-key key-translation-map (kbd "x") nil))
+
+;; Hooks
+(defvar top-mode-enable-hook nil)
+(defvar top-mode-disable-hook nil)
 
 ;;;###autoload
 (define-minor-mode top-mode
@@ -132,12 +128,14 @@ can be defined in the top-mode-map."
           (add-to-list 'emulation-mode-map-alists
                        `((top-mode . ,top-mode-map))))
         (top-mode--set-visual-indicator)
-        (top-mode--enable-key-translations))
+        (top-mode--enable-key-translations)
+        (run-hooks 'top-mode-enable-hook))
     (setq emulation-mode-map-alists
           (cl-remove-if (lambda (entry)
                        (eq (car entry) 'top-mode))
                      emulation-mode-map-alists))
     (top-mode--unset-visual-indicator)
-    (top-mode--disable-key-translations)))
+    (top-mode--disable-key-translations)
+    (run-hooks 'top-mode-disable-hook)))
 
 (provide 'top-mode)

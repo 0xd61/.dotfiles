@@ -985,6 +985,12 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (setq top-mode-modline-background "#2CB1BC")
   (setq top-mode-modline-foreground "#012326")
 
+  (dolist (top-mode-disable-pfx '(
+                                  "C-x s"
+                                  "C-x j"
+                                  ))
+    (add-to-list 'top-mode-auto-disable-prefixes top-mode-disable-pfx))
+
   (dolist (top-mode-disable-cmds '(revert-buffer
                                    find-file
                                    find-file-other-window
