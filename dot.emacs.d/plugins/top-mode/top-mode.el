@@ -7,17 +7,21 @@
   "Backup of the original `emulation-mode-map-alists` entry for `top-mode`.")
 
 ;; Color indicator
+(defcustom top-mode-modline-background "red"
+  "Modline background color when `top-mode` is active."
+  :type 'color
+  :group 'top-mode)
+
+(defcustom top-mode-modline-foreground "white"
+  "Modline foreground color when `top-mode` is active."
+  :type 'color
+  :group 'top-mode)
+
 (defvar top-mode--prev-modeline-bg nil
   "Stores the previous modeline background color.")
 
 (defvar top-mode--prev-modeline-fg nil
   "Stores the previous modeline foreground color.")
-
-(defvar top-mode--prev-border-color nil
-  "Stores the previous GUI border color.")
-
-(defvar top-mode--prev-border-width nil
-  "Stores the previous GUI border width.")
 
 (defun top-mode--set-visual-indicator ()
   "Set red visual indicators (modeline and border) for top-mode."
@@ -26,13 +30,7 @@
         (fg (face-foreground 'mode-line)))
     (unless top-mode--prev-modeline-bg (setq top-mode--prev-modeline-bg bg))
     (unless top-mode--prev-modeline-fg (setq top-mode--prev-modeline-fg fg)))
-  (set-face-attribute 'mode-line nil :background "red" :foreground "white")
-  (force-mode-line-update t)
-  (when (display-graphic-p)
-    (setq top-mode--prev-border-color (frame-parameter nil 'internal-border-color))
-    (setq top-mode--prev-border-width (frame-parameter nil 'internal-border-width))
-    (set-frame-parameter nil 'internal-border-color "red")
-    (set-frame-parameter nil 'internal-border-width 5)))
+  (set-face-attribute 'mode-line nil :background top-mode-modline-background :foreground top-mode-modline-foreground))
 
 (defun top-mode--unset-visual-indicator ()
   "Restore modeline and GUI border colors after disabling top-mode."
@@ -41,15 +39,7 @@
                         :background top-mode--prev-modeline-bg
                         :foreground top-mode--prev-modeline-fg)
     (setq top-mode--prev-modeline-bg nil)
-    (setq top-mode--prev-modeline-fg nil))
-  (force-mode-line-update t)
-  (when (display-graphic-p)
-    (when top-mode--prev-border-color
-      (set-frame-parameter nil 'internal-border-color top-mode--prev-border-color)
-      (setq top-mode--prev-border-color nil))
-    (when top-mode--prev-border-width
-      (set-frame-parameter nil 'internal-border-width top-mode--prev-border-width)
-      (setq top-mode--prev-border-width nil))))
+    (setq top-mode--prev-modeline-fg nil)))
 
 (defcustom top-mode-auto-disable-commands
   '(execute-extended-command
@@ -100,7 +90,6 @@
 Disable `top-mode` if command is in `top-mode-auto-disable-commands`,
 then re-enable it after the command finishes."
   (if (and (bound-and-true-p top-mode)
-           (commandp this-command)
            (memq this-command top-mode-auto-disable-commands))
       (progn
         (top-mode -1)
@@ -113,7 +102,6 @@ then re-enable it after the command finishes."
   "Around advice for `call-interactively`.
 Disable `top-mode` if command is in `top-mode-auto-exit-commands`."
 (when (and (bound-and-true-p top-mode)
-             (commandp this-command)
              (memq this-command top-mode-auto-exit-commands))
     (top-mode -1)))
 

@@ -979,42 +979,36 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (add-hook 'eww-after-render-hook 'eww-readable)
 
 (use-package top-mode
-  :ensure nil  ;; No need to install a package for a custom minor mode
-  :defer t
-  :config
-  ;; Modal keybindings
-  (define-key top-mode-map (kbd "x") ctl-x-map)
-  (define-key top-mode-map (kbd "c") mode-specific-map)
+    :ensure nil  ;; No need to install a package for a custom minor mode
+    :defer t
+    :config
+(setq top-mode-modline-background "#2CB1BC")
+(setq top-mode-modline-foreground "#012326")
 
-  (dolist (top-mode-disable-cmds '(revert-buffer
-                                   find-file
-                                   save-buffer))
-    (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
+    ;; Modal keybindings
+    (define-key top-mode-map (kbd "x") ctl-x-map)
+    (define-key top-mode-map (kbd "c") mode-specific-map)
 
-  (dolist (top-mode-exit-cmds '(org-agenda
-                                list-denotes))
-    (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
-
-  :bind (:map top-mode-map
-              ("a" . execute-extended-command)
-              ("M-a" . consult-mode-command)
-              ("RET" . top-mode)
-              ("i" . previous-line)
-              ("k" . next-line)
-              ("j" . backward-char)
-              ("l" . forward-char)
-              ("u" . backward-word)
-              ("o" . forward-word)
-              ("h" . backward-paragraph)
-              (";" . forward-paragraph)
-              ("n a" . org-agenda)
-              ("n c" . org-capture)
-              ("n d" . list-denotes)
-              ("C-c c" . copy-region-as-kill)
-              ("C-c x" . kill-region)
-              ("C-c v" . consult-yank-pop)
-              ("TAB" . consult-buffer)
-              ))
+    :bind (:map top-mode-map
+                ("a" . execute-extended-command)
+                ("M-a" . consult-mode-command)
+                ("RET" . top-mode)
+                ("i" . previous-line)
+                ("k" . next-line)
+                ("j" . backward-char)
+                ("l" . forward-char)
+                ("u" . backward-word)
+                ("o" . forward-word)
+                ("h" . backward-paragraph)
+                (";" . forward-paragraph)
+                ("n a" . org-agenda)
+                ("n c" . org-capture)
+                ("n d" . list-denotes)
+                ("C-c c" . copy-region-as-kill)
+                ("C-c x" . kill-region)
+                ("C-c v" . consult-yank-pop)
+                ("TAB" . consult-buffer)
+                ))
 
 (when (eq system-type 'gnu/linux)
  (use-package exwm

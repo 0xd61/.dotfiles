@@ -1573,6 +1573,9 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
     :ensure nil  ;; No need to install a package for a custom minor mode
     :defer t
     :config
+    (setq top-mode-modline-background <<string>>)
+    (setq top-mode-modline-foreground <<main_background>>)
+
     ;; Modal keybindings
     (define-key top-mode-map (kbd "x") ctl-x-map)
     (define-key top-mode-map (kbd "c") mode-specific-map)
