@@ -1576,20 +1576,10 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
     (setq top-mode-modline-background <<string>>)
     (setq top-mode-modline-foreground <<main_background>>)
 
-    (dolist (top-mode-disable-pfx '(
-                                    "C-x s"
-                                    "C-x j"
-                                    ))
-      (add-to-list 'top-mode-auto-disable-prefixes top-mode-disable-pfx))
+    ;; (dolist (top-mode-keep-enabled-cmds '(
 
-    (dolist (top-mode-disable-cmds '(revert-buffer
-                                     find-file
-                                     find-file-other-window
-                                     consult-buffer
-                                     consult-buffer-other-window
-                                     consult-mode-command
-                                     ))
-      (add-to-list 'top-mode-auto-disable-commands top-mode-disable-cmds))
+    ;;                                       ))
+    ;;   (add-to-list 'top-mode-keep-enabled-commands top-mode-keep-enabled-cmds))
 
     (dolist (top-mode-exit-cmds '(org-agenda
                                   list-denotes
