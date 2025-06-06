@@ -299,6 +299,8 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
   ("C-x C-b" . 'ibuffer)
 
   ("C-x RET" . 'top-mode)
+  ;; when typing fast this helps
+  ("C-x C-<return>" . 'top-mode)
 #+end_src
 
 *** Projects
@@ -332,22 +334,45 @@ Keys we always want to enforce in different modes aswell. *Be careful with those
               ("a" . execute-extended-command)
               ("M-a" . consult-mode-command)
               ("RET" . top-mode)
+              ;; Movement
               ("i" . previous-line)
               ("k" . next-line)
               ("j" . backward-char)
               ("l" . forward-char)
               ("u" . backward-word)
               ("o" . forward-word)
-              ("h" . backward-paragraph)
-              (";" . forward-paragraph)
+              ("h" . xah-beginning-of-line-or-block)
+              (";" . xah-end-of-line-or-block)
+              ("t" . set-mark-command)
+              ("SPC h" . beginning-of-buffer)
+              ("SPC n" . end-of-buffer)
+              ("s" . isearch-forward)
+              ("SPC s" . consult-ripgrep)
+              ;; Edit
+              ("C-c" . copy-region-as-kill)
+              ("C-x" . kill-region)
+              ("C-v" . consult-yank-pop)
+              ("y" . undo)
+              ("g" . kill-line)
+              ("SPC g" . kill-paragraph)
+              ("w" . delete-horizontal-space)
+              ("SPC r" . query-replace)
+              ;; Windows/Files/Buffers
+              ("C-s" . save-buffer)
+              ("b" . consult-buffer)
+              ("SPC b" . ibuffer)
+              ("f" . find-file)
+              ("SPC f" . find-file-other-window)
+              ("5" . split-window-right)
+              ("-" . split-window-below)
+              ("1" . delete-other-windows)
+              ("SPC 1" . delete-window)
+              ("," . other-window)
+              ;; Misc
               ("n a" . org-agenda)
               ("n c" . org-capture)
               ("n d" . list-denotes)
-              ("C-c c" . copy-region-as-kill)
-              ("C-c x" . kill-region)
-              ("C-c v" . consult-yank-pop)
-              ("TAB" . consult-buffer)
-              ))
+              )
 
 #+end_src
 * Basic Configuration
@@ -1586,7 +1611,7 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
                                   denote))
       (add-to-list 'top-mode-auto-exit-commands top-mode-exit-cmds))
 
-    <<top-mode-keys>>
+    <<top-mode-keys>>)
 #+end_src
 * OS
 ** EXWM
