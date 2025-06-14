@@ -1,3 +1,11 @@
 # st-265color error fix
-export EDITOR="emacsclient -nw"
 export GPG_TTY=$(tty)
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t"                  # $EDITOR opens in terminal
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
+
+# wayland settings
+export QT_QPA_PLATFORM=wayland-egl
+export ELM_DISPLAY=wl
+export SDL_VIDEODRIVER=wayland
+export MOZ_ENABLE_WAYLAND=1

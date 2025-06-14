@@ -186,6 +186,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (setq show-trailing-whitespace t)
 
+(add-to-list 'default-frame-alist '(undecorated . t))
+
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-language-environment "UTF-8")
@@ -1043,84 +1045,35 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   )
 
 (when (eq system-type 'gnu/linux)
- (use-package exwm
-   :ensure t
-   :config
-   ;; Set the initial workspace number.
-   (setq exwm-workspace-number 4)
-
-   ;; Automatically move EXWM buffer to current workspace when selected
-   (setq exwm-layout-show-all-buffers t)
-
-   ;; Display all EXWM buffers in every workspace buffer list
-   (setq exwm-workspace-show-all-buffers t)
-
-   ;; Make class name the buffer name.
-   (add-hook 'exwm-update-class-hook
-             (lambda () (exwm-workspace-rename-buffer exwm-class-name)))
-   ;; These keys should always pass through to Emacs
-   (setq exwm-input-prefix-keys
-         '(?\C-x
-           ?\C-u
-           ?\C-h
-           ?\C-q     ;; Prevent from accidently closing firefox
-           ?\M-J b
-           ?\M-b     ;; Buffer list
-           ?\M-P p   ;; Project selection
-           ?\M-x
-           ?\M-w     ;; other window
-           ?\M-`
-           ?\M-&
-           ?\M-:
-           ?\C-\ ))  ;; Ctrl+Space
-
-   ;; Global keybindings.
-   (setq exwm-input-global-keys
-         `(([?\s-r]   . exwm-reset) ;; s-r: Reset (to line-mode). C-c C-k switches to char-mode
-           ([?\s-0]   . exwm-workspace-switch) ;; s-w: Switch workspace.
-           ([?\s-b]   . exwm-workspace-switch-to-buffer)
-           ([?\s-q]   . exwm-input-send-next-key)
-           ([?\s-x]   . (lambda (cmd) ;; s-&: Launch application.
-                          (interactive (list (read-shell-command "$ ")))
-                          (start-process-shell-command cmd nil cmd)))
-           ;; s-N: Switch to certain workspace.
-           ,@(mapcar (lambda (i)
-                       `(,(kbd (format "s-%d" i)) .
-                         (lambda ()
-                           (interactive)
-                           (exwm-workspace-switch-create , (- i 1)))))
-                     (number-sequence 1 9))))
-   ;; Enable EXWM
-   (exwm-enable)
+ (use-package app-launcher
+   :ensure nil
    ))
 
 (when (eq system-type 'gnu/linux)
- (defvar efs/polybar-process nil
-   "Holds the process of the running Polybar instance, if any")
-
- (defun efs/kill-panel ()
+ (defun dgl/emacs-run-launcher ()
+   "Launch app in minimal frame"
    (interactive)
-   (when efs/polybar-process
-     (ignore-errors
-       (kill-process efs/polybar-process)))
-   (setq efs/polybar-process nil))
-
- (defun efs/start-panel ()
-   (interactive)
-   (efs/kill-panel)
-   (setq efs/polybar-process (start-process-shell-command "polybar" nil "polybar")))
-
- (defun efs/send-polybar-hook (module-name hook-index)
-   (start-process-shell-command "polybar-msg" nil (format "polybar-msg hook %s %s" module-name hook-index)))
-
- (defun efs/send-polybar-exwm-workspace ()
-   (efs/send-polybar-hook "exwm-workspace" 1))
-
- ;; Update panel indicator when workspace changes
- (add-hook 'exwm-workspace-switch-hook #'efs/send-polybar-exwm-workspace)
-
- ;; Run on startup
- (add-hook 'exwm-init-hook #'efs/start-panel)
+   (let ((launcher-frame
+          (make-frame '((name . "emacs-run-launcher")
+                        (minibuffer . only)
+                        (fullscreen . 0)
+                        (undecorated . t)
+                        (internal-border-width . 10)
+                        (width . 80)
+                        (height . 11)))))
+     (select-frame-set-input-focus launcher-frame)
+     (with-selected-frame launcher-frame
+       (with-current-buffer (window-buffer (minibuffer-window))
+         (vertico-flat-mode -1))  ;; Disable Vertico locally
+       (unwind-protect
+           (app-launcher-run-app)
+         ;; Schedule the frame deletion to occur shortly after
+         (run-at-time
+          "0.1 sec" nil
+          (lambda (frame)
+            (when (frame-live-p frame)
+              (delete-frame frame)))
+          launcher-frame)))))
  )
 
 (defun dgl-maximize-frame ()

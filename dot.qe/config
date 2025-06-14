@@ -1,0 +1,57 @@
+// Sample qemacs config file
+//
+// copy it in ~/.qe/config
+//
+// You can call any Qemacs command with a C like syntax.
+//
+// underscores can be used in command names instead of dash.
+//
+
+// simple key definition
+// C-key : Control + key
+// M-key : Meta + key
+// Read util.c to get all the key names
+// CG: should be save-all-buffers?
+global_set_key("C-x s", "set-style");
+global_set_key("M-w", "other-window");
+global_set_key("M-f", "find-file");
+global_set_key("M-F", "find-file-other-window");
+global_set_key("M-s", "save-buffer");
+global_set_key("M-b", "switch-to-buffer");
+global_set_key("M-u", "undo");
+global_set_key("C-q", "copy-region");
+
+// set X11 display size
+set_display_size(1920, 1080);
+
+// set default input method
+//set_input_method("HebrewIsraeli");
+
+// set X11 fonts and fall backs
+set_system_font("fixed", "InputMono,fixed,unifont");
+set_system_font("sans", "helvetica,unifont");
+set_system_font("serif", "InterVariable,times,unifont");
+
+// simple styles
+set_style("default", "background-color", "#012326");
+set_style("default", "color", "#D2B48C");
+set_style("mode-line", "background-color", "#D2B48C");
+set_style("mode-line", "color", "#012326");
+
+set_style("comment", "color", "#31B72C");
+set_style("comment", "font-family", "sans");
+set_style("comment", "font-size", "12");
+set_style("comment", "font-style", "italic");
+
+set_style("type", "color", "#65D6AD");
+
+set_style("keyword", "color", "#E8E6E1");
+set_style("keyword", "font-family", "serif");
+set_style("keyword", "font-size", "18");
+
+set_style("string", "color", "#2CB1BC");
+
+set_style("function", "color", "#D2B48C");
+set_style("function", "font-family", "serif");
+set_style("function", "font-size", "18");
+set_style("function", "font-weight", "bold");

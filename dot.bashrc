@@ -126,6 +126,18 @@ if [ -f ~/.dgl_env ]; then
     . ~/.dgl_env
 fi
 
+# some defaults follow — you are supposed to adjust these to your
+# liking; by default we add ~/.etc/bin and ~/bin (whichever exist)
+# to $PATH, set $SHELL to mksh, set some defaults for man and less
+# and show a few more possible things for users to begin moving in
+
+PATHSEP=":"
+for p in ~/.local/bin ~/bin; do
+        [[ -d $p/. ]] || continue
+        [[ $PATHSEP$PATH$PATHSEP = *"$PATHSEP$p$PATHSEP"* ]] || \
+            PATH=$p$PATHSEP$PATH
+done
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).

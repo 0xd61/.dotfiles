@@ -679,6 +679,11 @@ We want to know where we have trailing whitespace to keep things clean
   (setq show-trailing-whitespace t)
 #+end_src
 
+We want to remove the frame bar of gtk
+#+begin_src emacs-lisp
+(add-to-list 'default-frame-alist '(undecorated . t))
+#+end_src
+
 ** UTF-8 encoding
 By default we want utf-8 for everything
 #+begin_src emacs-lisp
@@ -1581,7 +1586,7 @@ Eat is apparently not properly working on windows but there is a patch. Therefor
   (autoload 'eat            "eat"         "Eat Terminal"                 t)
   (setq eat-term-scrollback-size 1048576)
 #+end_src
-
+***
 ** EWW
 Lookup with eww first, then use =eww-browse-with-external-browser= if we need to browse in a normal browser
 #+begin_src emacs-lisp
@@ -1618,7 +1623,7 @@ I want to have a simple modal mode to simplify movement and some commands. Howev
 
 Most of the config is taken and adjusted from [[https://github.com/daviwil/emacs-from-scratch/blob/219c060e1bd695948c7691955a12a5dcaf3a9530/Emacs.org#window-management][systemcrafters.net]].
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (<<platform_linux>>
    (use-package exwm
      :ensure t
@@ -1673,7 +1678,7 @@ Most of the config is taken and adjusted from [[https://github.com/daviwil/emacs
 #+end_src
 
 *** Polybar
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (<<platform_linux>>
    (defvar efs/polybar-process nil
      "Holds the process of the running Polybar instance, if any")
@@ -1701,6 +1706,46 @@ Most of the config is taken and adjusted from [[https://github.com/daviwil/emacs
 
    ;; Run on startup
    (add-hook 'exwm-init-hook #'efs/start-panel)
+   )
+#+end_src
+** App launcher
+As an alternative to exwm we use emacs still as app launcher
+
+#+begin_src emacs-lisp
+  (<<platform_linux>>
+   (use-package app-launcher
+     :ensure nil
+     ))
+#+end_src
+
+We make our own wrapper for the launcher to be able to run it anywhere. This is inspired by the approach of [[https://gitlab.com/dwt1/configuring-emacs/-/blob/main/07-the-final-touches/scripts/app-launchers.el?ref_type=heads][Derek Taylor]].
+
+#+begin_src emacs-lisp
+  (<<platform_linux>>
+   (defun dgl/emacs-run-launcher ()
+     "Launch app in minimal frame"
+     (interactive)
+     (let ((launcher-frame
+            (make-frame '((name . "emacs-run-launcher")
+                          (minibuffer . only)
+                          (fullscreen . 0)
+                          (undecorated . t)
+                          (internal-border-width . 10)
+                          (width . 80)
+                          (height . 11)))))
+       (select-frame-set-input-focus launcher-frame)
+       (with-selected-frame launcher-frame
+         (with-current-buffer (window-buffer (minibuffer-window))
+           (vertico-flat-mode -1))  ;; Disable Vertico locally
+         (unwind-protect
+             (app-launcher-run-app)
+           ;; Schedule the frame deletion to occur shortly after
+           (run-at-time
+            "0.1 sec" nil
+            (lambda (frame)
+              (when (frame-live-p frame)
+                (delete-frame frame)))
+            launcher-frame)))))
    )
 #+end_src
 * Custom Functions

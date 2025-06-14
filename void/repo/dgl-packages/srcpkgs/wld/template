@@ -1,0 +1,32 @@
+# Template file for 'wld'
+pkgname=wld
+version=8990a83
+revision=1
+hostmakedepends="pkg-config"
+makedepends="fontconfig-devel pixman-devel libdrm-devel wayland-devel"
+short_desc="A primitive drawing library targeted at Wayland"
+maintainer="Daniel Glinka <voidlinux@dgl.com.py>"
+license="MIT"
+homepage="https://github.com/michaelforney/wld"
+distfiles="https://github.com/michaelforney/wld/archive/${version}.tar.gz"
+checksum=8ba3cdd60d1a738bc309583e93303e91bd98a4818dfc5e6451a7bde436331b0d
+
+do_build() {
+    make PREFIX=/usr
+}
+
+do_install() {
+    make PREFIX=/usr DESTDIR=$DESTDIR install
+    vinstall README.md 644 usr/share/doc/$pkgname
+}
+
+wld-devel_package() {
+    depends="wld>=${version}_${revision}"
+    short_desc+=" - development files"
+    pkg_install() {
+        vmove usr/include
+        vmove usr/lib/pkgconfig
+        vmove "usr/lib/*.so*"
+        vmove "usr/lib/*.a"
+    }
+}

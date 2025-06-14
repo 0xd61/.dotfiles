@@ -1,0 +1,24 @@
+# Template file for 'velox'
+pkgname=velox
+version=fcc0412
+revision=1
+hostmakedepends="pkg-config"
+makedepends="swc-devel wld-devel pixman-devel wayland-devel fontconfig-devel libdrm-devel libxkbcommon-devel libinput-devel  xcb-util-wm-devel"
+depends="swc wld"
+short_desc="Velox window manager"
+maintainer="Daniel Glinka <voidlinux@dgl.com.py>"
+license="MIT"
+homepage="https://github.com/michaelforney/velox"
+distfiles="https://github.com/michaelforney/velox/archive/${version}.tar.gz"
+checksum=ab1400693473ebae727690898b4a19e88cb447f4516e5ec6ed9ce05e63dd31aa
+
+do_build() {
+    make PREFIX=/usr
+}
+
+do_install() {
+    make PREFIX=/usr DESTDIR=$DESTDIR install
+    vinstall README.md 644 usr/share/doc/$pkgname
+    #vinstall ${FILESDIR}/dwm.desktop 644 usr/share/xsessions
+    vlicense LICENSE
+}

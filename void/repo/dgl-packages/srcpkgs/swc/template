@@ -1,0 +1,33 @@
+# Template file for 'swc'
+pkgname=swc
+version=19893a5
+revision=1
+hostmakedepends="pkg-config"
+makedepends="libdrm-devel pixman-devel wayland-devel wayland-protocols libinput-devel libxkbcommon-devel fontconfig-devel wld-devel xcb-util-wm-devel"
+short_desc="A library for making a simple Wayland compositor"
+maintainer="Daniel Glinka <voidlinux@dgl.com.py>"
+license="MIT"
+homepage="https://github.com/michaelforney/swc"
+distfiles="https://github.com/michaelforney/swc/archive/${version}.tar.gz"
+checksum=d359df126b40296f6f90d680987f7757c6f50ddd1e7b94f7f5fb21a85a73815d
+
+do_build() {
+    make PREFIX=/usr
+}
+
+do_install() {
+    make PREFIX=/usr DESTDIR=$DESTDIR install
+    vinstall README.md 644 usr/share/doc/$pkgname
+    vlicense LICENSE
+}
+
+swc-devel_package() {
+    depends="swc>=${version}_${revision}"
+    short_desc+=" - development files"
+    pkg_install() {
+        vmove usr/include
+        vmove usr/lib/pkgconfig
+        vmove "usr/lib/*.so*"
+        vmove "usr/lib/*.a"
+    }
+}

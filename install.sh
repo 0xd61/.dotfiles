@@ -13,8 +13,10 @@ ln -s $BASEDIR/dot.dgl_alias $HOME/.mksh_alias #deprecated
 ln -s $BASEDIR/dot.dgl_env $HOME/.mksh_env     #deprecated
 ln -s $BASEDIR/dot.dgl_alias $HOME/.dgl_alias
 ln -s $BASEDIR/dot.dgl_env $HOME/.dgl_env
-ln -s $BASEDIR/dot.emacs $HOME/.emacs
+[ -d "$HOME/.config/river" ] && unlink $HOME/.config/river; ln -s $BASEDIR/dot.river $HOME/.config/river
+[ -d "$HOME/.config/waybar" ] && unlink $HOME/.config/waybar; ln -s $BASEDIR/dot.waybar $HOME/.config/waybar
 [ -d "$HOME/.emacs.d" ] && unlink $HOME/.emacs.d; ln -s $BASEDIR/dot.emacs.d $HOME/.emacs.d
+[ -d "$HOME/.qe" ] && unlink $HOME/.qe; ln -s $BASEDIR/dot.qe $HOME/.qe
 [ -d "$HOME/.runit" ] && unlink $HOME/.runit; ln -s $BASEDIR/dot.runit $HOME/.runit
 ln -s $BASEDIR/dot.gf2_config.ini $HOME/.config/gf2_config.ini
 [ -d "$HOME/.config/nvim" ] && unlink $HOME/.config/nvim; ln -s $BASEDIR/dot.nvim $HOME/.config/nvim
